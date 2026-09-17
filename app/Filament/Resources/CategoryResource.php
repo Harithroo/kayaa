@@ -34,7 +34,7 @@ class CategoryResource extends Resource
         return $schema->components([
             Select::make('department_id')->relationship('department', 'name')->required()->default(1),
             Select::make('parent_id')->label('Parent category')
-                ->relationship('parent', 'name', fn ($q) => $q->whereNull('parent_id'))
+                ->relationship('parent', 'name', fn ($query) => $query->whereNull('parent_id'))
                 ->helperText('Leave empty for a top-level category shown in the navigation.'),
             TextInput::make('name')->required()->maxLength(60)
                 ->live(onBlur: true)

@@ -21,10 +21,12 @@ copy .env.example .env
 composer run setup
 #    (= key:generate, migrate --seed, storage:link)
 
-# 5. Assets + server, in two terminals
-npm run dev
+# 5. Build the CSS/JS once, then run the app
+npm run build
 php artisan serve
 ```
+
+Re-run `npm run build` whenever you edit `resources/css/app.css` or `resources/js/app.js` (it takes ~100ms). If you're iterating on styling and want changes to appear without rebuilding, run `npm run dev` in a second terminal instead — that's Vite's watcher with hot reload, not a second copy of the site. Production only ever uses the built files in `public/build/`.
 
 Storefront: http://localhost:8000 · Admin: http://localhost:8000/admin (login with ADMIN_EMAIL / ADMIN_PASSWORD from `.env`).
 

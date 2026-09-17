@@ -41,7 +41,7 @@ img{max-width:100%;display:block}
 .topbar{background:var(--k-ink);color:#DCE6DE;font-size:12.5px;text-align:center;padding:8px 18px}
 .topbar a{color:inherit}
 
-.header{max-width:var(--container);margin:0 auto;position:sticky;top:0;z-index:40;background:var(--k-white)}
+.header{position:sticky;top:0;z-index:40;background:var(--k-white)}
 .header-in{display:flex;align-items:center;gap:10px;padding:14px 0}
 .logo{font-family:var(--font-display);font-weight:700;font-size:26px;letter-spacing:-.02em;margin:0;line-height:1;margin-right: auto;text-decoration:none;color:var(--k-ink)}
 .logo span{color:var(--k-butter)}
@@ -129,7 +129,7 @@ img{max-width:100%;display:block}
 
 .chips{display:flex;gap:9px;overflow-x:auto;padding:4px 0;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{border:1px solid var(--k-line);background:var(--k-white);color:var(--k-ink);border-radius:var(--r-pill);padding:10px 16px;font-size:14px;font-weight:500;white-space:nowrap;text-decoration:none}
+.chip{border:1px solid var(--k-line);background:var(--k-white);color:var(--k-ink);border-radius:var(--r-lg);padding:10px 16px;font-size:14px;font-weight:500;white-space:nowrap;text-decoration:none}
 .chip.on{background:var(--k-ink);color:#fff;border-color:var(--k-ink)}
 
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
@@ -297,7 +297,7 @@ img{max-width:100%;display:block}
 .steps li.done i{background:var(--k-sage)}
 
 /* ---------- footer ---------- */
-.foot{background:var(--k-ink);color:var(--k-dark-fg);padding:32px 0 36px;font-size:14px}
+.foot{background:var(--k-ink);color:var(--k-dark-fg);padding:32px 0 18px;font-size:14px}
 .foot-grid{display:flex;flex-wrap:wrap;gap:28px}
 .foot-brand{flex:1 1 220px}
 .foot-col{flex:1 1 140px}
