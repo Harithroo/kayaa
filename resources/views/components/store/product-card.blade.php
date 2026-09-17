@@ -1,6 +1,6 @@
 @props(['product'])
 @php
-  $tints = ['t1','t2','t3','t4','t5','t6'];
+  $tints = ['butter','sage','cloud','blush','sand'];
   $tint = $tints[$product->id % count($tints)];
   $colors = $product->colors()->count();
   $meta = collect([$colors ? "$colors colour".($colors > 1 ? 's' : '') : null, $product->sizeRangeLabel()])->filter()->implode(' · ');
@@ -8,8 +8,9 @@
 @endphp
 <a class="card" href="{{ route('products.show', $product) }}">
   <x-store.photo :image="$product->primaryImage()" :tint="$tint" :alt="$product->name">
-    @if($product->is_new)<span class="badge">New</span>
-    @elseif($product->isLowStock())<span class="badge low">Low stock</span>
+    @if($was)<span class="badge clay">Sale</span>
+    @elseif($product->is_new)<span class="badge">New</span>
+    @elseif($product->isLowStock())<span class="badge clay">Low stock</span>
     @elseif($product->totalStock() === 0)<span class="badge">Sold out</span>@endif
   </x-store.photo>
   <span class="cardname">{{ $product->name }}</span>

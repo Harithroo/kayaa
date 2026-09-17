@@ -1,33 +1,34 @@
-<x-layouts.store title="Checkout">
-  <div class="wrap section">
-    <div class="sechead"><h1 class="sec">Checkout</h1></div>
-    <div class="co-grid">
-      <form method="post" action="{{ route('checkout.store') }}" novalidate>
+<x-layouts.store title="Checkout" nav="cart">
+  <div class="section">
+  <div class="wrap">
+    <h1 class="h2 page" style="margin-bottom:18px">Checkout</h1>
+    <div class="split">
+      <form class="main" method="post" action="{{ route('checkout.store') }}" novalidate>
         @csrf
         <h2 class="h3">Contact</h2>
-        <x-store.field name="phone" label="Mobile number" type="tel" inputmode="tel" placeholder="077 123 4567" autocomplete="tel" required />
-        <x-store.field name="email" label="Email (for the receipt, optional)" type="email" placeholder="you@example.com" autocomplete="email" />
+        <x-store.field name="phone" label="Mobile number" type="tel" inputmode="tel" placeholder="077 412 6690" autocomplete="tel" required />
+        <x-store.field name="email" label="Email (for the receipt)" type="email" placeholder="you@example.com" autocomplete="email" />
 
         <h2 class="h3" style="margin-top:26px">Delivery address</h2>
         <div class="two">
-          <x-store.field name="first_name" label="First name" autocomplete="given-name" required />
-          <x-store.field name="last_name" label="Last name" autocomplete="family-name" required />
+          <x-store.field name="first_name" label="First name" placeholder="Amaya" autocomplete="given-name" required />
+          <x-store.field name="last_name" label="Last name" placeholder="Perera" autocomplete="family-name" required />
         </div>
-        <x-store.field name="address" label="Address" autocomplete="street-address" required />
+        <x-store.field name="address" label="Address" placeholder="24/3 Pagoda Road" autocomplete="street-address" required />
         <div class="two">
-          <x-store.field name="city" label="City / town" autocomplete="address-level2" required />
+          <x-store.field name="city" label="City" placeholder="Nugegoda" autocomplete="address-level2" required />
           <div @class(['field', 'invalid' => $errors->has('district')])>
             <label for="f-district">District</label>
-            <select id="f-district" name="district" required>
-              <option value="">Choose…</option>
-              @foreach($districts as $d)<option @selected(old('district') === $d)>{{ $d }}</option>@endforeach
+            <select id="f-district" name="district" required data-district>
+              @foreach($districts as $d)<option @selected(old('district', 'Colombo') === $d)>{{ $d }}</option>@endforeach
             </select>
             @error('district')<span class="err">{{ $message }}</span>@enderror
           </div>
         </div>
         <x-store.field name="note" label="Delivery note (optional)" type="textarea" rows="2" placeholder="Landmark, or a better time to deliver" />
+        <p class="muted" style="margin:0 0 20px;font-size:13.5px" data-eta>Delivery to Colombo takes 1–2 days.</p>
 
-        <h2 class="h3" style="margin-top:26px">Payment</h2>
+        <h2 class="h3">Payment</h2>
         <div class="pay">
           <label class="payopt {{ old('payment_method', 'cod') === 'cod' ? 'on' : '' }}">
             <input type="radio" name="payment_method" value="cod" @checked(old('payment_method', 'cod') === 'cod')>
@@ -40,28 +41,30 @@
           </label>
           @endif
         </div>
-        <button class="btn dark" style="margin-top:20px">Place order · {{ money($cart->total()) }}</button>
-        <p style="font-size:12.5px;color:var(--ink-soft);margin-top:12px">By placing this order you agree to our <a href="{{ route('pages.show', 'returns') }}">returns policy</a>. We never store card details.</p>
+        <button class="btn dark" style="margin-top:20px;width:100%">Place order · {{ money($cart->total()) }}</button>
+        <p class="muted" style="font-size:12.5px;margin-top:12px">By placing this order you agree to our <a href="{{ route('pages.show', 'returns') }}">returns policy</a>. We never store your card details.</p>
       </form>
 
-      <aside class="summary">
-        <h2 class="h3" style="font-size:15px">Order summary</h2>
+      <aside class="side summary">
+        <h2 class="h3">Order summary</h2>
         @foreach($cart->lines() as $line)
-          <div style="display:flex;gap:11px;margin-bottom:13px">
-            <x-store.photo :image="$line->variant->product->primaryImage()" :tint="'t'.(($line->variant->product_id % 6) + 1)" style="width:52px;border-radius:7px" />
-            <div style="flex:1;font-size:13.5px">
-              <p style="margin:0">{{ $line->variant->product->name }}</p>
-              <p style="margin:0;color:var(--ink-soft)">{{ $line->variant->label() }} · Qty {{ $line->qty }}</p>
+          @php $tints = ['butter','sage','cloud','blush','sand']; @endphp
+          <div class="sumline">
+            <x-store.photo :image="$line->variant->product->primaryImage()" :tint="$tints[$line->variant->product_id % 5]" cap="" />
+            <div class="body">
+              <p>{{ $line->variant->product->name }}</p>
+              <p class="muted">{{ $line->variant->label() }} · Qty {{ $line->qty }}</p>
             </div>
             <p class="price" style="margin:0;font-size:14px">{{ money($line->lineTotal) }}</p>
           </div>
         @endforeach
-        <div class="totals" style="padding-bottom:0">
-          <div><span>Subtotal</span><span class="price">{{ money($cart->subtotal()) }}</span></div>
-          <div><span>Delivery</span><span class="price">{{ $cart->shipping() === 0 ? 'Free' : money($cart->shipping()) }}</span></div>
-          <div class="grand"><span>Total</span><span class="price">{{ money($cart->total()) }}</span></div>
+        <div class="totals" style="padding:8px 0 0">
+          <div><span>Subtotal</span><span style="font-variant-numeric:tabular-nums">{{ money($cart->subtotal()) }}</span></div>
+          <div><span>Delivery</span><span style="font-variant-numeric:tabular-nums">{{ $cart->shipping() === 0 ? 'Free' : money($cart->shipping()) }}</span></div>
+          <div class="grand"><span>Total</span><span>{{ money($cart->total()) }}</span></div>
         </div>
       </aside>
     </div>
+  </div>
   </div>
 </x-layouts.store>

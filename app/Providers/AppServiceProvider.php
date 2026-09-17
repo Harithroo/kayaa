@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
                 ->orderBy('position')
                 ->get());
             $view->with('cartCount', app(CartService::class)->count());
+            $view->with('topbar', \App\Models\Banner::live('topbar')->first());
         });
     }
 }

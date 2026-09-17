@@ -1,34 +1,38 @@
-<x-layouts.store :title="$title" :category="$category">
-  <div class="wrap section">
+<x-layouts.store :title="$title" :category="$category" nav="shop">
+  <div class="section">
+  <div class="wrap">
     @if($category)
       <p class="crumbs"><a href="{{ route('home') }}">Home</a> › <a href="{{ route('shop.index') }}">{{ $department->name }}</a> › {{ $category->name }}</p>
     @else
       <p class="eyebrow">Newborn – 2 years</p>
     @endif
-    <div class="sechead"><h1 class="sec">{{ $title }}</h1></div>
-    @if($category?->description)<p class="muted" style="margin:0 0 14px;max-width:60ch">{{ $category->description }}</p>@endif
+    <h1 class="h2 page">{{ $title }}</h1>
+    <p class="muted small" style="margin:0 0 18px">{{ $products->total() }} {{ Str::plural('item', $products->total()) }}</p>
 
-    <div class="ages" style="margin-bottom:14px">
-      <a class="age {{ $activeSize ? '' : 'on' }}" href="{{ request()->fullUrlWithoutQuery(['size', 'page']) }}">All ages</a>
+    <div class="chips" style="margin-bottom:12px">
+      <a class="chip {{ $activeSize ? '' : 'on' }}" href="{{ request()->fullUrlWithoutQuery(['size', 'page']) }}">All ages</a>
       @foreach($sizes as $size)
-        <a class="age {{ $activeSize === $size->label ? 'on' : '' }}" href="{{ request()->fullUrlWithQuery(['size' => $size->label, 'page' => null]) }}">{{ $size->label }}</a>
+        <a class="chip {{ $activeSize === $size->label ? 'on' : '' }}" href="{{ request()->fullUrlWithQuery(['size' => $size->label, 'page' => null]) }}">{{ $size->label }}</a>
       @endforeach
     </div>
 
     <form class="toolbar" method="get">
       @foreach(request()->except('sort', 'page') as $k => $v)<input type="hidden" name="{{ $k }}" value="{{ $v }}">@endforeach
-      <span class="muted">{{ $products->total() }} {{ Str::plural('item', $products->total()) }}</span>
-      <label>Sort
-        <select name="sort" onchange="this.form.submit()">
-          <option value="" @selected(!request('sort'))>Newest</option>
-          <option value="price_asc" @selected(request('sort') === 'price_asc')>Price: low to high</option>
-          <option value="price_desc" @selected(request('sort') === 'price_desc')>Price: high to low</option>
-        </select>
-      </label>
+      <select name="sort" aria-label="Sort" onchange="this.form.submit()">
+        <option value="" @selected(!request('sort'))>Featured</option>
+        <option value="price_asc" @selected(request('sort') === 'price_asc')>Price: low to high</option>
+        <option value="price_desc" @selected(request('sort') === 'price_desc')>Price: high to low</option>
+        <option value="new" @selected(request('sort') === 'new')>Newest</option>
+      </select>
+      <a class="btn line" href="{{ route('shop.index') }}">Clear filters</a>
     </form>
 
     @if($products->isEmpty())
-      <p class="empty">Nothing here yet{{ $activeSize ? " in $activeSize" : '' }}. <a href="{{ route('shop.index') }}">See everything</a>.</p>
+      <div class="empty">
+        <h3>Nothing in this filter yet</h3>
+        <p>Try another age band or category.</p>
+        <a class="btn dark sm" href="{{ route('shop.index') }}">Clear filters</a>
+      </div>
     @else
       <div class="grid">
         @foreach($products as $product)<x-store.product-card :product="$product" />@endforeach
@@ -43,5 +47,6 @@
         </nav>
       @endif
     @endif
+  </div>
   </div>
 </x-layouts.store>

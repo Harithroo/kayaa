@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,10 @@ Route::post('/checkout', [CheckoutController::class, 'store'])
 Route::get('/orders/{order}/thank-you', [OrderController::class, 'thanks'])->name('orders.thanks');
 Route::get('/track', [OrderController::class, 'trackForm'])->name('orders.track');
 Route::post('/track', [OrderController::class, 'track'])->middleware('throttle:20,1');
+
+Route::get('/search', SearchController::class)->name('search');
+Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
+Route::post('/contact', [PageController::class, 'sendMessage'])->middleware('throttle:5,1')->name('pages.contact.send');
 
 Route::get('/size-guide', [PageController::class, 'sizeGuide'])->name('pages.size-guide');
 Route::get('/{page}', [PageController::class, 'show'])

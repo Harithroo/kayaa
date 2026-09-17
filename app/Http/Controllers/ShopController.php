@@ -55,7 +55,8 @@ class ShopController extends Controller
         match ($request->query('sort')) {
             'price_asc' => $query->orderBy(fn ($q) => $q->selectRaw('min(price)')->from('product_variants')->whereColumn('product_id', 'products.id')),
             'price_desc' => $query->orderByDesc(fn ($q) => $q->selectRaw('min(price)')->from('product_variants')->whereColumn('product_id', 'products.id')),
-            default => $query->orderByDesc('is_new')->orderByDesc('created_at'),
+            'new' => $query->orderByDesc('created_at'),
+            default => $query->orderByDesc('is_featured')->orderByDesc('is_new')->orderByDesc('created_at'),
         };
 
         $products = $query->paginate(24)->withQueryString();

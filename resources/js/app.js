@@ -31,12 +31,15 @@ document.querySelectorAll('[data-variant-picker]').forEach((root) => {
             input.value = v.id;
             priceEl.textContent = v.priceText;
             if (wasEl) { wasEl.textContent = v.compareText || ''; wasEl.hidden = !v.compareText; }
-            stockEl.textContent = v.stock <= 5 ? `Only ${v.stock} left in ${size}` : '';
+            const sizeLabel = root.querySelector(`.size[data-size="${size}"]`)?.textContent.trim() ?? '';
+            stockEl.textContent = v.stock <= 5 ? `Only ${v.stock} left in ${sizeLabel}` : 'In stock · ships from Colombo';
+            stockEl.classList.toggle('low', v.stock <= 5);
             addBtn.disabled = false;
             addBtn.textContent = 'Add to cart';
         } else {
             input.value = '';
-            stockEl.textContent = '';
+            stockEl.textContent = 'Choose a size';
+            stockEl.classList.remove('low');
             addBtn.disabled = true;
             addBtn.textContent = 'Choose a size';
         }
@@ -80,3 +83,31 @@ document.querySelectorAll('[data-qty-form]').forEach((form) => {
 document.querySelectorAll('.payopt input').forEach((r) => r.addEventListener('change', () => {
     document.querySelectorAll('.payopt').forEach((p) => p.classList.toggle('on', p.contains(r)));
 }));
+
+// Mobile menu drawer.
+const drawer = document.querySelector('[data-drawer]');
+if (drawer) {
+    const open = () => { drawer.hidden = false; document.body.style.overflow = 'hidden'; };
+    const close = () => { drawer.hidden = true; document.body.style.overflow = ''; };
+    document.querySelectorAll('[data-open-drawer]').forEach((b) => b.addEventListener('click', open));
+    drawer.querySelectorAll('[data-close-drawer]').forEach((b) => b.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !drawer.hidden) close(); });
+}
+
+// Inline size guide on the product page.
+document.querySelectorAll('[data-toggle-sizeguide]').forEach((b) => b.addEventListener('click', () => {
+    const g = document.querySelector('[data-sizeguide]');
+    if (g) g.hidden = !g.hidden;
+}));
+
+// Checkout: delivery estimate follows the district.
+const district = document.querySelector('[data-district]');
+const eta = document.querySelector('[data-eta]');
+if (district && eta) {
+    const update = () => {
+        const fast = ['Colombo', 'Gampaha'].includes(district.value);
+        eta.textContent = `Delivery to ${district.value} takes ${fast ? '1–2' : '2–4'} days.`;
+    };
+    district.addEventListener('change', update);
+    update();
+}
