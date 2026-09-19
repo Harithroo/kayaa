@@ -5,6 +5,12 @@
 
     RewriteEngine On
 
+    # STAGING ONLY — keeps static files (product photos etc.) out of search engines.
+    # Apache can't read .env, so delete this block before going to production.
+    <IfModule mod_headers.c>
+        Header set X-Robots-Tag "noindex, nofollow"
+    </IfModule>
+
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 

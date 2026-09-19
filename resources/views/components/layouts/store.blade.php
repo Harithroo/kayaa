@@ -24,6 +24,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  @if (config('kayaa.noindex'))
+  <meta name="robots" content="noindex, nofollow">
+  @endif
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>{{ isset($title) ? "$title · Kayaa" : 'Kayaa · Baby clothing, Sri Lanka' }}</title>
   <meta name="description" content="{{ $metaDescription ?? 'Soft cotton baby clothing sized by age, delivered island-wide. Cash on delivery available.' }}">
