@@ -64,8 +64,21 @@ jobs:
         env:
           DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+          DEPLOY_ORIGIN_IP: ${{ secrets.DEPLOY_ORIGIN_IP }}
         run: |
-          echo "Calling $DEPLOY_URL"
+          set -euo pipefail
+          HOST=$(printf '%s' "$DEPLOY_URL" | awk -F/ '{print $3}')
+          echo "Calling $HOST"
+
+          # Cloudflare serves a managed challenge to runner IPs, which no token
+          # can answer. With DEPLOY_ORIGIN_IP set, connect straight to the origin
+          # instead. SNI and Host stay correct, so TLS still verifies normally.
+          RESOLVE=()
+          if [ -n "${DEPLOY_ORIGIN_IP:-}" ]; then
+            RESOLVE=(--resolve "$HOST:443:$DEPLOY_ORIGIN_IP")
+            echo "Bypassing Cloudflare via origin $DEPLOY_ORIGIN_IP"
+          fi
+
           # --fail-with-body so a 4xx/5xx still prints artisan's output before failing.
           # No --location on purpose: set DEPLOY_URL to the final https URL so a
           # redirect surfaces as an error instead of silently becoming a GET.
@@ -73,6 +86,7 @@ jobs:
           # Content-Type before it ever reaches PHP — so send one.
           curl --silent --show-error --fail-with-body \
                --max-time 300 \
+               "${RESOLVE[@]}" \
                --request POST "$DEPLOY_URL" \
                --header "X-Deploy-Token: $DEPLOY_TOKEN" \
                --header "Content-Type: application/json" \
