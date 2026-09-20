@@ -2,12 +2,24 @@
   <div class="section">
   <div class="wrap">
     @if($category)
-      <p class="crumbs"><a href="{{ route('home') }}">Home</a> › <a href="{{ route('shop.index') }}">{{ $department->name }}</a> › {{ $category->name }}</p>
+      <p class="crumbs"><a href="{{ route('home') }}">Home</a> › <a href="{{ route('categories.index') }}">{{ $department->name }}</a> ›@if($category->parent) <a href="{{ $category->parent->url() }}">{{ $category->parent->name }}</a> ›@endif {{ $category->name }}</p>
     @else
       <p class="eyebrow">Newborn – 2 years</p>
     @endif
     <h1 class="h2 page">{{ $title }}</h1>
+    @if($category?->description)<p class="muted small" style="margin:0 0 6px;max-width:60ch">{{ $category->description }}</p>@endif
     <p class="muted small" style="margin:0 0 18px">{{ $products->total() }} {{ Str::plural('item', $products->total()) }}</p>
+
+    @if($category && $category->children->isNotEmpty())
+      <nav class="chips subnav" aria-label="{{ $category->name }} types" style="margin-bottom:10px">
+        <a class="chip on" href="{{ $category->url() }}">All {{ Str::lower($category->name) }}</a>
+        @foreach($category->children->where('is_active', true) as $child)
+          <a class="chip" href="{{ $child->url() }}">{{ $child->name }}</a>
+        @endforeach
+      </nav>
+    @elseif(!$category)
+      <p style="margin:0 0 14px"><a class="small" href="{{ route('categories.index') }}">Browse by category →</a></p>
+    @endif
 
     <div class="chips" style="margin-bottom:12px">
       <a class="chip {{ $activeSize ? '' : 'on' }}" href="{{ request()->fullUrlWithoutQuery(['size', 'page']) }}">All ages</a>
@@ -24,7 +36,7 @@
         <option value="price_desc" @selected(request('sort') === 'price_desc')>Price: high to low</option>
         <option value="new" @selected(request('sort') === 'new')>Newest</option>
       </select>
-      <a class="btn line" href="{{ route('shop.index') }}">Clear filters</a>
+      <a class="btn line" href="{{ $category ? $category->url() : route('shop.index') }}">Clear filters</a>
     </form>
 
     @if($products->isEmpty())

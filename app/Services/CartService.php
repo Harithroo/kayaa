@@ -3,12 +3,16 @@
 namespace App\Services;
 
 use App\Models\ProductVariant;
+use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 /**
- * Session-keyed cart for guests. Stored as [variant_id => qty].
- * Customer accounts (v2) can move this to a carts table without changing callers.
+ * The cart, as [variant_id => qty].
+ * Guests: kept in the session. Signed-in customers: kept in cart_items, so it follows
+ * them across devices. On sign-in the guest cart is merged into the account's (mergeGuestCart).
  */
 class CartService
 {
@@ -16,10 +20,51 @@ class CartService
 
     private ?Collection $lines = null;
 
+    /** @var array<int,int>|null Per-request cache of the account cart. */
+    private ?array $accountItems = null;
+
     /** @return array<int,int> */
     public function raw(): array
     {
-        return Session::get(self::KEY, []);
+        $user = Auth::user();
+        if (! $user) {
+            return Session::get(self::KEY, []);
+        }
+
+        return $this->accountItems ??= DB::table('cart_items')
+            ->where('user_id', $user->id)
+            ->orderBy('id')
+            ->pluck('qty', 'product_variant_id')
+            ->map(fn ($qty) => (int) $qty)
+            ->all();
+    }
+
+    /**
+     * Fold the guest session cart into the customer's saved cart, called on sign-in.
+     * Quantities for the same size are added together and capped at stock.
+     */
+    public function mergeGuestCart(User $user): void
+    {
+        $guest = Session::get(self::KEY, []);
+        if ($guest !== []) {
+            $stock = ProductVariant::whereKey(array_keys($guest))->where('is_active', true)->pluck('stock', 'id');
+            $saved = DB::table('cart_items')->where('user_id', $user->id)->pluck('qty', 'product_variant_id');
+
+            foreach ($guest as $variantId => $qty) {
+                if (! $stock->has($variantId) || $stock[$variantId] < 1) {
+                    continue;
+                }
+                $merged = min((int) ($saved[$variantId] ?? 0) + (int) $qty, (int) $stock[$variantId]);
+                DB::table('cart_items')->updateOrInsert(
+                    ['user_id' => $user->id, 'product_variant_id' => $variantId],
+                    ['qty' => $merged, 'updated_at' => now()],
+                );
+            }
+        }
+
+        Session::forget(self::KEY);
+        $this->accountItems = null;
+        $this->lines = null;
     }
 
     public function add(ProductVariant $variant, int $qty = 1): void
@@ -132,7 +177,28 @@ class CartService
 
     private function save(array $items): void
     {
-        Session::put(self::KEY, $items);
         $this->lines = null;
+
+        $user = Auth::user();
+        if (! $user) {
+            Session::put(self::KEY, $items);
+
+            return;
+        }
+
+        DB::transaction(function () use ($user, $items) {
+            DB::table('cart_items')->where('user_id', $user->id)
+                ->whereNotIn('product_variant_id', array_keys($items) ?: [0])
+                ->delete();
+
+            foreach ($items as $variantId => $qty) {
+                DB::table('cart_items')->updateOrInsert(
+                    ['user_id' => $user->id, 'product_variant_id' => $variantId],
+                    ['qty' => $qty, 'updated_at' => now()],
+                );
+            }
+        });
+
+        $this->accountItems = $items;
     }
 }

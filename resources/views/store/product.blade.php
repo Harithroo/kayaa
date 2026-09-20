@@ -77,9 +77,16 @@
 
           <div class="btnrow" style="margin-bottom:12px">
             <button class="btn" data-add type="submit" @disabled(!$anyStock)>{{ $anyStock ? 'Add to cart' : 'Sold out' }}</button>
+            @php $wishSaved = app(\App\Services\WishlistService::class)->has($product->id); @endphp
+            {{-- Submits the separate wishlist form below (forms can't nest). --}}
+            <button type="submit" form="wish-{{ $product->id }}" class="btn ghost wishtext {{ $wishSaved ? 'on' : '' }}" aria-pressed="{{ $wishSaved ? 'true' : 'false' }}" style="flex:0 1 auto">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ $wishSaved ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20S5 15.4 5 10.7A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 7 2.7C19 15.4 12 20 12 20Z"/></svg>
+              <span data-wish-label>{{ $wishSaved ? 'Saved' : 'Save' }}</span>
+            </button>
           </div>
           <p class="muted" style="margin:0 0 24px;font-size:13.5px">Order before 2pm for same-day dispatch · Cash on delivery available</p>
         </form>
+        <form id="wish-{{ $product->id }}" method="post" action="{{ route('wishlist.toggle', $product) }}" data-wish hidden>@csrf</form>
 
         <details class="acc" open>
           <summary>Fabric &amp; care</summary>

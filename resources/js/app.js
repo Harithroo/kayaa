@@ -189,3 +189,70 @@ if (cartDrawer) {
         });
     });
 }
+
+// Wishlist hearts: toggle in place instead of reloading the page. Forms still work without JS.
+const wishCount = document.querySelector('[data-wish-count]');
+const wishGrid = document.querySelector('[data-wish-grid]');
+
+// Taps are queued: the list lives in one cookie, so two requests in flight would overwrite each other.
+let wishQueue = Promise.resolve();
+
+document.addEventListener('submit', (e) => {
+    const form = e.target.closest('form[data-wish]');
+    if (!form || !window.fetch) return;
+    e.preventDefault();
+    wishQueue = wishQueue.then(() => toggleWish(form));
+});
+
+async function toggleWish(form) {
+
+    const buttons = [...form.elements].filter((el) => el.type === 'submit');
+    if (buttons.some((b) => b.disabled)) return;
+    buttons.forEach((b) => { b.disabled = true; });
+
+    try {
+        const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            credentials: 'same-origin',
+        });
+        if (!res.ok) throw new Error(res.status);
+        const { saved, count } = await res.json();
+
+        buttons.forEach((b) => {
+            b.classList.toggle('on', saved);
+            b.setAttribute('aria-pressed', String(saved));
+            b.querySelector('svg')?.setAttribute('fill', saved ? 'currentColor' : 'none');
+            const label = b.querySelector('[data-wish-label]');
+            if (label) label.textContent = saved ? 'Saved' : 'Save';
+            if (b.hasAttribute('aria-label')) {
+                b.setAttribute('aria-label', b.getAttribute('aria-label').replace(saved ? /^Save (.*) to wishlist$/ : /^Remove (.*) from wishlist$/, saved ? 'Remove $1 from wishlist' : 'Save $1 to wishlist'));
+            }
+        });
+
+        if (wishCount) {
+            wishCount.textContent = count;
+            wishCount.hidden = count === 0;
+            wishCount.closest('a')?.setAttribute('aria-label', `Wishlist, ${count} saved`);
+        }
+
+        // On the wishlist page an un-hearted card leaves the grid.
+        if (!saved && wishGrid?.contains(form)) {
+            const card = form.closest('.card');
+            card.classList.add('leaving');
+            setTimeout(() => {
+                card.remove();
+                if (!wishGrid.querySelector('.card')) window.location.reload();
+                else {
+                    const note = document.querySelector('[data-wish-note]');
+                    if (note) note.textContent = note.textContent.replace(/^\s*\d+ items?/, `${count} item${count === 1 ? '' : 's'}`);
+                }
+            }, 200);
+        }
+    } catch {
+        form.submit(); // fall back to the normal post
+    } finally {
+        buttons.forEach((b) => { b.disabled = false; });
+    }
+}

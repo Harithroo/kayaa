@@ -4,7 +4,7 @@
   $waHref = \App\Support\StoreContact::whatsappHref();
   $tel = \App\Support\StoreContact::phone();
   $telHref = \App\Support\StoreContact::phoneHref();
-  $active = $nav ?? (request()->routeIs('home') ? 'home' : (request()->routeIs('shop.*', 'products.*') ? 'shop' : (request()->routeIs('search') ? 'search' : (request()->routeIs('cart.*', 'checkout.*') ? 'cart' : (request()->routeIs('orders.*') ? 'orders' : (request()->routeIs('account.*', 'password.*') ? 'account' : null))))));
+  $active = $nav ?? (request()->routeIs('home') ? 'home' : (request()->routeIs('shop.*', 'products.*') ? 'shop' : (request()->routeIs('search') ? 'search' : (request()->routeIs('cart.*', 'checkout.*') ? 'cart' : (request()->routeIs('orders.*') ? 'orders' : (request()->routeIs('account.*', 'password.*') ? 'account' : (request()->routeIs('wishlist.*') ? 'wishlist' : (request()->routeIs('categories.*') ? 'categories' : null))))))));
   $ico = [
     'home' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>',
     'shop' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16M4 12h16M4 19h16"/></svg>',
@@ -17,6 +17,8 @@
   $menu = [
     ['home', 'Home', route('home')],
     ['shop', 'Shop', route('shop.index')],
+    ['categories', 'All categories', route('categories.index')],
+    ['wishlist', 'Wishlist'.($wishCount ? " ($wishCount)" : ''), route('wishlist.index')],
     ['about', 'About Kayaa', route('pages.show', 'about')],
     ['contact', 'Contact & help', route('pages.contact')],
     ['orders', 'Track my order', route('orders.track')],
@@ -53,6 +55,7 @@
         <a class="logo" href="{{ route('home') }}" aria-label="Kayaa home">kaya<span>a</span></a>
         <nav class="desknav" aria-label="Site">
           <a href="{{ route('shop.index') }}" @class(['on' => $active === 'shop'])>Shop</a>
+          <a href="{{ route('categories.index') }}" @class(['on' => $active === 'categories'])>Categories</a>
           <a href="{{ route('pages.show', 'about') }}" @class(['on' => request()->is('about')])>About</a>
           <a href="{{ route('pages.contact') }}" @class(['on' => request()->is('contact')])>Contact</a>
           <a href="{{ route('orders.track') }}" @class(['on' => $active === 'orders'])>Track order</a>
@@ -63,6 +66,10 @@
         <a class="iconbtn" href="{{ route('search') }}" aria-label="Search">
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         </a>
+        <a class="iconbtn" href="{{ route('wishlist.index') }}" aria-label="Wishlist, {{ $wishCount }} saved">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20S5 15.4 5 10.7A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 7 2.7C19 15.4 12 20 12 20Z"/></svg>
+          <span class="count sage" data-wish-count @unless($wishCount > 0) hidden @endunless>{{ $wishCount }}</span>
+        </a>
         <a class="iconbtn" href="{{ route('cart.index') }}" aria-label="Cart, {{ $cartCount }} items" data-open-cart>
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9.2 8V6.2a2.8 2.8 0 0 1 5.6 0V8"/></svg>
           <span class="count" @unless($cartCount > 0) hidden @endunless>{{ $cartCount }}</span>
@@ -70,6 +77,7 @@
       </div>
       <nav class="catnav" aria-label="Categories">
         <a href="{{ route('shop.index') }}" @class(['on' => request()->routeIs('shop.index') && !request('sale')])>New in</a>
+        <a href="{{ route('categories.index') }}" @class(['on' => $active === 'categories'])>All categories</a>
         @foreach($navCategories as $cat)
           <a href="{{ $cat->url() }}" @class(['on' => $category?->id === $cat->id])>{{ $cat->name }}</a>
         @endforeach
@@ -129,6 +137,7 @@
         </div>
         <div class="foot-col"><h3>Shop</h3><ul>
           <li><a href="{{ route('shop.index') }}">New in</a></li>
+          <li><a href="{{ route('categories.index') }}">All categories</a></li>
           @foreach($navCategories->take(3) as $cat)<li><a href="{{ $cat->url() }}">{{ $cat->name }}</a></li>@endforeach
           <li><a href="{{ route('shop.index', ['sale' => 1]) }}">Sale</a></li>
         </ul></div>
@@ -137,6 +146,7 @@
           <li><a href="{{ route('pages.show', 'delivery') }}">Delivery</a></li>
           <li><a href="{{ route('pages.show', 'returns') }}">Returns &amp; exchanges</a></li>
           <li><a href="{{ route('orders.track') }}">Track your order</a></li>
+          <li><a href="{{ route('wishlist.index') }}">Wishlist</a></li>
           <li><a href="{{ auth()->check() ? route('account.index') : route('account.login') }}">{{ auth()->check() ? 'My account' : 'Sign in / register' }}</a></li>
         </ul></div>
         <div class="foot-col"><h3>Contact</h3><ul>

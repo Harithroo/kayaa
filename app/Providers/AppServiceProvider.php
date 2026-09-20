@@ -6,6 +6,9 @@ use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Setting;
 use App\Services\CartService;
+use App\Services\WishlistService;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,13 +17,25 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->scoped(CartService::class);
+        $this->app->scoped(WishlistService::class);
     }
 
     public function boot(): void
     {
         $this->bootContactSettings();
 
-        // Every storefront view gets the nav categories and the cart count.
+        // Signing in (or registering) folds whatever was saved as a guest into the account,
+        // so the cart and wishlist carry over instead of disappearing. Fires for remember-me
+        // logins too. The event runs before Auth::user() is set, hence the explicit $user.
+        Event::listen(Login::class, function (Login $event) {
+            if (! $event->user instanceof \App\Models\User) {
+                return;
+            }
+            app(CartService::class)->mergeGuestCart($event->user);
+            app(WishlistService::class)->mergeGuestWishlist($event->user);
+        });
+
+        // Every storefront view gets the nav categories, cart and wishlist counts.
         View::composer('components.layouts.store', function ($view) {
             $view->with('navCategories', Category::query()
                 ->whereNull('parent_id')
@@ -29,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
                 ->get());
             $view->with('cart', app(CartService::class));
             $view->with('cartCount', app(CartService::class)->count());
+            $view->with('wishCount', app(WishlistService::class)->count());
             $view->with('topbar', Banner::live('topbar')->first());
         });
     }
