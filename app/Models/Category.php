@@ -43,6 +43,8 @@ class Category extends Model
 
     public function url(): string
     {
-        return route('shop.category', [$this->department, $this]);
+        // The route param is {categorySlug} and ShopController looks the category
+        // up by slug, so pass the slug — a bare model would resolve to its id.
+        return route('shop.category', [$this->department, $this->slug]);
     }
 }
