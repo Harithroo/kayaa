@@ -59,14 +59,18 @@ jobs:
       # Files are on the server but the schema is not. Run migrations and rebuild
       # the caches over SSH; skipped automatically if SSH secrets are not set.
       - name: Run Migrations & Rebuild Caches
-        if: ${{ env.SSH_HOST != '' }}
+        if: ${{ env.SSH_HOST != '' && env.SSH_USERNAME != '' && env.SSH_APP_PATH != '' }}
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_APP_PATH: ${{ secrets.SSH_APP_PATH }}
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Only needed if the cPanel key was generated with a passphrase.
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script_stop: true
           script: |
