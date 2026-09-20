@@ -69,7 +69,11 @@ jobs:
           # --fail-with-body so a 4xx/5xx still prints artisan's output before failing.
           # No --location on purpose: set DEPLOY_URL to the final https URL so a
           # redirect surfaces as an error instead of silently becoming a GET.
+          # The body is not read, but LiteSpeed 403s a POST with no
+          # Content-Type before it ever reaches PHP — so send one.
           curl --silent --show-error --fail-with-body \
                --max-time 300 \
                --request POST "$DEPLOY_URL" \
-               --header "X-Deploy-Token: $DEPLOY_TOKEN"
+               --header "X-Deploy-Token: $DEPLOY_TOKEN" \
+               --header "Content-Type: application/json" \
+               --data '{}'
