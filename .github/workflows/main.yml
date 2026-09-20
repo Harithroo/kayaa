@@ -77,6 +77,10 @@ jobs:
           if [ -n "${DEPLOY_ORIGIN_IP:-}" ]; then
             RESOLVE=(--resolve "$HOST:443:$DEPLOY_ORIGIN_IP")
             echo "Bypassing Cloudflare via origin $DEPLOY_ORIGIN_IP"
+          else
+            echo "WARNING: DEPLOY_ORIGIN_IP is not set, so this call goes through"
+            echo "Cloudflare, which challenges runner IPs. Expect a 403 titled"
+            echo "'Just a moment...'. Set the secret to reach the origin directly."
           fi
 
           # --fail-with-body so a 4xx/5xx still prints artisan's output before failing.
