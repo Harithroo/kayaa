@@ -55,3 +55,23 @@ jobs:
             storage/framework/cache/data/**
             storage/framework/sessions/**
             storage/framework/views/**
+
+      # Files are on the server but the schema is not. Run migrations and rebuild
+      # the caches over SSH; skipped automatically if SSH secrets are not set.
+      - name: Run Migrations & Rebuild Caches
+        if: ${{ env.SSH_HOST != '' }}
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script_stop: true
+          script: |
+            cd ${{ secrets.SSH_APP_PATH }}
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
