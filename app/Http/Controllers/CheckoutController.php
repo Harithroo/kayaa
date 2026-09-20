@@ -23,6 +23,7 @@ class CheckoutController extends Controller
         return view('store.checkout', [
             'cart' => $this->cart,
             'districts' => config('kayaa.districts'),
+            'customer' => auth()->user(),
         ]);
     }
 
@@ -43,6 +44,7 @@ class CheckoutController extends Controller
         ]);
 
         $data['phone'] = preg_replace('/\D+/', '', $data['phone']);
+        $data['user_id'] = $request->user()?->id;   // null for guest checkout
         $payment = $data['payment_method'];
         unset($data['payment_method']);
 

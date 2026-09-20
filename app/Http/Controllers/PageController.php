@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
+use App\Models\Faq;
 use App\Models\SizeScale;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,9 @@ class PageController extends Controller
 
     public function contact(): View
     {
-        return view('store.pages.contact');
+        return view('store.pages.contact', [
+            'faqs' => Faq::active()->forContact()->get(),
+        ]);
     }
 
     public function sendMessage(Request $request): RedirectResponse

@@ -28,6 +28,18 @@
         <button class="btn dark" style="width:100%">Send message</button>
       </form>
     </div>
+
+    @if($faqs->isNotEmpty())
+      <section class="faqs" id="faqs" style="margin-top:36px">
+        <h2 class="h2">Frequently asked</h2>
+        @foreach($faqs as $faq)
+          <details class="acc">
+            <summary>{{ $faq->question }}</summary>
+            <p>{!! nl2br(e($faq->answer)) !!}</p>
+          </details>
+        @endforeach
+      </section>
+    @endif
   </div>
   </div>
 </x-layouts.store>

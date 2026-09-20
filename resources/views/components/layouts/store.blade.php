@@ -2,22 +2,23 @@
 @php
   $wa = config('kayaa.whatsapp');
   $waHref = $wa ? 'https://wa.me/94'.preg_replace('/\D+/', '', ltrim($wa, '0')) : null;
-  $active = $nav ?? (request()->routeIs('home') ? 'home' : (request()->routeIs('shop.*', 'products.*') ? 'shop' : (request()->routeIs('search') ? 'search' : (request()->routeIs('cart.*', 'checkout.*') ? 'cart' : (request()->routeIs('orders.*') ? 'orders' : null)))));
+  $active = $nav ?? (request()->routeIs('home') ? 'home' : (request()->routeIs('shop.*', 'products.*') ? 'shop' : (request()->routeIs('search') ? 'search' : (request()->routeIs('cart.*', 'checkout.*') ? 'cart' : (request()->routeIs('orders.*') ? 'orders' : (request()->routeIs('account.*', 'password.*') ? 'account' : null))))));
   $ico = [
     'home' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>',
     'shop' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16M4 12h16M4 19h16"/></svg>',
     'search' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
     'cart' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9.2 8V6.2a2.8 2.8 0 0 1 5.6 0V8"/></svg>',
-    'orders' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
+    'account' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c.9-3.6 3.7-5.4 7-5.4s6.1 1.8 7 5.4"/></svg>',
   ];
+  // Drawer menu. Search and cart are left out — both already have their own icon
+  // in the header and their own slot in the tab bar.
   $menu = [
     ['home', 'Home', route('home')],
-    ['shop', 'Shop all', route('shop.index')],
-    ['search', 'Search', route('search')],
-    ['cart', 'Cart', route('cart.index')],
-    ['orders', 'Track my order', route('orders.track')],
+    ['shop', 'Shop', route('shop.index')],
     ['about', 'About Kayaa', route('pages.show', 'about')],
     ['contact', 'Contact & help', route('pages.contact')],
+    ['orders', 'Track my order', route('orders.track')],
+    ['account', auth()->check() ? 'My account' : 'Sign in / register', auth()->check() ? route('account.index') : route('account.login')],
   ];
 @endphp
 <!doctype html>
@@ -50,16 +51,19 @@
         <a class="logo" href="{{ route('home') }}" aria-label="Kayaa home">kaya<span>a</span></a>
         <nav class="desknav" aria-label="Site">
           <a href="{{ route('shop.index') }}" @class(['on' => $active === 'shop'])>Shop</a>
-          <a href="{{ route('orders.track') }}" @class(['on' => $active === 'orders'])>Track order</a>
           <a href="{{ route('pages.show', 'about') }}" @class(['on' => request()->is('about')])>About</a>
           <a href="{{ route('pages.contact') }}" @class(['on' => request()->is('contact')])>Contact</a>
+          <a href="{{ route('orders.track') }}" @class(['on' => $active === 'orders'])>Track order</a>
         </nav>
+        <a class="iconbtn" href="{{ auth()->check() ? route('account.index') : route('account.login') }}" aria-label="{{ auth()->check() ? 'My account' : 'Sign in' }}">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c.9-3.6 3.7-5.4 7-5.4s6.1 1.8 7 5.4"/></svg>
+        </a>
         <a class="iconbtn" href="{{ route('search') }}" aria-label="Search">
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         </a>
-        <a class="iconbtn" href="{{ route('cart.index') }}" aria-label="Cart, {{ $cartCount }} items">
+        <a class="iconbtn" href="{{ route('cart.index') }}" aria-label="Cart, {{ $cartCount }} items" data-open-cart>
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9.2 8V6.2a2.8 2.8 0 0 1 5.6 0V8"/></svg>
-          @if($cartCount > 0)<span class="count">{{ $cartCount }}</span>@endif
+          <span class="count" @unless($cartCount > 0) hidden @endunless>{{ $cartCount }}</span>
         </a>
       </div>
       <nav class="catnav" aria-label="Categories">
@@ -86,6 +90,21 @@
       @if($waHref)<a class="wa" href="{{ $waHref }}">WhatsApp us</a>@endif
     </div>
     <div class="drawer-scrim" data-close-drawer></div>
+  </div>
+
+  {{-- Cart: slides in from the right on desktop, up from the bottom on mobile. --}}
+  <div class="cartdrawer" data-cart-drawer @unless(session('cart_open')) hidden @endunless>
+    {{-- Anchors, not buttons: without JS these close the drawer by reloading the page. --}}
+    <a class="cartdrawer-scrim" href="{{ url()->current() }}" aria-label="Close cart" data-close-cart></a>
+    <aside class="cartdrawer-panel" role="dialog" aria-modal="true" aria-label="Your cart">
+      <div class="cartdrawer-head">
+        <p class="t">Your cart <span class="muted" data-cart-count-label>{{ $cartCount > 0 ? "($cartCount)" : '' }}</span></p>
+        <a class="iconbtn" href="{{ url()->current() }}" aria-label="Close cart" data-close-cart>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </a>
+      </div>
+      <x-store.cart-panel :cart="$cart" />
+    </aside>
   </div>
 
   @if(session('success') || session('error'))
@@ -116,6 +135,7 @@
           <li><a href="{{ route('pages.show', 'delivery') }}">Delivery</a></li>
           <li><a href="{{ route('pages.show', 'returns') }}">Returns &amp; exchanges</a></li>
           <li><a href="{{ route('orders.track') }}">Track your order</a></li>
+          <li><a href="{{ auth()->check() ? route('account.index') : route('account.login') }}">{{ auth()->check() ? 'My account' : 'Sign in / register' }}</a></li>
         </ul></div>
         <div class="foot-col"><h3>Contact</h3><ul>
           @if($wa)<li><a href="{{ $waHref }}">WhatsApp {{ $wa }}</a></li>@endif
@@ -130,9 +150,9 @@
 
   <nav class="tabbar" aria-label="Main">
     <div class="tabbar-in">
-      @foreach([['home', 'Home', route('home')], ['shop', 'Shop', route('shop.index')], ['search', 'Search', route('search')], ['cart', 'Cart', route('cart.index')], ['orders', 'Orders', route('orders.track')]] as [$key, $label, $href])
-        <a class="tab {{ $active === $key ? 'on' : '' }}" href="{{ $href }}">
-          <span class="ico">{!! $ico[$key] !!}@if($key === 'cart' && $cartCount > 0)<span class="count">{{ $cartCount }}</span>@endif</span>
+      @foreach([['home', 'Home', route('home')], ['shop', 'Shop', route('shop.index')], ['search', 'Search', route('search')], ['cart', 'Cart', route('cart.index')], ['account', auth()->check() ? 'Account' : 'Sign in', auth()->check() ? route('account.index') : route('account.login')]] as [$key, $label, $href])
+        <a class="tab {{ $active === $key ? 'on' : '' }}" href="{{ $href }}" @if($key === 'cart') data-open-cart @endif>
+          <span class="ico">{!! $ico[$key] !!}@if($key === 'cart')<span class="count" @unless($cartCount > 0) hidden @endunless>{{ $cartCount }}</span>@endif</span>
           <span>{{ $label }}</span>
         </a>
       @endforeach

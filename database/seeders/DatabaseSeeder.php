@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             SizeScaleSeeder::class,
             CatalogStructureSeeder::class,
             BannerSeeder::class,
+            FaqSeeder::class,
             DemoProductSeeder::class, // placeholder products; remove once real products are in
         ]);
     }

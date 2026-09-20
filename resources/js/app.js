@@ -71,13 +71,16 @@ document.querySelectorAll('[data-gallery]').forEach((g) => {
 });
 
 // Cart quantity steppers submit their form on change.
-document.querySelectorAll('[data-qty-form]').forEach((form) => {
-    const input = form.querySelector('input[name="qty"]');
-    form.querySelectorAll('[data-step]').forEach((b) => b.addEventListener('click', () => {
-        input.value = Math.max(0, Math.min(10, Number(input.value) + Number(b.dataset.step)));
-        form.requestSubmit();
-    }));
-});
+function wireQtySteppers(root = document) {
+    root.querySelectorAll('[data-qty-form]').forEach((form) => {
+        const input = form.querySelector('input[name="qty"]');
+        form.querySelectorAll('[data-step]').forEach((b) => b.addEventListener('click', () => {
+            input.value = Math.max(0, Math.min(10, Number(input.value) + Number(b.dataset.step)));
+            form.requestSubmit();
+        }));
+    });
+}
+wireQtySteppers();
 
 // Checkout: highlight the chosen payment option.
 document.querySelectorAll('.payopt input').forEach((r) => r.addEventListener('change', () => {
@@ -110,4 +113,79 @@ if (district && eta) {
     };
     district.addEventListener('change', update);
     update();
+}
+
+// Cart drawer: slides in from the right on desktop, up from the bottom on mobile.
+// Without JS every one of these forms still posts and redirects as normal.
+const cartDrawer = document.querySelector('[data-cart-drawer]');
+if (cartDrawer) {
+    const panelHost = cartDrawer.querySelector('.cartdrawer-panel');
+    const countLabel = cartDrawer.querySelector('[data-cart-count-label]');
+    let lastFocus = null;
+
+    const openCart = () => {
+        lastFocus = document.activeElement;
+        cartDrawer.hidden = false;
+        document.body.style.overflow = 'hidden';
+        cartDrawer.querySelector('[data-close-cart]')?.focus();
+    };
+    const closeCart = () => {
+        cartDrawer.hidden = true;
+        document.body.style.overflow = '';
+        lastFocus?.focus();
+    };
+
+    document.querySelectorAll('[data-open-cart]').forEach((b) => b.addEventListener('click', (e) => {
+        e.preventDefault();
+        openCart();
+    }));
+    cartDrawer.querySelectorAll('[data-close-cart]').forEach((b) => b.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeCart();
+    }));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !cartDrawer.hidden) closeCart(); });
+
+    // Swap in the freshly rendered panel and keep the header/tab-bar counts in step.
+    const setPanel = (html) => {
+        cartDrawer.querySelector('[data-cart-panel]')?.replaceWith(
+            new DOMParser().parseFromString(html, 'text/html').querySelector('[data-cart-panel]'),
+        );
+        wireQtySteppers(cartDrawer);
+        wireCartForms();
+        refreshCount();
+    };
+
+    const refreshCount = () => {
+        const n = [...cartDrawer.querySelectorAll('input[name="qty"]')]
+            .reduce((sum, i) => sum + Number(i.value || 0), 0);
+        if (countLabel) countLabel.textContent = n > 0 ? `(${n})` : '';
+        document.querySelectorAll('[data-open-cart] .count').forEach((el) => {
+            el.textContent = n;
+            el.hidden = n === 0;
+        });
+    };
+
+    const post = (form) => fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'X-Cart-Panel': '1', 'X-Requested-With': 'XMLHttpRequest' },
+    }).then((r) => r.text()).then(setPanel);
+
+    function wireCartForms() {
+        panelHost.querySelectorAll('form').forEach((form) => {
+            if (form.dataset.wired) return;
+            form.dataset.wired = '1';
+            form.addEventListener('submit', (e) => { e.preventDefault(); post(form); });
+        });
+    }
+    wireCartForms();
+
+    // Add to cart from a product page fills the drawer and opens it, without leaving the page.
+    document.querySelectorAll('[data-variant-picker]').forEach((form) => {
+        form.addEventListener('submit', (e) => {
+            if (!form.querySelector('input[name="variant_id"]')?.value) return;
+            e.preventDefault();
+            post(form).then(openCart);
+        });
+    });
 }

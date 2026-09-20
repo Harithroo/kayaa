@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\NoIndex;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,7 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->append(\App\Http\Middleware\NoIndex::class);
+        $middleware->append(NoIndex::class);
+
+        // Storefront accounts live under /account, not Laravel's default /login.
+        $middleware->redirectGuestsTo(fn () => route('account.login'));
+        $middleware->redirectUsersTo(fn () => route('account.index'));
 
         // PayHere posts to this URL from outside the browser session.
         $middleware->validateCsrfTokens(except: [

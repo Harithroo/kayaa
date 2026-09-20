@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Faq;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function show(Product $product): View
+    public function show(Request $request, Product $product): View
     {
         abort_unless($product->status === 'active', 404);
 
@@ -34,6 +36,19 @@ class ProductController extends Controller
             ];
         }
 
-        return view('store.product', compact('product', 'related', 'matrix'));
+        $reviews = $product->reviews()->approved()->latest()->limit(20)->get();
+        $ratingBreakdown = $product->reviews()->approved()
+            ->selectRaw('rating, count(*) as total')->groupBy('rating')->pluck('total', 'rating');
+
+        $faqs = Faq::active()->forProduct($product)->get();
+
+        // One review per signed-in customer; guests can always leave one.
+        $hasReviewed = $request->user()
+            ? $product->reviews()->where('user_id', $request->user()->id)->exists()
+            : false;
+
+        return view('store.product', compact(
+            'product', 'related', 'matrix', 'reviews', 'ratingBreakdown', 'faqs', 'hasReviewed'
+        ));
     }
 }

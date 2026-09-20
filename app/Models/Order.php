@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -13,7 +14,7 @@ class Order extends Model
     public const PAYMENT_STATUSES = ['pending', 'paid', 'failed', 'refunded'];
 
     protected $fillable = [
-        'reference', 'status', 'payment_method', 'payment_status', 'payment_reference',
+        'user_id', 'reference', 'status', 'payment_method', 'payment_status', 'payment_reference',
         'first_name', 'last_name', 'phone', 'email', 'address', 'city', 'district', 'note',
         'subtotal', 'shipping', 'total', 'paid_at', 'shipped_at',
     ];
@@ -32,6 +33,11 @@ class Order extends Model
     public function getRouteKeyName(): string
     {
         return 'reference';
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function items(): HasMany

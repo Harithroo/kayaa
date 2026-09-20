@@ -6,13 +6,13 @@
       <form class="main" method="post" action="{{ route('checkout.store') }}" novalidate>
         @csrf
         <h2 class="h3">Contact</h2>
-        <x-store.field name="phone" label="Mobile number" type="tel" inputmode="tel" placeholder="077 412 6690" autocomplete="tel" required />
-        <x-store.field name="email" label="Email (for the receipt)" type="email" placeholder="you@example.com" autocomplete="email" />
+        <x-store.field name="phone" label="Mobile number" type="tel" inputmode="tel" placeholder="077 412 6690" autocomplete="tel" :value="$customer?->phone" required />
+        <x-store.field name="email" label="Email (for the receipt)" type="email" placeholder="you@example.com" autocomplete="email" :value="$customer?->email" />
 
         <h2 class="h3" style="margin-top:26px">Delivery address</h2>
         <div class="two">
-          <x-store.field name="first_name" label="First name" placeholder="Amaya" autocomplete="given-name" required />
-          <x-store.field name="last_name" label="Last name" placeholder="Perera" autocomplete="family-name" required />
+          <x-store.field name="first_name" label="First name" placeholder="Amaya" autocomplete="given-name" :value="$customer ? Str::before($customer->name, ' ') : null" required />
+          <x-store.field name="last_name" label="Last name" placeholder="Perera" autocomplete="family-name" :value="$customer && Str::contains($customer->name, ' ') ? Str::after($customer->name, ' ') : null" required />
         </div>
         <x-store.field name="address" label="Address" placeholder="24/3 Pagoda Road" autocomplete="street-address" required />
         <div class="two">

@@ -48,6 +48,21 @@ class Product extends Model
         return $this->hasMany(ProductImage::class)->orderBy('position');
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function approvedReviews(): HasMany
+    {
+        return $this->hasMany(Review::class)->where('is_approved', true)->latest();
+    }
+
+    public function faqs(): HasMany
+    {
+        return $this->hasMany(Faq::class);
+    }
+
     public function collections(): BelongsToMany
     {
         return $this->belongsToMany(Collection::class)->withPivot('position');
@@ -112,6 +127,19 @@ class Product extends Model
         $last = self::shortSize($sizes->last()->label);
 
         return $first === $last ? $first : "{$first}–{$last}";
+    }
+
+    /** Average of approved ratings, rounded to one decimal. Null when there are none. */
+    public function ratingAverage(): ?float
+    {
+        $avg = $this->reviews()->approved()->avg('rating');
+
+        return $avg === null ? null : round((float) $avg, 1);
+    }
+
+    public function ratingCount(): int
+    {
+        return $this->reviews()->approved()->count();
     }
 
     public function totalStock(): int
