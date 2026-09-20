@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DeployController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
@@ -68,6 +69,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/account/password', [AccountController::class, 'updatePassword'])->name('account.password.update');
     Route::post('/account/logout', [CustomerAuthController::class, 'logout'])->name('account.logout');
 });
+
+// Called by the deploy workflow after the FTP sync. Declared before the
+// catch-all page routes, and 404s unless DEPLOY_TOKEN is set on the server.
+Route::post('/deploy/migrate', DeployController::class)
+    ->middleware('throttle:6,1')
+    ->name('deploy.migrate');
 
 Route::get('/search', SearchController::class)->name('search');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');

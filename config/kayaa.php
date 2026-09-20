@@ -11,6 +11,8 @@ return [
     'phone' => env('STORE_PHONE', ''),
     'email' => env('MAIL_FROM_ADDRESS', 'hello@kayaa.lk'),
     // Staging: keep the site out of search engines. Set to false (or remove) in production.
+    // Shared secret for POST /deploy/migrate. Empty disables the route.
+    'deploy_token' => env('DEPLOY_TOKEN', ''),
     'noindex' => (bool) env('APP_NOINDEX', false),
     'districts' => [
         'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya', 'Galle', 'Matara', 'Hambantota',

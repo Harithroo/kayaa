@@ -21,6 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // PayHere posts to this URL from outside the browser session.
         $middleware->validateCsrfTokens(except: [
             'payhere/notify',
+            // Called by GitHub Actions, not a browser; guarded by DEPLOY_TOKEN.
+            'deploy/migrate',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
