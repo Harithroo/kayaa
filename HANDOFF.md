@@ -76,13 +76,17 @@ Layout: `resources/views/components/layouts/store.blade.php` — hamburger drawe
 - `FaqSeeder` seeds starter FAQs.
 
 ## Admin (`/admin`, Filament)
-Products (variants and photos inline, 4:5 photos, New/Featured toggles) · Categories · Departments · Colours · Size scales · Orders (view, Confirm, Mark shipped, filters by status/payment, pending badge) · Banners (topbar / home_promo, ink/cream/butter style, on/off, date window, position) · Messages (contact inbox, unread badge) · Reviews (approve / hide, bulk approve, admin reply, pending badge) · FAQs · Customers (non-admin users, order count; list only).
+Products (variants and photos inline, 4:5 photos, New/Featured toggles) · Categories · Departments · Colours · Size scales · Orders (view, Confirm, Mark shipped, filters by status/payment, pending badge) · Banners (topbar / home_promo, ink/cream/butter style, on/off, date window, position) · Messages (contact inbox, unread badge) · Reviews (approve / hide, bulk approve, admin reply, pending badge) · FAQs · Customers (non-admin users, order count; list only) · **Contact details** (`App\Filament\Pages\ContactSettings` — store email, call number, WhatsApp number).
+
+Account: `->profile(isSimple: false)` on the panel adds `/admin/profile`, where the signed-in admin changes their name, email and **password** (Filament's built-in page; the current password is required). Reachable from the user menu, top right.
 
 ## Seed data (`DatabaseSeeder`)
 AdminUser (from `ADMIN_EMAIL` / `ADMIN_PASSWORD`) · SizeScale (Baby age) · CatalogStructure (Baby department + categories, colours) · Banner (topbar + promo) · Faq · **DemoProduct — 8 placeholder products with no photos**, still enabled.
 
 ## Config / env
-`config/kayaa.php`: currency LKR, shipping fee, free-shipping threshold, WhatsApp number (`STORE_WHATSAPP`), store email, `noindex`, the 25 districts.
+`config/kayaa.php`: currency LKR, shipping fee, free-shipping threshold, WhatsApp number (`STORE_WHATSAPP`), call number (`STORE_PHONE`), store email, `noindex`, the 25 districts.
+- **Contact details are DB-backed.** The `settings` table (key/value, `App\Models\Setting`, cached forever, busted on save) holds `contact_email / contact_phone / contact_whatsapp`. `AppServiceProvider::bootContactSettings` pushes them over `config('kayaa.*')` at boot, so views keep reading config. Env values are the fallback when a setting is blank. `Setting::map()` swallows a missing table so the site still renders before the migration runs.
+- `App\Support\StoreContact` builds the `tel:` and `wa.me` links (adds country code 94 to local numbers).
 Other env in use: `PAYHERE_MERCHANT_ID/SECRET/SANDBOX` (empty), `MAIL_MAILER` (log), `APP_NOINDEX`.
 
 ## Staging / deployment

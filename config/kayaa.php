@@ -5,7 +5,10 @@ return [
     'currency' => 'LKR',
     'shipping_fee' => (int) env('STORE_SHIPPING_FEE', 450) * 100,
     'free_shipping_over' => (int) env('STORE_FREE_SHIPPING_OVER', 7500) * 100,
+    // Defaults only. Admin > Settings > Contact details overrides these at
+    // runtime (see App\Providers\AppServiceProvider::bootContactSettings).
     'whatsapp' => env('STORE_WHATSAPP', ''),
+    'phone' => env('STORE_PHONE', ''),
     'email' => env('MAIL_FROM_ADDRESS', 'hello@kayaa.lk'),
     // Staging: keep the site out of search engines. Set to false (or remove) in production.
     'noindex' => (bool) env('APP_NOINDEX', false),

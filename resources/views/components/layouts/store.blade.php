@@ -1,7 +1,9 @@
 @props(['title' => null, 'metaDescription' => null, 'category' => null, 'nav' => null])
 @php
-  $wa = config('kayaa.whatsapp');
-  $waHref = $wa ? 'https://wa.me/94'.preg_replace('/\D+/', '', ltrim($wa, '0')) : null;
+  $wa = \App\Support\StoreContact::whatsapp();
+  $waHref = \App\Support\StoreContact::whatsappHref();
+  $tel = \App\Support\StoreContact::phone();
+  $telHref = \App\Support\StoreContact::phoneHref();
   $active = $nav ?? (request()->routeIs('home') ? 'home' : (request()->routeIs('shop.*', 'products.*') ? 'shop' : (request()->routeIs('search') ? 'search' : (request()->routeIs('cart.*', 'checkout.*') ? 'cart' : (request()->routeIs('orders.*') ? 'orders' : (request()->routeIs('account.*', 'password.*') ? 'account' : null))))));
   $ico = [
     'home' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>',
@@ -139,6 +141,7 @@
         </ul></div>
         <div class="foot-col"><h3>Contact</h3><ul>
           @if($wa)<li><a href="{{ $waHref }}">WhatsApp {{ $wa }}</a></li>@endif
+          @if($tel)<li><a href="{{ $telHref }}">Call {{ $tel }}</a></li>@endif
           <li><a href="mailto:{{ config('kayaa.email') }}">{{ config('kayaa.email') }}</a></li>
           <li><a href="{{ route('pages.show', 'about') }}">About Kayaa</a></li>
           <li><a href="{{ route('pages.show', 'privacy') }}">Privacy</a> · <a href="{{ route('pages.show', 'terms') }}">Terms</a></li>

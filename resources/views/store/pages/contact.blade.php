@@ -1,4 +1,9 @@
-@php $wa = config('kayaa.whatsapp'); $waHref = $wa ? 'https://wa.me/94'.preg_replace('/\D+/', '', ltrim($wa, '0')) : null; @endphp
+@php
+  $wa = \App\Support\StoreContact::whatsapp();
+  $waHref = \App\Support\StoreContact::whatsappHref();
+  $tel = \App\Support\StoreContact::phone();
+  $telHref = \App\Support\StoreContact::phoneHref();
+@endphp
 <x-layouts.store title="Contact us">
   <div class="section">
   <div class="wrap">
@@ -13,6 +18,9 @@
           </a>
         @endif
         <div class="rows">
+          @if($tel)
+            <div><p class="k">Call us</p><p class="v"><a href="{{ $telHref }}">{{ $tel }}</a></p></div>
+          @endif
           <div><p class="k">Email</p><p class="v"><a href="mailto:{{ config('kayaa.email') }}">{{ config('kayaa.email') }}</a></p></div>
           <div><p class="k">Hours</p><p class="v">Mon–Sat 9am–6pm</p></div>
           <div><p class="k">Delivery</p><p class="v">Island-wide by courier · cash on delivery available</p></div>

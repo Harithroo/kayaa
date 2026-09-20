@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Banner;
 use App\Models\Category;
+use App\Models\Setting;
 use App\Services\CartService;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -17,6 +18,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->bootContactSettings();
+
         // Every storefront view gets the nav categories and the cart count.
         View::composer('components.layouts.store', function ($view) {
             $view->with('navCategories', Category::query()
@@ -28,5 +31,20 @@ class AppServiceProvider extends ServiceProvider
             $view->with('cartCount', app(CartService::class)->count());
             $view->with('topbar', Banner::live('topbar')->first());
         });
+    }
+
+    /**
+     * Admin-managed contact details win over the config/.env defaults, so the
+     * storefront can keep reading config('kayaa.*') everywhere.
+     */
+    private function bootContactSettings(): void
+    {
+        foreach (['email', 'phone', 'whatsapp'] as $key) {
+            $value = Setting::get('contact_'.$key);
+
+            if ($value !== null) {
+                config(['kayaa.'.$key => $value]);
+            }
+        }
     }
 }

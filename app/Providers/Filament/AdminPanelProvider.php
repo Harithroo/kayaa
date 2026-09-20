@@ -27,6 +27,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // Adds /admin/profile: the signed-in admin can change their name,
+            // email and password (the current password is required to do it).
+            ->profile(isSimple: false)
             ->brandName('Kayaa')
             ->colors([
                 'primary' => Color::Amber,
