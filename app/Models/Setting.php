@@ -21,13 +21,15 @@ class Setting extends Model
      */
     public static function map(): array
     {
-        return Cache::rememberForever(self::CACHE_KEY, function () {
-            try {
-                return static::query()->pluck('value', 'key')->all();
-            } catch (Throwable) {
-                return [];
-            }
-        });
+        // The whole lookup is guarded, cache included: during `composer install` in CI
+        // (package:discover) there is no .env and no database, so even reading the
+        // database cache store throws. A failure is not cached, so settings apply as
+        // soon as the table exists instead of staying empty until the cache is cleared.
+        try {
+            return Cache::rememberForever(self::CACHE_KEY, fn () => static::query()->pluck('value', 'key')->all());
+        } catch (Throwable) {
+            return [];
+        }
     }
 
     public static function get(string $key, mixed $default = null): mixed
