@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->bootContactSettings();
+        $this->bootStoreSettings();
 
         // Signing in (or registering) folds whatever was saved as a guest into the account,
         // so the cart and wishlist carry over instead of disappearing. Fires for remember-me
@@ -47,6 +48,19 @@ class AppServiceProvider extends ServiceProvider
             $view->with('wishCount', app(WishlistService::class)->count());
             $view->with('topbar', Banner::live('topbar')->first());
         });
+    }
+
+    /**
+     * Admin-managed store numbers win over the config/.env defaults, same as
+     * the contact details above.
+     */
+    private function bootStoreSettings(): void
+    {
+        $threshold = Setting::get('low_stock_threshold');
+
+        if ($threshold !== null) {
+            config(['kayaa.low_stock_threshold' => (int) $threshold]);
+        }
     }
 
     /**

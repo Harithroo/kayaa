@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Auth\SessionGuard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -44,7 +45,7 @@ class CustomerAuthController extends Controller
 
         $this->claimGuestOrders($user);
 
-        Auth::login($user, remember: true);
+        Auth::login($user);
         $request->session()->regenerate();
 
         return redirect()->route('account.index')->with('success', 'Account created. Welcome to Kayaa.');
@@ -61,6 +62,8 @@ class CustomerAuthController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
+
+        $this->capRememberDuration();
 
         if (! Auth::attempt($data, $request->boolean('remember'))) {
             throw ValidationException::withMessages(['email' => 'Those details don\'t match an account.']);
@@ -81,9 +84,36 @@ class CustomerAuthController extends Controller
         return redirect()->route('home')->with('success', 'Signed out.');
     }
 
-    /** Attach past guest orders placed with the same email to the new account. */
+    /**
+     * Attach past guest orders to this account.
+     *
+     * Both the email and the phone number have to match. Email alone is not
+     * enough: anyone can register with an address they don't own, and claiming
+     * on email alone would hand them that person's orders, delivery address and
+     * phone number. An account with no phone number on it claims nothing.
+     */
     private function claimGuestOrders(User $user): void
     {
-        Order::whereNull('user_id')->where('email', $user->email)->update(['user_id' => $user->id]);
+        if (blank($user->phone)) {
+            return;
+        }
+
+        Order::whereNull('user_id')
+            ->where('email', $user->email)
+            ->where('phone', $user->phone)
+            ->update(['user_id' => $user->id]);
+    }
+
+    /**
+     * "Keep me signed in" lasts 30 days. Laravel's default remember cookie has
+     * a five-year lifetime, which is too long for a device that might be shared.
+     */
+    private function capRememberDuration(): void
+    {
+        $guard = Auth::guard('web');
+
+        if ($guard instanceof SessionGuard) {
+            $guard->setRememberDuration(60 * 24 * 30);
+        }
     }
 }

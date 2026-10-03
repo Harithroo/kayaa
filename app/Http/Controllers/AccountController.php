@@ -75,12 +75,9 @@ class AccountController extends Controller
         return back()->with('success', 'Password changed.');
     }
 
-    /** An order belongs to the customer via user_id, or by matching their email. */
+    /** An order belongs to the customer via user_id. An email match is not ownership. */
     private function owns(Request $request, Order $order): bool
     {
-        $user = $request->user();
-
-        return $order->user_id === $user->id
-            || ($order->email !== null && strcasecmp($order->email, $user->email) === 0);
+        return $order->user_id === $request->user()->id;
     }
 }

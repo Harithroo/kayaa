@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Order;
+use App\Services\OrderService;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
@@ -42,7 +43,7 @@ class OrderResource extends Resource
                 TextEntry::make('reference')->label('Order'),
                 TextEntry::make('status')->badge()->color(fn (string $state) => self::statusColor($state)),
                 TextEntry::make('created_at')->label('Placed')->dateTime('d M Y, H:i'),
-                TextEntry::make('payment_method')->label('Payment')->formatStateUsing(fn ($state) => $state === 'cod' ? 'Cash on delivery' : 'PayHere'),
+                TextEntry::make('payment_method')->label('Payment')->formatStateUsing(fn ($state) => $state === 'cod' ? 'Cash on delivery' : 'Onepay'),
                 TextEntry::make('payment_status')->badge()->color(fn (string $state) => match ($state) {
                     'paid' => 'success', 'failed' => 'danger', 'refunded' => 'warning', default => 'gray',
                 }),
@@ -85,14 +86,14 @@ class OrderResource extends Resource
                 TextColumn::make('phone')->searchable(),
                 TextColumn::make('district'),
                 TextColumn::make('total')->money('LKR', divideBy: 100)->sortable(),
-                TextColumn::make('payment_method')->label('Pay')->formatStateUsing(fn ($s) => $s === 'cod' ? 'COD' : 'PayHere'),
+                TextColumn::make('payment_method')->label('Pay')->formatStateUsing(fn ($s) => $s === 'cod' ? 'COD' : 'Onepay'),
                 TextColumn::make('payment_status')->badge()->color(fn (string $state) => $state === 'paid' ? 'success' : 'gray'),
                 TextColumn::make('status')->badge()->color(fn (string $state) => self::statusColor($state)),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
                 SelectFilter::make('status')->options(array_combine(Order::STATUSES, array_map('ucfirst', Order::STATUSES))),
-                SelectFilter::make('payment_method')->options(['cod' => 'COD', 'payhere' => 'PayHere']),
+                SelectFilter::make('payment_method')->options(['cod' => 'COD', 'onepay' => 'Onepay']),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -112,7 +113,7 @@ class OrderResource extends Resource
             Action::make('deliver')->label('Mark delivered')->icon(Heroicon::CheckCircle)->color('success')
                 ->visible(fn (Order $r) => $r->status === 'shipped')
                 ->action(function (Order $r) {
-                    $r->update(['status' => 'delivered']);
+                    $r->update(['status' => 'delivered', 'delivered_at' => now()]);
                     if ($r->payment_method === 'cod' && $r->payment_status !== 'paid') {
                         $r->markPaid();
                     }
@@ -125,13 +126,7 @@ class OrderResource extends Resource
                 ->visible(fn (Order $r) => ! in_array($r->status, ['delivered', 'cancelled']))
                 ->requiresConfirmation()
                 ->modalDescription('Stock for each item will be returned to the shelf.')
-                ->action(function (Order $r) {
-                    $r->loadMissing('items.variant');
-                    foreach ($r->items as $item) {
-                        $item->variant?->increment('stock', $item->qty);
-                    }
-                    $r->update(['status' => 'cancelled']);
-                }),
+                ->action(fn (Order $r) => app(OrderService::class)->cancel($r, 'Cancelled in the admin panel.')),
         ];
     }
 

@@ -18,9 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn () => route('account.login'));
         $middleware->redirectUsersTo(fn () => route('account.index'));
 
-        // PayHere posts to this URL from outside the browser session.
+        // Onepay posts to this URL from its own servers, outside the browser
+        // session. It authenticates by the transaction id surviving a
+        // server-to-server status lookup, not by a session token.
         $middleware->validateCsrfTokens(except: [
-            'payhere/notify',
+            'payment/callback',
             // Called by GitHub Actions, not a browser; guarded by DEPLOY_TOKEN.
             'deploy/migrate',
         ]);

@@ -48,6 +48,20 @@ class ProductVariant extends Model
         return $this->is_active && $this->stock > 0;
     }
 
+    /**
+     * The threshold behind "Only N left". Admin > Settings > Store overrides the
+     * config default, so the storefront must read this rather than hardcode 5.
+     */
+    public static function lowStockThreshold(): int
+    {
+        return (int) Setting::get('low_stock_threshold', config('kayaa.low_stock_threshold', 5));
+    }
+
+    public function isLowStock(): bool
+    {
+        return $this->inStock() && $this->stock <= self::lowStockThreshold();
+    }
+
     public function isOnSale(): bool
     {
         return $this->compare_at_price !== null && $this->compare_at_price > $this->price;

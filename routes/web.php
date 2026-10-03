@@ -10,6 +10,7 @@ use App\Http\Controllers\DeployController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SearchController;
@@ -39,7 +40,26 @@ Route::post('/checkout', [CheckoutController::class, 'store'])
     ->middleware('throttle:10,1')
     ->name('checkout.store');
 
+// Signed links, issued by the backend after checkout and in the confirmation
+// email. These pages show the delivery address and phone, so the signature (or
+// being the signed-in owner) is what grants access — never the reference alone.
 Route::get('/orders/{order}/thank-you', [OrderController::class, 'thanks'])->name('orders.thanks');
+Route::get('/orders/{order}/track', [OrderController::class, 'show'])->name('orders.track.show');
+Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])
+    ->middleware('throttle:10,1')
+    ->name('orders.cancel');
+
+// Online payment. 'start' also serves the retry from the order page.
+Route::post('/orders/{order}/pay', [PaymentController::class, 'start'])
+    ->middleware('throttle:10,1')
+    ->name('payment.start');
+Route::get('/orders/{order}/payment/return', [PaymentController::class, 'return'])
+    ->name('payment.return');
+Route::post('/payment/callback', [PaymentController::class, 'callback'])
+    ->middleware('throttle:60,1')
+    ->name('payment.callback');
+
+// The public tracking form: reference AND phone, both required.
 Route::get('/track', [OrderController::class, 'trackForm'])->name('orders.track');
 Route::post('/track', [OrderController::class, 'track'])->middleware('throttle:20,1');
 

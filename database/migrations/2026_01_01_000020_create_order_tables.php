@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->string('reference', 20)->unique();          // KY-240917-A3F9, shown to the customer
             $table->string('status', 20)->default('pending');   // pending | confirmed | shipped | delivered | cancelled
-            $table->string('payment_method', 20);               // cod | payhere
+            $table->string('payment_method', 20);               // cod | onepay
             $table->string('payment_status', 20)->default('pending'); // pending | paid | failed | refunded
-            $table->string('payment_reference')->nullable();    // PayHere payment_id
+            $table->string('payment_reference')->nullable();    // Onepay transaction id
 
             $table->string('first_name');
             $table->string('last_name');

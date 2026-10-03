@@ -16,7 +16,7 @@ class OrderService
      * inside the transaction so two checkouts can't oversell the last item.
      *
      * For COD, stock is committed at placement (there is no later "paid" event before
-     * dispatch). For PayHere, stock is also reserved here; the webhook flips payment_status.
+     * dispatch). For Onepay, stock is also reserved here; the callback flips payment_status.
      *
      * @param  array<string,mixed>  $customer  validated checkout fields
      *
@@ -74,6 +74,40 @@ class OrderService
             $this->cart->clear();
 
             return $order;
+        });
+    }
+
+    /**
+     * Cancel an order and put its stock back. Used by the customer (while the
+     * order is still pending) and by the admin panel, so the restock rule lives
+     * in one place. Locks each variant so a concurrent checkout can't read a
+     * stale count while we are adding to it.
+     */
+    public function cancel(Order $order, ?string $reason = null): void
+    {
+        if ($order->status === 'cancelled') {
+            return;
+        }
+
+        DB::transaction(function () use ($order, $reason) {
+            $order->loadMissing('items');
+
+            foreach ($order->items as $item) {
+                if ($item->product_variant_id === null) {
+                    continue;
+                }
+
+                $variant = ProductVariant::lockForUpdate()->find($item->product_variant_id);
+                $variant?->increment('stock', $item->qty);
+            }
+
+            $order->forceFill([
+                'status' => 'cancelled',
+                'cancelled_at' => now(),
+                'note' => $reason === null
+                    ? $order->note
+                    : trim(($order->note ? $order->note."\n" : '').$reason),
+            ])->save();
         });
     }
 }

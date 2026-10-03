@@ -38,13 +38,14 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Orders that belong to this customer: the ones placed while signed in, plus any
-     * guest order placed with the same email address before they had an account.
+     * Orders that belong to this customer. Ownership means user_id, full stop.
+     * Guest orders are attached to the account at sign-in (and only when both the
+     * email and the phone number match) — a matching email on its own is not
+     * proof of anything, since nothing stops someone signing up with it.
      */
     public function allOrders(): Builder
     {
-        return Order::query()
-            ->where(fn ($q) => $q->where('user_id', $this->id)->orWhere('email', $this->email));
+        return Order::query()->where('user_id', $this->id);
     }
 
     public function reviews(): HasMany
