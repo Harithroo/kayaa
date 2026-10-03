@@ -134,7 +134,7 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | `size-box--lg` and radio size boxes | product.css / components.css | Min 56x44px. Disabled = struck through with sr-only "(out of stock)". |
 | `.gallery` (carousel + thumbs) | pages/product.css | Below 900px a native scroll-snap carousel with a "1 / 5" pill and 44px dot buttons; from 900px the main image plus a vertical thumbnail rail (buttons with `aria-current`, arrow keys, roving tabindex). Smooth scrolling is turned off under reduced motion. |
 | `.sticky-atc` | pages/product.css | Fixed bar below 900px, shown by an IntersectionObserver once the main Add to cart button leaves the viewport. Hides the tab bar while visible (`body.has-sticky-atc`), uses safe-area insets, 64px tall (52px landscape). |
-| `.buy`, `.assure`, `.delivery-est`, `.review-form` | pages/product.css | Form layout, assurance list (returns row is one 44px link), delivery estimate select (16px), review form. |
+| `.buy`, `.assure`, `.review-form` | pages/product.css | Form layout, assurance list (returns row is one 44px link), review form. The district delivery estimate was removed (ETA is checkout-only). |
 | `data-qty-max` | app.js | A `[data-qty]` group can cap its quantity (used for stock). `syncQty` now honours it and runs on synthetic change events. |
 | `window.KayaaCart.add(item, trigger)` | app.js | Adds a line item (with `qty`) to the cart drawer demo and opens it. |
 | `assets/js/proto-product.js` | js | PROTOTYPE ONLY. Sample data, stock matrix per colour and size, the demo states and review validation. Delete at Blade conversion. |
@@ -161,3 +161,26 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 - Banner and category photos are decorative (`alt=""`): the card text and the label pill name the link. The hero alt is a generic default (a TODO comment is written next to it) unless credits.csv has an `alt` column. Product gallery photos use "Product photo placeholder (TODO)"; thumbnails are `alt=""` because the buttons have aria-labels.
 - Category photos are 4:5 while the placeholder tile is 4:3, so a tile changes ratio when its photo arrives. If only some categories have photos, the row mixes both.
 - Licence in docs/image-credits.md is inferred from the source (Unsplash, Pexels, Pixabay) and otherwise marked TODO.
+
+## Product page decisions round (colour photos, half stars, show more, hardening)
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| `data-colour` gallery filtering | product.html, product.js | Every slide (`li.gallery__slide`) and thumbnail button carries `data-colour="<slug>"` or `"all"`. Picking a colour shows its photos plus the shared ones, resets to the first, rebuilds the dots, updates the counter, thumbnail rail and the main image alt; `?colour=<slug>` deep-links (and is kept in the URL). A colour with no photos shows the shared set. Placeholder tones differ per colour (lilac `--tone-4`/`--tone-3`, cream `--swatch-cream`/`--cream`, sky `--sky-tint`/`--accent`, shared `--tone-2`). |
+| `.star-half` | components.css | Half star: an outline star with a filled star on top, clipped to 50% width (`clip-path`). Used for averages only: whole part = full stars, .1 to .9 adds one half star. |
+| `.accordion__body--text` | components.css | `white-space: pre-line` for the backend description. The Description accordion is open by default; the two-line summary above it is the first ~160 characters. |
+| Reviews "See more" | product.html, product.js | `.reviews__more` holds the count ("Showing 5 of 12"), the link/button and an `aria-live` region. The link (`?reviews=all#reviews`) is replaced by a button that reveals 5 more, moves focus to the first new review (`article tabindex="-1"`) and announces "5 more reviews shown". 12 sample reviews, 5 visible. |
+| `#product-variants` JSON | product.html | `[{"colour","size","stock"}]`, read by product.js. Blade generates it. The sample matrix moved here from the old JS. |
+| `data-low-stock-threshold` | buy form | Admin setting (5). |
+| `assets/js/product.js` / `proto-product.js` | js | product.js is production behaviour; proto-product.js only applies `?demo=` states, price/badge variants and the fake review validation, and runs first so it can rewrite the variants JSON. |
+| Cart and quick-add thumbnails | app.js | `toneValue()` maps a colour slug to its placeholder tone, so cart lines and the quick-add sheet thumbnail follow the selected colour. `window.KayaaCart.add` accepts a colour slug as `tone`. |
+| Delivery estimate removed | product.html, product.css | Delivery ETA is only shown at checkout. |
+| `styles` partial | tools/partials/styles.html | Direct `<link>` tags for tokens, base, components and layout in every page head. `app.css` and its `@import` chain are gone. |
+| `?v=<sha1>` cache busting | tools/sync-shell.mjs | Every local .css/.js reference gets the first 8 hex chars of the file's sha1; `--check` flags stale versions. |
+| `tools/check-css.mjs` | tools | Report-only: brace balance, unterminated comments, missing link/url/srcset targets, and a warning list of classes used in HTML but defined in no CSS. Current warnings are unstyled structural hooks (`hero__copy`, `mega__feature-body`, `pagination__edge-label`, `rating-row__label`, `switch__label`). |
+| Footer link rhythm | layout.css | 44px tap rows on touch and below 900px; with a mouse from 900px the links are compact (about 8px apart). Column headings share the wordmark's 44px row so all columns start on one line. |
+| `docs/backend-contract.md` | docs | Contract for the backend dev; update it whenever a page, form or param changes. |
+
+### Assumptions
+- 12 sample reviews: ten 5-star and two 4-star, so the average is 4.8 and shows 4.5 stars under the half-star rule.
+- Review ratings stay whole numbers; only averages get half stars.

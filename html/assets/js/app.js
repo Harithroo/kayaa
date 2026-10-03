@@ -341,6 +341,15 @@
     renderCart();
   }
 
+  // Placeholder thumbnails take the tone of the chosen colour (photos follow the colour).
+  // item.tone may be a colour slug, a number (var(--tone-N)) or a CSS value.
+  var COLOUR_TONE = { lilac: 'var(--tone-4)', cream: 'var(--swatch-cream)', sky: 'var(--sky-tint)' };
+  function toneValue(t) {
+    t = String(t || '1');
+    if (COLOUR_TONE[t.toLowerCase()]) return COLOUR_TONE[t.toLowerCase()];
+    return /^\d+$/.test(t) ? 'var(--tone-' + t + ')' : t;
+  }
+
   function addToCart(item) {
     var list = cart && $('[data-cart-items]', cart);
     var tpl = $('[data-cart-item-template]');
@@ -357,7 +366,7 @@
       $('[data-item-name]', li).textContent = item.name;
       $('[data-item-meta]', li).textContent = item.meta;
       $('[data-cart-remove]', li).setAttribute('aria-label', 'Remove ' + item.name);
-      $('[data-item-media]', li).style.setProperty('--tone', 'var(--tone-' + item.tone + ')');
+      $('[data-item-media]', li).style.setProperty('--tone', toneValue(item.tone));
       $('[data-qty-input]', li).value = item.qty || 1;
       list.appendChild(li);
     }
@@ -390,8 +399,17 @@
       var was = $('[data-qa-was]', sheet);
       was.textContent = current.was ? formatMoney(current.was) : '';
       was.hidden = !current.was;
-      $('[data-qa-thumb]', sheet).style.setProperty('--tone', 'var(--tone-' + current.tone + ')');
+      setSheetTone();
       openLayer(sheet, btn);
+    });
+
+    // the thumbnail follows the selected colour
+    function setSheetTone() {
+      var colour = $('input[name="colour"]:checked', form);
+      $('[data-qa-thumb]', sheet).style.setProperty('--tone', toneValue(colour ? colour.value : current && current.tone));
+    }
+    form.addEventListener('change', function (e) {
+      if (e.target.name === 'colour') setSheetTone();
     });
 
     form.addEventListener('submit', function (e) {
@@ -402,7 +420,7 @@
       addToCart({
         name: current.name,
         price: current.price,
-        tone: current.tone,
+        tone: colour ? colour.value : current.tone,
         meta: 'Size ' + (size ? size.value : '') + ' · ' + (colour ? colour.value : '')
       });
       var trigger = active && active.trigger;

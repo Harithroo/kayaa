@@ -1092,3 +1092,17 @@
   .breadcrumb a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 
+
+/* ---------- Half star (average ratings) ----------
+   An outline star with a filled star on top, clipped to 50% width. No extra assets.
+   <span class="star-half"><svg class="icon">..</svg><svg class="icon is-on">..</svg></span> */
+.star-half { position: relative; display: inline-flex; }
+.star-half .icon.is-on {
+  position: absolute;
+  top: 0;
+  left: 0;
+  clip-path: inset(0 50% 0 0);
+}
+
+/* Plain-text content from the backend with its line breaks kept (product description) */
+.accordion__body--text { white-space: pre-line; }

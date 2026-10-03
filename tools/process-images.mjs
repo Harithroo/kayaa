@@ -41,6 +41,17 @@ const R11 = [1, 1];
 const ALT_TODO = '<!-- TODO: check this alt text against the photo -->';
 
 // file: base name of the original; dir: output folder under html/assets/img
+// Sample gallery layout of product.html: lilac 4, cream 3, sky 3 and one shared photo (data-colour="all").
+// Colour photos are named product-<colour>-<n>; photos without a colour are product-<n>.
+const COLOUR_SETS = [['lilac', 4], ['cream', 3], ['sky', 3]];
+const GALLERY = [
+  ...COLOUR_SETS.flatMap(([colour, count]) => Array.from({ length: count }, (_, i) => ({ colour, n: i + 1, id: `product-${colour}-${i + 1}` }))),
+  { colour: 'all', n: 1, id: 'product-1' },
+];
+const GALLERY_TONES = { lilac: ['var(--tone-4)', 'var(--tone-3)'], cream: ['var(--swatch-cream)', 'var(--cream)'], sky: ['var(--sky-tint)', 'var(--accent)'], all: ['var(--tone-2)'] };
+const galleryTone = (g) => GALLERY_TONES[g.colour][(g.n - 1) % GALLERY_TONES[g.colour].length];
+const galleryLabel = (g) => `Product gallery: ${g.colour === 'all' ? 'shared' : g.colour} ${g.n}`;
+
 const SLOTS = [
   { id: 'hero', label: 'Hero', dir: 'hero', ratio: R45, widths: [480, 800, 1200, 1600], budget: [1200, 130] },
   { id: 'banner-newborn', label: 'Promo banner: newborn', dir: 'banner', ratio: R11 },
@@ -51,11 +62,10 @@ const SLOTS = [
   { id: 'cat-dresses-rompers', label: 'Category: dresses & rompers', dir: 'category', ratio: R45 },
   { id: 'cat-hats-mitts', label: 'Category: hats & mitts', dir: 'category', ratio: R45 },
   { id: 'cat-swaddles', label: 'Category: swaddles & blankets', dir: 'category', ratio: R45 },
-  ...[1, 2, 3, 4, 5].map((n) => ({ id: `product-${n}`, label: `Product gallery ${n}`, dir: 'product', ratio: R45 })),
+  ...GALLERY.map((g) => ({ id: g.id, label: galleryLabel(g), dir: 'product', ratio: R45 })),
 ].map((s) => ({ widths: [480, 800, 1200], budget: [800, 70], ...s }));   // budget: [checkpoint width, max KB]
 
 const CAT_TONES = { 'cat-bodysuits': 2, 'cat-sleepsuits': 1, 'cat-sets': 4, 'cat-dresses-rompers': 3, 'cat-hats-mitts': 1, 'cat-swaddles': 2 };
-const GALLERY_TONES = [1, 2, 3, 4, 2];
 const PRODUCT_ALT = 'Product photo placeholder (TODO)';
 
 // Wiring: one region per marker pair in a page. photo() builds the <img> variant, placeholder() the fallback.
@@ -80,18 +90,18 @@ const REGIONS = [
     wrap: (img) => `<div class="media" style="--ratio: 4 / 5; --tone: var(--tone-${tone})">${img}</div>`,
     placeholder: () => `<div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-${tone})">${icon}</div>`,
   })),
-  ...[1, 2, 3, 4, 5].flatMap((n) => [
+  ...GALLERY.flatMap((g, k) => [
     {
-      id: `product-${n}`, slot: `product-${n}`, page: 'product.html', widths: [800, 1200],
-      sizes: '(min-width: 900px) 46vw, calc(100vw - 40px)', eager: n === 1, alt: PRODUCT_ALT,
-      wrap: (img) => `<div class="media" style="--tone: var(--tone-${GALLERY_TONES[n - 1]})">${img}</div>`,
-      placeholder: () => `<div class="media" data-placeholder style="--tone: var(--tone-${GALLERY_TONES[n - 1]})">${icon}</div>`,
+      id: g.id, slot: g.id, page: 'product.html', widths: [800, 1200], colour: g.colour,
+      sizes: '(min-width: 900px) 46vw, calc(100vw - 40px)', eager: k === 0, alt: PRODUCT_ALT,   // product.js rewrites the alt per colour
+      wrap: (img) => `<div class="media" data-colour="${g.colour}" style="--tone: ${galleryTone(g)}">${img}</div>`,
+      placeholder: () => `<div class="media" data-colour="${g.colour}" data-placeholder style="--tone: ${galleryTone(g)}">${icon}</div>`,
     },
     {
-      id: `product-${n}-thumb`, slot: `product-${n}`, page: 'product.html', widths: [480],
+      id: `${g.id}-thumb`, slot: g.id, page: 'product.html', widths: [480], colour: g.colour,
       sizes: '72px', alt: '',   // the thumbnail button already has an aria-label
-      wrap: (img) => `<div class="media" style="--tone: var(--tone-${GALLERY_TONES[n - 1]})">${img}</div>`,
-      placeholder: () => `<div class="media" data-placeholder style="--tone: var(--tone-${GALLERY_TONES[n - 1]})">${icon}</div>`,
+      wrap: (img) => `<div class="media" data-colour="${g.colour}" style="--tone: ${galleryTone(g)}">${img}</div>`,
+      placeholder: () => `<div class="media" data-colour="${g.colour}" data-placeholder style="--tone: ${galleryTone(g)}">${icon}</div>`,
     },
   ]),
 ];
@@ -119,6 +129,29 @@ async function loadSharp() {
     process.exit(1);
   }
   return sharpMod;
+}
+
+// Accept any product-<colour>-<n> (colour photos) and product-<n> (shared photos) that exist, even beyond the sample layout.
+if (fs.existsSync(sourceDir)) {
+  for (const file of fs.readdirSync(sourceDir)) {
+    const ext = path.extname(file).toLowerCase();
+    const name = path.basename(file, path.extname(file)).toLowerCase();
+    if (EXTS.includes(ext) && /^product-(?:[a-z]+-)?\d+$/.test(name) && !SLOTS.some((s) => s.id === name)) {
+      SLOTS.push({ id: name, label: `Product gallery: ${name.replace(/^product-/, '')}`, dir: 'product', ratio: R45, widths: [480, 800, 1200], budget: [800, 70] });
+    }
+  }
+}
+
+// Remove generated files that no longer belong to any slot (an original that was deleted from the source folder).
+if (fs.existsSync(imgRoot)) {
+  for (const entry of fs.readdirSync(imgRoot, { withFileTypes: true }).filter((e) => e.isDirectory())) {
+    const dir = path.join(imgRoot, entry.name);
+    for (const file of fs.readdirSync(dir)) {
+      const m = file.match(/^(.*)-\d+\.webp$/);
+      if (m && !SLOTS.some((s) => s.id === m[1])) fs.unlinkSync(path.join(dir, file));
+    }
+    if (!fs.readdirSync(dir).length) fs.rmdirSync(dir);
+  }
 }
 
 const kb = (n) => Math.round(n / 1024);
@@ -309,6 +342,10 @@ for (const page of pages) {
     res ? wired++ : kept++;
   }
   fs.writeFileSync(file, text);
+}
+
+for (const id of Object.keys(results)) {
+  if (!REGIONS.some((r) => r.slot === id)) warnings.push(`${id}: processed, but product.html has no slot for it (the sample gallery is lilac 4, cream 3, sky 3, shared 1)`);
 }
 
 /* ---------------------------------------------------------------- summary */

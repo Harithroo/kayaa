@@ -1,0 +1,200 @@
+# Backend contract (frontend prototype -> Laravel 12 + Filament 4)
+
+Written from what the prototype in `html/` actually contains, so you do not need to open any HTML. Anything the prototype does not show is marked **(assumption)** or **TBD**. The prototype is static: its JS fakes server behaviour (see "Prototype-only behaviour" at the end). Keep this file in sync with the pages (see CLAUDE.md).
+
+Conventions used by every page
+- Money is whole rupees, shown as `Rs 1,490` (thousands separator). Free delivery over Rs 7,500; standard delivery Rs 450.
+- One shared shell (header, footer, drawers, tab bar) wrapped in `<!-- partial: NAME -->` comments. `<!-- loop: ... -->` marks repeated data, `<!-- blade: ... -->` marks conditionals and generated values.
+- Order statuses: `pending`, `confirmed`, `shipped`, `delivered`, `cancelled`. Payment statuses: `pending`, `paid`, `failed`, `refunded`.
+- Product images are 4:5. Placeholders (`.media[data-placeholder]`) are replaced by `<img>` markup when photos exist.
+- All pages carry `<meta name="robots" content="noindex,nofollow">` on staging; remove it at conversion.
+
+---
+
+## 1. What the frontend needs from the backend (new or changed)
+
+1. **Images per colour.** A product image has a nullable colour. Photos with a colour show only when that colour is selected; photos without a colour (shared) show for every colour. A colour with no photos falls back to the shared set. Each image needs an order and, ideally, alt text. The page renders every image with `data-colour="<colour slug>"` or `data-colour="all"`; JS filters them. `?colour=<slug>` must preselect the colour (the page rewrites the URL with `history.replaceState`).
+2. **Low-stock threshold** as an admin-editable setting (default 5). Rendered on the buy form as `data-low-stock-threshold="5"`. The stock note says "Only N left" when `1 <= stock <= threshold`.
+3. **Product description** as a plain-text field with line breaks preserved. The page shows the first ~160 characters (cut at a word boundary, ellipsis) as a summary, and the whole text in an open "Description" accordion. The page carries the hint `Str::limit($product->description, 160)`; plain `Str::limit` can cut mid-word, so use word-boundary truncation (for example its `preserveWords` option if your Laravel version has it).
+4. **Variants JSON.** Per product page, an inline block `<script type="application/json" id="product-variants">[{"colour":"lilac","size":"3-6M","stock":4}, ...]</script>`: one row per colour+size variant, `colour` = colour slug, `size` = size label (same string as the size radio value). Sizes are rendered in size-scale order.
+5. **Review "show more".** The product page shows 5 reviews and a "See more reviews" control that reveals 5 more in place. Prototype: all reviews are in the HTML and JS reveals them. Production options (pick one): (a) render all approved reviews and let JS reveal them, or (b) an endpoint that returns the next page of review-card HTML, like `/cart/panel` (assumption: `GET /products/{slug}/reviews?page=2` returning `<li class="review-card">...</li>` items plus the new "Showing N of M" count). Either way the no-JS fallback is a plain link to the same product page with `?reviews=all#reviews`, which must render every approved review. There is no separate reviews page.
+6. **Rating average with decimals** (one decimal, e.g. `4.8`) plus review count and a 5-to-1 breakdown (counts). Stars: whole part = full stars; any fraction .1 to .9 adds one half star (4.0 = 4 stars, 4.1 to 4.9 = 4.5 stars). Individual review ratings are whole numbers 1 to 5.
+7. **Onepay payment flow (design pending).** Payment is online only (Visa/Mastercard through the Onepay gateway). There is no cash on delivery. Assumption: checkout redirects to Onepay's hosted payment page. Orders start with `payment_status = pending` until the gateway confirms. The frontend still has to design paid, pending and failed/retry states, so the callback/return URLs and the retry route are needed (TBD).
+8. **Delivery ETA only at checkout.** The product page shows no delivery estimate. Checkout shows it after the delivery district is chosen: district list, ETA text and delivery fee per district are needed (TBD; the free-delivery threshold and the Rs 450 standard fee are known).
+9. **Category data:** name, slug, one-line description (shown in the listing header band) and a photo (home page tile).
+10. **Admin-managed shell content:** announcement bar (`topbar`: text, style `lilac|cream|sky`, enabled), home promo banners (`home_promo`: style `lilac|sky`, eyebrow, headline, text, button label and URL, optional photo), WhatsApp number/link, contact email, social URLs.
+11. **Age groups** are fixed in the prototype (5 slugs, see Listing). Product-to-age mapping is needed (a product can fit several ages).
+12. **Product flags:** `new`, `featured`, sale price (`was` price = regular, current = sale). Badge priority on cards: Out of stock > Sale > New > Featured (one badge max).
+13. **FAQs** from product, category and global FAQs (the product page shows five placeholder questions). TBD: how they are merged and ordered.
+14. **Size guide data** is TBD (global table vs per product). The prototype shows a placeholder table (size, age, weight, height) on the product page and will reuse it on `size-guide.html`.
+15. **Cart drawer endpoints** (see section 4). The prototype does quantity changes and removal client-side; they need real endpoints.
+16. **Related products:** same category as the current product, excluding the current product, 4 items.
+17. **Fabric & care and Delivery & returns** accordions are static site-wide text (placeholders). TBD whether they become settings.
+18. **SEO:** `<title>` `"<Name> | Kayaa"`, meta description, canonical URL, and a JSON-LD `Product` block (name, image, description, category, offers with `priceCurrency: "LKR"`, `price`, `availability`, `aggregateRating`). The prototype has placeholder values and a `<!-- blade: generate from the product -->` comment.
+
+---
+
+## 2. Shell (every page)
+
+### Announcement bar (admin "topbar")
+- Data: text (prototype: "Free delivery over Rs 7,500" + " · Secure online payment" as two segments; the second hides under 600px), style `lilac|cream|sky`, enabled.
+- Dismiss hides it for the current page view only (nothing stored); it returns on every load.
+
+### Header, menus, footer
+- Logo/wordmark -> `/`. Primary nav: Shop (`/shop`, with a mega menu), New in (`/shop?sort=new`), Sale (`/shop?sale=1`), Size guide (`/size-guide`), Our story (`/about`).
+- Mega menu: five age links `/shop?age=<slug>` and six category links `/{department}/{category}` (prototype: `category.html?c=<slug>`), plus a "New this week" feature card -> `/shop?sort=new` (placeholder copy, TBD).
+- Category row (desktop): the six categories. Account icon -> `/account` when signed in, else `/account/login`. Cart icon opens the cart drawer; the count is the sum of line quantities.
+- Footer: age links, help links (`/track`, `/size-guide`, `/delivery`, `/returns`, `/contact`), company links (`/about`, `/privacy`, `/terms`), WhatsApp link, contact email, social URLs.
+- Active nav states use `<body data-page="home|shop|category|product|search|cart|account|...">`; the server should set it per page (space-separated tokens allowed, e.g. `account login`).
+
+### Header search form
+| | |
+| --- | --- |
+| Route | `GET /search` |
+| Field | `q` (type `search`, optional on submit, example `romper`) |
+
+### Categories (fixed list in the prototype)
+`bodysuits` Bodysuits, `sleepsuits` Sleepsuits, `sets` Sets, `dresses-rompers` Dresses & Rompers, `hats-mitts` Hats & Mitts, `swaddles-blankets` Swaddles & Blankets (the home tile file name uses `cat-swaddles`).
+
+### Age groups (fixed list in the prototype)
+`newborn` Newborn, `0-3-months` 0-3 months, `3-6-months` 3-6 months, `6-12-months` 6-12 months, `1-2-years` 1-2 years.
+
+---
+
+## 3. Pages
+
+Route map (prototype file -> Laravel route). Status: **built** = designed in the prototype, **stub** = placeholder page only, nothing designed yet.
+
+| Prototype file | Laravel route | Status |
+| --- | --- | --- |
+| index.html | `/` | built |
+| shop.html | `/shop` | built |
+| category.html | `/{department}/{category}` | built (prototype uses `?c=<slug>`) |
+| search.html | `/search?q=` | built |
+| product.html | `/products/{slug}` | built |
+| cart.html | `/cart` | stub |
+| checkout.html | `/checkout` | stub |
+| thank-you.html | `/orders/{ref}/thank-you` | stub |
+| track.html | `/track` | stub |
+| contact.html | `/contact` | stub |
+| size-guide.html, delivery.html, returns.html, about.html, privacy.html, terms.html | same names | stub |
+| account/register, login, forgot-password, reset-password, index (orders), order, reviews, profile | `/account/...` | stub |
+| review.html | none | review-only index, delete at conversion |
+
+### 3.1 Home (`/`)
+- No query params, no forms (the header search is the only form).
+- Data: hero (static copy + one photo), trust strip (four static items: free delivery over Rs 7,500 with "Standard delivery Rs 450", secure online payment with "Visa & Mastercard accepted", easy returns (window TBD), verified parent reviews), age tiles (5, link `/shop?age=<slug>`), category tiles (6, each with a photo and label, link to the category), "New this week" (4 products, newest first, link "View all" `/shop?sort=new`), promo banners (`home_promo`, 2), "Featured products" (8 products with the `featured` flag, button "Shop all" `/shop`).
+- Product card data: name, URL, current price, regular price when on sale, badge (see section 1.12), up to 4 colour dots plus "+N", out-of-stock flag, photo.
+- States: out-of-stock card (muted, no quick add). Empty sections are not designed (assumption: hide the section).
+
+### 3.2 Listing pages: Shop, Category, Search
+One shared template. Everything is driven by the query string and works without JS (filters are a real GET form plus plain links). The prototype fakes the filtering with `assets/js/proto-listing.js`; the server does it in Laravel.
+
+Routes: `GET /shop`, `GET /{department}/{category}` (prototype `category.html?c=<slug>`), `GET /search`.
+
+| Param | Where | Allowed values | Notes |
+| --- | --- | --- | --- |
+| `age` | all | `newborn`, `0-3-months`, `3-6-months`, `6-12-months`, `1-2-years` | Invalid value ignored (= all ages). Not shown on Search (no age chips there). |
+| `sort` | all | `featured` (default), `new`, `price-asc`, `price-desc` | `new` is a sort (newest first), not a filter. Price directions are TBD with the backend dev. |
+| `sale` | all | `1` | Only products with a sale price. |
+| `c` | category only | category slug | Prototype stand-in for the route segment. Unknown slug -> "Category not found" with the empty state. No `c` behaves like Shop. |
+| `q` | search only | free text | Prototype matches every word against product name and category name, case-insensitively (assumption). Empty `q` shows the search box and the browse links. |
+| `page` | all | integer >= 1 | 12 products per page. Out-of-range pages clamp to the last page. |
+
+Form (the toolbar): `GET` to the same page.
+| Field | Type | Values | Notes |
+| --- | --- | --- | --- |
+| `sort` | select | the four sorts above | Auto-submits on change; a Noscript Apply button exists. |
+| `sale` | checkbox (`role="switch"`) | `1` | Unchecked sends nothing. |
+| `age`, `c`, `q` | hidden | current values | Only rendered when set, so the other filters survive a submit. `page` is dropped on submit. |
+
+Links: age chips (`All ages` + 5) keep `sort`, `sale`, `c`, `q` and drop `page`. Pagination links keep every other param. "Clear filters" removes `age`, `sort`, `sale` and `page` but keeps `c` and `q`.
+
+H1 and intro by state (precedence): Search: `Results for "<q>"` (empty q: "Search"); Category: category name + its one-line description; age: `<age label> clothing`; `sale=1`: "Sale"; `sort=new`: "New in"; default: "All baby clothing". With age or category plus `sale`, the intro adds "Showing sale items only." Document title is `"<H1> | Kayaa"`. Breadcrumb: Home / Shop (/ Category); Search: Home / Search.
+
+Data per page: products (page of 12) with the card data from 3.1, total count (band shows "N products", toolbar shows "Showing 1-12 of 24"), page count.
+
+States
+- Empty (no products): package icon, "No products match these filters", "Clear filters" button.
+- Search no results: `No results for "<q>"`, three tips, links to the six categories and five ages. Empty `q` shows the same block titled "What are you looking for?".
+- Pagination: Prev / numbers / Next (ellipsis beyond 7 pages); under 600px it shows Prev / "Page N of M" / Next. Hidden when there is one page.
+
+### 3.3 Product (`/products/{slug}`)
+
+Query params: `colour` (colour slug; preselects the colour and its photos; invalid values ignored), `reviews=all` (no-JS fallback: render every approved review). Prototype only: `demo` (see the end of this file).
+
+**Add-to-cart form** - `POST` (action TODO, the prototype posts to `cart.html`; assumption: `POST /cart/items`), `@csrf`. Field names are a TODO to confirm with the backend dev; a single variant id is the alternative.
+| Field | Type | Required | Values / validation | Example |
+| --- | --- | --- | --- | --- |
+| `colour` | radio | yes | a colour slug of this product; one preselected | `lilac` |
+| `size` | radio | yes | size label of an in-stock variant for the chosen colour; out-of-stock variants render as disabled radios (+ sr-only "(out of stock)") | `3-6M` |
+| `quantity` | text, numeric | yes | integer 1 to 10, and at most the variant's stock | `1` |
+| product id | hidden | yes | (assumption) the product id or slug | |
+
+Form attributes the page reads: `data-product-name`, `data-unit-price` (current price in rupees, sale price when on sale), `data-low-stock-threshold` (admin setting). Client behaviour: if no size is chosen the form does not submit and shows "Please choose a size". With every variant out of stock the button is disabled and reads "Out of stock".
+
+**Variants JSON**: see section 1.4.
+
+**Data the page needs:** name, slug, category (name, slug), price and sale price, flags (`new`, `featured`), description, colours (name, slug, swatch colour), sizes in scale order, variants (stock), images (url, alt, order, nullable colour), rating average (1 decimal), review count and 5-to-1 breakdown, approved reviews (author name, date, rating 1 to 5, comment, verified-purchase flag, optional admin reply), FAQs, related products (section 1.16), the user's "already reviewed" flag.
+
+**Badge** (top-left of the gallery, one max): Sale > New > Featured.
+
+**Reviews section** (`#reviews`): average, stars, "Based on N reviews", breakdown rows, "Write a review" button (anchor to `#write-review`), review cards (stars, name, date, optional "Verified purchase", comment, optional "Reply from Kayaa"; no titles), "Showing 5 of 12" count and "See more reviews" (section 1.5). Empty state: "No reviews yet. Be the first to review this product." with a button to the form.
+
+**Review form** (`#write-review`) - `POST` (action TODO; assumption: `POST /products/{slug}/reviews`), `@csrf`.
+| Field | Type | Required | Validation | Example |
+| --- | --- | --- | --- | --- |
+| `rating` | radio 1 to 5 (rendered as stars) | yes | integer 1 to 5 | `5` |
+| `name` | text | yes, for guests only (hide when signed in) | non-empty string | `Amaya R.` |
+| `comment` | textarea | yes | non-empty text (max length TBD) | `Lovely and soft.` |
+
+No review titles. Reviews are moderated: show "Thank you - your review will appear once it has been approved." States: field errors (message per field, `aria-invalid`, plus a summary alert "Please check your review" listing the errors), success alert, rate-limit alert "Too many attempts. Please wait a minute and try again.", and, for signed-in users who already reviewed, the form is replaced by "You've already reviewed this product."
+
+Other: the size guide panel is a static placeholder table (TBD, section 1.14); the assurance list is static (free delivery over Rs 7,500; secure card payment, Visa & Mastercard; easy returns, window TBD). Related products and FAQs: sections 1.13 and 1.16.
+
+### 3.4 Stub pages (cart, checkout, thank-you, track, contact, size-guide, delivery, returns, about, privacy, terms, account/*)
+Not designed yet. Only the route and the page name exist. Assumptions for planning, **not** from the prototype: contact will have name, email, message; track will take an order reference; checkout will collect delivery details and district, then redirect to Onepay (section 1.7).
+
+---
+
+## 4. Cart drawer (shell, every page)
+
+Root element `[data-cart-drawer]`; its inner markup is one self-contained panel (`.cart-panel`) so the server can return it and JS swaps it in (`GET /cart/panel`, like the existing backend convention).
+
+Panel contents
+- Header "Your bag (N)" with N = total units.
+- Free-delivery progress: text "Rs X away from free delivery" or "You've unlocked free delivery", a `<progress>` with `value = subtotal` (capped) and `max = 7500` (`data-free-threshold="7500"` on the panel).
+- Line items (`<li class="cart-item" data-key data-unit-price>`): thumbnail (4:5, the selected colour's photo), product name (link to the product), meta "Size 3-6M · Lilac", quantity stepper (1 to 10), line total, remove button.
+- Subtotal, note "Delivery calculated at checkout · Pay securely by card", primary "Checkout" -> `/checkout`, secondary "View bag" -> `/cart`.
+- Empty state (`data-state="empty"`): "Your bag is empty", "Start shopping" -> `/shop`.
+
+Endpoints (assumption: the prototype changes the DOM only)
+| Action | Request | Response |
+| --- | --- | --- |
+| Read panel | `GET /cart/panel` | panel HTML |
+| Add line | `POST /cart/items` with `product`, `colour`, `size`, `quantity` | panel HTML (or JSON count + panel) |
+| Change quantity | `PATCH /cart/items/{id}` with `quantity` (1 to 10, not above stock) | panel HTML |
+| Remove | `DELETE /cart/items/{id}` | panel HTML |
+
+Rules: the header count and every `[data-cart-count]` badge show the unit total and hide at 0. A line is identified by product + colour + size; adding the same line again increases its quantity. Quantity is capped by stock.
+
+### Quick add (product cards)
+A bottom sheet / modal opened from a card's "Quick add" button (mouse) or round "+" (touch).
+| Field | Type | Required | Values |
+| --- | --- | --- | --- |
+| `size` | radio | yes | in-stock size labels for the product (prototype: static list, one disabled) |
+| `colour` | radio | yes | colour names/slugs of the product (prototype sends the display name, e.g. `Lilac`; use slugs in production) |
+| product | (assumption) hidden id | yes | |
+
+The button carries `data-name`, `data-price`, optional `data-was`, `data-tone` (prototype only). Production assumption: the sheet's options are rendered per product (or fetched), because sizes and colours differ between products. On submit the line is added and the cart drawer opens.
+
+---
+
+## 5. Prototype-only behaviour (delete at conversion)
+
+- `assets/js/proto-listing.js`: filters, sorts, searches and paginates the 24 sample cards from the query string; sets H1, intro, breadcrumb, counts, pagination and the empty states. The server does all of this.
+- `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `sale`, `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
+- Cart drawer line items, quantity changes and the "added to cart" flow run in `assets/js/app.js` against the DOM only.
+- `html/review.html` is a review index for the client; remove it.
+
+Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, search toggle, steppers, active-nav marking) and `assets/js/product.js` (variants, gallery filtering, stock note, quantity cap, size validation, sticky bar, show-more reviews). Remove the `data-demo-cart` attribute from the buy form when the real cart exists.

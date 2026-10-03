@@ -10,8 +10,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css">
-  <link rel="stylesheet" href="assets/css/pages/product.css">
+  <!-- partial: styles -->
+  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
+  <link rel="stylesheet" href="assets/css/components.css?v=6a1ff2de">
+  <link rel="stylesheet" href="assets/css/layout.css?v=fa77edd0">
+  <!-- /partial: styles -->
+  <link rel="stylesheet" href="assets/css/pages/product.css?v=892817d8">
   <!-- blade: generate this JSON-LD from the product (placeholder values) -->
   <script type="application/ld+json">
   {
@@ -31,7 +36,7 @@
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.8",
-      "reviewCount": "32"
+      "reviewCount": "12"
     }
   }
   </script>
@@ -288,30 +293,60 @@
           <div class="gallery__stage">
             <!-- img: first photo eager (above the fold): <img width height fetchpriority="high" decoding="async">; photos 2-5 loading="lazy" decoding="async"; the 4:5 aspect-ratio box stays so nothing shifts -->
             <ul class="gallery__track" role="list" data-gallery-track>
-            <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+            <li class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+              <!-- photo: product-lilac-1 -->
+              <div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-lilac-1 -->
+            </li>
+            <li class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 2 of 5">
+              <!-- photo: product-lilac-2 -->
+              <div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-lilac-2 -->
+            </li>
+            <li class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 3 of 5">
+              <!-- photo: product-lilac-3 -->
+              <div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-lilac-3 -->
+            </li>
+            <li class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 4 of 5">
+              <!-- photo: product-lilac-4 -->
+              <div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-lilac-4 -->
+            </li>
+            <li class="gallery__slide" data-colour="cream" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+              <!-- photo: product-cream-1 -->
+              <div class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-cream-1 -->
+            </li>
+            <li class="gallery__slide" data-colour="cream" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+              <!-- photo: product-cream-2 -->
+              <div class="media" data-colour="cream" data-placeholder style="--tone: var(--cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-cream-2 -->
+            </li>
+            <li class="gallery__slide" data-colour="cream" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+              <!-- photo: product-cream-3 -->
+              <div class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-cream-3 -->
+            </li>
+            <li class="gallery__slide" data-colour="sky" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+              <!-- photo: product-sky-1 -->
+              <div class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-sky-1 -->
+            </li>
+            <li class="gallery__slide" data-colour="sky" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+              <!-- photo: product-sky-2 -->
+              <div class="media" data-colour="sky" data-placeholder style="--tone: var(--accent)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-sky-2 -->
+            </li>
+            <li class="gallery__slide" data-colour="sky" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+              <!-- photo: product-sky-3 -->
+              <div class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-sky-3 -->
+            </li>
+            <li class="gallery__slide" data-colour="all" role="group" aria-roledescription="slide" aria-label="Photo 5 of 5">
               <!-- photo: product-1 -->
-              <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <div class="media" data-colour="all" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-1 -->
-            </li>
-            <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 2 of 5">
-              <!-- photo: product-2 -->
-              <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: product-2 -->
-            </li>
-            <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 3 of 5">
-              <!-- photo: product-3 -->
-              <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: product-3 -->
-            </li>
-            <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 4 of 5">
-              <!-- photo: product-4 -->
-              <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: product-4 -->
-            </li>
-            <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 5 of 5">
-              <!-- photo: product-5 -->
-              <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: product-5 -->
             </li>
             </ul>
             <!-- blade: badge priority @if sale Sale (accent) @elseif new New (lilac) @elseif featured Featured (outline) -->
@@ -326,11 +361,17 @@
           <button type="button" class="gallery__dot" data-gallery-dot aria-label="Show photo 5 of 5"></button>
           </div>
           <ul class="gallery__thumbs" role="list" aria-label="Photo thumbnails" data-gallery-thumbs>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 1 of 5" aria-current="true"><!-- photo: product-1-thumb --><div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-1-thumb --></button></li>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 2 of 5" tabindex="-1"><!-- photo: product-2-thumb --><div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-2-thumb --></button></li>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 3 of 5" tabindex="-1"><!-- photo: product-3-thumb --><div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-3-thumb --></button></li>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 4 of 5" tabindex="-1"><!-- photo: product-4-thumb --><div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-4-thumb --></button></li>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 5 of 5" tabindex="-1"><!-- photo: product-5-thumb --><div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-5-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 1 of 5" aria-current="true"><!-- photo: product-lilac-1-thumb --><div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-lilac-1-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 2 of 5" tabindex="-1"><!-- photo: product-lilac-2-thumb --><div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-lilac-2-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 3 of 5" tabindex="-1"><!-- photo: product-lilac-3-thumb --><div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-lilac-3-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 4 of 5" tabindex="-1"><!-- photo: product-lilac-4-thumb --><div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-lilac-4-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="cream" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-cream-1-thumb --><div class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-cream-1-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="cream" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-cream-2-thumb --><div class="media" data-colour="cream" data-placeholder style="--tone: var(--cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-cream-2-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="cream" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-cream-3-thumb --><div class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-cream-3-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="sky" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-sky-1-thumb --><div class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-sky-1-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="sky" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-sky-2-thumb --><div class="media" data-colour="sky" data-placeholder style="--tone: var(--accent)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-sky-2-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="sky" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-sky-3-thumb --><div class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-sky-3-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="all" data-gallery-thumb aria-label="Show photo 5 of 5" tabindex="-1"><!-- photo: product-1-thumb --><div class="media" data-colour="all" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-1-thumb --></button></li>
           </ul>
         </section>
 
@@ -339,20 +380,21 @@
           <a class="product__eyebrow" href="category.html?c=bodysuits">Bodysuits</a>
           <h1 class="product__title">Ribbed Cotton Bodysuit</h1>
           <a class="rating-link" href="#reviews" data-rating-summary>
-            <span class="stars" aria-hidden="true"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
-            <span aria-hidden="true">4.8 · 32 reviews</span>
-            <span class="visually-hidden">Rated 4.8 out of 5 from 32 reviews</span>
+            <span class="stars" aria-hidden="true"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><span class="star-half"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span></span>
+            <span aria-hidden="true">4.8 · 12 reviews</span>
+            <span class="visually-hidden">Rated 4.8 out of 5 from 12 reviews</span>
           </a>
 
           <div class="product__price-row" data-price-row>
             <!-- blade: @if sale price + was-price + "Save Rs X" (shown with ?demo=sale) -->
             <p class="price price--lg"><span class="price__now">Rs 1,490</span></p>
           </div>
-          <!-- TODO: description from the backend -->
-          <p class="product__lede">Placeholder description: a soft everyday bodysuit with a ribbed finish and easy snap closures.</p>
+          <!-- blade: Str::limit($product->description, 160) -->
+          <p class="product__lede">A soft everyday bodysuit with a ribbed finish and easy snap closures at the shoulder and bottom, made to be worn on its own or layered. Sample text. The real…</p>
 
           <!-- TODO: confirm field names with the backend dev: colour, size, quantity (or a single variant id). Add @csrf and the product id. -->
-          <form class="buy" method="post" action="cart.html" data-buy-form novalidate>
+          <!-- blade: data-low-stock-threshold comes from the admin setting; data-unit-price is the current (sale) price. Remove data-demo-cart (prototype cart drawer) at conversion. -->
+          <form class="buy" method="post" action="cart.html" data-buy-form data-product-name="Ribbed Cotton Bodysuit" data-unit-price="1490" data-low-stock-threshold="5" data-demo-cart novalidate>
             <fieldset class="buy__group">
               <legend class="buy__legend">Colour: <span data-colour-label>Lilac</span></legend>
               <div class="buy__options buy__options--colours">
@@ -370,13 +412,13 @@
                 <button type="button" class="link-btn" data-size-guide-toggle aria-expanded="false" aria-controls="size-guide-panel">Size guide</button>
               </div>
               <div class="buy__options" role="radiogroup" aria-labelledby="size-label" id="size-group" tabindex="-1" data-size-group>
-                <!-- loop: sizes (ordered by position in the size scale; disabled = out of stock for the chosen colour) -->
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="nb" disabled><span>NB</span><span class="visually-hidden" data-oos-text> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="0-3m"><span>0-3M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="3-6m"><span>3-6M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="6-9m"><span>6-9M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="9-12m" disabled><span>9-12M</span><span class="visually-hidden" data-oos-text> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="12-18m"><span>12-18M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+                <!-- loop: sizes (ordered by position in the size scale; disabled = out of stock for the chosen colour; values match the variants JSON) -->
+              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="NB" disabled><span>NB</span><span class="visually-hidden" data-oos-text> (out of stock)</span></label>
+              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="0-3M"><span>0-3M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="3-6M"><span>3-6M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="6-9M"><span>6-9M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="9-12M" disabled><span>9-12M</span><span class="visually-hidden" data-oos-text> (out of stock)</span></label>
+              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="12-18M"><span>12-18M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
                 <!-- /loop -->
               </div>
               <p class="buy__error" id="size-error" role="alert" data-size-error hidden><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg> <span>Please choose a size</span></p>
@@ -422,26 +464,13 @@
             <li><a class="assure__link" href="returns.html"><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-rotate-ccw"></use></svg></span><span>Easy returns · see our returns page</span></a></li>
           </ul>
 
-          <!-- TODO: real delivery data per district (placeholder values) -->
-          <div class="delivery-est">
-            <div class="field">
-              <label for="district">Delivery to</label>
-              <select id="district" name="district" data-district>
-              <option value="colombo" selected>Colombo</option>
-              <option value="gampaha">Gampaha</option>
-              <option value="kandy">Kandy</option>
-              <option value="galle">Galle</option>
-              <option value="jaffna">Jaffna</option>
-              <option value="kurunegala">Kurunegala</option>
-              </select>
-            </div>
-            <p class="delivery-est__result" data-delivery-result aria-live="polite">Estimated delivery to Colombo: 2–3 working days · Rs 450</p>
-          </div>
-
           <div class="accordion product__accordion">
-            <details class="accordion__item">
+            <details class="accordion__item" open>
               <summary class="accordion__summary">Description <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder description. <!-- TODO: description from the backend, if the field exists --></p></div>
+              <!-- blade: {{ $product->description }} (plain text; line breaks are kept with white-space: pre-line) -->
+              <div class="accordion__body accordion__body--text">A soft everyday bodysuit with a ribbed finish and easy snap closures at the shoulder and bottom, made to be worn on its own or layered.
+
+Sample text. The real description comes from the product record in the backend.</div>
             </details>
             <details class="accordion__item">
               <summary class="accordion__summary">Fabric &amp; care <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
@@ -467,15 +496,15 @@
           <div class="rating-summary" data-reviews-summary>
             <div class="rating-summary__score">
               <p class="rating-summary__avg">4.8</p>
-              <span class="stars stars--lg" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
+              <span class="stars stars--lg" role="img" aria-label="Rated 4.8 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><span class="star-half"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span></span>
             </div>
-            <p class="rating-summary__based">Based on 32 reviews</p>
+            <p class="rating-summary__based">Based on 12 reviews</p>
             <ul class="rating-rows" role="list">
-            <li class="rating-row"><span class="rating-row__label">5 stars</span><progress class="progress" value="26" max="32" aria-hidden="true">26</progress><span class="rating-row__count">26</span></li>
-            <li class="rating-row"><span class="rating-row__label">4 stars</span><progress class="progress" value="5" max="32" aria-hidden="true">5</progress><span class="rating-row__count">5</span></li>
-            <li class="rating-row"><span class="rating-row__label">3 stars</span><progress class="progress" value="1" max="32" aria-hidden="true">1</progress><span class="rating-row__count">1</span></li>
-            <li class="rating-row"><span class="rating-row__label">2 stars</span><progress class="progress" value="0" max="32" aria-hidden="true">0</progress><span class="rating-row__count">0</span></li>
-            <li class="rating-row"><span class="rating-row__label">1 star</span><progress class="progress" value="0" max="32" aria-hidden="true">0</progress><span class="rating-row__count">0</span></li>
+            <li class="rating-row"><span class="rating-row__label">5 stars</span><progress class="progress" value="10" max="12" aria-hidden="true">10</progress><span class="rating-row__count">10</span></li>
+            <li class="rating-row"><span class="rating-row__label">4 stars</span><progress class="progress" value="2" max="12" aria-hidden="true">2</progress><span class="rating-row__count">2</span></li>
+            <li class="rating-row"><span class="rating-row__label">3 stars</span><progress class="progress" value="0" max="12" aria-hidden="true">0</progress><span class="rating-row__count">0</span></li>
+            <li class="rating-row"><span class="rating-row__label">2 stars</span><progress class="progress" value="0" max="12" aria-hidden="true">0</progress><span class="rating-row__count">0</span></li>
+            <li class="rating-row"><span class="rating-row__label">1 star</span><progress class="progress" value="0" max="12" aria-hidden="true">0</progress><span class="rating-row__count">0</span></li>
             </ul>
             <a class="btn btn--secondary btn--block" href="#write-review">Write a review</a>
           </div>
@@ -486,7 +515,7 @@
               <ul class="reviews__list" role="list">
                 <!-- loop: reviews (approved only; no review titles) -->
             <li class="review-card">
-              <article>
+              <article tabindex="-1">
                 <header class="review-card__head">
                   <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
                   <p class="review-card__name">Amaya R.</p>
@@ -502,7 +531,7 @@
               </article>
             </li>
             <li class="review-card">
-              <article>
+              <article tabindex="-1">
                 <header class="review-card__head">
                   <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
                   <p class="review-card__name">Dilini P.</p>
@@ -513,7 +542,7 @@
               </article>
             </li>
             <li class="review-card">
-              <article>
+              <article tabindex="-1">
                 <header class="review-card__head">
                   <span class="stars" role="img" aria-label="Rated 4 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
                   <p class="review-card__name">Nimali S.</p>
@@ -528,7 +557,7 @@
               </article>
             </li>
             <li class="review-card">
-              <article>
+              <article tabindex="-1">
                 <header class="review-card__head">
                   <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
                   <p class="review-card__name">Chamari W.</p>
@@ -539,7 +568,7 @@
               </article>
             </li>
             <li class="review-card">
-              <article>
+              <article tabindex="-1">
                 <header class="review-card__head">
                   <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
                   <p class="review-card__name">Thilini K.</p>
@@ -548,8 +577,8 @@
                 <p class="review-card__text">Soft and comfortable, the buttons are easy to do up.</p>
               </article>
             </li>
-            <li class="review-card" data-review-extra hidden>
-              <article>
+            <li class="review-card" hidden>
+              <article tabindex="-1">
                 <header class="review-card__head">
                   <span class="stars" role="img" aria-label="Rated 4 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
                   <p class="review-card__name">Ruwani D.</p>
@@ -559,8 +588,8 @@
                 <p class="review-card__text">Pretty colour. Delivery to Kandy was quick.</p>
               </article>
             </li>
-            <li class="review-card" data-review-extra hidden>
-              <article>
+            <li class="review-card" hidden>
+              <article tabindex="-1">
                 <header class="review-card__head">
                   <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
                   <p class="review-card__name">Sachini M.</p>
@@ -570,24 +599,72 @@
                 <p class="review-card__text">Great value, I will order more colours.</p>
               </article>
             </li>
-            <li class="review-card" data-review-extra hidden>
-              <article>
+            <li class="review-card" hidden>
+              <article tabindex="-1">
                 <header class="review-card__head">
-                  <span class="stars" role="img" aria-label="Rated 3 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
+                  <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
                   <p class="review-card__name">Hasini L.</p>
                   <time class="review-card__date" datetime="2026-07-30">30 Jul 2026</time>
                 </header>
-                <p class="review-card__text">Nice, but the colour was a little lighter than the photo.</p>
+                <p class="review-card__text">Perfect for the first few months. Very happy.</p>
                 <!-- blade: @if admin reply -->
                 <div class="review-card__reply">
                   <p class="review-card__reply-title">Reply from Kayaa</p>
-                  <p>Thanks for telling us, Hasini. Colours can vary slightly between screens.</p>
+                  <p>Thank you Hasini! We are glad it worked well for you.</p>
                 </div>
+              </article>
+            </li>
+            <li class="review-card" hidden>
+              <article tabindex="-1">
+                <header class="review-card__head">
+                  <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
+                  <p class="review-card__name">Madhavi G.</p>
+                  <time class="review-card__date" datetime="2026-07-22">22 Jul 2026</time>
+                  <span class="badge badge--outline">Verified purchase</span>
+                </header>
+                <p class="review-card__text">Washed many times and still looks lovely.</p>
+              </article>
+            </li>
+            <li class="review-card" hidden>
+              <article tabindex="-1">
+                <header class="review-card__head">
+                  <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
+                  <p class="review-card__name">Piumi A.</p>
+                  <time class="review-card__date" datetime="2026-07-15">15 Jul 2026</time>
+                </header>
+                <p class="review-card__text">A thoughtful gift, the whole family loved it.</p>
+              </article>
+            </li>
+            <li class="review-card" hidden>
+              <article tabindex="-1">
+                <header class="review-card__head">
+                  <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
+                  <p class="review-card__name">Kavindi T.</p>
+                  <time class="review-card__date" datetime="2026-07-02">2 Jul 2026</time>
+                  <span class="badge badge--outline">Verified purchase</span>
+                </header>
+                <p class="review-card__text">Nice and soft against the skin.</p>
+              </article>
+            </li>
+            <li class="review-card" hidden>
+              <article tabindex="-1">
+                <header class="review-card__head">
+                  <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
+                  <p class="review-card__name">Sewwandi N.</p>
+                  <time class="review-card__date" datetime="2026-06-24">24 Jun 2026</time>
+                  <span class="badge badge--outline">Verified purchase</span>
+                </header>
+                <p class="review-card__text">Will definitely buy again.</p>
               </article>
             </li>
                 <!-- /loop -->
               </ul>
-              <p class="reviews__more" data-reviews-more><a class="link-arrow" href="?reviews=all#reviews">See more reviews <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
+              <!-- "See more reviews" reveals the next 5 in place (app JS turns the link into a button). Without JS the link reloads this page with every review. -->
+              <div class="reviews__more" data-reviews-more>
+                <p class="reviews__count" data-reviews-count>Showing 5 of 12</p>
+                <a class="btn btn--secondary" href="?reviews=all#reviews" data-reviews-more-link>See more reviews</a>
+                <p class="visually-hidden" aria-live="polite" data-reviews-live></p>
+              </div>
             </div>
             <!-- blade: @else empty state -->
             <div class="reviews__empty" data-reviews-empty hidden>
@@ -685,7 +762,7 @@
         <a class="link-arrow" href="https://wa.me/" target="_blank" rel="noopener">Still unsure? Chat on WhatsApp <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
       </section>
 
-      <!-- optional: needs backend (same category, exclude current) -->
+      <!-- blade: related products = same category as this product, excluding this product, 4 items -->
       <section class="related" aria-labelledby="related-title">
         <h2 id="related-title">You may also like</h2>
         <ul class="scroller" role="list">
@@ -1054,8 +1131,33 @@
   </div>
   <!-- /partial: quick-add -->
 
-  <script src="assets/js/app.js" defer></script>
+  <!-- blade: variants for this product (colour, size, stock) -->
+  <script type="application/json" id="product-variants">
+  [
+    { "colour": "lilac", "size": "NB", "stock": 0 },
+    { "colour": "lilac", "size": "0-3M", "stock": 8 },
+    { "colour": "lilac", "size": "3-6M", "stock": 3 },
+    { "colour": "lilac", "size": "6-9M", "stock": 12 },
+    { "colour": "lilac", "size": "9-12M", "stock": 0 },
+    { "colour": "lilac", "size": "12-18M", "stock": 6 },
+    { "colour": "cream", "size": "NB", "stock": 5 },
+    { "colour": "cream", "size": "0-3M", "stock": 0 },
+    { "colour": "cream", "size": "3-6M", "stock": 9 },
+    { "colour": "cream", "size": "6-9M", "stock": 2 },
+    { "colour": "cream", "size": "9-12M", "stock": 7 },
+    { "colour": "cream", "size": "12-18M", "stock": 0 },
+    { "colour": "sky", "size": "NB", "stock": 0 },
+    { "colour": "sky", "size": "0-3M", "stock": 4 },
+    { "colour": "sky", "size": "3-6M", "stock": 0 },
+    { "colour": "sky", "size": "6-9M", "stock": 10 },
+    { "colour": "sky", "size": "9-12M", "stock": 6 },
+    { "colour": "sky", "size": "12-18M", "stock": 3 }
+]
+  </script>
+
+  <script src="assets/js/app.js?v=d05ab4cf" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="assets/js/proto-product.js" defer></script>
+  <script src="assets/js/proto-product.js?v=a057e19e" defer></script>
+  <script src="assets/js/product.js?v=3ba02061" defer></script>
 </body>
 </html>

@@ -289,12 +289,6 @@
   text-decoration: none;
 }
 .assure__link span:last-child { text-decoration: underline; text-underline-offset: 3px; }
-.delivery-est { margin-top: var(--space-5); }
-.delivery-est__result {
-  margin-top: var(--space-2);
-  font-size: var(--fs-dense);
-  font-weight: 600;
-}
 .product__accordion { margin-top: var(--space-5); }
 
 /* ---------- Sticky add-to-cart bar (below 900px, replaces the tab bar) ---------- */
@@ -367,7 +361,16 @@ body.has-sticky-atc .tabbar { display: none; }
 .rating-summary__based { margin-top: var(--space-1); font-size: var(--fs-ui); color: var(--ink-soft); }
 .rating-rows { display: grid; gap: var(--space-2); margin: var(--space-4) 0; list-style: none; }
 .reviews__list { display: grid; gap: var(--space-3); list-style: none; }
-.reviews__more { margin-top: var(--space-3); }
+.reviews__more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  margin-top: var(--space-4);
+}
+.reviews__count { font-size: var(--fs-dense); font-weight: 600; color: var(--ink-soft); }
+.review-card article:focus { outline: none; }
+.review-card article:focus-visible { outline: var(--focus-ring); outline-offset: 6px; border-radius: var(--radius-tile); }
 .reviews__empty {
   padding: var(--space-6) var(--space-5);
   text-align: center;

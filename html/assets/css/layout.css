@@ -695,6 +695,7 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
 }
 .footer__grid {
   display: grid;
+  align-items: start;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-6) var(--space-4);
 }
@@ -725,6 +726,9 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
   .footer__list a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 .footer__title {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);   /* same row height as the wordmark so every column starts on one line */
   margin-bottom: var(--space-1);
   font-family: var(--font-body);
   font-size: var(--fs-caption);
@@ -788,4 +792,13 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
 /* Landscape phones: keep the fixed chrome (header + tab bar) to about a third of the height */
 @media (max-width: 899px) and (max-height: 500px) and (orientation: landscape) {
   :root { --bottom-bar-h: 52px; }
+}
+
+/* Footer links: 44px tap rows on touch and below 900px; compact (about 8px between links) with a mouse on desktop */
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+  .footer__list,
+  .footer__contact { gap: var(--space-2); }
+  .footer__list a,
+  .footer__contact a { min-height: 0; padding-block: 2px; }
+  .footer__title { margin-bottom: var(--space-2); }
 }

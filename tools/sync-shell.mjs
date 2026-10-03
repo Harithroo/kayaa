@@ -7,11 +7,14 @@
 // For each <!-- partial: NAME --> ... <!-- /partial: NAME --> pair in a page, the content between
 // the markers is replaced with tools/partials/NAME.html. The marker pair "sprite" is filled from
 // html/assets/icons/sprite.svg. In partials, {{root}} becomes "" for html/*.html and "../" for
-// html/account/*.html (one "../" per folder of depth). Everything outside the markers is untouched.
+// html/account/*.html (one "../" per folder of depth). It also sets ?v=<first 8 hex of the sha1> on every
+// local .css/.js reference so browsers never serve stale files (re-run it after editing any CSS or JS).
+// Everything else outside the markers is untouched.
 // Dev-only: this folder is never published. Plain Node, no dependencies.
 
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -20,7 +23,13 @@ const partialsDir = path.join(repo, 'tools', 'partials');
 const spritePath = path.join(htmlDir, 'assets', 'icons', 'sprite.svg');
 const check = process.argv.includes('--check');
 
-const toLF = (s) => s.replace(/\r\n/g, '\n');
+const hashes = new Map();
+const hash = (abs) => {
+  if (!hashes.has(abs)) hashes.set(abs, crypto.createHash('sha1').update(fs.readFileSync(abs)).digest('hex').slice(0, 8));
+  return hashes.get(abs);
+};
+
+const toLF =(s) => s.replace(/\r\n/g, '\n');
 
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
@@ -77,6 +86,13 @@ for (const file of walk(htmlDir).sort()) {
       return `${indent}<!-- partial: ${name} -->\n${inner}\n${indent}<!-- /partial: ${name} -->`;
     });
   }
+
+  // Cache busting: every local .css/.js reference gets ?v=<first 8 hex of the file's sha1>.
+  text = text.replace(/\b(href|src)="((?!https?:|\/\/|#|mailto:|tel:|data:)[^"?#]+\.(?:css|js))(?:\?v=[0-9a-f]*)?"/g, (m, attr, url) => {
+    const abs = path.resolve(path.dirname(file), url);
+    if (!fs.existsSync(abs)) { problems.push(`${label}: missing file ${url}`); return m; }
+    return `${attr}="${url}?v=${hash(abs)}"`;
+  });
 
   const next = text.replace(/\n/g, eol);
   if (next !== original) {
