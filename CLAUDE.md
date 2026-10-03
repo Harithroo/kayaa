@@ -7,6 +7,7 @@ Static prototype of the Kayaa storefront. Backend (Laravel 12 + Filament 4) is o
 - Source of truth for design: design/kayaa-final-design-system.html. Light mode only. No green. No pure black. Accent (Periwinkle Sky) used sparingly. No dark sections, including the footer.
 - Mobile-first. Breakpoints: 600, 900, 1200. At 900 the nav switches: below 900 = hamburger drawer + 5-tab bottom bar; 900+ = full header nav + desktop category row.
 - Never use emoji as UI. Icons come from assets/icons/sprite.svg. Chrome blocks external <use> over file://, so each page inlines the sprite once (<!-- partial: sprite -->) and references icons as <use href="#i-search">. assets/icons/sprite.svg stays the source; `node tools/sync-shell.mjs` refreshes every page.
+- Prototype-only JS lives in assets/js/proto-*.js and is deleted at Blade conversion.
 - Product images are 4:5. Use the .media placeholder with data-placeholder until real photos exist.
 
 ## Conversion-to-Blade conventions
@@ -23,6 +24,13 @@ Static prototype of the Kayaa storefront. Backend (Laravel 12 + Filament 4) is o
 
 ## Route map (prototype file -> Laravel route)
 index.html -> / | shop.html -> /shop | category.html -> /{department}/{category} | product.html -> /products/{slug} | cart.html -> /cart | checkout.html -> /checkout | thank-you.html -> /orders/{ref}/thank-you | track.html -> /track | search.html -> /search?q= | contact.html -> /contact | size-guide.html, delivery.html, returns.html, about.html, privacy.html, terms.html -> same names | account/register.html, login.html, forgot-password.html, reset-password.html, index.html (orders), order.html, reviews.html, profile.html -> /account/...
+
+## Listing query-param contract (shop.html, category.html, search.html; GET form plus plain links, works without JS)
+- age = newborn | 0-3-months | 3-6-months | 6-12-months | 1-2-years
+- sort = featured | new | price-asc | price-desc
+- sale = 1
+- c = category slug (category.html only) | q = search text (search.html only) | page = page number (12 per page)
+- Filters are limited to what the backend supports: age, sort, sale. No colour, size or price-range filters.
 
 ## Accessibility and SEO
 - Semantic landmarks, one h1 per page, skip link, labelled form fields, aria-expanded/aria-controls on toggles, dialog semantics for drawers and sheets (focus trap, ESC closes, focus returns to trigger), prefers-reduced-motion honoured.

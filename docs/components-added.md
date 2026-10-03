@@ -61,3 +61,30 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 - Account links use `account/login.html`; pages inside /account need `../` (Blade `route()` solves this).
 - WhatsApp number, email, social URLs, fabric claim and returns window are TODO.
 - Cart state is demo-only and resets on reload.
+
+## Stubs and listing pages (shop, category, search)
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| `.stub`, `.stub__card`, `.stub__actions` | pages/stub.css | Centred "still being designed" card on every unbuilt page. Whole `<main>` is replaced when the page is built. |
+| `i-chevron-left` icon | sprite.svg | Lucide, for pagination Prev. |
+| `.breadcrumb` | pages/listing.css | `nav > ol`, "/" separators via CSS, last item `aria-current="page"`. Links have a 44px minimum target. |
+| `.listing-head` (header band) | pages/listing.css | Rounded `--tone-2` container (not full-bleed) with H1, one-line intro and result count. |
+| `.listing-search` | pages/listing.css | Search field and button inside the band on search.html (mobile has no header search). |
+| `.age-chips` | pages/listing.css | Chip links; scroll-snap row with a faded right edge below 900px (alpha mask), wrapping from 900px. Active chip uses `aria-current="page"` (added to `.chip` states). |
+| `.toolbar` | pages/listing.css | GET form: range text, sort select, Sale switch. Sticky under the header below 900px using `--header-h` (measured in app.js). The range text is screen-reader only below 600px and the sort label is too, to give the select room. |
+| `.switch` | components.css | Checkbox with `role="switch"` styled as a toggle. Off = Ink Soft outline, on = Primary Deep. Focus ring on the track. |
+| `data-autosubmit` | app.js | Submits the form on change. Pages ship a `<noscript>` Apply button. |
+| `.pagination` | pages/listing.css | Prev / numbers / Next with `aria-current`; ellipsis when more than 7 pages; below 600px it compacts to Prev / "Page 1 of 2" / Next. |
+| `.listing-empty` | pages/listing.css | Reuses `.empty-state` (package icon, Clear filters). |
+| `.no-results`, `.chip-list` | pages/listing.css | Search-only: three tips plus category and age chip links. |
+| `.size-help` | pages/listing.css | Size-guide band under the grid. |
+| `assets/js/proto-listing.js` | js | PROTOTYPE ONLY. Filters, sorts, searches and paginates the cards. Delete at Blade conversion. |
+
+### Listing assumptions
+- H1 precedence when several filters are active: category > age > sale > sort=new > default. With age or category plus sale, the intro adds "Showing sale items only."
+- sort=new is a sort, not a filter, so "New in" lists every product, newest first.
+- "Clear filters" removes age, sort, sale and page but keeps c and q, so category and search pages stay on their category or query.
+- category.html with no `c` behaves like Shop; an unknown `c` shows "Category not found" with the empty state.
+- Search matches every word in the query against product name and category name, case-insensitively.
+- Category descriptions are placeholders (TODO in proto-listing.js).

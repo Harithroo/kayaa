@@ -27,6 +27,24 @@
     }
   })();
 
+  /* ---------- Header height -> --header-h (lets sticky bars sit exactly under the header) ---------- */
+  (function () {
+    var header = $('.site-header');
+    if (!header) return;
+    function set() { root.style.setProperty('--header-h', header.getBoundingClientRect().height + 'px'); }
+    set();
+    window.addEventListener('resize', set);
+    if (window.ResizeObserver) new ResizeObserver(set).observe(header);
+  })();
+
+  /* ---------- Auto-submit: [data-autosubmit] controls submit their form on change.
+     Pages ship a <noscript> Apply button for the no-JS case. ---------- */
+  document.addEventListener('change', function (e) {
+    var el = e.target.closest && e.target.closest('[data-autosubmit]');
+    if (!el || !el.form) return;
+    if (el.form.requestSubmit) el.form.requestSubmit(); else el.form.submit();
+  });
+
   /* ---------- Active page: <body data-page="home"> marks matching [data-nav] links ----------
      Both attributes take space-separated tokens, e.g. data-page="account login". */
   (function () {

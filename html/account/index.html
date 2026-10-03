@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<!-- review-only page: delete when the site moves to Laravel. Not linked from the header or footer. -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow">
-  <title>Kayaa prototype - review</title>
-  <meta name="description" content="Index of every screen in the Kayaa prototype, with review status.">
+  <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
+  <title>My orders | Kayaa</title>
+  <meta name="description" content="My orders page of the Kayaa prototype. Placeholder.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css">
-  <link rel="stylesheet" href="assets/css/pages/review.css">
+  <link rel="stylesheet" href="../assets/css/app.css">
+  <link rel="stylesheet" href="../assets/css/pages/stub.css">
 </head>
-<body data-page="review">
+<body data-page="account">
   <!-- partial: sprite -->
   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="display:none">
     <!-- Lucide icons (ISC licence), 24x24, outline. Stroke/fill/caps are set by .icon in base.css. -->
@@ -141,7 +140,7 @@
     <div class="container site-header__bar">
       <button type="button" class="icon-btn icon-btn--plain site-header__menu" data-open-layer="menu" aria-label="Open menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-drawer"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg></button>
 
-      <a class="wordmark" href="index.html" aria-label="Kayaa home">kayaa</a> <!-- TODO: replace with logo when ready -->
+      <a class="wordmark" href="../index.html" aria-label="Kayaa home">kayaa</a> <!-- TODO: replace with logo when ready -->
 
       <nav class="primary-nav" aria-label="Primary">
         <ul>
@@ -149,22 +148,22 @@
             <button type="button" class="primary-nav__link" data-dropdown-toggle aria-expanded="false" aria-controls="age-menu">Shop by age <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></button>
             <ul class="dropdown" id="age-menu" data-dropdown-panel hidden>
               <!-- loop: age_groups -->
-              <li><a href="shop.html?age=newborn">Newborn</a></li>
-              <li><a href="shop.html?age=0-3-months">0–3 months</a></li>
-              <li><a href="shop.html?age=3-6-months">3–6 months</a></li>
-              <li><a href="shop.html?age=6-12-months">6–12 months</a></li>
-              <li><a href="shop.html?age=1-2-years">1–2 years</a></li>
+              <li><a href="../shop.html?age=newborn">Newborn</a></li>
+              <li><a href="../shop.html?age=0-3-months">0–3 months</a></li>
+              <li><a href="../shop.html?age=3-6-months">3–6 months</a></li>
+              <li><a href="../shop.html?age=6-12-months">6–12 months</a></li>
+              <li><a href="../shop.html?age=1-2-years">1–2 years</a></li>
               <!-- /loop -->
             </ul>
           </li>
-          <li><a class="primary-nav__link" href="shop.html?sort=new">New in</a></li>
-          <li><a class="primary-nav__link" href="shop.html?sale=1">Sale</a></li>
-          <li><a class="primary-nav__link" href="size-guide.html" data-nav="size-guide">Size guide</a></li>
-          <li><a class="primary-nav__link" href="about.html" data-nav="about">Our story</a></li>
+          <li><a class="primary-nav__link" href="../shop.html?sort=new">New in</a></li>
+          <li><a class="primary-nav__link" href="../shop.html?sale=1">Sale</a></li>
+          <li><a class="primary-nav__link" href="../size-guide.html" data-nav="size-guide">Size guide</a></li>
+          <li><a class="primary-nav__link" href="../about.html" data-nav="about">Our story</a></li>
         </ul>
       </nav>
 
-      <form class="header-search" role="search" action="search.html" method="get">
+      <form class="header-search" role="search" action="../search.html" method="get">
         <label class="visually-hidden" for="header-q">Search Kayaa</label>
         <input id="header-q" type="search" name="q" placeholder="Search" autocomplete="off">
         <button type="submit" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
@@ -172,7 +171,7 @@
 
       <div class="site-header__actions">
         <!-- blade: @auth account/index.html @else account/login.html -->
-        <a class="icon-btn site-header__account" href="account/login.html" data-nav="account" aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
+        <a class="icon-btn site-header__account" href="../account/login.html" data-nav="account" aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
         <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
           <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg>
           <span class="icon-btn__count" data-cart-count aria-hidden="true">2</span>
@@ -184,12 +183,12 @@
       <div class="container">
         <ul>
           <!-- loop: categories -->
-          <li><a href="category.html?c=bodysuits">Bodysuits</a></li>
-          <li><a href="category.html?c=sleepsuits">Sleepsuits</a></li>
-          <li><a href="category.html?c=sets">Sets</a></li>
-          <li><a href="category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
-          <li><a href="category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
-          <li><a href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
+          <li><a href="../category.html?c=bodysuits">Bodysuits</a></li>
+          <li><a href="../category.html?c=sleepsuits">Sleepsuits</a></li>
+          <li><a href="../category.html?c=sets">Sets</a></li>
+          <li><a href="../category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
+          <li><a href="../category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
+          <li><a href="../category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
           <!-- /loop -->
         </ul>
       </div>
@@ -197,163 +196,28 @@
   </header>
   <!-- /partial: header -->
 
+  <!-- prototype-stub: replace this whole main when the page is built -->
   <main id="main">
-    <div class="container review">
-      <header class="review__head">
+    <div class="container stub">
+      <div class="stub__card">
         <p class="eyebrow">Prototype</p>
-        <h1>Kayaa prototype - review</h1>
-        <p class="review__intro">Click through every screen below. Prices, products and copy are placeholders.</p>
-      </header>
-
-        <section class="review__group" aria-labelledby="review-g0">
-          <h2 id="review-g0">Browse</h2>
-          <ul class="review__list" role="list">
-            <li class="review__item">
-              <div class="review__text"><a class="review__name" href="index.html">Home</a><p class="review__note">Hero, shop by age and category, product cards, cart drawer and quick add.</p></div>
-              <span class="badge badge--lilac">Ready to review</span>
-            </li>
-            <li class="review__item">
-              <div class="review__text"><a class="review__name" href="shop.html">Shop</a><p class="review__note">Age chips, sort, sale filter, pagination and the empty state.</p></div>
-              <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="shop.html?sort=new">New in</a></li><li><a href="shop.html?sale=1">Sale</a></li><li><a href="shop.html?age=3-6-months">3-6 months</a></li><li><a href="shop.html?age=newborn&amp;sale=1">Empty state</a></li><li><a href="shop.html?page=2">Page 2</a></li></ul></div>
-            </li>
-            <li class="review__item">
-              <div class="review__text"><a class="review__name" href="category.html">Category</a><p class="review__note">A category listing with the same filters.</p></div>
-              <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="category.html?c=bodysuits">Bodysuits</a></li><li><a href="category.html?c=hats-mitts">Hats &amp; Mitts</a></li><li><a href="category.html?c=hats-mitts&amp;sale=1">Empty state</a></li></ul></div>
-            </li>
-            <li class="review__item">
-              <div class="review__text"><a class="review__name" href="search.html">Search</a><p class="review__note">Search results and the no-results state.</p></div>
-              <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="search.html?q=romper">Search: romper</a></li><li><a href="search.html?q=zzz">No results: zzz</a></li><li><a href="search.html">Empty search</a></li></ul></div>
-            </li>
-          </ul>
-        </section>
-
-        <section class="review__group" aria-labelledby="review-g1">
-          <h2 id="review-g1">Product</h2>
-          <ul class="review__list" role="list">
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Product</span><p class="review__note">Gallery, size and colour choice, add to bag, reviews.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-          </ul>
-        </section>
-
-        <section class="review__group" aria-labelledby="review-g2">
-          <h2 id="review-g2">Buy</h2>
-          <ul class="review__list" role="list">
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Bag</span><p class="review__note">Full bag with quantities and delivery progress.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Checkout</span><p class="review__note">Delivery details and cash on delivery.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Thank you</span><p class="review__note">Order confirmation after checkout.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Track order</span><p class="review__note">Look up an order by reference.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-          </ul>
-        </section>
-
-        <section class="review__group" aria-labelledby="review-g3">
-          <h2 id="review-g3">Account</h2>
-          <ul class="review__list" role="list">
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Register</span><p class="review__note">Create an account.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Log in</span><p class="review__note">Sign in form and error states.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Forgot password</span><p class="review__note">Request a reset link.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Reset password</span><p class="review__note">Choose a new password.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">My orders</span><p class="review__note">Order list with order and payment statuses.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Order details</span><p class="review__note">A single order and its items.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">My reviews</span><p class="review__note">Reviews written and waiting to be written.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Profile</span><p class="review__note">Personal details and addresses.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-          </ul>
-        </section>
-
-        <section class="review__group" aria-labelledby="review-g4">
-          <h2 id="review-g4">Support &amp; content</h2>
-          <ul class="review__list" role="list">
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Contact</span><p class="review__note">Contact form and details.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Size guide</span><p class="review__note">Size chart by weight, height and age.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Delivery</span><p class="review__note">Delivery information.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Returns</span><p class="review__note">Returns information.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">About</span><p class="review__note">Our story.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Privacy</span><p class="review__note">Privacy policy.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Terms</span><p class="review__note">Terms and conditions.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
-            </li>
-          </ul>
-        </section>
-
-        <section class="review__group" aria-labelledby="review-g5">
-          <h2 id="review-g5">System</h2>
-          <ul class="review__list" role="list">
-            <li class="review__item">
-              <div class="review__text"><a class="review__name" href="review.html">Review index</a><p class="review__note">This page. The status of every screen in one place.</p></div>
-              <span class="badge badge--lilac">Ready to review</span>
-            </li>
-          </ul>
-        </section>
-
-      <p class="review__footnote">This page exists for review only and is removed when the site moves to Laravel.</p>
+        <h1>My orders</h1>
+        <p class="stub__text">This screen is still being designed and will appear here in a later review round.</p>
+        <div class="stub__actions">
+          <a class="btn btn--primary" href="../index.html">Back to home</a>
+          <a class="btn btn--secondary" href="../review.html">Review index</a>
+        </div>
+      </div>
     </div>
   </main>
+  <!-- /prototype-stub -->
 
   <!-- partial: footer -->
   <footer class="site-footer">
     <div class="container">
       <div class="footer__grid">
         <div class="footer__brand">
-          <a class="wordmark" href="index.html" aria-label="Kayaa home">kayaa</a>
+          <a class="wordmark" href="../index.html" aria-label="Kayaa home">kayaa</a>
           <p class="footer__blurb">Soft everyday clothing for babies, delivered across Sri Lanka.</p>
           <ul class="footer__contact" role="list">
             <li><a href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a></li> <!-- TODO: add WhatsApp number -->
@@ -363,29 +227,29 @@
         <nav aria-labelledby="footer-age">
           <h2 class="footer__title" id="footer-age">Shop by age</h2>
           <ul class="footer__list" role="list">
-            <li><a href="shop.html?age=newborn">Newborn</a></li>
-            <li><a href="shop.html?age=0-3-months">0–3 months</a></li>
-            <li><a href="shop.html?age=3-6-months">3–6 months</a></li>
-            <li><a href="shop.html?age=6-12-months">6–12 months</a></li>
-            <li><a href="shop.html?age=1-2-years">1–2 years</a></li>
+            <li><a href="../shop.html?age=newborn">Newborn</a></li>
+            <li><a href="../shop.html?age=0-3-months">0–3 months</a></li>
+            <li><a href="../shop.html?age=3-6-months">3–6 months</a></li>
+            <li><a href="../shop.html?age=6-12-months">6–12 months</a></li>
+            <li><a href="../shop.html?age=1-2-years">1–2 years</a></li>
           </ul>
         </nav>
         <nav aria-labelledby="footer-help">
           <h2 class="footer__title" id="footer-help">Help</h2>
           <ul class="footer__list" role="list">
-            <li><a href="track.html">Track order</a></li>
-            <li><a href="size-guide.html">Size guide</a></li>
-            <li><a href="delivery.html">Delivery</a></li>
-            <li><a href="returns.html">Returns</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="../track.html">Track order</a></li>
+            <li><a href="../size-guide.html">Size guide</a></li>
+            <li><a href="../delivery.html">Delivery</a></li>
+            <li><a href="../returns.html">Returns</a></li>
+            <li><a href="../contact.html">Contact</a></li>
           </ul>
         </nav>
         <nav aria-labelledby="footer-company">
           <h2 class="footer__title" id="footer-company">Company</h2>
           <ul class="footer__list" role="list">
-            <li><a href="about.html">Our story</a></li>
-            <li><a href="privacy.html">Privacy policy</a></li>
-            <li><a href="terms.html">Terms &amp; conditions</a></li>
+            <li><a href="../about.html">Our story</a></li>
+            <li><a href="../privacy.html">Privacy policy</a></li>
+            <li><a href="../terms.html">Terms &amp; conditions</a></li>
           </ul>
         </nav>
       </div>
@@ -408,9 +272,9 @@
   <!-- partial: tabbar -->
   <nav class="tabbar" aria-label="Mobile">
     <ul>
-      <li><a class="tabbar__item" href="index.html" data-nav="home"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></span><span>Home</span></a></li>
-      <li><a class="tabbar__item" href="shop.html" data-nav="shop category product"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-layout-grid"></use></svg></span><span>Shop</span></a></li>
-      <li><a class="tabbar__item" href="search.html" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
+      <li><a class="tabbar__item" href="../index.html" data-nav="home"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></span><span>Home</span></a></li>
+      <li><a class="tabbar__item" href="../shop.html" data-nav="shop category product"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-layout-grid"></use></svg></span><span>Shop</span></a></li>
+      <li><a class="tabbar__item" href="../search.html" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
       <li>
         <button type="button" class="tabbar__item" data-open-layer="cart" data-nav="cart" aria-haspopup="dialog">
           <span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg><span class="icon-btn__count" data-cart-count aria-hidden="true">2</span></span>
@@ -418,7 +282,7 @@
         </button>
       </li>
       <!-- blade: @auth account/index.html @else account/login.html -->
-      <li><a class="tabbar__item" href="account/login.html" data-nav="account"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
+      <li><a class="tabbar__item" href="../account/login.html" data-nav="account"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
     </ul>
   </nav>
   <!-- /partial: tabbar -->
@@ -433,48 +297,48 @@
       <nav aria-label="Menu">
         <div class="menu-group">
           <ul role="list">
-            <li><a href="shop.html?sort=new">New in</a></li>
-            <li><a href="shop.html?sale=1">Sale</a></li>
-            <li><a href="about.html" data-nav="about">Our story</a></li>
+            <li><a href="../shop.html?sort=new">New in</a></li>
+            <li><a href="../shop.html?sale=1">Sale</a></li>
+            <li><a href="../about.html" data-nav="about">Our story</a></li>
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Shop by age</p>
           <ul role="list">
-            <li><a href="shop.html?age=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=0-3-months">0–3 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=3-6-months">3–6 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=6-12-months">6–12 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=1-2-years">1–2 years <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../shop.html?age=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../shop.html?age=0-3-months">0–3 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../shop.html?age=3-6-months">3–6 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../shop.html?age=6-12-months">6–12 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../shop.html?age=1-2-years">1–2 years <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Shop by category</p>
           <ul role="list">
-            <li><a href="category.html?c=bodysuits">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=sleepsuits">Sleepsuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=sets">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=dresses-rompers">Dresses &amp; Rompers <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=hats-mitts">Hats &amp; Mitts <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=bodysuits">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=sleepsuits">Sleepsuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=sets">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=dresses-rompers">Dresses &amp; Rompers <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=hats-mitts">Hats &amp; Mitts <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=swaddles-blankets">Swaddles &amp; Blankets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Help</p>
           <ul role="list">
-            <li><a href="track.html" data-nav="track">Track order</a></li>
-            <li><a href="size-guide.html" data-nav="size-guide">Size guide</a></li>
-            <li><a href="delivery.html" data-nav="delivery">Delivery</a></li>
-            <li><a href="returns.html" data-nav="returns">Returns</a></li>
-            <li><a href="contact.html" data-nav="contact">Contact</a></li>
+            <li><a href="../track.html" data-nav="track">Track order</a></li>
+            <li><a href="../size-guide.html" data-nav="size-guide">Size guide</a></li>
+            <li><a href="../delivery.html" data-nav="delivery">Delivery</a></li>
+            <li><a href="../returns.html" data-nav="returns">Returns</a></li>
+            <li><a href="../contact.html" data-nav="contact">Contact</a></li>
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Account</p>
           <!-- blade: @auth My account @else Log in / Register -->
           <ul role="list">
-            <li><a href="account/login.html" data-nav="login">Log in</a></li>
-            <li><a href="account/register.html" data-nav="register">Register</a></li>
+            <li><a href="../account/login.html" data-nav="login">Log in</a></li>
+            <li><a href="../account/register.html" data-nav="register">Register</a></li>
           </ul>
         </div>
       </nav>
@@ -506,7 +370,7 @@
             <li class="cart-item" data-cart-item data-key="Ruffle Sleeve Dress|Size 3-6M · Lilac" data-unit-price="3450">
               <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <div class="cart-item__body">
-                <p class="cart-item__name"><a href="product.html" data-item-name>Ruffle Sleeve Dress</a></p>
+                <p class="cart-item__name"><a href="../product.html" data-item-name>Ruffle Sleeve Dress</a></p>
                 <p class="cart-item__meta" data-item-meta>Size 3-6M · Lilac</p>
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
@@ -522,7 +386,7 @@
             <li class="cart-item" data-cart-item data-key="Cotton Sleepsuit|Size 0-3M · Cream" data-unit-price="2850">
               <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <div class="cart-item__body">
-                <p class="cart-item__name"><a href="product.html" data-item-name>Cotton Sleepsuit</a></p>
+                <p class="cart-item__name"><a href="../product.html" data-item-name>Cotton Sleepsuit</a></p>
                 <p class="cart-item__meta" data-item-meta>Size 0-3M · Cream</p>
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
@@ -542,8 +406,8 @@
           <p class="cart-summary"><span>Subtotal</span> <span class="cart-summary__value" data-cart-subtotal>Rs 6,300</span></p>
           <p class="cart-note">Delivery calculated at checkout · Cash on delivery available</p>
           <div class="cart-actions">
-            <a class="btn btn--primary btn--lg btn--block" href="checkout.html">Checkout</a>
-            <a class="btn btn--secondary btn--block" href="cart.html">View bag</a>
+            <a class="btn btn--primary btn--lg btn--block" href="../checkout.html">Checkout</a>
+            <a class="btn btn--secondary btn--block" href="../cart.html">View bag</a>
           </div>
         </div>
       </div>
@@ -552,7 +416,7 @@
         <div class="empty-state">
           <span class="empty-state__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg></span>
           <h3 class="empty-state__title">Your bag is empty</h3>
-          <a class="btn btn--primary" href="shop.html" data-autofocus-empty>Start shopping</a>
+          <a class="btn btn--primary" href="../shop.html" data-autofocus-empty>Start shopping</a>
         </div>
       </div>
       <!-- /blade -->
@@ -562,7 +426,7 @@
     <li class="cart-item" data-cart-item data-key="|" data-unit-price="0">
       <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
       <div class="cart-item__body">
-        <p class="cart-item__name"><a href="product.html" data-item-name></a></p>
+        <p class="cart-item__name"><a href="../product.html" data-item-name></a></p>
         <p class="cart-item__meta" data-item-meta></p>
         <div class="cart-item__row">
           <div class="qty" data-qty>
@@ -592,7 +456,7 @@
         </div>
         <button type="button" class="icon-btn icon-btn--plain quick-add__close" data-close-layer aria-label="Close quick add"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
       </div>
-      <form data-quick-add-form action="cart.html" method="post">
+      <form data-quick-add-form action="../cart.html" method="post">
         <fieldset class="quick-add__group">
           <legend>Size</legend>
           <!-- TODO: sizes and stock come from the product variants -->
@@ -617,6 +481,6 @@
   </div>
   <!-- /partial: quick-add -->
 
-  <script src="assets/js/app.js" defer></script>
+  <script src="../assets/js/app.js" defer></script>
 </body>
 </html>

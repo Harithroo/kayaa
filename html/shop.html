@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Kayaa | Baby clothing, delivered across Sri Lanka</title>
-  <meta name="description" content="Soft everyday baby clothing from Kayaa, sized by weight and height. Cash on delivery across Sri Lanka.">
+  <title>Shop baby clothing | Kayaa</title>
+  <meta name="description" content="Shop soft everyday baby clothing by age, newest and sale. Cash on delivery across Sri Lanka.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/app.css">
-  <link rel="stylesheet" href="assets/css/pages/home.css">
+  <link rel="stylesheet" href="assets/css/pages/listing.css">
 </head>
-<body data-page="home">
+<body data-page="shop">
   <!-- partial: sprite -->
   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="display:none">
     <!-- Lucide icons (ISC licence), 24x24, outline. Stroke/fill/caps are set by .icon in base.css. -->
@@ -197,146 +197,71 @@
   <!-- /partial: header -->
 
   <main id="main">
+    <div class="container listing" data-listing="shop.html">
 
-    <!-- Hero -->
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="container hero__grid">
-        <div class="hero__copy">
-          <p class="eyebrow">New arrivals</p>
-          <h1 class="display" id="hero-title">Dressed for every little season</h1>
-          <!-- TODO: confirm with client (fabric claim: soft, breathable cotton) -->
-          <p class="hero__lede">Soft, breathable cotton essentials, sized to your baby's actual weight and height.</p>
-          <div class="hero__actions">
-            <a class="btn btn--primary btn--lg" href="shop.html?sort=new">Shop new arrivals</a>
-            <a class="link-arrow" href="size-guide.html">Find your baby's size <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
-          </div>
-        </div>
-        <div class="hero__visual">
-          <!-- img: replace placeholder with <img src alt="Baby wearing a lilac ribbed bodysuit"> when photography exists -->
-          <div class="media media--round hero__media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-          <div class="hero__tag">
-            <span class="hero__tag-icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-ruler"></use></svg></span>
-            <p class="hero__tag-text">Sized by weight,<br>not just age</p>
-          </div>
-        </div>
-      </div>
-    </section>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol data-breadcrumb>
+          <li><a href="index.html">Home</a></li>
+          <li aria-current="page">Shop</li>
+        </ol>
+      </nav>
 
-    <!-- Trust strip -->
-    <section class="trust" aria-label="Why shop with Kayaa">
-      <div class="container">
-        <ul class="trust__list">
-          <li class="trust__item">
-            <span class="trust__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span>
-            <div><p class="trust__title">Free delivery over Rs 7,500</p><p class="trust__text">Standard delivery Rs 450</p></div>
-          </li>
-          <li class="trust__item">
-            <span class="trust__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg></span>
-            <div><p class="trust__title">Cash on delivery</p><p class="trust__text">Pay when it arrives</p></div>
-          </li>
-          <li class="trust__item">
-            <span class="trust__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-rotate-ccw"></use></svg></span>
-            <!-- TODO: confirm with client (returns window and conditions) -->
-            <div><p class="trust__title">Easy returns</p><p class="trust__text">See our returns page</p></div>
-          </li>
-          <li class="trust__item">
-            <span class="trust__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shield-check"></use></svg></span>
-            <div><p class="trust__title">Verified parent reviews</p><p class="trust__text">From real orders</p></div>
-          </li>
-        </ul>
-      </div>
-    </section>
+      <header class="listing-head">
+        <h1 data-listing-title>All baby clothing</h1>
+        <p class="listing-head__intro" data-listing-intro>Soft everyday essentials, sorted by age and stage.</p>
+        <p class="listing-head__count" data-listing-count>24 products</p>
+      </header>
 
-    <!-- Shop by age -->
-    <section class="section" aria-labelledby="age-title">
-      <div class="container">
-        <div class="section__head">
-          <div>
-            <h2 id="age-title">Shop by age &amp; stage</h2>
-            <p class="section__intro">Find clothes that fit right now, then the next size up.</p>
-          </div>
-        </div>
-        <ul class="scroller scroller--age" role="list">
+      <nav class="age-chips" aria-label="Shop by age">
+        <ul class="age-chips__list" role="list">
           <!-- loop: age_groups -->
-          <li><a class="age-tile" href="shop.html?age=newborn" style="--tone: var(--tone-1)"><span class="age-tile__label">Newborn</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?age=0-3-months" style="--tone: var(--tone-2)"><span class="age-tile__label">0–3 months</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?age=3-6-months" style="--tone: var(--tone-3)"><span class="age-tile__label">3–6 months</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?age=6-12-months" style="--tone: var(--tone-4)"><span class="age-tile__label">6–12 months</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?age=1-2-years" style="--tone: var(--tone-2)"><span class="age-tile__label">1–2 years</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li><a class="chip" href="shop.html" aria-current="page">All ages</a></li>
+          <li><a class="chip" href="shop.html?age=newborn">Newborn</a></li>
+          <li><a class="chip" href="shop.html?age=0-3-months">0–3 months</a></li>
+          <li><a class="chip" href="shop.html?age=3-6-months">3–6 months</a></li>
+          <li><a class="chip" href="shop.html?age=6-12-months">6–12 months</a></li>
+          <li><a class="chip" href="shop.html?age=1-2-years">1–2 years</a></li>
           <!-- /loop -->
         </ul>
-      </div>
-    </section>
+      </nav>
 
-    <!-- Shop by category -->
-    <section class="section section--surface" aria-labelledby="cat-title">
-      <div class="container">
-        <div class="section__head">
-          <h2 id="cat-title">Shop by category</h2>
+      <form class="toolbar" method="get" action="shop.html" data-listing-form>
+        <!-- blade: hidden inputs keep the other active params (age, c, q) -->
+        <input type="hidden" name="age" value="" data-keep="age" disabled>
+        <p class="toolbar__count" data-listing-range>Showing 1-12 of 24</p>
+        <div class="toolbar__controls">
+          <div class="field toolbar__sort">
+            <label for="sort">Sort by</label>
+            <!-- TODO: confirm the price sort directions with the backend dev -->
+            <select id="sort" name="sort" data-autosubmit>
+              <option value="featured" selected>Featured</option>
+              <option value="new">Newest</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+            </select>
+          </div>
+          <label class="switch">
+            <input type="checkbox" role="switch" name="sale" value="1" data-autosubmit>
+            <span class="switch__track" aria-hidden="true"></span>
+            <span class="switch__label">Sale only</span>
+          </label>
+          <noscript><button type="submit" class="btn btn--secondary btn--sm">Apply</button></noscript>
         </div>
-        <ul class="cat-grid" role="list">
-          <!-- loop: categories -->
-          <li>
-            <a class="cat-tile" href="category.html?c=bodysuits">
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <span class="cat-tile__label">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=sleepsuits">
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <span class="cat-tile__label">Sleepsuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=sets">
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <span class="cat-tile__label">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=dresses-rompers">
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <span class="cat-tile__label">Dresses &amp; Rompers <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=hats-mitts">
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <span class="cat-tile__label">Hats &amp; Mitts <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=swaddles-blankets">
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <span class="cat-tile__label">Swaddles &amp; Blankets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <!-- /loop -->
-        </ul>
-      </div>
-    </section>
+      </form>
 
-    <!-- New this week -->
-    <section class="section" aria-labelledby="new-title">
-      <div class="container">
-        <div class="section__head">
-          <h2 id="new-title">New this week</h2>
-          <a class="link-arrow" href="shop.html?sort=new">View all <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
-        </div>
-        <!-- img: real photos replace .media[data-placeholder]; alt = product name -->
-        <ul class="scroller scroller--products" role="list">
-          <!-- loop: products (new arrivals) -->
-          <!-- blade: badge priority @if sale Sale (accent) @elseif new New (lilac) @elseif featured Featured (outline); @if out_of_stock hide quick-add -->
-          <li>
+      <div data-listing-results>
+        <ul class="product-grid" role="list" data-listing-grid>
+          <!-- loop: products (12 per page; data-* attributes are read by assets/js/proto-listing.js) -->
+          <!-- blade: badge priority @if out_of_stock Out of stock @elseif sale Sale (accent) @elseif new New (lilac) @elseif featured Featured (outline) -->
+          <li data-product data-name="Ribbed Cotton Bodysuit" data-price="1490" data-age="newborn 0-3-months 3-6-months" data-category="bodysuits" data-new="1" data-sale="0" data-featured="5" data-added="95">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
                 <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-name="Ribbed Cotton Bodysuit" data-price="1490" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Ribbed Cotton Bodysuit">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Ribbed Cotton Bodysuit" data-price="1490" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Ribbed Cotton Bodysuit">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
               </div>
               <div class="product-card__info">
                 <h3 class="product-card__name"><a class="product-card__link" href="product.html">Ribbed Cotton Bodysuit</a></h3>
@@ -347,107 +272,15 @@
               </div>
             </article>
           </li>
-          <li>
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-name="Ruffle Sleeve Dress" data-price="3450" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Ruffle Sleeve Dress">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Ruffle Sleeve Dress</a></h3>
-                <div class="product-card__row">
-                  <p class="price"><span class="price__now">Rs 3,450</span></p>
-                  <ul class="product-card__colours" role="list" aria-label="Colours: Blush, Cream, Lilac"><li class="dot dot--blush"></li><li class="dot dot--cream"></li><li class="dot dot--lilac"></li></ul>
-                </div>
-              </div>
-            </article>
-          </li>
-          <li>
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-name="Knit Bonnet &amp; Booties Set" data-price="1760" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Knit Bonnet &amp; Booties Set">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Knit Bonnet &amp; Booties Set</a></h3>
-                <div class="product-card__row">
-                  <p class="price"><span class="price__now">Rs 1,760</span></p>
-                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Blush"><li class="dot dot--cream"></li><li class="dot dot--blush"></li></ul>
-                </div>
-              </div>
-            </article>
-          </li>
-          <li>
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-name="Cotton Sleepsuit" data-price="2850" data-tone="4" aria-haspopup="dialog" aria-label="Quick add, Cotton Sleepsuit">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Cotton Sleepsuit</a></h3>
-                <div class="product-card__row">
-                  <p class="price"><span class="price__now">Rs 2,850</span></p>
-                  <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Dove, Cream"><li class="dot dot--lilac"></li><li class="dot dot--dove"></li><li class="dot dot--cream"></li></ul>
-                </div>
-              </div>
-            </article>
-          </li>
-          <!-- /loop -->
-        </ul>
-      </div>
-    </section>
-
-    <!-- Promo banners (admin: home_promo) -->
-    <section class="section" aria-label="Promotions">
-      <div class="container promos__grid">
-        <!-- loop: home_promo -->
-        <!-- blade: class promo--{style} (lilac | sky) -->
-        <!-- TODO: placeholder copy, confirm with client -->
-        <article class="promo promo--lilac">
-          <p class="eyebrow">Newborn essentials</p>
-          <h2 class="promo__title">Everything for the first weeks</h2>
-          <p class="promo__text">Placeholder text about a soft, simple starter wardrobe for new arrivals.</p>
-          <a class="btn btn--primary" href="shop.html?age=newborn">Shop newborn</a>
-        </article>
-        <article class="promo promo--sky">
-          <p class="eyebrow">Sale</p>
-          <h2 class="promo__title">Selected styles, lower prices</h2>
-          <p class="promo__text">Placeholder text about a limited selection of reduced items.</p>
-          <a class="btn btn--secondary" href="shop.html?sale=1">Shop the sale</a>
-        </article>
-        <!-- /loop -->
-      </div>
-    </section>
-
-    <!-- Featured products -->
-    <section class="section" aria-labelledby="featured-title">
-      <div class="container">
-        <div class="section__head">
-          <h2 id="featured-title">Featured products</h2>
-        </div>
-        <ul class="product-grid" role="list">
-          <!-- loop: products (featured) -->
-          <li>
+          <li data-product data-name="Muslin Swaddle Wrap" data-price="2250" data-age="newborn 0-3-months" data-category="swaddles-blankets" data-new="0" data-sale="0" data-featured="2" data-added="2">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
                 <span class="badge badge--outline product-card__badge">Featured</span>
-                <button type="button" class="product-card__quick" data-quick-add data-name="Muslin Swaddle Wrap" data-price="2250" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Muslin Swaddle Wrap">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Muslin Swaddle Wrap" data-price="2250" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Muslin Swaddle Wrap">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
               </div>
               <div class="product-card__info">
                 <h3 class="product-card__name"><a class="product-card__link" href="product.html">Muslin Swaddle Wrap</a></h3>
@@ -458,15 +291,15 @@
               </div>
             </article>
           </li>
-          <li>
+          <li data-product data-name="Pointelle Knit Cardigan" data-price="1120" data-age="3-6-months 6-12-months" data-category="sets" data-new="0" data-sale="1" data-featured="7" data-added="3">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
                 <span class="badge badge--accent product-card__badge">Sale</span>
-                <button type="button" class="product-card__quick" data-quick-add data-name="Pointelle Knit Cardigan" data-price="1120" data-was="1400" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Pointelle Knit Cardigan">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Pointelle Knit Cardigan" data-price="1120" data-was="1400" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Pointelle Knit Cardigan">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
               </div>
               <div class="product-card__info">
                 <h3 class="product-card__name"><a class="product-card__link" href="product.html">Pointelle Knit Cardigan</a></h3>
@@ -477,102 +310,7 @@
               </div>
             </article>
           </li>
-          <li>
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--accent product-card__badge">Sale</span>
-                <button type="button" class="product-card__quick" data-quick-add data-name="Terry Romper" data-price="1540" data-was="1890" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Terry Romper">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Terry Romper</a></h3>
-                <div class="product-card__row">
-                  <p class="price price--sale"><span class="visually-hidden">Sale price </span><span class="price__now">Rs 1,540</span> <s class="price__was"><span class="visually-hidden">Was </span>Rs 1,890</s></p>
-                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Sky, Blush"><li class="dot dot--cream"></li><li class="dot dot--sky"></li><li class="dot dot--blush"></li></ul>
-                </div>
-              </div>
-            </article>
-          </li>
-          <li>
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--outline product-card__badge">Featured</span>
-                <button type="button" class="product-card__quick" data-quick-add data-name="Wrap Front Bodysuit, 3 Pack" data-price="3290" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Wrap Front Bodysuit, 3 Pack">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Wrap Front Bodysuit, 3 Pack</a></h3>
-                <div class="product-card__row">
-                  <p class="price"><span class="price__now">Rs 3,290</span></p>
-                  <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Cream, Dove"><li class="dot dot--lilac"></li><li class="dot dot--cream"></li><li class="dot dot--dove"></li></ul>
-                </div>
-              </div>
-            </article>
-          </li>
-          <li>
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                
-                <button type="button" class="product-card__quick" data-quick-add data-name="Pull-On Shorts Set" data-price="2490" data-tone="4" aria-haspopup="dialog" aria-label="Quick add, Pull-On Shorts Set">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Pull-On Shorts Set</a></h3>
-                <div class="product-card__row">
-                  <p class="price"><span class="price__now">Rs 2,490</span></p>
-                  <ul class="product-card__colours" role="list" aria-label="Colours: Dove, Sky"><li class="dot dot--dove"></li><li class="dot dot--sky"></li></ul>
-                </div>
-              </div>
-            </article>
-          </li>
-          <li>
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                
-                <button type="button" class="product-card__quick" data-quick-add data-name="Soft Sole Booties" data-price="980" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Soft Sole Booties">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Soft Sole Booties</a></h3>
-                <div class="product-card__row">
-                  <p class="price"><span class="price__now">Rs 980</span></p>
-                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Lilac, Blush"><li class="dot dot--cream"></li><li class="dot dot--lilac"></li><li class="dot dot--blush"></li></ul>
-                </div>
-              </div>
-            </article>
-          </li>
-          <li>
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--outline product-card__badge">Featured</span>
-                <button type="button" class="product-card__quick" data-quick-add data-name="Hooded Baby Towel" data-price="1950" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Hooded Baby Towel">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Hooded Baby Towel</a></h3>
-                <div class="product-card__row">
-                  <p class="price"><span class="price__now">Rs 1,950</span></p>
-                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Lilac"><li class="dot dot--cream"></li><li class="dot dot--lilac"></li></ul>
-                </div>
-              </div>
-            </article>
-          </li>
-          <li>
+          <li data-product data-name="Scratch Mitten Set" data-price="720" data-age="newborn 0-3-months" data-category="hats-mitts" data-new="0" data-sale="0" data-featured="24" data-added="4">
             <article class="product-card product-card--oos">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -587,14 +325,413 @@
               </div>
             </article>
           </li>
+          <li data-product data-name="Ruffle Sleeve Dress" data-price="3450" data-age="6-12-months 1-2-years" data-category="dresses-rompers" data-new="1" data-sale="0" data-featured="3" data-added="96">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--lilac product-card__badge">New</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Ruffle Sleeve Dress" data-price="3450" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Ruffle Sleeve Dress">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Ruffle Sleeve Dress</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 3,450</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Blush, Cream, Lilac"><li class="dot dot--blush"></li><li class="dot dot--cream"></li><li class="dot dot--lilac"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Cotton Sleepsuit" data-price="2850" data-age="newborn 0-3-months 3-6-months" data-category="sleepsuits" data-new="1" data-sale="0" data-featured="6" data-added="97">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--lilac product-card__badge">New</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Cotton Sleepsuit" data-price="2850" data-tone="4" aria-haspopup="dialog" aria-label="Quick add, Cotton Sleepsuit">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Cotton Sleepsuit</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 2,850</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Dove, Cream"><li class="dot dot--lilac"></li><li class="dot dot--dove"></li><li class="dot dot--cream"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Terry Romper" data-price="1540" data-age="3-6-months 6-12-months" data-category="dresses-rompers" data-new="0" data-sale="1" data-featured="11" data-added="7">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--accent product-card__badge">Sale</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Terry Romper" data-price="1540" data-was="1890" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Terry Romper">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Terry Romper</a></h3>
+                <div class="product-card__row">
+                  <p class="price price--sale"><span class="visually-hidden">Sale price </span><span class="price__now">Rs 1,540</span> <s class="price__was"><span class="visually-hidden">Was </span>Rs 1,890</s></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Sky, Blush"><li class="dot dot--cream"></li><li class="dot dot--sky"></li><li class="dot dot--blush"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Knit Bonnet &amp; Booties Set" data-price="1760" data-age="newborn 0-3-months" data-category="hats-mitts" data-new="1" data-sale="0" data-featured="21" data-added="98">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--lilac product-card__badge">New</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Knit Bonnet &amp; Booties Set" data-price="1760" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Knit Bonnet &amp; Booties Set">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Knit Bonnet &amp; Booties Set</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 1,760</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Blush"><li class="dot dot--cream"></li><li class="dot dot--blush"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Wrap Front Bodysuit, 3 Pack" data-price="3290" data-age="newborn 0-3-months 3-6-months" data-category="bodysuits" data-new="0" data-sale="0" data-featured="1" data-added="9">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--outline product-card__badge">Featured</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Wrap Front Bodysuit, 3 Pack" data-price="3290" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Wrap Front Bodysuit, 3 Pack">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Wrap Front Bodysuit, 3 Pack</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 3,290</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Cream, Dove"><li class="dot dot--lilac"></li><li class="dot dot--cream"></li><li class="dot dot--dove"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Pull-On Shorts Set" data-price="2490" data-age="6-12-months 1-2-years" data-category="sets" data-new="0" data-sale="0" data-featured="14" data-added="10">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+              <button type="button" class="product-card__quick" data-quick-add data-name="Pull-On Shorts Set" data-price="2490" data-tone="4" aria-haspopup="dialog" aria-label="Quick add, Pull-On Shorts Set">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Pull-On Shorts Set</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 2,490</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Dove, Sky"><li class="dot dot--dove"></li><li class="dot dot--sky"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Soft Sole Booties" data-price="980" data-age="0-3-months 3-6-months 6-12-months" data-category="hats-mitts" data-new="0" data-sale="0" data-featured="18" data-added="11">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+              <button type="button" class="product-card__quick" data-quick-add data-name="Soft Sole Booties" data-price="980" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Soft Sole Booties">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Soft Sole Booties</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 980</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Lilac, Blush"><li class="dot dot--cream"></li><li class="dot dot--lilac"></li><li class="dot dot--blush"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Hooded Baby Towel" data-price="1950" data-age="6-12-months 1-2-years" data-category="swaddles-blankets" data-new="0" data-sale="0" data-featured="4" data-added="12">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--outline product-card__badge">Featured</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Hooded Baby Towel" data-price="1950" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Hooded Baby Towel">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Hooded Baby Towel</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 1,950</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Lilac"><li class="dot dot--cream"></li><li class="dot dot--lilac"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Zip-Front Sleepsuit" data-price="2650" data-age="3-6-months 6-12-months" data-category="sleepsuits" data-new="0" data-sale="0" data-featured="9" data-added="13">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+              <button type="button" class="product-card__quick" data-quick-add data-name="Zip-Front Sleepsuit" data-price="2650" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Zip-Front Sleepsuit">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Zip-Front Sleepsuit</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 2,650</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Sky, Cream, Lilac"><li class="dot dot--sky"></li><li class="dot dot--cream"></li><li class="dot dot--lilac"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Footed Sleepsuit, 2 Pack" data-price="2790" data-age="6-12-months 1-2-years" data-category="sleepsuits" data-new="0" data-sale="1" data-featured="16" data-added="14">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--accent product-card__badge">Sale</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Footed Sleepsuit, 2 Pack" data-price="2790" data-was="3490" data-tone="4" aria-haspopup="dialog" aria-label="Quick add, Footed Sleepsuit, 2 Pack">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Footed Sleepsuit, 2 Pack</a></h3>
+                <div class="product-card__row">
+                  <p class="price price--sale"><span class="visually-hidden">Sale price </span><span class="price__now">Rs 2,790</span> <s class="price__was"><span class="visually-hidden">Was </span>Rs 3,490</s></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Dove"><li class="dot dot--lilac"></li><li class="dot dot--dove"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Short Sleeve Bodysuit, 3 Pack" data-price="2990" data-age="3-6-months 6-12-months" data-category="bodysuits" data-new="1" data-sale="0" data-featured="8" data-added="100">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--lilac product-card__badge">New</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Short Sleeve Bodysuit, 3 Pack" data-price="2990" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Short Sleeve Bodysuit, 3 Pack">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Short Sleeve Bodysuit, 3 Pack</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 2,990</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Blush, Sky"><li class="dot dot--cream"></li><li class="dot dot--blush"></li><li class="dot dot--sky"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Long Sleeve Bodysuit" data-price="1690" data-age="6-12-months 1-2-years" data-category="bodysuits" data-new="0" data-sale="0" data-featured="19" data-added="16">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+              <button type="button" class="product-card__quick" data-quick-add data-name="Long Sleeve Bodysuit" data-price="1690" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Long Sleeve Bodysuit">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Long Sleeve Bodysuit</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 1,690</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Cream"><li class="dot dot--lilac"></li><li class="dot dot--cream"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Gingham Pinafore Dress" data-price="2950" data-age="6-12-months 1-2-years" data-category="dresses-rompers" data-new="0" data-sale="1" data-featured="17" data-added="17">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--accent product-card__badge">Sale</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Gingham Pinafore Dress" data-price="2950" data-was="3650" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Gingham Pinafore Dress">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Gingham Pinafore Dress</a></h3>
+                <div class="product-card__row">
+                  <p class="price price--sale"><span class="visually-hidden">Sale price </span><span class="price__now">Rs 2,950</span> <s class="price__was"><span class="visually-hidden">Was </span>Rs 3,650</s></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Sky, Blush"><li class="dot dot--sky"></li><li class="dot dot--blush"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Button Romper" data-price="2350" data-age="3-6-months 6-12-months" data-category="dresses-rompers" data-new="0" data-sale="0" data-featured="15" data-added="18">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+              <button type="button" class="product-card__quick" data-quick-add data-name="Button Romper" data-price="2350" data-tone="4" aria-haspopup="dialog" aria-label="Quick add, Button Romper">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Button Romper</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 2,350</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Dove, Lilac"><li class="dot dot--cream"></li><li class="dot dot--dove"></li><li class="dot dot--lilac"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Sun Hat" data-price="1150" data-age="6-12-months 1-2-years" data-category="hats-mitts" data-new="0" data-sale="0" data-featured="20" data-added="19">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+              <button type="button" class="product-card__quick" data-quick-add data-name="Sun Hat" data-price="1150" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Sun Hat">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Sun Hat</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 1,150</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Sky, Cream, Blush"><li class="dot dot--sky"></li><li class="dot dot--cream"></li><li class="dot dot--blush"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Knit Beanie" data-price="890" data-age="newborn 0-3-months" data-category="hats-mitts" data-new="0" data-sale="0" data-featured="22" data-added="20">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+              <button type="button" class="product-card__quick" data-quick-add data-name="Knit Beanie" data-price="890" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Knit Beanie">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Knit Beanie</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 890</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Cream, Dove"><li class="dot dot--lilac"></li><li class="dot dot--cream"></li><li class="dot dot--dove"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Cotton Cellular Blanket" data-price="2750" data-age="newborn 0-3-months 3-6-months" data-category="swaddles-blankets" data-new="1" data-sale="0" data-featured="10" data-added="99">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--lilac product-card__badge">New</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Cotton Cellular Blanket" data-price="2750" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Cotton Cellular Blanket">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Cotton Cellular Blanket</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 2,750</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Sky, Lilac"><li class="dot dot--cream"></li><li class="dot dot--sky"></li><li class="dot dot--lilac"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Swaddle Sleep Sack" data-price="3150" data-age="3-6-months 6-12-months 1-2-years" data-category="swaddles-blankets" data-new="0" data-sale="0" data-featured="23" data-added="22">
+            <article class="product-card product-card--oos">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--muted product-card__badge">Out of stock</span>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Swaddle Sleep Sack</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 3,150</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Dove"><li class="dot dot--lilac"></li><li class="dot dot--dove"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Pyjama Set" data-price="2890" data-age="6-12-months 1-2-years" data-category="sets" data-new="0" data-sale="0" data-featured="12" data-added="23">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--outline product-card__badge">Featured</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Pyjama Set" data-price="2890" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Pyjama Set">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Pyjama Set</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 2,890</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Sky, Blush, Cream"><li class="dot dot--sky"></li><li class="dot dot--blush"></li><li class="dot dot--cream"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
+          <li data-product data-name="Two-Piece Gift Set" data-price="4250" data-age="newborn 0-3-months" data-category="sets" data-new="0" data-sale="0" data-featured="13" data-added="24">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="badge badge--outline product-card__badge">Featured</span>
+              <button type="button" class="product-card__quick" data-quick-add data-name="Two-Piece Gift Set" data-price="4250" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Two-Piece Gift Set">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                <span class="product-card__quick-label">Quick add</span>
+              </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Two-Piece Gift Set</a></h3>
+                <div class="product-card__row">
+                  <p class="price"><span class="price__now">Rs 4,250</span></p>
+                  <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Cream, Blush"><li class="dot dot--lilac"></li><li class="dot dot--cream"></li><li class="dot dot--blush"></li></ul>
+                </div>
+              </div>
+            </article>
+          </li>
           <!-- /loop -->
         </ul>
-        <div class="section__foot">
-          <a class="btn btn--secondary btn--lg" href="shop.html">Shop all</a>
-        </div>
-      </div>
-    </section>
 
+        <nav class="pagination" aria-label="Pagination" data-listing-pagination>
+          <ul class="pagination__list" role="list">
+            <li><span class="pagination__link pagination__edge" aria-disabled="true"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg><span class="pagination__edge-label">Prev</span></span></li>
+            <li class="pagination__num"><a class="pagination__link" href="shop.html" aria-current="page">1</a></li>
+            <li class="pagination__num"><a class="pagination__link" href="shop.html?page=2">2</a></li>
+            <li class="pagination__status">Page 1 of 2</li>
+            <li><a class="pagination__link pagination__edge" href="shop.html?page=2" rel="next"><span class="pagination__edge-label">Next</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="empty-state listing-empty" data-state="empty" hidden>
+        <span class="empty-state__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-package"></use></svg></span>
+        <h2 class="empty-state__title">No products match these filters</h2>
+        <p class="listing-empty__text">Try removing a filter to see more.</p>
+        <a class="btn btn--primary" href="shop.html" data-clear-filters>Clear filters</a>
+      </div>
+
+      <aside class="size-help" aria-labelledby="size-help-title">
+        <span class="size-help__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-ruler"></use></svg></span>
+        <div class="size-help__text">
+          <h2 class="size-help__title" id="size-help-title">Not sure about the size?</h2>
+          <p>Our size guide helps you match by weight and height.</p>
+        </div>
+        <a class="link-arrow" href="size-guide.html">Open the size guide <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+      </aside>
+
+    </div>
   </main>
 
   <!-- partial: footer -->
@@ -866,7 +1003,8 @@
   </div>
   <!-- /partial: quick-add -->
 
-
   <script src="assets/js/app.js" defer></script>
+  <!-- PROTOTYPE ONLY: delete at Blade conversion -->
+  <script src="assets/js/proto-listing.js" defer></script>
 </body>
 </html>

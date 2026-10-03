@@ -75,7 +75,7 @@
   justify-content: center;
   gap: var(--space-2);
   min-height: var(--tap);
-  padding-inline: calc(var(--gutter) + var(--space-5)) var(--gutter);   /* balances the close button */
+  padding-inline: 52px;   /* clears the 44px close button on both sides so text stays centred */
   background: var(--secondary);
   color: var(--ink);
   position: relative;

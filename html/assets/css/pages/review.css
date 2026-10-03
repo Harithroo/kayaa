@@ -56,3 +56,40 @@ span.review__name { color: var(--ink-soft); }
 @media (max-width: 599px) {
   .review__item { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
 }
+
+/* "Try these states" links under ready pages */
+.review__item { flex-wrap: wrap; }
+.review__states {
+  flex: 1 0 100%;
+  padding-top: var(--space-2);
+}
+.review__states-label {
+  margin-bottom: var(--space-1);
+  font-size: var(--fs-caption);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+}
+.review__states ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+}
+.review__states a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 var(--space-4);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-ui);
+  font-weight: 700;
+  color: var(--primary-deep);
+  text-decoration: none;
+}
+.review__states a:hover { background: var(--secondary); }
+@media (max-width: 599px) {
+  .review__states { flex: none; width: 100%; }
+}
