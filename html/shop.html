@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
   <title>Shop baby clothing | Kayaa</title>
-  <meta name="description" content="Shop soft everyday baby clothing by age, newest and sale. Cash on delivery across Sri Lanka.">
+  <meta name="description" content="Shop soft everyday baby clothing by age, newest and sale. Secure online payment, delivered across Sri Lanka.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -122,6 +122,11 @@
     <symbol id="i-chevron-left" viewBox="0 0 24 24">
       <path d="m15 18-6-6 6-6" />
     </symbol>
+    <symbol id="i-credit-card" viewBox="0 0 24 24">
+      <rect width="20" height="14" x="2" y="5" rx="2" />
+      <line x1="2" x2="22" y1="10" y2="10" />
+      <path d="M6 14h2" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -130,31 +135,62 @@
   <!-- partial: announcement -->
   <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
   <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
-    <p class="topbar__text">Free delivery over Rs 7,500 · Cash on delivery island-wide</p>
+    <p class="topbar__text"><span>Free delivery over Rs 7,500</span><span class="topbar__extra"> · Secure online payment</span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
   </div>
   <!-- /partial: announcement -->
 
   <!-- partial: header -->
+  <div class="mega-scrim" data-mega-scrim></div>
   <header class="site-header">
-    <div class="container site-header__bar">
+    <div class="container site-header__bar" data-header-bar>
       <button type="button" class="icon-btn icon-btn--plain site-header__menu" data-open-layer="menu" aria-label="Open menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-drawer"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg></button>
 
       <a class="wordmark" href="index.html" aria-label="Kayaa home">kayaa</a> <!-- TODO: replace with logo when ready -->
 
       <nav class="primary-nav" aria-label="Primary">
         <ul>
-          <li class="has-dropdown" data-dropdown>
-            <button type="button" class="primary-nav__link" data-dropdown-toggle aria-expanded="false" aria-controls="age-menu">Shop by age <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></button>
-            <ul class="dropdown" id="age-menu" data-dropdown-panel hidden>
-              <!-- loop: age_groups -->
-              <li><a href="shop.html?age=newborn">Newborn</a></li>
-              <li><a href="shop.html?age=0-3-months">0–3 months</a></li>
-              <li><a href="shop.html?age=3-6-months">3–6 months</a></li>
-              <li><a href="shop.html?age=6-12-months">6–12 months</a></li>
-              <li><a href="shop.html?age=1-2-years">1–2 years</a></li>
-              <!-- /loop -->
-            </ul>
+          <!-- Split control: the link goes to the shop, the chevron toggles the mega menu -->
+          <li class="primary-nav__split" data-mega>
+            <a class="primary-nav__link" href="shop.html" data-nav="shop category product search">Shop</a>
+            <button type="button" class="primary-nav__chevron" data-mega-toggle aria-expanded="false" aria-controls="mega-shop" aria-label="Shop menu"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></button>
+            <div class="mega" id="mega-shop" data-mega-panel inert>
+              <div class="mega__panel">
+                <div class="mega__main">
+                  <p class="eyebrow">Shop by age</p>
+                  <ul class="mega__ages" role="list">
+                    <!-- loop: age_groups -->
+                    <li><a class="mega-tile" href="shop.html?age=newborn" style="--tone: var(--tone-1)"><span class="mega-tile__label"><span>Newborn</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <li><a class="mega-tile" href="shop.html?age=0-3-months" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>0–3</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <li><a class="mega-tile" href="shop.html?age=3-6-months" style="--tone: var(--tone-3)"><span class="mega-tile__label"><span>3–6</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <li><a class="mega-tile" href="shop.html?age=6-12-months" style="--tone: var(--tone-4)"><span class="mega-tile__label"><span>6–12</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <li><a class="mega-tile" href="shop.html?age=1-2-years" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>1–2</span><span>years</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <!-- /loop -->
+                  </ul>
+                  <p class="eyebrow mega__eyebrow">Browse by category</p>
+                  <ul class="chip-list" role="list">
+                    <!-- loop: categories -->
+                    <li><a class="chip" href="category.html?c=bodysuits">Bodysuits</a></li>
+                    <li><a class="chip" href="category.html?c=sleepsuits">Sleepsuits</a></li>
+                    <li><a class="chip" href="category.html?c=sets">Sets</a></li>
+                    <li><a class="chip" href="category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
+                    <li><a class="chip" href="category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
+                    <li><a class="chip" href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
+                    <!-- /loop -->
+                  </ul>
+                </div>
+                <!-- TODO: placeholder copy, confirm with client -->
+                <aside class="mega__feature" aria-label="Featured">
+                  <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  <div class="mega__feature-body">
+                    <p class="eyebrow">New this week</p>
+                    <p class="mega__feature-title">Fresh styles just landed</p>
+                    <p class="mega__feature-text">Placeholder text about the latest arrivals.</p>
+                    <a class="link-arrow" href="shop.html?sort=new">Shop new in <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+                  </div>
+                </aside>
+              </div>
+            </div>
           </li>
           <li><a class="primary-nav__link" href="shop.html?sort=new">New in</a></li>
           <li><a class="primary-nav__link" href="shop.html?sale=1">Sale</a></li>
@@ -163,13 +199,15 @@
         </ul>
       </nav>
 
-      <form class="header-search" role="search" action="search.html" method="get">
-        <label class="visually-hidden" for="header-q">Search Kayaa</label>
-        <input id="header-q" type="search" name="q" placeholder="Search" autocomplete="off">
-        <button type="submit" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
-      </form>
-
       <div class="site-header__actions">
+        <form class="header-search" role="search" action="search.html" method="get" data-header-search>
+          <button type="button" class="icon-btn header-search__toggle" data-search-toggle aria-expanded="false" aria-controls="header-search-field" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
+          <div class="header-search__field" id="header-search-field">
+            <label class="visually-hidden" for="header-q">Search Kayaa</label>
+            <input id="header-q" type="search" name="q" placeholder="Search" autocomplete="off">
+            <button type="submit" class="header-search__submit" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
+          </div>
+        </form>
         <!-- blade: @auth account/index.html @else account/login.html -->
         <a class="icon-btn site-header__account" href="account/login.html" data-nav="account" aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
         <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
@@ -252,6 +290,7 @@
       <div data-listing-results>
         <ul class="product-grid" role="list" data-listing-grid>
           <!-- loop: products (12 per page; data-* attributes are read by assets/js/proto-listing.js) -->
+          <!-- img (below the fold): <img src alt="{{ name }}" width height loading="lazy" decoding="async"> replaces the .media placeholder; keep the aspect-ratio box so nothing shifts -->
           <!-- blade: badge priority @if out_of_stock Out of stock @elseif sale Sale (accent) @elseif new New (lilac) @elseif featured Featured (outline) -->
           <li data-product data-name="Ribbed Cotton Bodysuit" data-price="1490" data-age="newborn 0-3-months 3-6-months" data-category="bodysuits" data-new="1" data-sale="0" data-featured="5" data-added="95">
             <article class="product-card">
@@ -777,7 +816,8 @@
       </div>
       <div class="footer__base">
         <ul class="footer__facts" role="list">
-          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg> Cash on delivery</li>
+          <!-- TODO: add official card marks and the Onepay badge from their brand kit -->
+          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg> Secure card payments</li>
           <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg> Delivery across Sri Lanka</li>
         </ul>
         <ul class="footer__social" role="list">
@@ -819,6 +859,7 @@
       <nav aria-label="Menu">
         <div class="menu-group">
           <ul role="list">
+            <li><a href="shop.html" data-nav="shop category product search">Shop</a></li>
             <li><a href="shop.html?sort=new">New in</a></li>
             <li><a href="shop.html?sale=1">Sale</a></li>
             <li><a href="about.html" data-nav="about">Our story</a></li>
@@ -926,7 +967,7 @@
         </div>
         <div class="drawer__foot">
           <p class="cart-summary"><span>Subtotal</span> <span class="cart-summary__value" data-cart-subtotal>Rs 6,300</span></p>
-          <p class="cart-note">Delivery calculated at checkout · Cash on delivery available</p>
+          <p class="cart-note">Delivery calculated at checkout · Pay securely by card</p>
           <div class="cart-actions">
             <a class="btn btn--primary btn--lg btn--block" href="checkout.html">Checkout</a>
             <a class="btn btn--secondary btn--block" href="cart.html">View bag</a>

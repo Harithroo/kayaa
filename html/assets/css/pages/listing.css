@@ -34,7 +34,9 @@
   color: var(--primary-deep);
   text-decoration: none;
 }
-.breadcrumb a:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .breadcrumb a:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
 
 /* ---------- Header band ---------- */
 .listing-head {
@@ -94,6 +96,7 @@
   overflow-x: auto;
   scroll-snap-type: x proximity;
   scroll-padding-inline: var(--gutter);
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
   list-style: none;
   /* faded right edge hints at more chips (alpha only, colour is irrelevant) */
@@ -149,7 +152,7 @@
   width: auto;
   min-width: 0;
   padding-block: 8px;
-  font-size: var(--fs-dense);
+  font-size: 16px;   /* 16px stops iOS Safari zooming on focus */
   font-weight: 600;
 }
 
@@ -201,7 +204,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-1);
+  gap: var(--space-2);
   list-style: none;
 }
 .pagination__link {
@@ -219,7 +222,9 @@
   text-decoration: none;
   transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
-a.pagination__link:hover { background: var(--secondary); }
+@media (hover: hover) and (pointer: fine) {
+  a.pagination__link:hover { background: var(--secondary); }
+}
 .pagination__link[aria-current="page"] {
   background: var(--primary-deep);
   color: #fff;
@@ -244,7 +249,9 @@ a.pagination__link:hover { background: var(--secondary); }
 }
 .pagination__list > li { display: flex; }
 .pagination__edge { border: 1.5px solid var(--line); background: var(--surface); }
-a.pagination__edge:hover { border-color: var(--primary-deep); }
+@media (hover: hover) and (pointer: fine) {
+  a.pagination__edge:hover { border-color: var(--primary-deep); }
+}
 
 /* Mobile: Prev / "Page 1 of 2" / Next */
 @media (max-width: 599px) {
@@ -286,12 +293,6 @@ a.pagination__edge:hover { border-color: var(--primary-deep); }
   font-size: var(--fs-h4);
   font-weight: 600;
 }
-.chip-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  list-style: none;
-}
 
 /* ---------- Size help band ---------- */
 .size-help {
@@ -318,3 +319,12 @@ a.pagination__edge:hover { border-color: var(--primary-deep); }
 .size-help__text { flex: 1 1 240px; }
 .size-help__title { font-size: var(--fs-h4); }
 .size-help__text p { margin-top: 2px; font-size: var(--fs-dense); color: var(--ink-soft); }
+/* Mobile: leave room for the sticky header and toolbar when scrolling to a focused element */
+@media (max-width: 899px) {
+  html { scroll-padding-top: calc(var(--header-h, 61px) + 76px); }
+}
+/* Landscape phones: too little height for a sticky toolbar */
+@media (max-width: 899px) and (max-height: 500px) and (orientation: landscape) {
+  .toolbar { position: static; }
+  html { scroll-padding-top: calc(var(--header-h, 53px) + 8px); }
+}

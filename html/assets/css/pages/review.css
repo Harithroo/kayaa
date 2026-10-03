@@ -38,6 +38,7 @@
   font-weight: 600;
   color: var(--primary-deep);
 }
+.review__name { min-width: var(--tap); justify-content: flex-start; }
 span.review__name { color: var(--ink-soft); }
 .review__note {
   margin-top: -6px;
@@ -89,7 +90,9 @@ span.review__name { color: var(--ink-soft); }
   color: var(--primary-deep);
   text-decoration: none;
 }
-.review__states a:hover { background: var(--secondary); }
+@media (hover: hover) and (pointer: fine) {
+  .review__states a:hover { background: var(--secondary); }
+}
 @media (max-width: 599px) {
   .review__states { flex: none; width: 100%; }
 }

@@ -44,7 +44,7 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | `--cream` #FBF6EE, `--sky-tint` #DDE7F3, `--line-strong`, `--scrim` | tokens.css | Derived: topbar/promo variants, footer dividers, drawer scrim (Ink at 40%). |
 | `--swatch-*`, `.dot`, `.swatch` | tokens / components | Product colour dots (lilac, sky, cream, blush, dove). No green. Selectable swatch is a radio with a ring. |
 | `.topbar` (--lilac / --cream / --sky) | layout.css | Dismiss remembered in sessionStorage. |
-| `.site-header`, `.primary-nav`, `.dropdown`, `.header-search`, `.category-row` | layout.css | Disclosure dropdown (aria-expanded, ESC returns focus). |
+| `.site-header`, `.primary-nav`, `.header-search`, `.category-row` | layout.css | See the refinement round below for the Shop mega menu and search. |
 | `.drawer`, `.overlay`, `.sheet` | layout.css | Shared layer system in app.js: focus trap, ESC, focus return, scroll lock. |
 | `.tabbar` | layout.css | Below 900px only. Active tab = Primary Deep + 3px top indicator. Labels are Ink (Ink Soft is not allowed at 12.5px). |
 | `.site-footer` | layout.css | Light, on --secondary. |
@@ -88,3 +88,30 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 - category.html with no `c` behaves like Shop; an unknown `c` shows "Category not found" with the empty state.
 - Search matches every word in the query against product name and category name, case-insensitively.
 - Category descriptions are placeholders (TODO in proto-listing.js).
+
+## Refinement round: shell, payment copy, mega menu, mobile pass
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| `.topbar` dismiss | app.js / layout.css | No storage at all: it returns on every load. Height collapses over 200ms (`.is-collapsing`), instant under reduced motion, then `--header-h` is re-measured. `.topbar__extra` (second segment) is hidden below 600px so the bar stays on one line. |
+| `i-credit-card` icon | sprite.svg | Lucide. Used for "Secure online payment" (trust strip) and "Secure card payments" (footer). `i-banknote` stays in the sprite but is unused. |
+| `.primary-nav__split`, `.primary-nav__chevron` | layout.css | "Shop" is a split control: link to shop.html plus a 44px chevron button (`aria-expanded`, `aria-controls="mega-shop"`). The old "Shop by age" dropdown (`.dropdown`, `.has-dropdown`, `[data-dropdown]`) is removed. |
+| `.mega`, `.mega__panel`, `.mega-tile`, `.mega__feature`, `.mega-scrim` | layout.css | Shop mega menu inside the split item (so Tab flows chevron -> panel). Attached to the bottom of the 72px header bar, spans the container width and covers the category row. Hover intent 120ms open / 250ms close, click/Enter/Space toggles, ESC returns focus to the chevron, outside click and focus leaving close it, `inert` + `visibility` while closed. Below 1100px the feature card is hidden so the five age tiles keep a readable width. Scrim is Ink at 8%. |
+| `--scrim-light`, `--shift-panel` | tokens.css | Mega backdrop and panel slide distance (zeroed under reduced motion). |
+| `.header-search` (rebuilt) | layout.css | 1100px+: 240px pill that grows to 320px on focus. 900-1099px: icon button (`data-search-toggle`) that opens an inline field over the nav; ESC closes and returns focus. Search sits in the right-hand group with account and cart. |
+| `.chip-list` | components.css | Moved here from listing.css (used by the mega menu and no-results). |
+| `.product-card__quick` | components.css | Two separate rules: touch = 44x44 circle (`border-radius: 50%`); mouse = pill (`--radius-pill`, 11px 22px, 13px bold, `width: max-content`, 16px icon, 8px gap). The 13px is the design-system value and only shows with a mouse. |
+| Hover gating | all CSS | Every `:hover` rule now sits inside `@media (hover: hover) and (pointer: fine)` so touch devices never get stuck hover states. |
+| `.icon-btn__count` | components.css | Now 12.5px in a 20px badge (was 11px). |
+| Scroll lock | layout.css / app.js | `html.is-locked` also locks body and pads by the measured scrollbar width (`--scrollbar-w`) so nothing jumps. |
+| `scroll-padding` | base.css / listing.css | Top = `--header-h` + 8px (+76px under the sticky toolbar on mobile); bottom = tab bar + safe area. |
+| Footer and menu link lists | layout.css | 8px gap between rows so tap targets never touch. |
+
+### Payment copy
+- Online payment only (Onepay, Visa/Mastercard); no cash on delivery anywhere in html/, tools/, docs/ or CLAUDE.md.
+- No card or Onepay logos: text and the credit-card icon, with TODO comments to add the official marks and badge.
+
+### Assumptions
+- Between 900 and 1099px the mega menu shows the age tiles and category chips without the feature card.
+- The announcement bar's focus moves to the wordmark when dismissed, so keyboard users are not dropped at the top of the page.
+- The tab bar items touch each other (each is 75px+ wide), so they are treated as one control for the 8px spacing rule.

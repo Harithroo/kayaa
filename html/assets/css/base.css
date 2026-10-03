@@ -9,12 +9,20 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(195, 175, 218, 0.35);   /* soft lilac instead of the grey flash */
   scroll-behavior: smooth;
+  /* sticky header (measured in app.js) and the mobile tab bar must never hide a focused field */
+  scroll-padding-top: calc(var(--header-h, 61px) + var(--space-2));
+  scroll-padding-bottom: calc(var(--space-2) + var(--bottom-bar-h-active, 0px));
+}
+@media (max-width: 899px) {
+  html { --bottom-bar-h-active: calc(var(--bottom-bar-h) + env(safe-area-inset-bottom, 0px)); }
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
@@ -32,6 +40,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
 }
 
+h1, h2 { text-wrap: balance; }
 h1 { font-size: var(--fs-h1); font-weight: 700; line-height: var(--lh-h1); }
 h2 { font-size: var(--fs-h2); font-weight: 600; line-height: var(--lh-h2); }
 h3 { font-size: var(--fs-h3); font-weight: 600; line-height: var(--lh-h3); }
@@ -110,6 +119,17 @@ button {
   cursor: pointer;
 }
 
+a,
+button,
+input,
+select,
+textarea,
+label,
+summary,
+[role="button"] {
+  touch-action: manipulation;   /* no 300ms tap delay or double-tap zoom on controls */
+}
+
 [hidden] {
   display: none !important;
 }
@@ -170,6 +190,7 @@ hr {
     --lift-icon-button: 0px;
     --shift-arrow: 0px;
     --pop-scale-from: 1;
+    --shift-panel: 0px;
   }
 
   html {

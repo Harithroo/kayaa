@@ -23,6 +23,7 @@
   --cream: #FBF6EE;            /* announcement bar --cream */
   --sky-tint: #DDE7F3;         /* Periwinkle Sky at ~40% on white: announcement bar / promo --sky */
   --line-strong: rgba(110, 90, 140, 0.2);   /* dividers on Secondary backgrounds (footer) */
+  --scrim-light: rgba(61, 53, 71, 0.08);    /* mega menu backdrop: well under 10% ink */
   --scrim: rgba(61, 53, 71, 0.4);           /* drawer / sheet overlay, Ink-tinted, not black */
 
   /* Product colour dots (no green) */
@@ -91,6 +92,7 @@
   --lift-icon-button: -2px;
   --shift-arrow: 5px;
   --pop-scale-from: 0.85;
+  --shift-panel: -8px;
 
   /* Focus */
   --focus-ring: 2px solid var(--primary-deep);

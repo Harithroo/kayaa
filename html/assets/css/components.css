@@ -55,26 +55,32 @@
   border-color: var(--primary-deep);
   color: #fff;
 }
-.btn--primary:hover {
-  transform: translateY(var(--lift-button));
-  box-shadow: var(--shadow-button-lift);
+@media (hover: hover) and (pointer: fine) {
+  .btn--primary:hover {
+    transform: translateY(var(--lift-button));
+    box-shadow: var(--shadow-button-lift);
+  }
 }
 
 .btn--secondary {
   border-color: var(--primary-deep);
   color: var(--primary-deep);
 }
-.btn--secondary:hover {
-  background: var(--primary-deep);
-  color: #fff;
+@media (hover: hover) and (pointer: fine) {
+  .btn--secondary:hover {
+    background: var(--primary-deep);
+    color: #fff;
+  }
 }
 
 .btn--ghost {
   background: var(--secondary);
   color: var(--ink);
 }
-.btn--ghost:hover {
-  background: var(--primary);
+@media (hover: hover) and (pointer: fine) {
+  .btn--ghost:hover {
+    background: var(--primary);
+  }
 }
 
 .btn--danger {
@@ -82,9 +88,11 @@
   border-color: var(--error);
   color: #fff;
 }
-.btn--danger:hover {
-  transform: translateY(var(--lift-button));
-  box-shadow: var(--shadow-button-lift-danger);
+@media (hover: hover) and (pointer: fine) {
+  .btn--danger:hover {
+    transform: translateY(var(--lift-button));
+    box-shadow: var(--shadow-button-lift-danger);
+  }
 }
 
 .btn:disabled,
@@ -100,7 +108,7 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
   .btn--primary:hover,
   .btn--danger:hover {
     opacity: 0.9;
@@ -127,9 +135,11 @@
     border-color var(--dur-base) var(--ease),
     color var(--dur-base) var(--ease);
 }
-.icon-btn:hover {
-  transform: translateY(var(--lift-icon-button));
-  border-color: var(--primary-deep);
+@media (hover: hover) and (pointer: fine) {
+  .icon-btn:hover {
+    transform: translateY(var(--lift-icon-button));
+    border-color: var(--primary-deep);
+  }
 }
 .icon-btn[aria-current="page"],
 .icon-btn[aria-expanded="true"] {
@@ -147,14 +157,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 18px;
-  height: 18px;
+  min-width: 20px;
+  height: 20px;
   padding: 0 4px;
   border-radius: var(--radius-pill);
   background: var(--primary-deep);
   color: #fff;
   font-family: var(--font-body);
-  font-size: 11px;   /* count glyph inside a badge, not readable copy; mirrors design system 10px */
+  font-size: var(--fs-caption);
   font-weight: 800;
   line-height: 1;
 }
@@ -173,8 +183,10 @@
 .link-arrow .icon {
   transition: transform var(--dur-base) var(--ease);
 }
-.link-arrow:hover .icon {
-  transform: translateX(var(--shift-arrow));
+@media (hover: hover) and (pointer: fine) {
+  .link-arrow:hover .icon {
+    transform: translateX(var(--shift-arrow));
+  }
 }
 
 /* ---------- Badges ---------- */
@@ -217,13 +229,18 @@
     background-color var(--dur-fast) var(--ease),
     border-color var(--dur-fast) var(--ease);
 }
-.chip:hover,
 .chip.is-active,
 .chip[aria-pressed="true"],
 .chip[aria-current="page"],
 .chip[aria-current="true"] {
   background: var(--primary);
   border-color: var(--primary);
+}
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
 }
 
 /* ---------- Size box ---------- */
@@ -243,8 +260,10 @@
   cursor: pointer;
   transition: all var(--dur-fast) var(--ease);
 }
-.size-box:hover {
-  border-color: var(--primary-deep);
+@media (hover: hover) and (pointer: fine) {
+  .size-box:hover {
+    border-color: var(--primary-deep);
+  }
 }
 .size-box.is-selected,
 .size-box[aria-pressed="true"],
@@ -429,7 +448,9 @@
   color: var(--ink);
   transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
-.qty__btn:hover { background: var(--secondary); color: var(--primary-deep); }
+@media (hover: hover) and (pointer: fine) {
+  .qty__btn:hover { background: var(--secondary); color: var(--primary-deep); }
+}
 .qty__btn:disabled { color: var(--ink-soft); opacity: 0.5; cursor: not-allowed; background: none; }
 .qty__input {
   width: 44px;
@@ -464,7 +485,9 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
-.size-box:has(input:disabled):hover { border-color: var(--line); }
+@media (hover: hover) and (pointer: fine) {
+  .size-box:has(input:disabled):hover { border-color: var(--line); }
+}
 
 /* ---------- Colour dots and swatches ----------
    .dot: small static dot (cards). .swatch: selectable radio (sheets, product page). */
@@ -606,7 +629,7 @@
   height: var(--tap);
   padding: 0;
   border: 1px solid var(--line);
-  border-radius: var(--radius-round);
+  border-radius: 50%;   /* touch: a true circle (equal sides). The pill below is a separate rule. */
   background: var(--surface);
   color: var(--primary-deep);
   box-shadow: 0 2px 10px -2px rgba(61, 53, 71, 0.25);
@@ -632,14 +655,18 @@
     right: auto;
     bottom: auto;
     left: 50%;
-    width: auto;
+    /* mouse: a true pill sized by its content (no stretched height), per the design system */
+    width: max-content;
+    height: auto;
     gap: var(--space-2);
-    padding: 0 22px;
+    padding: 11px 22px;
     border: 0;
+    border-radius: var(--radius-pill);
     background: var(--ink);
     color: var(--bg);
-    font-size: var(--fs-ui);
+    font-size: 13px;   /* design-system value; mouse only, so the 14px touch floor does not apply */
     font-weight: 700;
+    line-height: 1.2;
     box-shadow: none;
     opacity: 0;
     transform: translate(-50%, -50%) scale(var(--pop-scale-from));
@@ -647,6 +674,7 @@
       opacity var(--dur-base) var(--ease),
       transform var(--dur-base) var(--ease);
   }
+  .product-card__quick .icon { width: 16px; height: 16px; }
   .product-card__quick-label {
     position: static;
     width: auto;
@@ -706,7 +734,9 @@
   margin-top: var(--space-2);
 }
 .cart-item__remove { margin: -8px -8px 0 0; align-self: start; color: var(--ink-soft); }
-.cart-item__remove:hover { color: var(--error); }
+@media (hover: hover) and (pointer: fine) {
+  .cart-item__remove:hover { color: var(--error); }
+}
 
 .cart-summary { display: flex; justify-content: space-between; align-items: baseline; font-weight: 700; }
 .cart-summary__value { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 700; }
@@ -816,3 +846,11 @@
   outline-offset: var(--focus-offset);
 }
 .switch input:disabled + .switch__track { opacity: 0.5; }
+
+/* ---------- Chip list (wrapping row of chip links) ---------- */
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+}

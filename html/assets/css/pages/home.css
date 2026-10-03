@@ -136,7 +136,7 @@
 }
 
 /* ---------- Shop by age ---------- */
-.scroller--age { --scroller-item: 160px; --scroller-cols: 5; }
+.scroller--age { --scroller-item: min(160px, 42vw); --scroller-cols: 5; }   /* always leaves a peek of the next tile */
 
 .age-tile {
   display: flex;

@@ -10,21 +10,34 @@
     return 'Rs ' + Math.round(n).toLocaleString('en-US');
   }
 
-  /* ---------- Announcement bar (dismiss remembered for the session) ---------- */
+  /* ---------- Announcement bar: dismiss hides it for this page view only (nothing is stored,
+     so it is back after a refresh and on every new page). Height collapses over 200ms;
+     reduced motion hides it instantly. ---------- */
   (function () {
     var bar = $('[data-topbar]');
-    if (!bar) return;
-    var KEY = 'kayaa.topbar.dismissed';
-    try {
-      if (sessionStorage.getItem(KEY) === '1') bar.hidden = true;
-    } catch (e) { /* storage unavailable: show the bar */ }
-    var btn = $('[data-topbar-dismiss]', bar);
-    if (btn) {
-      btn.addEventListener('click', function () {
-        bar.hidden = true;
-        try { sessionStorage.setItem(KEY, '1'); } catch (e) { /* ignore */ }
-      });
+    var btn = bar && $('[data-topbar-dismiss]', bar);
+    if (!btn) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var finished = false;
+
+    function done() {
+      if (finished) return;
+      finished = true;
+      bar.hidden = true;
+      window.dispatchEvent(new Event('resize'));   // re-measure --header-h and the sticky offsets
     }
+
+    btn.addEventListener('click', function () {
+      var wordmark = $('.site-header .wordmark');
+      if (wordmark) wordmark.focus();   // the close button is about to disappear: keep focus somewhere sensible
+      if (reduce) { done(); return; }
+      bar.style.height = bar.offsetHeight + 'px';
+      void bar.offsetHeight;            // commit the start height before animating
+      bar.classList.add('is-collapsing');
+      bar.style.height = '0px';
+      bar.addEventListener('transitionend', function (e) { if (e.propertyName === 'height') done(); });
+      setTimeout(done, 260);            // safety net if transitionend never fires
+    });
   })();
 
   /* ---------- Header height -> --header-h (lets sticky bars sit exactly under the header) ---------- */
@@ -77,6 +90,7 @@
     el.classList.add('is-open');
     el.setAttribute('aria-hidden', 'false');
     if (overlay) overlay.classList.add('is-visible');
+    root.style.setProperty('--scrollbar-w', Math.max(0, window.innerWidth - root.clientWidth) + 'px');   // no layout jump when the scrollbar disappears
     root.classList.add('is-locked');
     if (trigger && trigger.hasAttribute('aria-expanded')) trigger.setAttribute('aria-expanded', 'true');
     var first = $('[data-autofocus]', el) || focusables(el)[0];
@@ -140,42 +154,96 @@
     });
   }
 
-  /* ---------- Disclosure dropdown (desktop nav) ---------- */
-  $$('[data-dropdown]').forEach(function (dd) {
-    var toggle = $('[data-dropdown-toggle]', dd);
-    var panel = $('[data-dropdown-panel]', dd);
-    if (!toggle || !panel) return;
+  /* ---------- Mega menu (Shop, desktop) ----------
+     Mouse: opens on hover intent (120ms), closes after a 250ms grace. Keyboard/touch: the chevron
+     button toggles. ESC closes and returns focus to the chevron; outside click and focus leaving close it. */
+  (function () {
+    var item = $('[data-mega]');
+    if (!item) return;
+    var toggle = $('[data-mega-toggle]', item);
+    var panel = $('[data-mega-panel]', item);
+    var scrim = $('[data-mega-scrim]');
+    var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+    var desktop = window.matchMedia('(min-width: 900px)');
+    var openTimer, closeTimer;
+    var isOpen = false;
+    var via = '';   // 'hover' or 'click'
 
-    function setOpen(open, returnFocus) {
+    function setOpen(open, by) {
+      isOpen = open;
+      via = open ? by : '';
+      panel.classList.toggle('is-open', open);
+      if (open) panel.removeAttribute('inert'); else panel.setAttribute('inert', '');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      panel.hidden = !open;
-      if (!open && returnFocus) toggle.focus();
+      if (scrim) scrim.classList.toggle('is-visible', open);
+    }
+    function open(by) {
+      clearTimeout(openTimer); clearTimeout(closeTimer);
+      if (!isOpen) setOpen(true, by);
+    }
+    function close(restoreFocus) {
+      clearTimeout(openTimer); clearTimeout(closeTimer);
+      if (!isOpen) return;
+      setOpen(false);
+      if (restoreFocus) toggle.focus();
     }
 
     toggle.addEventListener('click', function () {
-      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+      if (isOpen && via === 'hover') { via = 'click'; return; }   // a click on a hover-opened menu pins it
+      if (isOpen) close(false); else open('click');
     });
-    toggle.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        setOpen(true);
-        var link = $('a', panel);
-        if (link) link.focus();
-      }
+
+    item.addEventListener('mouseenter', function () {
+      if (!fine.matches || !desktop.matches) return;
+      clearTimeout(closeTimer);
+      if (!isOpen) openTimer = setTimeout(function () { open('hover'); }, 120);
     });
-    dd.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
-        e.stopPropagation();
-        setOpen(false, true);
-      }
+    item.addEventListener('mouseleave', function () {
+      clearTimeout(openTimer);
+      if (isOpen && via === 'hover') closeTimer = setTimeout(function () { close(false); }, 250);
     });
-    dd.addEventListener('focusout', function (e) {
-      if (e.relatedTarget && !dd.contains(e.relatedTarget)) setOpen(false);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen) { e.preventDefault(); close(true); }
     });
     document.addEventListener('click', function (e) {
-      if (!dd.contains(e.target)) setOpen(false);
+      if (isOpen && !item.contains(e.target)) close(false);
     });
-  });
+    item.addEventListener('focusout', function (e) {
+      if (isOpen && e.relatedTarget && !item.contains(e.relatedTarget)) close(false);
+    });
+    desktop.addEventListener('change', function () { close(false); });
+  })();
+
+  /* ---------- Header search (900-1099px: icon button that opens an inline field) ---------- */
+  (function () {
+    var form = $('[data-header-search]');
+    if (!form) return;
+    var toggle = $('[data-search-toggle]', form);
+    var input = $('input[type="search"]', form);
+    var bar = $('[data-header-bar]');
+    var wide = window.matchMedia('(min-width: 1100px)');
+
+    function isOpen() { return form.classList.contains('is-open'); }
+    function setOpen(open, restoreFocus) {
+      form.classList.toggle('is-open', open);
+      if (bar) bar.classList.toggle('is-searching', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) input.focus(); else if (restoreFocus) toggle.focus();
+    }
+
+    toggle.addEventListener('click', function () { setOpen(!isOpen(), true); });
+    form.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen() && !wide.matches) { e.preventDefault(); setOpen(false, true); }
+    });
+    form.addEventListener('focusout', function (e) {
+      if (isOpen() && !wide.matches && e.relatedTarget && !form.contains(e.relatedTarget)) setOpen(false);
+    });
+    document.addEventListener('click', function (e) {
+      if (isOpen() && !form.contains(e.target)) setOpen(false);
+    });
+    wide.addEventListener('change', function () { setOpen(false); });
+  })();
 
   /* ---------- Quantity steppers (any [data-qty] group) ---------- */
   var QTY_MAX = 10;

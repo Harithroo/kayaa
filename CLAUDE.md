@@ -19,7 +19,7 @@ Static prototype of the Kayaa storefront. Backend (Laravel 12 + Filament 4) is o
 - Cart drawer root is [data-cart-drawer]. Its inner markup is a self-contained panel, because the backend's /cart/panel returns HTML that JS swaps into it.
 - Money is "Rs 1,490" (whole rupees, thousands separator). Free delivery over Rs 7,500; standard delivery Rs 450.
 - Order statuses: pending, confirmed, shipped, delivered, cancelled. Payment statuses: pending, paid, failed, refunded.
-- Payment is cash on delivery in practice (PayHere is not live). Never imply card payment works.
+- Payment is online only through the Onepay gateway (Visa/Mastercard). There is no cash on delivery. Checkout redirects to Onepay's hosted payment page (assumption, TODO confirm with the backend dev). Orders start with payment_status pending until the gateway confirms; design paid, pending and failed/retry states.
 - Do not invent policy or product facts (return window, fabric certifications, delivery times). Use plausible placeholder text and mark it <!-- TODO: confirm with client -->.
 
 ## Route map (prototype file -> Laravel route)
@@ -36,8 +36,21 @@ index.html -> / | shop.html -> /shop | category.html -> /{department}/{category}
 - Semantic landmarks, one h1 per page, skip link, labelled form fields, aria-expanded/aria-controls on toggles, dialog semantics for drawers and sheets (focus trap, ESC closes, focus returns to trigger), prefers-reduced-motion honoured.
 - Every page: <title>, meta description, meta viewport with viewport-fit=cover, and <meta name="robots" content="noindex,nofollow"> (staging; removed at Blade conversion).
 
+## Mobile definition of done
+Most visitors are on phones. Every page is checked at 320, 360, 375, 390, 412 and 430px, a 667x375 landscape phone, and 768/820px tablets.
+- No horizontal scroll or clipped text at any width; 320px stays usable.
+- Tap targets are at least 44x44px with at least 8px between neighbours (steppers, chips, close buttons, size boxes, colour swatches with a 44px hit area, pagination).
+- Fixed chrome (announcement + sticky header + sticky toolbar + bottom tab bar) never covers more than about a third of the portrait viewport, and nothing focused hides behind it (html scroll-padding top and bottom, safe-area insets). Sticky toolbars are turned off on landscape phones.
+- Inputs, selects and textareas are 16px minimum so iOS Safari does not zoom on focus.
+- Drawers, the quick-add sheet and the menu use 100dvh (with a 100vh fallback), overscroll-behavior: contain and safe-area padding, and lock background scroll without a layout jump (scrollbar width compensated).
+- Hover styles live only inside @media (hover: hover) and (pointer: fine). Controls set touch-action: manipulation; the tap highlight is soft lilac.
+- Horizontal scroll rows show a peek of the next item and never trap vertical scrolling.
+- Media reserves space with aspect-ratio. Below-the-fold images need loading="lazy" decoding="async" (width/height too); the hero image is eager. Placeholders are divs for now, so loops carry an <!-- img: ... --> hint for Blade.
+- Body text is at least 16px with line-height 1.5-1.6. Nothing is under 14px except 12.5px captions (and the 13px hover-only Quick add pill, which never shows on touch). h1/h2 use text-wrap: balance.
+- Respect prefers-reduced-motion: movement becomes an opacity change or nothing.
+
 ## Process
 - After each page, log new components in docs/components-added.md.
 - After building a page, add or update its entry in html/review.html.
 - Do not commit or push. Do not touch files outside html/, docs/, design/, tools/, CLAUDE.md and .github/workflows/pages.yml.
-- Done = checked at 375px, 768px and 1280px: no horizontal scroll, no console errors, keyboard usable.
+- Done = checked at 375px, 768px and 1280px: no horizontal scroll, no console errors, keyboard usable, and the mobile definition of done above.
