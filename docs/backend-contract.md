@@ -32,6 +32,14 @@ Conventions used by every page
 17. **Fabric & care and Delivery & returns** accordions are static site-wide text (placeholders). TBD whether they become settings.
 18. **SEO:** `<title>` `"<Name> | Kayaa"`, meta description, canonical URL, and a JSON-LD `Product` block (name, image, description, category, offers with `priceCurrency: "LKR"`, `price`, `availability`, `aggregateRating`). The prototype has placeholder values and a `<!-- blade: generate from the product -->` comment.
 
+19. **Cart line data** with per-variant stock, the sale/regular price, the "price changed" flag and the colour's thumbnail (section 3.4).
+20. **Flat delivery fee rule from config** (Rs 450, free from Rs 7,500). TODO confirm it is not district-based.
+21. **Checkout** fields, validation, the 25-district list from `config/kayaa.php` and the delivery-ETA data per district (sections 3.5).
+22. **Payment hand-off:** order creation, stock decrement at order time, redirect to Onepay, return URL and callback, the retry action, the stock-hold expiry (30 minutes shown), the four outcomes, and how a shopper cancel is stored (sections 3.6 and 3.7).
+23. **Order reference format** (the prototype uses `KYA-10234`, TODO real format) and a **signed URL or unguessable token** for the thank-you page (section 3.7).
+24. **Status component mapping** for order and payment statuses (section 3.8).
+25. **Order confirmation emails do not exist yet.** The pages never claim one was sent.
+
 ---
 
 ## 2. Shell (every page)
@@ -46,6 +54,9 @@ Conventions used by every page
 - Category row (desktop): the six categories. Account icon -> `/account` when signed in, else `/account/login`. Cart icon opens the cart drawer; the count is the sum of line quantities.
 - Footer: age links, help links (`/track`, `/size-guide`, `/delivery`, `/returns`, `/contact`), company links (`/about`, `/privacy`, `/terms`), WhatsApp link, contact email, social URLs.
 - Active nav states use `<body data-page="home|shop|category|product|search|cart|account|...">`; the server should set it per page (space-separated tokens allowed, e.g. `account login`).
+
+### Minimal shell (checkout and thank-you)
+These two pages use `header-minimal` and `footer-minimal` partials only: no announcement bar, menu drawer, tab bar or cart drawer.
 
 ### Header search form
 | | |
@@ -72,9 +83,10 @@ Route map (prototype file -> Laravel route). Status: **built** = designed in the
 | category.html | `/{department}/{category}` | built (prototype uses `?c=<slug>`) |
 | search.html | `/search?q=` | built |
 | product.html | `/products/{slug}` | built |
-| cart.html | `/cart` | stub |
-| checkout.html | `/checkout` | stub |
-| thank-you.html | `/orders/{ref}/thank-you` | stub |
+| cart.html | `/cart` | built |
+| checkout.html | `/checkout` | built (minimal shell) |
+| thank-you.html | `/orders/{ref}/thank-you` | built (minimal shell) |
+| proto-onepay.html | none | prototype stand-in for the hosted payment page, delete at conversion |
 | track.html | `/track` | stub |
 | contact.html | `/contact` | stub |
 | size-guide.html, delivery.html, returns.html, about.html, privacy.html, terms.html | same names | stub |
@@ -152,8 +164,94 @@ No review titles. Reviews are moderated: show "Thank you - your review will appe
 
 Other: the size guide panel is a static placeholder table (TBD, section 1.14); the assurance list is static (free delivery over Rs 7,500; secure card payment, Visa & Mastercard; easy returns, window TBD). Related products and FAQs: sections 1.13 and 1.16.
 
-### 3.4 Stub pages (cart, checkout, thank-you, track, contact, size-guide, delivery, returns, about, privacy, terms, account/*)
-Not designed yet. Only the route and the page name exist. Assumptions for planning, **not** from the prototype: contact will have name, email, message; track will take an order reference; checkout will collect delivery details and district, then redirect to Onepay (section 1.7).
+### 3.4 Cart (`/cart`)
+Replaces the stub. No query params. Prototype-only `?demo=` (`empty`, `oos-line`, `low-stock`, `price-changed`, `free-delivery`, `checkout-oos`). Full shell (header, tab bar, drawers).
+
+Data: the cart lines and totals. Each line: product name and URL, colour (slug + label), size (key + label), unit price, regular price when on sale, quantity, current stock of that variant, thumbnail (the selected colour's first photo), availability, "price changed since added" flag. Totals: subtotal (available lines only), delivery fee, total, units count, "Rs X away from free delivery".
+
+Rules (config, TODO confirm the delivery fee is flat and not district-based): delivery is Rs 450 below a Rs 7,500 subtotal and free at Rs 7,500 or more. Quantity per line is 1 to 10 and never above the variant's stock.
+
+Forms (real forms, so the page works without JS; `@csrf`; actions are TODO, assumptions shown):
+| Form | Method / action | Fields |
+| --- | --- | --- |
+| Update quantity (one per line) | `POST` + `_method=PATCH` -> `/cart/items/{line}` | `line` (hidden, the line id), `quantity` (text, numeric, 1 to 10, at most the stock). A `<noscript>` "Update" button is shown; with JS the stepper submits on change. |
+| Remove (one per line) | `POST` + `_method=DELETE` -> `/cart/items/{line}` | `line` (hidden) |
+| Checkout | link `GET /checkout` | none. Disabled (`aria-disabled`) while any line is unavailable, with the hint "Remove the unavailable item to continue to checkout." |
+
+Line states: "Only N left" caption when `stock <= low-stock threshold` (same admin setting as the product page, `data-low-stock-threshold` on the page); "No longer available" (muted line, disabled stepper and a message; checkout blocked until removed); a quiet info alert "The price of this item changed." Top alert slot (`role="alert"`): "Some items in your bag are no longer available. We've updated your bag." - shown when checkout redirects back to the cart because stock ran out (assumption: a flash message).
+
+Empty state: icon, "Your bag is empty", "Start shopping" -> `/shop`, chips for the five age groups.
+
+Mobile: a sticky bar (total + Checkout) shows when the main Checkout button leaves the viewport and replaces the tab bar (same component as the product page).
+
+### 3.5 Checkout (`/checkout`)
+Minimal shell (reduces abandonment): `header-minimal` (wordmark, "Secure checkout" with a lock icon, "Back to bag" -> `/cart`) and `footer-minimal` (Delivery, Returns, Privacy, Terms, Contact). No menu drawer, tab bar, cart drawer or announcement bar. Prototype-only `?demo=`: `errors`, `throttle`, `gateway-error`, `signed-in`, `empty`.
+
+Empty bag: "Your bag is empty" with a link to `/shop` (the server should redirect or render this).
+
+Layout: desktop 7/5 columns (form | sticky order summary). Mobile: a native `<details>` "Order summary · N items · Rs X" at the top, then the form. Summary: compact lines (thumbnail, name, size/colour, quantity, price), subtotal, delivery, total, "Edit bag" -> `/cart`, and the delivery estimate once the district is known.
+
+Form: `POST` (action TODO; assumption `POST /checkout` creates the order, then the server redirects to Onepay), `@csrf`, `novalidate`. The server must repeat every validation rule below. Throttle: 10 attempts per minute (TODO confirm).
+| Field (`name`) | Type | Required | Validation | Example |
+| --- | --- | --- | --- | --- |
+| `email` | `email` (`autocomplete="email"`) | yes (TODO: is email required for guests?) | valid email | `amaya@example.com` |
+| `phone` | `tel` (`autocomplete="tel"`) | yes | Sri Lankan mobile: `07X XXXXXXX` (10 digits, X in 0-8) or `+94 7X XXXXXXX`, spaces/dashes allowed; normalise on the server | `071 234 5678` |
+| `name` | text (`autocomplete="name"`) | yes | non-empty | `Amaya Ranasinghe` |
+| `address_line1` | text (`address-line1`) | yes | non-empty | `42 Temple Road` |
+| `address_line2` | text (`address-line2`) | no | | `Apartment 3` |
+| `city` | text (`address-level2`) | yes | non-empty | `Nugegoda` |
+| `district` | select | yes | one of the 25 districts from `config/kayaa.php`; the option value is the slug | `colombo` |
+| `notes` | textarea | no | free text ("delivery notes") | `Call on arrival` |
+
+No postal code, promo code, gift option or order note beyond `notes` (TODO confirm whether a postal code is needed). Districts (slug): `ampara`, `anuradhapura`, `badulla`, `batticaloa`, `colombo`, `galle`, `gampaha`, `hambantota`, `jaffna`, `kalutara`, `kandy`, `kegalle`, `kilinochchi`, `kurunegala`, `mannar`, `matale`, `matara`, `monaragala`, `mullaitivu`, `nuwara-eliya`, `polonnaruwa`, `puttalam`, `ratnapura`, `trincomalee`, `vavuniya`.
+
+Delivery estimate: shown only here (and in the order summary and on the thank-you page), after the district is chosen: "Estimated delivery to Colombo: 2-3 working days". The prototype reads a placeholder table (`<script type="application/json" id="district-eta">` mapping district slug to text). TODO: the real ETA data per district (where it lives: config, admin or database) and whether more than the text is needed (min and max days). Never shown on the product page or the cart.
+
+Contact states: guests see "Have an account? Log in" (`/account/login`); signed-in users see their fields prefilled and "Signed in as {email} - Not you?".
+
+Payment card (no radio cards, online only): credit-card icon, "Pay by card - Visa or Mastercard", "You'll be taken to Onepay's secure page to enter your card details. We never see or store your card number." (TODO confirm hosted redirect), plain-text Visa and Mastercard badges (TODO official marks and Onepay badge), and "By paying you agree to our Terms and Returns policy" (`/terms`, `/returns`).
+
+Pay button: `Pay Rs 6,750` with a lock icon and the helper "Secure payment via Onepay". On a valid submit the button is disabled with `aria-busy="true"`, shows a spinner and "Redirecting to secure payment..." and cannot be submitted twice. TODO: should the label say "Place order" instead?
+
+States: field errors (message under each field, `aria-invalid`, `aria-describedby`), an error summary at the top (`role="alert"`, focus moves to it, links to each invalid field), throttle alert ("Too many attempts. Please wait a minute and try again."), gateway error alert ("We couldn't start the payment. Please try again."), stock-ran-out redirect to `/cart`.
+
+### 3.6 Payment hand-off (Onepay) - assumptions, all TODO to confirm with the backend dev
+1. `POST /checkout` validates, creates the order with `payment_status = pending` and `status = pending`, **decrements stock** (abandoned payments therefore hold stock), generates the order reference, and responds with a redirect to Onepay's hosted payment page. We never handle card numbers.
+2. Onepay redirects the shopper back to `/orders/{ref}/thank-you` (return URL) and also calls the server (callback/webhook) to confirm the result; the server sets `payment_status` to `paid`, `failed` (or leaves `pending`). The thank-you page must show the state the server knows, not a state taken from the URL.
+3. Outcomes the frontend has designed: **paid**, **pending** (gateway still confirming), **failed**, **cancelled by the shopper**. `cancelled` is not in the payment status list (`pending`, `paid`, `failed`, `refunded`): TBD whether the server maps a shopper cancel to `failed` plus a reason, or to the order status `cancelled`.
+4. Retry: "Try payment again" needs an action that restarts payment for the same order (TBD route, for example `POST /orders/{ref}/pay`). The failed/cancelled page also says "We'll hold your items for 30 minutes" (TODO decide the real stock-hold expiry and the job that releases stock).
+5. The bag is cleared when the order is paid or pending, and kept on failed and cancelled.
+6. No order confirmation email exists yet, so the pages never claim one was sent (TODO show an "email sent" line once order emails exist).
+7. Prototype stand-in: `html/proto-onepay.html` (no shell, no brand marks) with four buttons that go to `thank-you.html?state=paid|pending|failed|cancelled`. The order is kept in sessionStorage with a reference like `KYA-10234` (TODO real format).
+
+### 3.7 Thank-you (`/orders/{ref}/thank-you`)
+Minimal shell as for checkout. Prototype-only `?state=paid|pending|failed|cancelled` (paid by default); in Laravel the state comes from the order's payment status.
+
+Data needed for every state: order reference, items (name, size, colour, quantity, price), subtotal, delivery fee, total, delivery address (name, lines, city, district, phone), the district's estimated delivery text, payment line "Card - Onepay" with the payment status.
+
+| State | Icon | Heading | Buttons | Status badge |
+| --- | --- | --- | --- | --- |
+| paid | check, Primary Deep on lilac tint | "Thank you, {first name} - your order is confirmed" + next steps | Track your order (`/track`), Continue shopping; guests also get "Create an account with the same email to see this order later" (`/account/register`) | `status--paid` |
+| pending | clock | "We're confirming your payment" - "This can take a few minutes. Please don't pay again." | Refresh status (reloads the page), Contact us (`/contact`) | `status--pending` |
+| failed | alert circle, error colour | "Your payment didn't go through" - "If you were charged, contact us with your order reference." + the 30-minute hold line | Try payment again (retry action), Return to bag (`/cart`) | `status--failed` |
+| cancelled | alert circle, error colour | "You cancelled the payment" - same copy as failed | Try payment again, Return to bag | `status--cancelled` |
+
+The order reference is shown large with a Copy button (clipboard; announces "Order reference copied").
+
+**Security flag:** `/orders/{ref}/thank-you` exposes a name, address and phone. With a sequential reference (KYA-10234) anyone can enumerate orders. Recommendation: use an unguessable token or a signed URL (for example `/orders/{ref}/thank-you?signature=...` or a random token in the path) and check the session where possible. Decision needed from the backend dev.
+
+### 3.8 Status component (order and payment statuses)
+`<span class="status status--paid">Paid</span>`: icon plus text, never colour alone. The mapping is defined once in `components.css` and is reused for order tracking and the account pages:
+| Status | Look |
+| --- | --- |
+| `paid`, `confirmed`, `delivered` | lilac tint + check icon |
+| `shipped` | blue tint + truck icon |
+| `pending` | neutral outline + clock icon |
+| `failed`, `cancelled` | error tint + x icon |
+| `refunded` | blue tint + rotate-ccw icon |
+
+### 3.9 Stub pages (track, contact, size-guide, delivery, returns, about, privacy, terms, account/*)
+Not designed yet. Only the route and the page name exist. Assumptions for planning, **not** from the prototype: contact will have name, email, message; track will take an order reference and reuse the `.status` component (section 3.8).
 
 ---
 
@@ -168,7 +266,7 @@ Panel contents
 - Subtotal, note "Delivery calculated at checkout · Pay securely by card", primary "Checkout" -> `/checkout`, secondary "View bag" -> `/cart`.
 - Empty state (`data-state="empty"`): "Your bag is empty", "Start shopping" -> `/shop`.
 
-Endpoints (assumption: the prototype changes the DOM only)
+The same line data feeds the cart page (3.4). Endpoints (assumption: the prototype changes its demo cart in sessionStorage only; the cart page forms in 3.4 use the same routes)
 | Action | Request | Response |
 | --- | --- | --- |
 | Read panel | `GET /cart/panel` | panel HTML |
@@ -182,8 +280,8 @@ Rules: the header count and every `[data-cart-count]` badge show the unit total 
 A bottom sheet / modal opened from a card's "Quick add" button (mouse) or round "+" (touch).
 | Field | Type | Required | Values |
 | --- | --- | --- | --- |
-| `size` | radio | yes | in-stock size labels for the product (prototype: static list, one disabled) |
-| `colour` | radio | yes | colour names/slugs of the product (prototype sends the display name, e.g. `Lilac`; use slugs in production) |
+| `size` | radio | yes | the size key of an in-stock variant (same value as the product page form, e.g. `3-6M`; the prototype shows a static list with one disabled) |
+| `colour` | radio | yes | the colour **slug** (e.g. `lilac`; the label is sent alongside in the prototype as `data-label`) - same shape as the product page form |
 | product | (assumption) hidden id | yes | |
 
 The button carries `data-name`, `data-price`, optional `data-was`, `data-tone` (prototype only). Production assumption: the sheet's options are rendered per product (or fetched), because sizes and colours differ between products. On submit the line is added and the cart drawer opens.
@@ -194,7 +292,8 @@ The button carries `data-name`, `data-price`, optional `data-was`, `data-tone` (
 
 - `assets/js/proto-listing.js`: filters, sorts, searches and paginates the 24 sample cards from the query string; sets H1, intro, breadcrumb, counts, pagination and the empty states. The server does all of this.
 - `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `sale`, `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
-- Cart drawer line items, quantity changes and the "added to cart" flow run in `assets/js/app.js` against the DOM only.
+- `assets/js/proto-cart.js`: the demo cart (sessionStorage) behind the header counts, the drawer, the cart page and the checkout summary, plus the simulated order. Line shape: `{id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}`.
+- `assets/js/proto-cart-page.js`, `proto-checkout.js`, `proto-thankyou.js`, `proto-onepay.js` and `html/proto-onepay.html`: render the pages from the demo cart/order and fake the payment hand-off. Demo params: cart `empty`, `oos-line`, `low-stock`, `price-changed`, `free-delivery`, `checkout-oos`; checkout `errors`, `throttle`, `gateway-error`, `signed-in`, `empty`; thank-you `state=paid|pending|failed|cancelled`.
 - `html/review.html` is a review index for the client; remove it.
 
-Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, search toggle, steppers, active-nav marking) and `assets/js/product.js` (variants, gallery filtering, stock note, quantity cap, size validation, sticky bar, show-more reviews). Remove the `data-demo-cart` attribute from the buy form when the real cart exists.
+Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, search toggle, steppers, active-nav marking), `product.js` (variants, gallery filtering, stock note, quantity cap, size validation, sticky bar, show-more reviews), `cart.js` (sticky checkout bar), `checkout.js` (validation, error summary, delivery estimate, loading state) and `thank-you.js` (copy reference, refresh). The drawer in `app.js` currently renders from the demo cart: in Laravel it swaps in the server panel. Remove the `data-demo-cart` attribute from the buy form when the real cart exists.

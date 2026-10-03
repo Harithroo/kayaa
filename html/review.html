@@ -13,8 +13,8 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=6a1ff2de">
-  <link rel="stylesheet" href="assets/css/layout.css?v=fa77edd0">
+  <link rel="stylesheet" href="assets/css/components.css?v=7db20248">
+  <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/review.css?v=5a9d40b6">
 </head>
@@ -142,6 +142,18 @@
       <circle cx="12" cy="12" r="10" />
       <line x1="12" x2="12" y1="8" y2="12" />
       <line x1="12" x2="12.01" y1="16" y2="16" />
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 6v6l4 2" />
+    </symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24">
+      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24">
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
     </symbol>
   </svg>
   <!-- /partial: sprite -->
@@ -297,17 +309,24 @@
         <section class="review__group" aria-labelledby="review-g2">
           <h2 id="review-g2">Buy</h2>
           <ul class="review__list" role="list">
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Bag</span><p class="review__note">Full bag with quantities and delivery progress.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
+            <li class="review__item">
+              <div class="review__text"><a class="review__name" href="product.html">Walk the full flow</a><p class="review__note">Add to bag, then cart, checkout, simulated payment, thank-you. Start on the product page; the demo bag lives in this browser tab.</p></div>
+              <span class="badge badge--lilac">Ready to review</span>
             </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Checkout</span><p class="review__note">Delivery details, then secure payment by card.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
+            <li class="review__item">
+              <div class="review__text"><a class="review__name" href="cart.html">Bag</a><p class="review__note">Bag lines with real forms, line states, summary, free-delivery progress, mobile sticky bar and the empty state.</p></div>
+              <span class="badge badge--lilac">Ready to review</span>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="cart.html">Filled</a></li><li><a href="cart.html?demo=empty">Empty</a></li><li><a href="cart.html?demo=oos-line">Unavailable line</a></li><li><a href="cart.html?demo=low-stock">Low stock</a></li><li><a href="cart.html?demo=price-changed">Price changed</a></li><li><a href="cart.html?demo=free-delivery">Free delivery</a></li><li><a href="cart.html?demo=checkout-oos">Redirected from checkout</a></li></ul></div>
             </li>
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Thank you</span><p class="review__note">Order confirmation after checkout.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
+            <li class="review__item">
+              <div class="review__text"><a class="review__name" href="checkout.html">Checkout</a><p class="review__note">Minimal shell, contact, delivery address with district ETA, card payment hand-off, validation and the loading state.</p></div>
+              <span class="badge badge--lilac">Ready to review</span>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="checkout.html">Clean</a></li><li><a href="checkout.html?demo=errors">With errors</a></li><li><a href="checkout.html?demo=signed-in">Signed in (ETA shown)</a></li><li><a href="checkout.html?demo=throttle">Rate limited</a></li><li><a href="checkout.html?demo=gateway-error">Gateway error</a></li><li><a href="checkout.html?demo=empty">Empty bag</a></li></ul></div>
+            </li>
+            <li class="review__item">
+              <div class="review__text"><a class="review__name" href="thank-you.html">Thank you</a><p class="review__note">The four payment outcomes with the order reference, items, delivery and payment status.</p></div>
+              <span class="badge badge--lilac">Ready to review</span>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="thank-you.html?state=paid">Paid</a></li><li><a href="thank-you.html?state=pending">Pending</a></li><li><a href="thank-you.html?state=failed">Failed</a></li><li><a href="thank-you.html?state=cancelled">Cancelled</a></li></ul></div>
             </li>
             <li class="review__item review__item--soon">
               <div class="review__text"><span class="review__name">Track order</span><p class="review__note">Look up an order by reference.</p></div>
@@ -391,6 +410,10 @@
         <section class="review__group" aria-labelledby="review-g5">
           <h2 id="review-g5">System</h2>
           <ul class="review__list" role="list">
+            <li class="review__item">
+              <div class="review__text"><a class="review__name" href="proto-onepay.html">Payment gateway stand-in</a><p class="review__note">Prototype page that stands in for Onepay’s hosted payment page, with a button for each outcome.</p></div>
+              <span class="badge badge--lilac">Ready to review</span>
+            </li>
             <li class="review__item">
               <div class="review__text"><a class="review__name" href="review.html">Review index</a><p class="review__note">This page. The status of every screen in one place.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
@@ -662,9 +685,9 @@
         <fieldset class="quick-add__group">
           <legend>Colour</legend>
           <div class="quick-add__options quick-add__options--colours">
-            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="Lilac" checked><span class="dot dot--lilac" aria-hidden="true"></span><span class="visually-hidden">Lilac</span></label>
-            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="Cream"><span class="dot dot--cream" aria-hidden="true"></span><span class="visually-hidden">Cream</span></label>
-            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="Sky"><span class="dot dot--sky" aria-hidden="true"></span><span class="visually-hidden">Sky</span></label>
+            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="lilac" data-label="Lilac" checked><span class="dot dot--lilac" aria-hidden="true"></span><span class="visually-hidden">Lilac</span></label>
+            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="cream" data-label="Cream"><span class="dot dot--cream" aria-hidden="true"></span><span class="visually-hidden">Cream</span></label>
+            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="sky" data-label="Sky"><span class="dot dot--sky" aria-hidden="true"></span><span class="visually-hidden">Sky</span></label>
           </div>
         </fieldset>
         <button type="submit" class="btn btn--primary btn--lg btn--block">Add to cart</button>
@@ -673,6 +696,9 @@
   </div>
   <!-- /partial: quick-add -->
 
-  <script src="assets/js/app.js?v=d05ab4cf" defer></script>
+  <!-- partial: scripts -->
+  <script src="assets/js/proto-cart.js?v=51cee244" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=b66a945b" defer></script>
+  <!-- /partial: scripts -->
 </body>
 </html>

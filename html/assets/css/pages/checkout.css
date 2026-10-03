@@ -1,0 +1,129 @@
+/* Checkout */
+
+.checkout { padding-block: var(--space-4) var(--space-7); }
+.checkout__title { margin-bottom: var(--space-4); }
+.checkout__alerts { display: grid; gap: var(--space-3); margin-bottom: var(--space-4); }
+.checkout__alerts .alert:focus { outline: var(--focus-ring); outline-offset: 2px; }
+.alert .alert__list { display: grid; gap: var(--space-2); margin-top: var(--space-1); padding: 0; list-style: none; }
+.alert__list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.checkout-layout { display: grid; gap: var(--space-5); }
+.checkout-aside { display: none; }
+@media (min-width: 900px) {
+  .checkout-layout { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-7); align-items: start; }
+  .checkout-aside { display: block; position: sticky; top: calc(var(--header-h, 73px) + var(--space-4)); }
+  .checkout-summary-m { display: none; }
+}
+
+/* ---------- Mobile summary (native <details>) ---------- */
+.checkout-summary-m {
+  margin-bottom: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.checkout-summary-m > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: var(--space-2) var(--space-4);
+  font-weight: 700;
+  list-style: none;
+  cursor: pointer;
+}
+.checkout-summary-m > summary::-webkit-details-marker { display: none; }
+.checkout-summary-m > summary .icon { transition: transform var(--dur-fast) var(--ease); }
+.checkout-summary-m[open] > summary .icon { transform: rotate(180deg); }
+.checkout-summary-m__body { padding: 0 var(--space-4) var(--space-4); }
+.checkout-summary-m__body .totals { margin-top: var(--space-3); }
+
+.summary-edit { margin-top: var(--space-3); }
+
+/* ---------- Numbered cards ---------- */
+.checkout-card {
+  margin-bottom: var(--space-4);
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.checkout-card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-h3);
+}
+.checkout-card__num {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-round);
+  background: var(--secondary);
+  color: var(--primary-deep);
+  font-family: var(--font-display);
+  font-size: var(--fs-ui);
+  font-weight: 800;
+}
+.checkout-card__aside { margin-top: var(--space-2); font-size: var(--fs-dense); color: var(--ink-soft); }
+.checkout-card__aside a { font-weight: 700; display: inline-flex; align-items: center; min-height: var(--tap); padding-inline: var(--space-2); }
+.checkout-fields { display: grid; gap: var(--space-4); margin-top: var(--space-4); }
+@media (min-width: 600px) {
+  .checkout-fields--2 { grid-template-columns: 1fr 1fr; }
+  .checkout-fields .field--wide { grid-column: 1 / -1; }
+}
+
+/* ---------- Delivery estimate ---------- */
+.eta-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--tone-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tile);
+}
+.eta-card > .icon { flex: none; margin-top: 2px; color: var(--primary-deep); }
+.eta-card__title { font-weight: 700; font-size: var(--fs-dense); }
+.eta-card__fee { margin-top: 2px; font-size: var(--fs-ui); color: var(--ink-soft); }
+
+/* ---------- Payment ---------- */
+.pay-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: var(--tone-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tile);
+}
+.pay-card > .icon { flex: none; margin-top: 2px; color: var(--primary-deep); }
+.pay-card__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: 600; }
+.pay-card__text { margin-top: 2px; font-size: var(--fs-dense); color: var(--ink-soft); }
+.pay-card__brands { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
+.checkout-terms { margin-top: var(--space-4); font-size: var(--fs-ui); color: var(--ink-soft); }
+/* inline links in a sentence: vertical padding on an inline box grows the tap area to 44px without changing the line height */
+.checkout-terms a { margin-inline: -4px; padding: 14px 4px; font-weight: 700; }
+.pay-btn { margin-top: var(--space-5); }   /* clears the padded tap area of the Terms and Returns links above */
+.pay-helper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: var(--space-2);
+  font-size: var(--fs-ui);
+  color: var(--ink-soft);
+}
+
+.checkout-empty .empty-state { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); }

@@ -8,6 +8,7 @@ Static prototype of the Kayaa storefront. Backend (Laravel 12 + Filament 4) is o
 - Mobile-first. Breakpoints: 600, 900, 1200. At 900 the nav switches: below 900 = hamburger drawer + 5-tab bottom bar; 900+ = full header nav + desktop category row.
 - Never use emoji as UI. Icons come from assets/icons/sprite.svg. Chrome blocks external <use> over file://, so each page inlines the sprite once (<!-- partial: sprite -->) and references icons as <use href="#i-search">. assets/icons/sprite.svg stays the source; `node tools/sync-shell.mjs` refreshes every page.
 - Prototype-only JS lives in assets/js/proto-*.js and is deleted at Blade conversion. Production behaviour (for example product.js) stays and must not depend on the prototype files.
+- Scripts: the `scripts` partial (tools/partials/scripts.html, markers in every page) loads proto-cart.js then app.js; page scripts follow it (production first, then the proto-* file that fakes the server).
 - CSS: there is no app.css and no @import. The `styles` partial (tools/partials/styles.html, markers in every page head) holds direct <link> tags for tokens, base, components and layout; page CSS is a separate <link> after it. `node tools/sync-shell.mjs` also sets ?v=<first 8 hex of the file's sha1> on every local .css and .js reference, so re-run it after editing any CSS or JS.
 - Product images are 4:5. Use the .media placeholder with data-placeholder until real photos exist.
 
@@ -18,7 +19,10 @@ Static prototype of the Kayaa storefront. Backend (Laravel 12 + Filament 4) is o
 - Repeated data: render several static items and wrap them in <!-- loop: products --> ... <!-- /loop -->. Conditionals get <!-- blade: @if sale --> hints.
 - No inline styles (except --tone / --ratio custom properties), no inline event handlers. JS hooks use data-* attributes (never styling classes).
 - Cart drawer root is [data-cart-drawer]. Its inner markup is a self-contained panel, because the backend's /cart/panel returns HTML that JS swaps into it.
+- Checkout and Thank-you use a minimal shell to reduce abandonment: only the `header-minimal` (wordmark, "Secure checkout" with a lock icon, "Back to bag") and `footer-minimal` (Delivery, Returns, Privacy, Terms, Contact) partials, plus sprite, styles and scripts. No announcement bar, menu drawer, tab bar or cart drawer, and their marker pairs are omitted from those pages (sync-shell only fills the markers a page has). The cart page keeps the full shell.
+- Delivery fee is the flat rule from config: Rs 450, free from Rs 7,500 (TODO confirm it is not district-based). Stock is decremented when the order is placed; abandoned payments hold stock (the failed state says "We'll hold your items for 30 minutes", TODO decide the expiry). There are no promo codes or gift options, and no order confirmation email exists yet, so never claim one was sent.
 - Delivery ETA is shown only at checkout, after the delivery district is chosen.
+- Prototype cart: assets/js/proto-cart.js keeps a demo cart in sessionStorage (seeded with two sample items; line shape {id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}). The header counts, the drawer, the cart page and the checkout summary all read it through window.KayaaCart (get, totals, add, update, remove, clear). Products are added with colour and size slugs plus labels, the same shape from the product page form and the quick-add sheet. It is deleted at Blade conversion (the server owns the cart).
 - Update docs/backend-contract.md whenever a page, form or param changes.
 - Money is "Rs 1,490" (whole rupees, thousands separator). Free delivery over Rs 7,500; standard delivery Rs 450.
 - Order statuses: pending, confirmed, shipped, delivered, cancelled. Payment statuses: pending, paid, failed, refunded.
@@ -45,6 +49,11 @@ Full detail for the backend dev is in docs/backend-contract.md. Summary:
 - Reviews are a section of the product page (no separate page). "See more reviews" reveals the next 5 in place; without JS it is a link to the same product page with ?reviews=all#reviews. Review form: method post, radios rating (1 to 5), text name (guests only), textarea comment, no titles; reviews are moderated.
 - Related products: same category, excluding the current product, 4 items.
 - Behaviour lives in assets/js/product.js (stays after the Blade conversion). assets/js/proto-product.js (prototype only) applies the ?demo= states: sale, new, low-stock, oos, no-reviews, reviewed, review-success, review-error, review-throttle. Other params: colour, reviews=all. Every product card in the prototype opens this same sample product.
+
+## Cart, checkout and order demo params
+- cart.html: ?demo=empty | oos-line | low-stock | price-changed | free-delivery | checkout-oos.
+- checkout.html: ?demo=errors | throttle | gateway-error | signed-in | empty. A valid submit stores a simulated order and goes to proto-onepay.html (prototype stand-in for Onepay's hosted page, no shell, no brand marks), whose four buttons go to thank-you.html?state=paid | pending | failed | cancelled. The bag is cleared on paid and pending only.
+- Order and payment statuses use the .status component (icon + text, never colour alone): paid, confirmed, delivered = lilac tint + check; shipped = blue tint + truck; pending = neutral outline + clock; failed, cancelled = error tint + x; refunded = blue tint + rotate-ccw. Never green.
 
 ## Photography (tools/process-images.mjs)
 - Originals live in tools/image-source/ (git-ignored, never published): hero, banner-newborn, banner-sale, cat-bodysuits, cat-sleepsuits, cat-sets, cat-dresses-rompers, cat-hats-mitts, cat-swaddles, product-<colour>-<n> for colour photos (for example product-lilac-1) and product-<n> for photos shared by every colour (any extension) plus credits.csv (file, source, photographer, url; optional alt).

@@ -1,0 +1,23 @@
+/* PROTOTYPE ONLY: stand-in for the hosted payment page */
+
+body { display: grid; place-items: center; min-height: 100vh; min-height: 100dvh; padding: var(--space-4); background: var(--bg); }
+.onepay { width: 100%; max-width: 460px; }
+.onepay__card {
+  padding: var(--space-6) var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.onepay__banner {
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--secondary);
+  border-radius: var(--radius-tile);
+  font-size: var(--fs-dense);
+  font-weight: 600;
+}
+.onepay__facts { display: grid; gap: var(--space-3); margin: var(--space-4) 0 var(--space-5); }
+.onepay__facts div { display: flex; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-3); border-bottom: 1px solid var(--line); }
+.onepay__facts dt { color: var(--ink-soft); }
+.onepay__facts dd { margin: 0; font-weight: 800; }
+.onepay__actions { display: grid; gap: var(--space-3); }

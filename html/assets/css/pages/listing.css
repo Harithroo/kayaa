@@ -294,3 +294,18 @@
   .toolbar { position: static; }
   html { scroll-padding-top: calc(var(--header-h, 53px) + 8px); }
 }
+
+/* Narrow phones: Prev / Next become icon-only (the labels stay for screen readers) so the row fits at 320px */
+@media (max-width: 399px) {
+  .pagination__edge { min-width: var(--tap); padding-inline: 0; }
+  .pagination__edge-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

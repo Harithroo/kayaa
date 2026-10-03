@@ -279,104 +279,110 @@
     if (input) syncQty(input.closest('[data-qty]'));
   });
 
-  /* ---------- Cart drawer (demo state lives in the DOM) ---------- */
+  /* ---------- Cart drawer: rendered from the shared demo cart (proto-cart.js) ----------
+     The markup contract is unchanged: [data-cart-drawer] holds one self-contained panel. In production the server
+     returns that panel (/cart/panel) and the header counts come from the server too. */
   var cart = $('[data-cart-drawer]');
+  var store = window.KayaaCart;
+
+  function fillLine(li, it) {
+    li.setAttribute('data-id', it.id);
+    li.setAttribute('data-unit-price', it.unitPrice);
+    var link = $('[data-item-name]', li);
+    link.textContent = it.name;
+    link.setAttribute('href', 'product.html');
+    $('[data-item-meta]', li).textContent = 'Size ' + it.sizeLabel + ' · ' + it.colourLabel + (it.unavailable ? ' · No longer available' : '');
+    $('[data-item-media]', li).style.setProperty('--tone', store.toneCss(it));
+    $('[data-cart-remove]', li).setAttribute('aria-label', 'Remove ' + it.name);
+    li.classList.toggle('is-unavailable', !!it.unavailable);
+    var group = $('[data-qty]', li);
+    group.setAttribute('data-qty-max', String(Math.max(1, Math.min(store.MAX, it.stock || store.MAX))));
+    var input = $('[data-qty-input]', li);
+    if (document.activeElement !== input) input.value = it.qty;
+    syncQty(group);
+    $('[data-line-total]', li).textContent = formatMoney(it.qty * it.unitPrice);
+  }
 
   function renderCart() {
+    if (!store) return;
+    var items = store.get();
+    var t = store.totals();
+
+    $$('[data-cart-count]').forEach(function (n) {
+      n.textContent = t.count;
+      n.hidden = t.count === 0;
+    });
+    $$('[data-cart-aria]').forEach(function (n) {
+      n.setAttribute('aria-label', 'Open bag, ' + t.count + (t.count === 1 ? ' item' : ' items'));
+    });
     if (!cart) return;
     var panel = $('[data-cart-panel]', cart);
     if (!panel) return;
-    var threshold = parseInt(panel.getAttribute('data-free-threshold'), 10) || 7500;
-    var count = 0;
-    var subtotal = 0;
 
-    $$('[data-cart-item]', panel).forEach(function (li) {
-      var group = $('[data-qty]', li);
-      var qty = syncQty(group);
-      var line = qty * parseInt(li.getAttribute('data-unit-price'), 10);
-      $('[data-line-total]', li).textContent = formatMoney(line);
-      count += qty;
-      subtotal += line;
-    });
-
-    panel.setAttribute('data-state', count ? 'items' : 'empty');
-    $$('[data-cart-count-label]', cart).forEach(function (n) { n.textContent = count; });
-    $$('[data-cart-subtotal]', cart).forEach(function (n) { n.textContent = formatMoney(subtotal); });
+    panel.setAttribute('data-state', t.count ? 'items' : 'empty');
+    $$('[data-cart-count-label]', cart).forEach(function (n) { n.textContent = t.count; });
+    $$('[data-cart-subtotal]', cart).forEach(function (n) { n.textContent = formatMoney(t.subtotal); });
 
     var bar = $('[data-cart-progress]', panel);
     var text = $('[data-cart-progress-text]', panel);
     if (bar) {
-      bar.max = threshold;
-      bar.value = Math.min(subtotal, threshold);
-      bar.textContent = Math.round(Math.min(subtotal / threshold, 1) * 100) + '%';
+      bar.max = t.freeAt;
+      bar.value = Math.min(t.subtotal, t.freeAt);
+      bar.textContent = Math.round(Math.min(t.subtotal / t.freeAt, 1) * 100) + '%';
     }
     if (text) {
-      text.textContent = subtotal >= threshold
+      text.textContent = t.free
         ? 'You’ve unlocked free delivery'
-        : formatMoney(threshold - subtotal) + ' away from free delivery';
+        : formatMoney(t.away) + ' away from free delivery';
     }
 
-    $$('[data-cart-count]').forEach(function (n) {
-      n.textContent = count;
-      n.hidden = count === 0;
+    // reconcile the lines in place (keeps focus on the stepper the shopper is using)
+    var list = $('[data-cart-items]', panel);
+    var tpl = $('[data-cart-item-template]');
+    if (!list || !tpl) return;
+    var byId = {};
+    $$('[data-cart-item]', list).forEach(function (li) {
+      var id = li.getAttribute('data-id');
+      if (id) byId[id] = li; else li.parentNode.removeChild(li);   // the static sample lines in the markup
     });
-    $$('[data-cart-aria]').forEach(function (n) {
-      n.setAttribute('aria-label', 'Open bag, ' + count + (count === 1 ? ' item' : ' items'));
+    items.forEach(function (it) {
+      var li = byId[it.id];
+      if (!li) {
+        li = tpl.content.firstElementChild.cloneNode(true);
+        list.appendChild(li);
+      }
+      delete byId[it.id];
+      fillLine(li, it);
+    });
+    Object.keys(byId).forEach(function (id) { byId[id].parentNode.removeChild(byId[id]); });
+  }
+
+  if (store) {
+    document.addEventListener('kayaa:cart', renderCart);
+    document.addEventListener('kayaa:open-cart', function (e) {
+      if (cart) openLayer(cart, e.detail && e.detail.trigger);
     });
   }
 
-  if (cart) {
-    cart.addEventListener('change', renderCart);
+  if (cart && store) {
+    cart.addEventListener('change', function (e) {
+      var input = e.target.closest('[data-qty-input]');
+      var li = input && input.closest('[data-cart-item]');
+      if (li) store.update(li.getAttribute('data-id'), input.value);
+    });
     cart.addEventListener('click', function (e) {
       var rm = e.target.closest('[data-cart-remove]');
       if (!rm) return;
       var li = rm.closest('[data-cart-item]');
-      var next = li.nextElementSibling || li.previousElementSibling;
-      li.parentNode.removeChild(li);
-      renderCart();
-      var target = next && $('[data-cart-remove]', next);
+      var neighbour = li.nextElementSibling || li.previousElementSibling;
+      var nextId = neighbour && neighbour.getAttribute('data-id');
+      store.remove(li.getAttribute('data-id'));
+      var target = nextId && $('[data-cart-item][data-id="' + nextId + '"] [data-cart-remove]', cart);
       if (!target) target = $('[data-autofocus-empty]', cart) || $('[data-close-layer]', cart);
       if (target) target.focus();
     });
-    renderCart();
   }
-
-  // Placeholder thumbnails take the tone of the chosen colour (photos follow the colour).
-  // item.tone may be a colour slug, a number (var(--tone-N)) or a CSS value.
-  var COLOUR_TONE = { lilac: 'var(--tone-4)', cream: 'var(--swatch-cream)', sky: 'var(--sky-tint)' };
-  function toneValue(t) {
-    t = String(t || '1');
-    if (COLOUR_TONE[t.toLowerCase()]) return COLOUR_TONE[t.toLowerCase()];
-    return /^\d+$/.test(t) ? 'var(--tone-' + t + ')' : t;
-  }
-
-  function addToCart(item) {
-    var list = cart && $('[data-cart-items]', cart);
-    var tpl = $('[data-cart-item-template]');
-    if (!list || !tpl) return;
-    var key = item.name + '|' + item.meta;
-    var existing = $$('[data-cart-item]', list).filter(function (li) { return li.getAttribute('data-key') === key; })[0];
-    if (existing) {
-      var input = $('[data-qty-input]', existing);
-      input.value = (parseInt(input.value, 10) || 0) + (item.qty || 1);
-    } else {
-      var li = tpl.content.firstElementChild.cloneNode(true);
-      li.setAttribute('data-key', key);
-      li.setAttribute('data-unit-price', item.price);
-      $('[data-item-name]', li).textContent = item.name;
-      $('[data-item-meta]', li).textContent = item.meta;
-      $('[data-cart-remove]', li).setAttribute('aria-label', 'Remove ' + item.name);
-      $('[data-item-media]', li).style.setProperty('--tone', toneValue(item.tone));
-      $('[data-qty-input]', li).value = item.qty || 1;
-      list.appendChild(li);
-    }
-    renderCart();
-  }
-
-  /* Used by the product page form: add a line item (with quantity) and open the drawer. */
-  window.KayaaCart = {
-    add: function (item, trigger) { addToCart(item); openLayer(cart, trigger); }
-  };
+  renderCart();
 
   /* ---------- Quick-add sheet ---------- */
   var sheet = $('[data-quick-add-sheet]');
@@ -406,7 +412,7 @@
     // the thumbnail follows the selected colour
     function setSheetTone() {
       var colour = $('input[name="colour"]:checked', form);
-      $('[data-qa-thumb]', sheet).style.setProperty('--tone', toneValue(colour ? colour.value : current && current.tone));
+      $('[data-qa-thumb]', sheet).style.setProperty('--tone', store ? store.toneCss({ tone: colour ? colour.value : current && current.tone }) : '');
     }
     form.addEventListener('change', function (e) {
       if (e.target.name === 'colour') setSheetTone();
@@ -417,11 +423,20 @@
       if (!current) return;
       var size = $('input[name="size"]:checked', form);
       var colour = $('input[name="colour"]:checked', form);
-      addToCart({
+      if (!store || !size || !colour) return;
+      // same shape as the product page form: colour slug + label, size key + label
+      store.add({
+        productSlug: store.slugify(current.name),
         name: current.name,
-        price: current.price,
-        tone: colour ? colour.value : current.tone,
-        meta: 'Size ' + (size ? size.value : '') + ' · ' + (colour ? colour.value : '')
+        colourSlug: colour.value,
+        colourLabel: colour.getAttribute('data-label') || colour.value,
+        sizeSlug: size.value.toLowerCase(),
+        sizeLabel: size.getAttribute('data-label') || size.value,
+        unitPrice: current.price,
+        wasPrice: current.was,
+        qty: 1,
+        stock: 8,   // the sample sheet has no stock data
+        tone: colour.value
       });
       var trigger = active && active.trigger;
       closeLayer({ restore: false, keep: true });

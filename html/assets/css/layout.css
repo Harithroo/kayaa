@@ -681,7 +681,7 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
 
 /* Leave room for the bottom bar so it never covers content */
 @media (max-width: 899px) {
-  body {
+  body:has(.tabbar) {
     padding-bottom: calc(var(--bottom-bar-h) + env(safe-area-inset-bottom, 0px));
   }
 }
@@ -802,3 +802,60 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
   .footer__contact a { min-height: 0; padding-block: 2px; }
   .footer__title { margin-bottom: var(--space-2); }
 }
+
+/* ---------- Minimal shell (checkout, thank-you): wordmark, "Secure checkout", back link; one-row footer ---------- */
+.site-header__bar.site-header__bar--minimal {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "logo back" "label label";
+  align-items: center;
+  height: auto;
+  min-height: 60px;
+  padding-bottom: 6px;
+}
+.site-header__bar--minimal .wordmark { grid-area: logo; justify-self: start; }
+.site-header__bar--minimal .site-header__back { grid-area: back; justify-self: end; }
+.secure-label {
+  grid-area: label;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-ui);
+  font-weight: 700;
+}
+.secure-label .icon { color: var(--primary-deep); }
+@media (min-width: 600px) {
+  .site-header__bar.site-header__bar--minimal {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas: "logo label back";
+    min-height: 72px;
+    padding-bottom: 0;
+  }
+}
+
+.site-footer--minimal { margin-top: var(--space-7); padding-block: var(--space-5); }
+.footer-min {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+.footer-min__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+  list-style: none;
+}
+.footer-min__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding-inline: var(--space-2);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  color: var(--ink);
+}
+.footer-min__copy { font-size: var(--fs-ui); }

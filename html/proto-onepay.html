@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Secure payment (prototype) | Kayaa</title>
+  <meta name="description" content="Prototype stand-in for the hosted payment page.">
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- partial: styles -->
+  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
+  <link rel="stylesheet" href="assets/css/components.css?v=7db20248">
+  <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
+  <!-- /partial: styles -->
+  <link rel="stylesheet" href="assets/css/pages/onepay.css?v=c992a69a">
+</head>
+<body data-page="proto-onepay">
+  <!-- PROTOTYPE ONLY: this page stands in for the gateway's hosted payment page. No shell, no real brand marks. Delete at Blade conversion. -->
+  <main class="onepay" id="main">
+    <div class="onepay__card">
+      <p class="onepay__banner" role="note">Prototype: this page stands in for Onepay's hosted payment page.</p>
+      <h1>Secure payment (prototype)</h1>
+      <dl class="onepay__facts">
+        <div><dt>Order reference</dt><dd data-order-ref>KYA-10234</dd></div>
+        <div><dt>Amount</dt><dd data-order-amount>Rs 6,750</dd></div>
+      </dl>
+      <div class="onepay__actions">
+        <a class="btn btn--primary btn--block" href="thank-you.html?state=paid">Simulate successful payment</a>
+        <a class="btn btn--secondary btn--block" href="thank-you.html?state=pending">Simulate pending</a>
+        <a class="btn btn--secondary btn--block" href="thank-you.html?state=failed">Simulate failed payment</a>
+        <a class="btn btn--ghost btn--block" href="thank-you.html?state=cancelled">Cancel and return</a>
+      </div>
+    </div>
+  </main>
+  <script src="assets/js/proto-cart.js?v=51cee244" defer></script>
+  <script src="assets/js/proto-onepay.js?v=9ee19332" defer></script>
+</body>
+</html>

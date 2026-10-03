@@ -223,16 +223,22 @@
     var sel = selected();
     if (addBtn.disabled) { e.preventDefault(); return; }
     if (!sel.size) { e.preventDefault(); showSizeError(); return; }
-    // The prototype adds to the demo cart drawer. In Laravel the form posts to the backend: remove data-demo-cart.
+    // The prototype adds to the demo cart (proto-cart.js) and opens the drawer. In Laravel the form posts to the backend: remove data-demo-cart.
     if (form.hasAttribute('data-demo-cart') && window.KayaaCart) {
       e.preventDefault();
       window.KayaaCart.add({
+        productSlug: form.getAttribute('data-product-slug') || undefined,
         name: NAME,
-        price: unitPrice(),
-        tone: sel.colour,   // the thumbnail uses the selected colour's tone
-        meta: 'Size ' + sel.size + ' · ' + COLOUR_NAME[sel.colour],
-        qty: Math.max(1, parseInt(qtyInput.value, 10) || 1)
-      }, lastTrigger);
+        colourSlug: sel.colour,
+        colourLabel: COLOUR_NAME[sel.colour],
+        sizeSlug: sel.size.toLowerCase(),
+        sizeLabel: sel.size,
+        unitPrice: unitPrice(),
+        wasPrice: parseInt(form.getAttribute('data-was-price'), 10) || 0,
+        qty: Math.max(1, parseInt(qtyInput.value, 10) || 1),
+        stock: stockOf(sel.colour, sel.size),
+        tone: sel.colour   // placeholder thumbnail takes the selected colour's tone
+      }, { open: true, trigger: lastTrigger });
     }
   });
   addBtn.addEventListener('click', function () { lastTrigger = addBtn; });

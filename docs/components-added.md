@@ -184,3 +184,28 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 ### Assumptions
 - 12 sample reviews: ten 5-star and two 4-star, so the average is 4.8 and shows 4.5 stars under the half-star rule.
 - Review ratings stay whole numbers; only averages get half stars.
+
+## Cart, checkout, payment hand-off and thank-you
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| `proto-cart.js` (demo cart) | js | PROTOTYPE ONLY. sessionStorage store (memory fallback) behind `window.KayaaCart`; events `kayaa:cart` and `kayaa:open-cart`. Header counts, drawer, cart page and checkout all read it. The `scripts` partial loads it before app.js. |
+| Drawer renders from the store | app.js | Lines are reconciled in place by id (focus stays on the stepper). The drawer markup and the `[data-cart-drawer]` contract are unchanged. Quick-add sends colour slug + label and size key + label; the product page form sends the same shape. |
+| `.status` | components.css | Order/payment status: icon + text. The icon is a CSS mask so the mapping lives in one place (paid/confirmed/delivered lilac + check, shipped blue + truck, pending outline + clock, failed/cancelled error tint + x, refunded blue + rotate-ccw). Reused for tracking and account pages. |
+| `.spinner`, `.btn[aria-busy]` | components.css | Busy button keeps the Primary Deep fill; under reduced motion the spinner is a static ring plus the text. |
+| `.btn-text` | components.css | Text button with an icon (Remove), 44px target. |
+| `.summary-card`, `.totals`, `.order-lines`/`.order-line` | components.css | Shared by cart, checkout and thank-you. |
+| `.assure` list | components.css | Moved from product.css (cart summary reuses it). |
+| `.sticky-atc` | components.css | Moved from product.css; the cart uses it as a sticky checkout bar. |
+| `i-clock`, `i-lock`, `i-copy` icons | sprite.svg | Lucide. |
+| `.site-header--minimal`, `.secure-label`, `.site-footer--minimal`, `.footer-min` | layout.css | Minimal shell for checkout and thank-you. Below 600px the "Secure checkout" label sits on its own row under the wordmark and "Back to bag". `body:has(.tabbar)` now owns the tab-bar padding. |
+| `header-minimal`, `footer-minimal`, `scripts` partials | tools/partials | sync-shell fills only the markers a page contains. |
+| Cart page (`pages/cart.css`, cart.js, proto-cart-page.js) | cart.html | Lines with real update/remove forms, line states (only N left, no longer available, price changed), sticky summary, mobile sticky bar, empty state. |
+| Checkout (`pages/checkout.css`, checkout.js, proto-checkout.js) | checkout.html | 7/5 layout, collapsible mobile summary, numbered cards, delivery estimate card from a JSON table, payment card, error summary and loading state. |
+| `proto-onepay.html` | html | PROTOTYPE ONLY gateway stand-in. |
+| Thank-you (`pages/thank-you.css`, thank-you.js, proto-thankyou.js) | thank-you.html | Four state blocks (paid, pending, failed, cancelled), copyable order reference. |
+
+### Assumptions
+- Checkout's mobile "Edit bag" link and the order summary list only available lines; unavailable lines are excluded from totals.
+- The thank-you pages keep a "Back to bag" link from the minimal header on every state.
+- Terms and Returns links in the pay card are inline links with a padded tap area rather than separate buttons.

@@ -1106,3 +1106,225 @@
 
 /* Plain-text content from the backend with its line breaks kept (product description) */
 .accordion__body--text { white-space: pre-line; }
+
+/* ---------- Sticky action bar (below 900px, replaces the tab bar): product add-to-cart, cart checkout ---------- */
+.sticky-atc {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--z-bottom-bar);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom, 0px));
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  visibility: hidden;
+  transform: translateY(100%);
+  transition: transform 200ms var(--ease), visibility 0s linear 200ms;
+}
+.sticky-atc.is-visible {
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+.sticky-atc__info { flex: 1; min-width: 0; line-height: 1.3; }
+.sticky-atc__price { font-weight: 800; color: var(--primary-deep); }
+.sticky-atc__size {
+  overflow: hidden;
+  font-size: var(--fs-ui);
+  color: var(--ink-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sticky-atc .btn { flex: none; }
+body.has-sticky-atc .tabbar { display: none; }
+@media (min-width: 900px) {
+  .sticky-atc { display: none; }
+}
+@media (max-width: 899px) and (max-height: 500px) and (orientation: landscape) {
+  .sticky-atc { padding-block: 4px calc(4px + env(safe-area-inset-bottom, 0px)); }
+}
+
+
+/* ---------- Assurance list (product page, cart) ---------- */
+.assure {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+.assure li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-dense);
+  font-weight: 600;
+}
+.assure__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: var(--radius-round);
+  background: var(--secondary);
+  color: var(--primary-deep);
+}
+.assure__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  color: inherit;
+  text-decoration: none;
+}
+.assure__link span:last-child { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Status (order and payment statuses): icon + text, never colour alone ----------
+   The mapping lives here once. Markup: <span class="status status--paid">Paid</span>
+   paid, confirmed, delivered = lilac tint + check | shipped = blue tint + truck | pending = neutral outline + clock
+   failed, cancelled = error tint + x | refunded = blue tint + rotate-ccw */
+.status {
+  --status-bg: transparent;
+  --status-border: var(--ink-soft);
+  --status-icon-color: var(--ink-soft);
+  --status-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%20%2F%3E%20%3Cpath%20d%3D%22M12%206v6l4%202%22%20%2F%3E%3C%2Fsvg%3E");
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 10px;
+  border: 1.5px solid var(--status-border);
+  border-radius: var(--radius-pill);
+  background: var(--status-bg);
+  color: var(--ink);
+  font-size: var(--fs-ui);
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.status::before {
+  content: "";
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background: var(--status-icon-color);
+  -webkit-mask: var(--status-icon) center / contain no-repeat;
+  mask: var(--status-icon) center / contain no-repeat;
+}
+.status--paid,
+.status--confirmed,
+.status--delivered {
+  --status-bg: var(--tone-2);
+  --status-border: var(--primary);
+  --status-icon-color: var(--primary-deep);
+  --status-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%206%209%2017l-5-5%22%20%2F%3E%3C%2Fsvg%3E");
+}
+.status--shipped {
+  --status-bg: var(--sky-tint);
+  --status-border: var(--accent);
+  --status-icon-color: var(--primary-deep);
+  --status-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M14%2018V6a2%202%200%200%200-2-2H4a2%202%200%200%200-2%202v11a1%201%200%200%200%201%201h2%22%20%2F%3E%20%3Cpath%20d%3D%22M15%2018H9%22%20%2F%3E%20%3Cpath%20d%3D%22M19%2018h2a1%201%200%200%200%201-1v-3.65a1%201%200%200%200-.22-.624l-3.48-4.35A1%201%200%200%200%2017.52%208H14%22%20%2F%3E%20%3Ccircle%20cx%3D%2217%22%20cy%3D%2218%22%20r%3D%222%22%20%2F%3E%20%3Ccircle%20cx%3D%227%22%20cy%3D%2218%22%20r%3D%222%22%20%2F%3E%3C%2Fsvg%3E");
+}
+.status--pending { --status-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%20%2F%3E%20%3Cpath%20d%3D%22M12%206v6l4%202%22%20%2F%3E%3C%2Fsvg%3E"); }
+.status--failed,
+.status--cancelled {
+  --status-bg: var(--error-tint);
+  --status-border: var(--error);
+  --status-icon-color: var(--error);
+  --status-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M18%206%206%2018%22%20%2F%3E%20%3Cpath%20d%3D%22m6%206%2012%2012%22%20%2F%3E%3C%2Fsvg%3E");
+}
+.status--refunded {
+  --status-bg: var(--sky-tint);
+  --status-border: var(--accent);
+  --status-icon-color: var(--primary-deep);
+  --status-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2012a9%209%200%201%200%209-9%209.75%209.75%200%200%200-6.74%202.74L3%208%22%20%2F%3E%20%3Cpath%20d%3D%22M3%203v5h5%22%20%2F%3E%3C%2Fsvg%3E");
+}
+
+/* ---------- Spinner and busy buttons ---------- */
+.spinner {
+  display: inline-block;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn[aria-busy="true"],
+.btn[aria-busy="true"]:disabled {
+  background: var(--primary-deep);
+  border-color: var(--primary-deep);
+  color: #fff;
+  opacity: 0.88;
+  cursor: progress;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---------- Text button with an icon (e.g. Remove) ---------- */
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--tap);
+  padding: 0 var(--space-2);
+  border: 0;
+  background: none;
+  font-size: var(--fs-ui);
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-text:hover { color: var(--error); }
+}
+
+/* ---------- Order totals, summary card and compact order lines (cart, checkout, thank-you) ---------- */
+.summary-card {
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.summary-card > h2 { margin-bottom: var(--space-3); font-size: var(--fs-h3); }
+.totals { margin: 0; }
+.totals__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 6px 0;
+  font-size: var(--fs-dense);
+}
+.totals__row dt { color: var(--ink-soft); }
+.totals__row dd { margin: 0; font-weight: 700; text-align: right; }
+.totals__row--total {
+  margin-top: 6px;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-body);
+}
+.totals__row--total dt { color: var(--ink); font-weight: 800; }
+.totals__row--total dd { font-family: var(--font-display); font-size: var(--fs-h3); }
+
+.order-lines { display: grid; gap: var(--space-3); list-style: none; }
+.order-line {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: start;
+}
+.order-line__media { width: 56px; border: 1px solid var(--line); }
+.order-line__media.media[data-placeholder] > .icon { width: 18px; height: 18px; }
+.order-line__name { font-size: var(--fs-dense); font-weight: 700; line-height: 1.3; }
+.order-line__meta { font-size: var(--fs-ui); color: var(--ink-soft); }
+.order-line__price { font-size: var(--fs-dense); font-weight: 700; white-space: nowrap; }
+
+.order-lines + .totals { margin-top: var(--space-4); }

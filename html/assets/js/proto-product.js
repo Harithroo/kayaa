@@ -26,6 +26,7 @@
   var badge = $('[data-product-badge]');
   if (demo === 'sale') {
     form.setAttribute('data-unit-price', '1190');
+    form.setAttribute('data-was-price', '1490');
     badge.className = 'badge badge--accent gallery__badge';
     badge.textContent = 'Sale';
     $('[data-price-row]').innerHTML =
