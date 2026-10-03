@@ -261,7 +261,9 @@
         </div>
         <div class="hero__visual">
           <!-- img (above the fold, LCP): <img src alt="Baby wearing a lilac ribbed bodysuit" width height fetchpriority="high" decoding="async"> (no lazy loading) replaces the placeholder when photography exists -->
+          <!-- photo: hero -->
           <div class="media media--round hero__media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+          <!-- /photo: hero -->
           <div class="hero__tag">
             <span class="hero__tag-icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-ruler"></use></svg></span>
             <p class="hero__tag-text">Sized by weight,<br>not just age</p>
@@ -328,37 +330,49 @@
           <!-- img (below the fold): <img src alt="{{ name }}" width height loading="lazy" decoding="async"> replaces the .media placeholder; keep the aspect-ratio box so nothing shifts -->
           <li>
             <a class="cat-tile" href="category.html?c=bodysuits">
+              <!-- photo: cat-bodysuits -->
               <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: cat-bodysuits -->
               <span class="cat-tile__label">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
             </a>
           </li>
           <li>
             <a class="cat-tile" href="category.html?c=sleepsuits">
+              <!-- photo: cat-sleepsuits -->
               <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: cat-sleepsuits -->
               <span class="cat-tile__label">Sleepsuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
             </a>
           </li>
           <li>
             <a class="cat-tile" href="category.html?c=sets">
+              <!-- photo: cat-sets -->
               <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: cat-sets -->
               <span class="cat-tile__label">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
             </a>
           </li>
           <li>
             <a class="cat-tile" href="category.html?c=dresses-rompers">
+              <!-- photo: cat-dresses-rompers -->
               <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: cat-dresses-rompers -->
               <span class="cat-tile__label">Dresses &amp; Rompers <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
             </a>
           </li>
           <li>
             <a class="cat-tile" href="category.html?c=hats-mitts">
+              <!-- photo: cat-hats-mitts -->
               <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: cat-hats-mitts -->
               <span class="cat-tile__label">Hats &amp; Mitts <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
             </a>
           </li>
           <li>
             <a class="cat-tile" href="category.html?c=swaddles-blankets">
+              <!-- photo: cat-swaddles -->
               <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: cat-swaddles -->
               <span class="cat-tile__label">Swaddles &amp; Blankets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
             </a>
           </li>
@@ -466,12 +480,16 @@
         <!-- blade: class promo--{style} (lilac | sky) -->
         <!-- TODO: placeholder copy, confirm with client -->
         <article class="promo promo--lilac">
+          <!-- photo: banner-newborn -->
+          <!-- /photo: banner-newborn -->
           <p class="eyebrow">Newborn essentials</p>
           <h2 class="promo__title">Everything for the first weeks</h2>
           <p class="promo__text">Placeholder text about a soft, simple starter wardrobe for new arrivals.</p>
           <a class="btn btn--primary" href="shop.html?age=newborn">Shop newborn</a>
         </article>
         <article class="promo promo--sky">
+          <!-- photo: banner-sale -->
+          <!-- /photo: banner-sale -->
           <p class="eyebrow">Sale</p>
           <h2 class="promo__title">Selected styles, lower prices</h2>
           <p class="promo__text">Placeholder text about a limited selection of reduced items.</p>

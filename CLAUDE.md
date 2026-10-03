@@ -38,6 +38,12 @@ index.html -> / | shop.html -> /shop | category.html -> /{department}/{category}
 - Sizes are ordered by position in the size scale; out-of-stock variants are disabled radios with sr-only "(out of stock)". Low stock threshold is 5 (TODO).
 - The prototype shows one sample product from assets/js/proto-product.js. The demo query param accepts: sale, new, low-stock, oos, no-reviews, reviewed, review-success, review-error, review-throttle. Other params: reviews=all.
 
+## Photography (tools/process-images.mjs)
+- Originals live in tools/image-source/ (git-ignored, never published): hero, banner-newborn, banner-sale, cat-bodysuits, cat-sleepsuits, cat-sets, cat-dresses-rompers, cat-hats-mitts, cat-swaddles, product-1..5 (any extension) plus credits.csv (file, source, photographer, url; optional alt).
+- Re-run with `node tools/process-images.mjs` (optional `--source <dir>`). It needs sharp, which is NOT a repo dependency: install it once outside the repo (`mkdir %TEMP%\kayaa-sharp`, `npm init -y`, `npm i sharp` there; or point KAYAA_SHARP at that folder).
+- It crops to 4:5 (banners 1:1) with the attention strategy, exports WebP at 480/800/1200 (hero also 1600) to html/assets/img/<slot>/, strips EXIF, never upscales, re-encodes to meet the budget (hero 1200w <= 130KB, others 800w <= 70KB), writes docs/image-credits.md, and rewrites every <!-- photo: ID --> ... <!-- /photo: ID --> region in index.html and product.html. A missing original keeps its placeholder. Never hand-edit between photo markers.
+- Photo rules: <img> with srcset + sizes, width/height, decoding="async", loading="lazy" (hero and first gallery image: eager + fetchpriority="high"). Alt: one plain sentence for informative images, alt="" for decorative ones, never "image of". Palette is lilac, cream and blue: no green, yellow or orange photos.
+
 ## Accessibility and SEO
 - Semantic landmarks, one h1 per page, skip link, labelled form fields, aria-expanded/aria-controls on toggles, dialog semantics for drawers and sheets (focus trap, ESC closes, focus returns to trigger), prefers-reduced-motion honoured.
 - Every page: <title>, meta description, meta viewport with viewport-fit=cover, and <meta name="robots" content="noindex,nofollow"> (staging; removed at Blade conversion).

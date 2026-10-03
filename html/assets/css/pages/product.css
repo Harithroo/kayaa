@@ -404,3 +404,6 @@ body.has-sticky-atc .tabbar { display: none; }
 .faqs .accordion { margin-top: var(--space-4); }
 .faqs .link-arrow { margin-top: var(--space-3); }
 .related .scroller { margin-top: var(--space-4); --scroller-item: min(68%, 260px); --scroller-cols: 4; }
+
+/* Over a real photo the outline badge needs a solid background to stay readable */
+.gallery__badge.badge--outline { background: var(--surface); }

@@ -289,19 +289,29 @@
             <!-- img: first photo eager (above the fold): <img width height fetchpriority="high" decoding="async">; photos 2-5 loading="lazy" decoding="async"; the 4:5 aspect-ratio box stays so nothing shifts -->
             <ul class="gallery__track" role="list" data-gallery-track>
             <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+              <!-- photo: product-1 -->
               <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-1 -->
             </li>
             <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 2 of 5">
+              <!-- photo: product-2 -->
               <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-2 -->
             </li>
             <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 3 of 5">
+              <!-- photo: product-3 -->
               <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-3 -->
             </li>
             <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 4 of 5">
+              <!-- photo: product-4 -->
               <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-4 -->
             </li>
             <li class="gallery__slide" role="group" aria-roledescription="slide" aria-label="Photo 5 of 5">
+              <!-- photo: product-5 -->
               <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <!-- /photo: product-5 -->
             </li>
             </ul>
             <!-- blade: badge priority @if sale Sale (accent) @elseif new New (lilac) @elseif featured Featured (outline) -->
@@ -316,11 +326,11 @@
           <button type="button" class="gallery__dot" data-gallery-dot aria-label="Show photo 5 of 5"></button>
           </div>
           <ul class="gallery__thumbs" role="list" aria-label="Photo thumbnails" data-gallery-thumbs>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 1 of 5" aria-current="true"><div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div></button></li>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 2 of 5" tabindex="-1"><div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div></button></li>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 3 of 5" tabindex="-1"><div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div></button></li>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 4 of 5" tabindex="-1"><div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div></button></li>
-          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 5 of 5" tabindex="-1"><div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div></button></li>
+          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 1 of 5" aria-current="true"><!-- photo: product-1-thumb --><div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-1-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 2 of 5" tabindex="-1"><!-- photo: product-2-thumb --><div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-2-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 3 of 5" tabindex="-1"><!-- photo: product-3-thumb --><div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-3-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 4 of 5" tabindex="-1"><!-- photo: product-4-thumb --><div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-4-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-gallery-thumb aria-label="Show photo 5 of 5" tabindex="-1"><!-- photo: product-5-thumb --><div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-5-thumb --></button></li>
           </ul>
         </section>
 

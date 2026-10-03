@@ -144,3 +144,20 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 - Demo states: sale, new, low-stock, oos, no-reviews, reviewed, review-success, review-error, plus review-throttle (rate-limit alert) and reviews=all.
 - If a colour change makes the chosen size unavailable, the size is cleared rather than silently switched.
 - With no size chosen the sticky bar's button says "Choose size" and scrolls to and focuses the size group.
+
+## Photography
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| `tools/process-images.mjs` | tools | Crop, WebP export, budgets, credits doc and page wiring. Re-runnable and idempotent; a missing original keeps its placeholder markup. |
+| `<!-- photo: ID -->` regions | index.html, product.html | Generated content. Hero, 2 promo banners, 6 category tiles, 5 product gallery slides and 5 thumbnails. |
+| `.media > img` | components.css | Photo variant of `.media`: `<img>` with `object-fit: cover` inside the existing aspect-ratio box. The `--tone` background shows while it loads. The placeholder variant (`data-placeholder`) is unchanged. |
+| `.promo__photo` | pages/home.css | Banner photo masked into an organic blob (`border-radius`) over the big circle. Absolutely positioned and behind the text, so the card height does not change; text stays on the solid tint. 24% of the card width on mobile (72-120px), 34% from 900px (130-220px); the title and text narrow to avoid it. |
+| Category tile photo variant | pages/home.css | Triggered by `:has(.media:not([data-placeholder]))`. Photo fills the tile at 4:5; the label becomes a cream pill at bottom-left (no overlay, no text on the photo). The whole tile lifts on hover. |
+| `.gallery__badge.badge--outline` | pages/product.css | Gets a solid surface background so it stays readable over a photo. |
+| `/tools/image-source/` | .gitignore | Originals are never committed. |
+
+### Photography assumptions
+- Banner and category photos are decorative (`alt=""`): the card text and the label pill name the link. The hero alt is a generic default (a TODO comment is written next to it) unless credits.csv has an `alt` column. Product gallery photos use "Product photo placeholder (TODO)"; thumbnails are `alt=""` because the buttons have aria-labels.
+- Category photos are 4:5 while the placeholder tile is 4:3, so a tile changes ratio when its photo arrives. If only some categories have photos, the row mixes both.
+- Licence in docs/image-credits.md is inferred from the source (Unsplash, Pexels, Pixabay) and otherwise marked TODO.

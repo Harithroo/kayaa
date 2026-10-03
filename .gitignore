@@ -21,3 +21,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Original photography (never committed or published)
+/tools/image-source/
