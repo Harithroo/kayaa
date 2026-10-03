@@ -128,6 +128,16 @@
       <line x1="2" x2="22" y1="10" y2="10" />
       <path d="M6 14h2" />
     </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4" />
+      <path d="M12 8h.01" />
+    </symbol>
+    <symbol id="i-circle-alert" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" x2="12" y1="8" y2="12" />
+      <line x1="12" x2="12.01" y1="16" y2="16" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -271,9 +281,10 @@
         <section class="review__group" aria-labelledby="review-g1">
           <h2 id="review-g1">Product</h2>
           <ul class="review__list" role="list">
-            <li class="review__item review__item--soon">
-              <div class="review__text"><span class="review__name">Product</span><p class="review__note">Gallery, size and colour choice, add to bag, reviews.</p></div>
-              <span class="badge badge--muted">Coming soon</span>
+            <li class="review__item">
+              <div class="review__text"><a class="review__name" href="product.html">Product</a><p class="review__note">Gallery, size and colour choice, add to cart, reviews and the review form. Known limitation: every product card in the prototype opens this same sample product.</p></div>
+              <span class="badge badge--lilac">Ready to review</span>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="product.html">Default</a></li><li><a href="product.html?demo=sale">Sale</a></li><li><a href="product.html?demo=new">New</a></li><li><a href="product.html?demo=low-stock">Low stock</a></li><li><a href="product.html?demo=oos">Out of stock</a></li><li><a href="product.html?demo=no-reviews">No reviews</a></li><li><a href="product.html?demo=reviewed">Already reviewed</a></li><li><a href="product.html?demo=review-success">Review success</a></li><li><a href="product.html?demo=review-error">Review errors</a></li><li><a href="product.html?demo=review-throttle">Review rate limit</a></li></ul></div>
             </li>
           </ul>
         </section>

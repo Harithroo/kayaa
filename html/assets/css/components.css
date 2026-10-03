@@ -854,3 +854,240 @@
   gap: var(--space-2);
   list-style: none;
 }
+/* ---------- Back link (mobile replacement for the breadcrumb) ---------- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--tap);
+  font-size: var(--fs-ui);
+  font-weight: 700;
+  color: var(--primary-deep);
+  text-decoration: none;
+}
+
+/* ---------- Star rating (display) ----------
+   <span class="stars" role="img" aria-label="Rated 5 out of 5"><svg class="icon is-on">...</svg> x5</span>
+   Filled = Primary Deep, empty = outline. Rounded to whole stars. */
+.stars {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--primary-deep);
+}
+.stars .icon { width: 18px; height: 18px; fill: none; }
+.stars .icon.is-on { fill: currentColor; }
+.stars--lg .icon { width: 22px; height: 22px; }
+
+/* ---------- Star rating (input): real radios, 1 to 5 in DOM order ----------
+   A label is filled when its own radio or any later radio is checked (pure CSS, no JS). */
+.rating-input { margin: 0; padding: 0; border: 0; }
+.rating-input legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-size: var(--fs-ui);
+  font-weight: 700;
+}
+.rating-input__stars { display: flex; gap: var(--space-2); }
+.rating-input input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+.rating-input label {
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: var(--radius-round);
+  color: var(--primary-deep);
+  cursor: pointer;
+}
+.rating-input label .icon { width: 28px; height: 28px; fill: none; }
+.rating-input input:checked + label .icon,
+.rating-input label:has(~ input:checked) .icon { fill: currentColor; }
+.rating-input input:focus-visible + label {
+  outline: var(--focus-ring);
+  outline-offset: 0;
+}
+.rating-input--error .rating-input__stars label { color: var(--error); }
+
+/* ---------- Rating breakdown row ----------
+   <div class="rating-row"><span class="rating-row__label">5 stars</span><progress class="progress" ...><span class="rating-row__count">26</span></div> */
+.rating-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 32px;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+}
+.rating-row__count { text-align: right; color: var(--ink-soft); }
+
+/* ---------- Review card (+ admin reply) ---------- */
+.review-card {
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.review-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+}
+.review-card__name { font-weight: 700; }
+.review-card__date { font-size: var(--fs-ui); color: var(--ink-soft); }
+.review-card__text { margin-top: var(--space-3); }
+.review-card__reply {
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--tone-2);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius-tile) var(--radius-tile) 0;
+  font-size: var(--fs-dense);
+}
+.review-card__reply-title {
+  margin-bottom: 2px;
+  font-size: var(--fs-ui);
+  font-weight: 800;
+  color: var(--primary-deep);
+}
+
+/* ---------- Alert (info, success = lilac tint, error) ----------
+   <div class="alert alert--success" role="status"><svg class="icon">..</svg><div>...</div></div> */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tile);
+  background: var(--tone-2);
+  color: var(--ink);
+  font-size: var(--fs-dense);
+}
+.alert > .icon { flex: none; margin-top: 2px; color: var(--primary-deep); }
+.alert__title { font-weight: 800; }
+.alert p + p, .alert ul { margin-top: 2px; }
+.alert ul { padding-left: var(--space-4); }
+.alert--info { background: var(--secondary); }
+.alert--success { background: var(--tone-2); border-color: var(--primary); }
+.alert--error { background: var(--error-tint); border-color: var(--error); }
+.alert--error > .icon { color: var(--error); }
+
+/* ---------- Accordion (native <details>) ---------- */
+.accordion { border-top: 1px solid var(--line); }
+.accordion__item { border-bottom: 1px solid var(--line); }
+.accordion__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: var(--space-2) 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+.accordion__summary::-webkit-details-marker { display: none; }
+.accordion__summary .icon { transition: transform var(--dur-fast) var(--ease); }
+.accordion__item[open] > .accordion__summary .icon { transform: rotate(180deg); }
+.accordion__body {
+  padding: 0 0 var(--space-4);
+  color: var(--ink-soft);
+}
+.accordion__body > * + * { margin-top: var(--space-2); }
+.accordion__body a { font-weight: 700; }
+
+/* ---------- Size guide table (stacks into cards under 420px) ---------- */
+.size-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-ui);
+}
+.size-table th,
+.size-table td {
+  padding: 10px var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.size-table thead th {
+  font-weight: 800;
+  background: var(--tone-2);
+}
+.size-table tbody th { font-weight: 800; }
+@media (max-width: 419px) {
+  .size-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  .size-table,
+  .size-table tbody,
+  .size-table tr,
+  .size-table th,
+  .size-table td { display: block; }
+  .size-table tr {
+    margin-bottom: var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-tile);
+    overflow: hidden;
+  }
+  .size-table tbody th { background: var(--tone-2); border-bottom: 1px solid var(--line); }
+  .size-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-block: 8px;
+    border-bottom: 0;
+  }
+  .size-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+}
+
+/* ---------- Breadcrumb (nav > ol; last item aria-current="page") ---------- */
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+}
+.breadcrumb li {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  color: var(--ink);
+}
+.breadcrumb li + li::before {
+  content: "/";
+  margin-inline: 4px;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap);
+  min-height: var(--tap);
+  color: var(--primary-deep);
+  text-decoration: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .breadcrumb a:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
+

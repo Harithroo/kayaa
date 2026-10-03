@@ -4,40 +4,6 @@
   padding-bottom: var(--space-7);
 }
 
-/* ---------- Breadcrumb ---------- */
-.breadcrumb ol {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  list-style: none;
-}
-.breadcrumb li {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap);
-  font-size: var(--fs-ui);
-  font-weight: 600;
-  color: var(--ink);
-}
-.breadcrumb li + li::before {
-  content: "/";
-  margin-inline: 2px;
-  color: var(--ink-soft);
-  font-weight: 400;
-}
-.breadcrumb a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: var(--tap);
-  min-height: var(--tap);
-  color: var(--primary-deep);
-  text-decoration: none;
-}
-@media (hover: hover) and (pointer: fine) {
-  .breadcrumb a:hover { text-decoration: underline; text-underline-offset: 3px; }
-}
-
 /* ---------- Header band ---------- */
 .listing-head {
   padding: var(--space-5);

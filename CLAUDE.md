@@ -32,6 +32,12 @@ index.html -> / | shop.html -> /shop | category.html -> /{department}/{category}
 - c = category slug (category.html only) | q = search text (search.html only) | page = page number (12 per page)
 - Filters are limited to what the backend supports: age, sort, sale. No colour, size or price-range filters.
 
+## Product page contract (product.html)
+- Add-to-cart form: method post, radio inputs named colour and size (values are slugs such as lilac, 3-6m), text input quantity (1 to 10, capped at the variant's stock), action TODO. Field names are a TODO to confirm with the backend dev (a single variant id is the alternative).
+- Review form: method post, radios rating (1 to 5), text name (guests only), textarea comment. No review titles. Reviews are moderated, so show the "will appear once approved" message.
+- Sizes are ordered by position in the size scale; out-of-stock variants are disabled radios with sr-only "(out of stock)". Low stock threshold is 5 (TODO).
+- The prototype shows one sample product from assets/js/proto-product.js. The demo query param accepts: sale, new, low-stock, oos, no-reviews, reviewed, review-success, review-error, review-throttle. Other params: reviews=all.
+
 ## Accessibility and SEO
 - Semantic landmarks, one h1 per page, skip link, labelled form fields, aria-expanded/aria-controls on toggles, dialog semantics for drawers and sheets (focus trap, ESC closes, focus returns to trigger), prefers-reduced-motion honoured.
 - Every page: <title>, meta description, meta viewport with viewport-fit=cover, and <meta name="robots" content="noindex,nofollow"> (staging; removed at Blade conversion).

@@ -22,6 +22,7 @@
   /* Derived tints (see docs/components-added.md) */
   --cream: #FBF6EE;            /* announcement bar --cream */
   --sky-tint: #DDE7F3;         /* Periwinkle Sky at ~40% on white: announcement bar / promo --sky */
+  --error-tint: #FBEFED;                    /* alert --error background (Error at ~8% on white) */
   --line-strong: rgba(110, 90, 140, 0.2);   /* dividers on Secondary backgrounds (footer) */
   --scrim-light: rgba(61, 53, 71, 0.08);    /* mega menu backdrop: well under 10% ink */
   --scrim: rgba(61, 53, 71, 0.4);           /* drawer / sheet overlay, Ink-tinted, not black */

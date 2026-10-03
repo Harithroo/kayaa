@@ -115,3 +115,32 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 - Between 900 and 1099px the mega menu shows the age tiles and category chips without the feature card.
 - The announcement bar's focus moves to the wordmark when dismissed, so keyboard users are not dropped at the top of the page.
 - The tab bar items touch each other (each is 75px+ wide), so they are treated as one control for the 8px spacing rule.
+
+## Product page
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| `.stars` (display), `.stars--lg` | components.css | Five outline stars, filled ones use `.is-on` (Primary Deep, no gold). Rounded to whole stars; half stars are a TODO. |
+| `.rating-input` (star input) | components.css | Five real radios in DOM order 1 to 5, styled as 44px stars. A star is filled when its radio or any later radio is checked (`label:has(~ input:checked)`), so it works without JS and with arrow keys. `.rating-input--error` turns the stars red. |
+| `.rating-row` | components.css | Breakdown row: label, existing `.progress`, count. |
+| `.review-card`, `.review-card__reply` | components.css | Stars, name, date, optional "Verified purchase" outline badge, comment, tinted "Reply from Kayaa" block. No titles (not in the backend). |
+| `.alert` (info, success, error) | components.css | Success is a lilac tint with a check icon and Primary Deep (no green). Error uses the new `--error-tint` token. `role="alert"` for errors, `role="status"` for success. |
+| `--error-tint` | tokens.css | Error at about 8% on white. |
+| `i-info`, `i-circle-alert` icons | sprite.svg | Lucide, for alerts and inline errors. |
+| `.accordion` | components.css | Native `<details>`; 56px summary, chevron rotates when open. No height animation, so reduced motion needs no special case. |
+| `.size-table` | components.css | Size guide table. Under 420px each row becomes a card (cells show their `data-label`) so nothing scrolls sideways at 320px. Same data as the future size-guide.html (placeholders, TODO). |
+| `.back-link` | components.css | "< Back to Bodysuits"; replaces the breadcrumb under 600px. |
+| `.breadcrumb` | components.css | Moved from listing.css so the product page can use it. Separator spacing is now 4px. |
+| `size-box--lg` and radio size boxes | product.css / components.css | Min 56x44px. Disabled = struck through with sr-only "(out of stock)". |
+| `.gallery` (carousel + thumbs) | pages/product.css | Below 900px a native scroll-snap carousel with a "1 / 5" pill and 44px dot buttons; from 900px the main image plus a vertical thumbnail rail (buttons with `aria-current`, arrow keys, roving tabindex). Smooth scrolling is turned off under reduced motion. |
+| `.sticky-atc` | pages/product.css | Fixed bar below 900px, shown by an IntersectionObserver once the main Add to cart button leaves the viewport. Hides the tab bar while visible (`body.has-sticky-atc`), uses safe-area insets, 64px tall (52px landscape). |
+| `.buy`, `.assure`, `.delivery-est`, `.review-form` | pages/product.css | Form layout, assurance list (returns row is one 44px link), delivery estimate select (16px), review form. |
+| `data-qty-max` | app.js | A `[data-qty]` group can cap its quantity (used for stock). `syncQty` now honours it and runs on synthetic change events. |
+| `window.KayaaCart.add(item, trigger)` | app.js | Adds a line item (with `qty`) to the cart drawer demo and opens it. |
+| `assets/js/proto-product.js` | js | PROTOTYPE ONLY. Sample data, stock matrix per colour and size, the demo states and review validation. Delete at Blade conversion. |
+
+### Product page assumptions
+- The sample product is Ribbed Cotton Bodysuit; every product card in the prototype opens it (noted on review.html).
+- Demo states: sale, new, low-stock, oos, no-reviews, reviewed, review-success, review-error, plus review-throttle (rate-limit alert) and reviews=all.
+- If a colour change makes the chosen size unavailable, the size is cleared rather than silently switched.
+- With no size chosen the sticky bar's button says "Choose size" and scrolls to and focuses the size group.

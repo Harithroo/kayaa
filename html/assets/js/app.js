@@ -254,10 +254,11 @@
     var plus = $('[data-qty-plus]', group);
     var v = parseInt(input.value, 10);
     if (isNaN(v) || v < 1) v = 1;
-    if (v > QTY_MAX) v = QTY_MAX;
+    var max = parseInt(group.getAttribute('data-qty-max'), 10) || QTY_MAX;   // e.g. capped to stock on the product page
+    if (v > max) v = max;
     input.value = v;
     if (minus) minus.disabled = v <= 1;
-    if (plus) plus.disabled = v >= QTY_MAX;
+    if (plus) plus.disabled = v >= max;
     return v;
   }
 
@@ -275,7 +276,7 @@
 
   document.addEventListener('change', function (e) {
     var input = e.target.closest && e.target.closest('[data-qty-input]');
-    if (input && e.isTrusted) syncQty(input.closest('[data-qty]'));
+    if (input) syncQty(input.closest('[data-qty]'));
   });
 
   /* ---------- Cart drawer (demo state lives in the DOM) ---------- */
@@ -348,7 +349,7 @@
     var existing = $$('[data-cart-item]', list).filter(function (li) { return li.getAttribute('data-key') === key; })[0];
     if (existing) {
       var input = $('[data-qty-input]', existing);
-      input.value = (parseInt(input.value, 10) || 0) + 1;
+      input.value = (parseInt(input.value, 10) || 0) + (item.qty || 1);
     } else {
       var li = tpl.content.firstElementChild.cloneNode(true);
       li.setAttribute('data-key', key);
@@ -357,10 +358,16 @@
       $('[data-item-meta]', li).textContent = item.meta;
       $('[data-cart-remove]', li).setAttribute('aria-label', 'Remove ' + item.name);
       $('[data-item-media]', li).style.setProperty('--tone', 'var(--tone-' + item.tone + ')');
+      $('[data-qty-input]', li).value = item.qty || 1;
       list.appendChild(li);
     }
     renderCart();
   }
+
+  /* Used by the product page form: add a line item (with quantity) and open the drawer. */
+  window.KayaaCart = {
+    add: function (item, trigger) { addToCart(item); openLayer(cart, trigger); }
+  };
 
   /* ---------- Quick-add sheet ---------- */
   var sheet = $('[data-quick-add-sheet]');
