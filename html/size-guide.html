@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
   <title>Size guide | Kayaa</title>
-  <meta name="description" content="Size guide page of the Kayaa prototype. Placeholder.">
+  <meta name="description" content="Find the right Kayaa size for your baby by age, weight and height.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,9 +15,9 @@
   <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
   <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/stub.css?v=eb5a12f5">
+  <link rel="stylesheet" href="assets/css/pages/content.css?v=7a025b72">
 </head>
-<body data-page="size-guide">
+<body data-page="size-guide" data-print>
   <!-- partial: sprite -->
   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="display:none">
     <!-- Lucide icons (ISC licence), 24x24, outline. Stroke/fill/caps are set by .icon in base.css. -->
@@ -164,6 +164,48 @@
       <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
       <path d="m2 2 20 20" />
     </symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6.003 6.003 0 0 1 7.057-8.26c.438.12.54.662.219.984z" />
+    </symbol>
+    <symbol id="i-search-x" viewBox="0 0 24 24">
+      <path d="m13.5 8.5-5 5" />
+      <path d="m8.5 8.5 5 5" />
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+    </symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24">
+      <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+      <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+      <path d="M7 21h10" />
+      <path d="M12 3v18" />
+      <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
+    </symbol>
+    <symbol id="i-hourglass" viewBox="0 0 24 24">
+      <path d="M5 22h14" />
+      <path d="M5 2h14" />
+      <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22" />
+      <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2" />
+    </symbol>
+    <symbol id="i-triangle-alert" viewBox="0 0 24 24">
+      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+      <path d="M12 9v4" />
+      <path d="M12 17h.01" />
+    </symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24">
+      <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+      <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+    </symbol>
+    <symbol id="i-link" viewBox="0 0 24 24">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </symbol>
+    <symbol id="i-list-checks" viewBox="0 0 24 24">
+      <path d="m3 17 2 2 4-4" />
+      <path d="m3 7 2 2 4-4" />
+      <path d="M13 6h8" />
+      <path d="M13 12h8" />
+      <path d="M13 18h8" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -271,21 +313,102 @@
   </header>
   <!-- /partial: header -->
 
-  <!-- prototype-stub: replace this whole main when the page is built -->
   <main id="main">
-    <div class="container stub">
-      <div class="stub__card">
-        <p class="eyebrow">Prototype</p>
+    <div class="container content">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li aria-current="page">Size guide</li>
+        </ol>
+      </nav>
+      <header class="content__head">
         <h1>Size guide</h1>
-        <p class="stub__text">This screen is still being designed and will appear here in a later review round.</p>
-        <div class="stub__actions">
-          <a class="btn btn--primary" href="index.html">Back to home</a>
-          <a class="btn btn--secondary" href="review.html">Review index</a>
+        <p class="content__lede">Match your baby’s weight and height to a size. Every baby is different, so use this as a guide.</p>
+        <!-- TODO: "Last updated" comes from the page's updated_at (or a static date); confirm with the client -->
+        <p class="content__updated">Last updated <span class="placeholder">[date]</span></p>
+      </header>
+      <div class="content__layout">
+        <div class="content__main">
+          <div class="prose">
+            <h2 id="chart">Size chart <a class="anchor" href="#chart" aria-label="Link to this section: Size chart"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <!-- The product page size table must mirror this one (same sizes and ranges, one source in Blade). -->
+            <!-- TODO: placeholder ranges, confirm with the client -->
+            <div class="table-wrap">
+              <table class="size-table">
+                <caption class="visually-hidden">Size guide by age, weight and height</caption>
+                <thead>
+                  <tr><th scope="col">Size</th><th scope="col">Age</th><th scope="col">Weight</th><th scope="col">Height</th></tr>
+                </thead>
+                <tbody>
+                  <!-- loop: sizes -->
+                  <tr><th scope="row">NB</th><td data-label="Age">Newborn</td><td data-label="Weight">Up to 3.5 kg</td><td data-label="Height">Up to 55 cm</td></tr>
+                  <tr><th scope="row">0-3M</th><td data-label="Age">0–3 months</td><td data-label="Weight">3.5–6 kg</td><td data-label="Height">55–62 cm</td></tr>
+                  <tr><th scope="row">3-6M</th><td data-label="Age">3–6 months</td><td data-label="Weight">6–7.5 kg</td><td data-label="Height">62–68 cm</td></tr>
+                  <tr><th scope="row">6-9M</th><td data-label="Age">6–9 months</td><td data-label="Weight">7.5–9 kg</td><td data-label="Height">68–74 cm</td></tr>
+                  <tr><th scope="row">9-12M</th><td data-label="Age">9–12 months</td><td data-label="Weight">9–10 kg</td><td data-label="Height">74–80 cm</td></tr>
+                  <tr><th scope="row">12-18M</th><td data-label="Age">12–18 months</td><td data-label="Weight">10–11.5 kg</td><td data-label="Height">80–86 cm</td></tr>
+                  <!-- /loop -->
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">Placeholder ranges, confirm with the client.</p>
+
+            <h2 id="measure">How to measure <a class="anchor" href="#measure" aria-label="Link to this section: How to measure"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <ol class="how-steps" role="list">
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-scale"></use></svg></span><h3>Weigh your baby</h3><p>Use a recent weight in kilograms.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-ruler"></use></svg></span><h3>Measure length</h3><p>Lay your baby flat and measure from head to heel in centimetres.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-list-checks"></use></svg></span><h3>Compare with the chart</h3><p>Find the row that matches both numbers and pick that size.</p></li>
+            </ol>
+
+            <h2 id="between">Between sizes? <a class="anchor" href="#between" aria-label="Link to this section: Between sizes?"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <!-- TODO: confirm the between-sizes advice with the client -->
+            <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div><p class="notice__title">Between two sizes</p><p><span class="placeholder">[Advice for babies between two sizes]</span></p></div></div>
+
+            <h2 id="age">Shop by age <a class="anchor" href="#age" aria-label="Link to this section: Shop by age"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <ul class="chip-list" role="list">
+              <li><a class="chip" href="shop.html?age=newborn">Newborn</a></li>
+              <li><a class="chip" href="shop.html?age=0-3-months">0–3 months</a></li>
+              <li><a class="chip" href="shop.html?age=3-6-months">3–6 months</a></li>
+              <li><a class="chip" href="shop.html?age=6-12-months">6–12 months</a></li>
+              <li><a class="chip" href="shop.html?age=1-2-years">1–2 years</a></li>
+            </ul>
+
+            <h2 id="questions">Size questions <a class="anchor" href="#questions" aria-label="Link to this section: Size questions"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <!-- TODO: placeholder answers, confirm with the client -->
+            <div class="accordion">
+            <details class="accordion__item">
+              <summary class="accordion__summary">How do I choose the right size? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <div class="accordion__body"><p>Placeholder: match your baby’s weight and height to the chart above.</p></div>
+            </details>
+            <details class="accordion__item">
+              <summary class="accordion__summary">What if my baby is between sizes? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <div class="accordion__body"><p>Placeholder: advice for babies between two sizes.</p></div>
+            </details>
+            <details class="accordion__item">
+              <summary class="accordion__summary">Do sizes differ between products? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <div class="accordion__body"><p>Placeholder: note any products that fit differently.</p></div>
+            </details>
+            <details class="accordion__item">
+              <summary class="accordion__summary">Can I exchange a size? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <div class="accordion__body"><p>Placeholder: please see our returns page for exchanges.</p><p><a class="link-arrow" href="returns.html">Returns information <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p></div>
+            </details>
+            </div>
+          </div>
+        <section class="help-card" aria-labelledby="help-title">
+          <div>
+            <h2 id="help-title">Still need help?</h2>
+            <!-- TODO: confirm the WhatsApp number and reply times with the client -->
+            <p>Message us on WhatsApp <span class="placeholder">[WhatsApp number]</span> or send us a note from the contact page.</p>
+          </div>
+          <div class="help-card__actions">
+            <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
+            <a class="btn btn--secondary" href="contact.html">Contact us</a>
+          </div>
+        </section>
         </div>
       </div>
     </div>
   </main>
-  <!-- /prototype-stub -->
 
   <!-- partial: footer -->
   <footer class="site-footer">
@@ -560,7 +683,8 @@
 
   <!-- partial: scripts -->
   <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=86051b1a" defer></script>
+  <script src="assets/js/app.js?v=65261b3f" defer></script>
   <!-- /partial: scripts -->
+  <script src="assets/js/content.js?v=a2894b72" defer></script>
 </body>
 </html>

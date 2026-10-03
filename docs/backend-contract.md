@@ -26,7 +26,7 @@ Conventions used by every page
 11. **Age groups** are fixed in the prototype (5 slugs, see Listing). Product-to-age mapping is needed (a product can fit several ages).
 12. **Product flags:** `new`, `featured`, sale price (`was` price = regular, current = sale). Badge priority on cards: Out of stock > Sale > New > Featured (one badge max).
 13. **FAQs** from product, category and global FAQs (the product page shows five placeholder questions). TBD: how they are merged and ordered.
-14. **Size guide data** is TBD (global table vs per product). The prototype shows a placeholder table (size, age, weight, height) on the product page and will reuse it on `size-guide.html`.
+14. **Size guide data**: one global table (size, age, weight, height) shown on `size-guide.html` and mirrored on the product page; placeholder ranges, confirm with the client. Per-product tables are not designed (section 3.13).
 15. **Cart drawer endpoints** (see section 4). The prototype does quantity changes and removal client-side; they need real endpoints.
 16. **Related products:** same category as the current product, excluding the current product, 4 items.
 17. **Fabric & care and Delivery & returns** accordions are static site-wide text (placeholders). TBD whether they become settings.
@@ -46,6 +46,12 @@ Conventions used by every page
 29. **Auth rate limits and safe responses:** login, register, forgot and reset are rate-limited; login errors never say which field was wrong; forgot-password never reveals whether an email exists; reset emails go through the configured mailer (section 3.10).
 30. **Review statuses for the customer:** one `approved` flag, so "Awaiting approval" covers pending and hidden; admins can reply; one review per customer per product (section 3.11).
 31. **Order status history timestamps** are not shown (the backend may not store them). TODO decide whether the stepper should get dates.
+
+32. **Contact form endpoint**, limited to 5 messages a minute, with an open question about where messages go and spam protection (section 3.14).
+33. **Delivery page estimates** from the same data as the checkout ETA (25 districts grouped by 9 provinces): one source (section 3.13).
+34. **FAQs with placement `contact`** (the contact page shows four).
+35. **Error views** `resources/views/errors/{404,419,429,500,503}.blade.php`; 500 and 503 must not touch the database or session (section 3.15).
+36. **Static or editable content:** the client decides whether About, Delivery, Returns, Privacy and Terms get an admin editor.
 
 ---
 
@@ -95,8 +101,9 @@ Route map (prototype file -> Laravel route). Status: **built** = designed in the
 | thank-you.html | `/orders/{ref}/thank-you` | built (minimal shell) |
 | proto-onepay.html | none | prototype stand-in for the hosted payment page, delete at conversion |
 | track.html | `/track` | built |
-| contact.html | `/contact` | stub |
-| size-guide.html, delivery.html, returns.html, about.html, privacy.html, terms.html | same names | stub |
+| contact.html | `/contact` | built |
+| size-guide.html, delivery.html, returns.html, about.html, privacy.html, terms.html | same names | built (content template; all facts are placeholders) |
+| 404.html, 419.html, 429.html, 500.html, 503.html | error views `resources/views/errors/*.blade.php` | built |
 | account/register, login, forgot-password, reset-password | `/account/register`, `/account/login`, `/account/forgot-password`, `/account/reset-password` | built (calm minimal shell) |
 | account/index (orders), order, reviews, profile | `/account`, `/account/orders/{ref}`, `/account/reviews`, `/account/profile` | built |
 | review.html | none | review-only index, delete at conversion |
@@ -330,8 +337,51 @@ Cancelling an order and deleting an account are not in the backend and are not d
 ### 3.12 Status component additions
 The `.status` mapping (3.8) is also used for the review statuses: "Published" = `status--confirmed` (lilac + check), "Awaiting approval" = `status--pending` (neutral outline + clock).
 
-### 3.13 Stub pages (contact, size-guide, delivery, returns, about, privacy, terms)
-Not designed yet. Only the route and the page name exist. Assumption for planning, **not** from the prototype: contact will have name, email and message.
+### 3.13 Content pages (size guide, delivery, returns, about, privacy, terms)
+Full shell, no forms. One template (`content.css`): breadcrumb, h1, one-line intro, "Last updated {date}" (TODO: from `updated_at` or a static date), then the content in a readable column (72ch). Delivery, Returns, Privacy and Terms add an "On this page" table of contents built from the h2 ids (a `<details>` block under the intro below 1100px, a sticky sidebar from 1100px); h2 and h3 carry ids and heading anchor links. Every content page except Contact ends with a "Still need help?" card (WhatsApp button + Contact link; reuse one Blade partial). Size guide, Delivery, Returns, Privacy and Terms carry `<body data-print>` and have a print stylesheet (shell hidden, link URLs printed after links).
+
+**Every fact on these pages is a placeholder** (shown in brackets, for example `[return window]`, plus `<!-- TODO: confirm with client -->`). Nothing is invented. Privacy and Terms are skeletons with a visible notice "Placeholder text. The final policy will be supplied by Kayaa." and one placeholder sentence per heading; the client supplies the real text.
+
+| Page | Route | Data the page needs |
+| --- | --- | --- |
+| Size guide | `/size-guide` | The size table: size, age, weight (kg), height (cm) for NB, 0-3M, 3-6M, 6-9M, 9-12M, 12-18M. **The product page table must mirror this one: one source** (global table; per-product tables are not designed). Placeholder ranges. Also: the "between sizes" advice, 4 size FAQs (static placeholders for now), age chips -> `/shop?age=<slug>`. |
+| Delivery | `/delivery` | The fee rule (Rs 450, free from Rs 7,500; TODO confirm it is flat) from config. **The district estimate table (25 districts grouped into 9 provinces) must come from the same data as the checkout ETA** (the `district-eta` JSON block on `/checkout`: district slug -> text such as `2-3 working days`); one source in Blade, keyed by district with its province for the grouping. The prototype shows the placeholder estimates in brackets. Static text: how delivery works (4 steps), "Not at home?", "Delivery questions". |
+| Returns | `/returns` | Static placeholder sections: return window, condition of items, how to start a return (order reference through WhatsApp or the contact form), exchanges for size, refunds (to the original card through Onepay, timeline TODO), items that can't be returned, damaged or wrong items. |
+| About ("Our story") | `/about` | Story text, three values (heading + sentence), two images. Placeholder copy. |
+| Privacy | `/privacy` | Skeleton, 8 headings: information we collect, how we use it, payments and Onepay, sharing with couriers, cookies, how long we keep it, your choices, contact. |
+| Terms | `/terms` | Skeleton, 9 headings: using the site, orders and pricing, payment, delivery, returns, accounts, reviews, changes to these terms, contact. |
+
+**Static or editable?** All six are static Blade views in the prototype. **Question for the client:** do they want an admin editor (Filament rich-text pages for About, Delivery, Returns, Privacy, Terms) or are Blade views that a developer edits enough? Either way, the size table and the delivery estimates are data, not copy.
+
+### 3.14 Contact (`/contact`)
+Full shell. Three info cards (WhatsApp with a lilac icon and no brand logo, email, hours: all placeholders, TODO confirm with the client), the message form and four FAQs. Prototype-only `?demo=`: `sent`, `errors`, `throttle`.
+
+Form: `POST /contact` (TODO action; assumption), `@csrf`, `novalidate`, **limited to 5 messages a minute**.
+| Field | Type | Required | Validation | Example |
+| --- | --- | --- | --- | --- |
+| `name` | text, `autocomplete="name"` | yes | non-empty | `Amaya Ranasinghe` |
+| `email` | email, `autocomplete="email"`, `inputmode="email"` | yes | valid email | `amaya@example.com` |
+| `message` | textarea (6 rows), `autocomplete="off"` | yes | non-empty (TODO: max length) | `Do you have the dress in 6-9M?` |
+
+Only these three fields. Extra fields to consider (not added): order reference, mobile number, topic.
+States: success alert "Thanks, we'll get back to you soon." (flash after the redirect; the form comes back empty), error summary "Please check your message" (focus moves to it, links to each field) plus inline messages with `aria-invalid`, throttle alert "Too many messages. Please wait a minute and try again." Spam protection is TODO (honeypot field, Turnstile or reCAPTCHA: backend dev's call). What happens to the message (an email to the shop, a database row, both) is TBD. Never claim an email was sent to the customer.
+FAQs: the four on this page come from FAQs with the placement `contact` (wrapped in `<!-- loop: faqs (placement: contact) -->`).
+
+### 3.15 Error pages (404, 419, 429, 500, 503)
+One template (`errors.css`): a lilac icon disc, a code label, h1, one sentence, two buttons and a help line. The backend should provide `resources/views/errors/404.blade.php`, `419.blade.php`, `429.blade.php`, `500.blade.php` and `503.blade.php`.
+| Code | h1 | Sentence | Buttons | Shell |
+| --- | --- | --- | --- | --- |
+| 404 | We can't find that page | The link may be old or mistyped. Try a search or head back to the shop. | Back to home, Shop new in; search field (`GET /search`) and the six category chips | full shell |
+| 419 | This page has expired | For your security the page timed out. Go back and try again. | Go back (`history.back()`, the href is the fallback), Home | full shell |
+| 429 | Too many attempts | Please wait a minute and try again. | Go back, Home | full shell |
+| 500 | Something went wrong on our side | Please try again in a moment. | Try again (reload), Home; WhatsApp help line | `header-error` + `footer-minimal` |
+| 503 | We'll be right back | We're making a quick update. Please check back soon. | Try again, Contact us; the contact email | `header-error` + `footer-minimal` |
+
+500 and 503 use only the wordmark header and the minimal footer, with no database-driven shell, because the backend may be unhealthy; they must not query the database or session. No technical details are ever shown. The 503 page promises no time. 403 is not designed.
+**GitHub Pages only (prototype):** Pages serves `/404.html` for any missing URL at that URL's path, so `html/404.html` carries `<!-- sync-root: /kayaa/ -->` and uses root-absolute `/kayaa/...` links. Blade does not need this: its error view uses the normal asset helpers.
+
+### 3.16 Shell partials added
+`header-error` (wordmark only; 500 and 503). `header-auth` (wordmark and "Continue shopping"; the account auth pages). `header-minimal` stays for checkout and thank-you only.
 
 ---
 
@@ -373,8 +423,8 @@ The button carries `data-name`, `data-price`, optional `data-was`, `data-tone` (
 - `assets/js/proto-listing.js`: filters, sorts, searches and paginates the 24 sample cards from the query string; sets H1, intro, breadcrumb, counts, pagination and the empty states. The server does all of this.
 - `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `sale`, `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
 - `assets/js/proto-cart.js`: the demo cart (sessionStorage) behind the header counts, the drawer, the cart page and the checkout summary, plus the simulated order. Line shape: `{id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}`.
-- `assets/js/proto-orders.js` (twelve sample orders, the stepper renderer), `proto-account.js` (track, orders, order detail, reviews, profile, log out) and `proto-auth.js` (auth demo outcomes and the demo session). Demo session: `window.KayaaCart.session` (sessionStorage); when set, the Account links in the header, tab bar and menu drawer go to the dashboard. In Laravel the server renders `@auth` and `@guest`.
+- `assets/js/proto-content.js` (the contact form demo outcomes). `assets/js/proto-orders.js` (twelve sample orders, the stepper renderer), `proto-account.js` (track, orders, order detail, reviews, profile, log out) and `proto-auth.js` (auth demo outcomes and the demo session). Demo session: `window.KayaaCart.session` (sessionStorage); when set, the Account links in the header, tab bar and menu drawer go to the dashboard. In Laravel the server renders `@auth` and `@guest`.
 - `assets/js/proto-cart-page.js`, `proto-checkout.js`, `proto-thankyou.js`, `proto-onepay.js` and `html/proto-onepay.html`: render the pages from the demo cart/order and fake the payment hand-off. Demo params: cart `empty`, `oos-line`, `low-stock`, `price-changed`, `free-delivery`, `checkout-oos`; checkout `errors`, `throttle`, `gateway-error`, `signed-in`, `empty`; thank-you `state=paid|pending|failed|cancelled`.
 - `html/review.html` is a review index for the client; remove it.
 
-Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, search toggle, steppers, active-nav marking), `product.js` (variants, gallery filtering, stock note, quantity cap, size validation, sticky bar, show-more reviews), `cart.js` (sticky checkout bar), `checkout.js` (validation, error summary, delivery estimate, loading state) and `thank-you.js` (copy reference, refresh) and `account.js` (auth and profile form validation, error summary, show/hide password). The drawer in `app.js` currently renders from the demo cart: in Laravel it swaps in the server panel. Remove the `data-demo-cart` attribute from the buy form when the real cart exists.
+Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, search toggle, steppers, active-nav marking), `product.js` (variants, gallery filtering, stock note, quantity cap, size validation, sticky bar, show-more reviews), `cart.js` (sticky checkout bar), `checkout.js` (validation, error summary, delivery estimate, loading state) and `thank-you.js` (copy reference, refresh) `account.js` (auth, profile and contact form validation, error summary, show/hide password) and `content.js` (table of contents behaviour and print). `app.js` also carries the `data-history-back` / `data-reload` hooks of the error pages. The drawer in `app.js` currently renders from the demo cart: in Laravel it swaps in the server panel. Remove the `data-demo-cart` attribute from the buy form when the real cart exists.

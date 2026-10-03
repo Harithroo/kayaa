@@ -1,0 +1,237 @@
+/* Content template: size guide, delivery, returns, about, contact, privacy, terms.
+   Breadcrumb, h1, intro, "Last updated", then a readable column (max 72ch). Long pages add an "On this page" table of contents. */
+
+.content { padding-block: var(--space-2) var(--space-8); }
+.content__head { max-width: 72ch; margin-top: var(--space-3); }
+.content__head h1 { font-size: var(--fs-h1); }
+.content__lede { margin-top: var(--space-2); font-size: 17px; line-height: 1.55; color: var(--ink-soft); }
+.content__updated { margin-top: var(--space-2); font-size: var(--fs-ui); color: var(--ink-soft); }
+.content__layout { display: grid; gap: var(--space-5); margin-top: var(--space-5); }
+.content__main { min-width: 0; }
+
+/* ---------- Table of contents (a <details> block on small screens, a sticky sidebar from 1100px) ---------- */
+.toc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); }
+.toc__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-display);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  touch-action: manipulation;
+}
+.toc__summary::-webkit-details-marker { display: none; }
+.toc__summary .icon { transition: transform var(--dur-fast) var(--ease); }
+.toc[open] > .toc__summary .icon { transform: rotate(180deg); }
+.toc__list { display: grid; gap: var(--space-2); padding: 0 var(--space-2) var(--space-3); list-style: none; counter-reset: toc; }
+.toc__list a {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-input);
+  font-size: var(--fs-dense);
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+.toc__list a:focus-visible { outline: var(--focus-ring); outline-offset: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .toc__list a:hover { background: var(--tone-2); color: var(--primary-deep); }
+}
+@media (min-width: 1100px) {
+  .content__layout--toc { grid-template-columns: 250px minmax(0, 72ch); gap: var(--space-8); align-items: start; }
+  .toc { position: sticky; top: calc(var(--header-h, 61px) + var(--space-4)); }
+  .toc__summary { cursor: default; }
+  .toc__summary .icon { display: none; }
+}
+
+/* ---------- Prose ---------- */
+.prose { max-width: 72ch; font-size: var(--fs-body); line-height: 1.6; }
+.prose > * + * { margin-top: var(--space-3); }
+.prose h2 { margin-top: var(--space-7); font-size: var(--fs-h2); scroll-margin-top: var(--space-3); }
+.prose h3 { margin-top: var(--space-5); font-size: var(--fs-h3); scroll-margin-top: var(--space-3); }
+.prose > h2:first-child { margin-top: 0; }
+.prose h2 + *, .prose h3 + * { margin-top: var(--space-2); }
+.prose ul, .prose ol { padding-left: var(--space-5); }
+.prose li + li { margin-top: var(--space-2); }
+.prose a:not(.btn):not(.chip):not(.link-arrow):not(.anchor) {
+  color: var(--primary-deep);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose dl { display: grid; gap: var(--space-3); }
+.prose dt { font-weight: 800; }
+.prose dd { margin-top: 2px; color: var(--ink-soft); }
+.prose .placeholder { padding: 1px 6px; border-radius: 6px; background: var(--tone-2); font-weight: 700; color: var(--primary-deep); }
+
+/* Heading anchor links: shown on hover or keyboard focus on desktop; hidden on touch (the table of contents covers it) */
+.anchor { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .anchor {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tap);
+    height: var(--tap);
+    margin-block: -10px;
+    vertical-align: middle;
+    color: var(--ink-soft);
+    opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease);
+  }
+  .prose :is(h2, h3):hover .anchor,
+  .anchor:focus-visible { opacity: 1; }
+  .anchor:hover { color: var(--primary-deep); }
+}
+
+/* ---------- Notice (lilac tint with icon) ---------- */
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--tone-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-tile);
+  font-size: var(--fs-dense);
+  line-height: 1.55;
+}
+.notice > .icon { flex: none; margin-top: 2px; color: var(--primary-deep); }
+.notice p + p { margin-top: var(--space-2); }
+.notice__title { font-weight: 800; }
+
+/* ---------- Tables inside prose: the shared .size-table stacks into labelled cards under 420px ---------- */
+.table-wrap { margin-top: var(--space-3); }
+@media (min-width: 420px) { .size-table--two { table-layout: fixed; } .size-table--two th:first-child { width: 42%; } }
+.table-wrap .size-table caption { padding-bottom: var(--space-2); text-align: left; font-weight: 700; }
+.table-note { margin-top: var(--space-2); font-size: var(--fs-ui); color: var(--ink-soft); }
+
+/* ---------- Numbered steps with icons (how to measure, how delivery works) ---------- */
+.how-steps { display: grid; gap: var(--space-3); padding: 0; list-style: none; counter-reset: step; }
+.how-steps li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1) var(--space-4);
+  align-items: start;
+  margin: 0;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  counter-increment: step;
+}
+.how-steps__icon {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-tile);
+  background: var(--tone-1);
+  color: var(--primary-deep);
+}
+.how-steps h3 { margin: 0; font-size: var(--fs-h4); }
+.how-steps h3::before { content: counter(step) ". "; color: var(--primary-deep); }
+.how-steps p { margin: 0; font-size: var(--fs-dense); color: var(--ink-soft); }
+.how-steps a { font-weight: 700; }
+@media (min-width: 600px) { .how-steps--row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- "Still need help?" card, closes every content page ---------- */
+.help-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-5);
+  max-width: 72ch;
+  margin-top: var(--space-7);
+  padding: var(--space-5);
+  background: var(--tone-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.help-card h2 { font-size: var(--fs-h3); }
+.help-card p { margin-top: var(--space-1); color: var(--ink-soft); }
+.help-card__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+/* ---------- About ---------- */
+.values { display: grid; gap: var(--space-3); padding: 0; list-style: none; }
+.values li { padding: var(--space-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); }
+.values__icon { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: var(--space-3); border-radius: var(--radius-tile); background: var(--tone-1); color: var(--primary-deep); }
+.values h3 { margin: 0; font-size: var(--fs-h4); }
+.values p { margin-top: var(--space-1); font-size: var(--fs-dense); color: var(--ink-soft); }
+@media (min-width: 900px) { .values { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.about-media { display: grid; gap: var(--space-3); margin-top: var(--space-5); }
+.about-media .media { border-radius: var(--radius-card); }
+@media (min-width: 600px) { .about-media { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.content__cta { margin-top: var(--space-6); }
+
+/* ---------- Contact ---------- */
+.contact-cards { display: grid; gap: var(--space-3); padding: 0; list-style: none; margin-top: var(--space-5); }
+.contact-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1) var(--space-4);
+  align-items: start;
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.contact-card__icon { grid-row: span 3; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--tone-3); color: var(--primary-deep); }
+.contact-card h2 { font-size: var(--fs-h4); }
+.contact-card p { font-size: var(--fs-dense); color: var(--ink-soft); }
+.contact-card__value { color: var(--ink); font-weight: 700; overflow-wrap: anywhere; }
+.contact-card .link-arrow { margin-top: var(--space-1); }
+@media (min-width: 900px) { .contact-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.contact-main { display: grid; gap: var(--space-7); max-width: 720px; margin-top: var(--space-6); }
+.contact-form { padding: var(--space-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); }
+.contact-form h2 { font-size: var(--fs-h3); }
+.contact-form__lede { margin-top: var(--space-1); color: var(--ink-soft); }
+.contact-form .alert { margin-top: var(--space-4); }
+.contact-form .alert:focus { outline: var(--focus-ring); outline-offset: 2px; }
+.contact-form .alert__list { display: grid; gap: var(--space-2); margin-top: var(--space-1); padding: 0; list-style: none; }
+.contact-form .alert__list a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--ink); font-weight: 700; }
+.contact-form__fields { display: grid; gap: var(--space-4); margin-top: var(--space-5); }
+.contact-form .btn { justify-self: start; }
+.contact-faq h2 { margin-bottom: var(--space-3); font-size: var(--fs-h3); }
+
+/* ---------- Print (Delivery, Returns, Privacy, Terms, Size guide: <body data-print>) ---------- */
+@media print {
+  body[data-print] .site-header,
+  body[data-print] .site-footer,
+  body[data-print] .topbar,
+  body[data-print] .tabbar,
+  body[data-print] .skip-link,
+  body[data-print] .breadcrumb,
+  body[data-print] .toc,
+  body[data-print] .anchor,
+  body[data-print] .help-card__actions,
+  body[data-print] .chip-list,
+  body[data-print] [data-layer],
+  body[data-print] [data-overlay] { display: none !important; }
+  body[data-print] { background: #fff; color: var(--ink); font-size: 12pt; }
+  body[data-print] .container { max-width: none; padding: 0; }
+  body[data-print] .content { padding: 0; }
+  body[data-print] .content__layout { display: block; }
+  body[data-print] .prose { max-width: none; }
+  body[data-print] .toc + .content__main { margin: 0; }
+  body[data-print] .notice,
+  body[data-print] .help-card,
+  body[data-print] .how-steps li,
+  body[data-print] .size-table thead th { background: none; }
+  body[data-print] .help-card { padding: 0; border: 0; margin-top: 18pt; }
+  body[data-print] h2, body[data-print] h3 { break-after: avoid; }
+  body[data-print] tr, body[data-print] .how-steps li, body[data-print] .notice { break-inside: avoid; }
+  body[data-print] .accordion__summary .icon { display: none; }
+  body[data-print] .prose a[href]:not([href^="#"])::after,
+  body[data-print] .accordion__body a[href]:not([href^="#"])::after { content: " (" attr(href) ")"; font-size: 10pt; font-weight: 400; word-break: break-all; }
+}
+.about-media + .prose { margin-top: var(--space-6); }

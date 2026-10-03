@@ -232,3 +232,30 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 ### Assumptions
 - The track page, order detail and thank-you page share one status vocabulary (`.status` and the stepper); the delivered, cancelled and refunded orders hide the delivery estimate.
 - The stored checkout order replaces any sample order with the same reference; new references start at KYA-10261 so they never collide with the samples.
+
+## Content template and error pages
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| Content layout (`.content`, `.content__head`, `.content__lede`, `.content__updated`, `.content__layout`) | pages/content.css | Breadcrumb, h1, intro, "Last updated [date]" and a readable column (`.prose`, 72ch). `--toc` adds the sidebar column from 1100px. |
+| Table of contents (`.toc`, `data-toc`) | pages/content.css, js/content.js | A `<details>` block under the intro below 1100px (starts closed), a sticky always-open sidebar from 1100px. Links are 44px tall with 8px gaps. Markup ships `open` so it works without JS. |
+| Prose (`.prose`) | pages/content.css | 16px / 1.6 text, lists, underlined links, `dl`, h2/h3 with `scroll-margin-top` (the html scroll-padding clears the sticky header and fixed bars), `.placeholder` bracket highlight. |
+| Heading anchor (`.anchor`) | pages/content.css | Link icon after each h2/h3, shown on hover or keyboard focus on desktop only (the table of contents serves touch). |
+| Notice (`.notice`) | pages/content.css | Lilac tint callout with an info icon (placeholder notice, between sizes). |
+| Content tables | pages/content.css | The shared `.size-table` (stacks into labelled cards under 420px) inside `.table-wrap`; `.size-table--two` fixes the column widths of the delivery tables. |
+| Icon steps (`.how-steps`) | pages/content.css | Numbered ordered list with an icon tile (how to measure, how delivery works; `--row` makes two columns from 600px). |
+| Help card (`.help-card`) | pages/content.css | "Still need help?" with WhatsApp button and Contact link; closes every content page except Contact. |
+| Values and about media (`.values`, `.about-media`) | pages/content.css | Three-card values row and two `.media` placeholders. |
+| Contact cards and form (`.contact-card`, `.contact-form`) | pages/content.css | Lilac icon discs (no green, no brand logo); the form reuses `.field`, the error-summary alert and `account.js` validation (now also for textareas). |
+| Print stylesheet | pages/content.css | `body[data-print]`: shell, table of contents, anchors and chips hidden, white background, full-width text, link URLs after links; accordions are opened by content.js before printing. |
+| Error template (`.error-page`, `.error-disc`, `.error-code`, `.error-actions`, `.error-search`, `.error-cats`) | pages/errors.css | Centred card: lilac icon disc, code label, h1, sentence, two buttons, help line; 404 adds the search field and category chips. |
+| `header-error` partial | tools/partials | Wordmark-only header for 500 and 503 (header-minimal says "Secure checkout" and "Back to bag"). **Deviation from the brief**, which asked for header-minimal. |
+| `sync-root` override | tools/sync-shell.mjs | `<!-- sync-root: /kayaa/ -->` in 404.html makes {{root}} resolve to `/kayaa/`. |
+| `tools/check-links.mjs` | tools | Dev-only link checker; allows root-absolute URLs only in the sync-root page. |
+| `data-history-back`, `data-reload` | js/app.js | Error page buttons; the href is the fallback without history or JS. |
+| New icons | assets/icons/sprite.svg | wrench, search-x, scale, hourglass, triangle-alert, mail, link, list-checks. |
+
+### Assumptions
+- All six content pages ship placeholder facts in brackets; Privacy and Terms are skeletons only.
+- The delivery page repeats the checkout's placeholder estimates in brackets so the two stay consistent until the real data exists.
+- app.js builds the cart drawer's product links from the wordmark link, so they resolve from account/ and from 404.html at any path (this also fixes the drawer's links on the account pages).

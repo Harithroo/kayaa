@@ -1,4 +1,4 @@
-/* Auth and account forms (production code: stays after the Blade conversion; the server repeats every rule).
+/* Auth, account and contact forms (production code: stays after the Blade conversion; the server repeats every rule).
    For every <form data-auth-form data-summary="ID"> it provides:
    - client validation on submit: required, data-validate (email, phone), data-minlength, data-match="otherFieldId"
    - an error summary (role="alert", focus moves to it, links to each invalid field) plus inline messages with
@@ -58,7 +58,7 @@
   function init(form) {
     var summary = document.getElementById(form.getAttribute('data-summary'));
     var list = summary && $('[data-error-list]', summary);
-    var inputs = $$('[data-field] input', form).filter(function (i) { return i.type !== 'checkbox'; });
+    var inputs = $$('[data-field] input, [data-field] textarea', form).filter(function (i) { return i.type !== 'checkbox'; });
     var extra = {};   // server-side errors keyed by field id
     var attempted = false;
 

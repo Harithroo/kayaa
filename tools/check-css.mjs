@@ -87,6 +87,8 @@ const used = new Map();   // class -> [pages]
 for (const file of walk(htmlDir, '.html')) {
   const raw = fs.readFileSync(file, 'utf8');
   const label = rel(file);
+  const syncRoot = (raw.match(/<!-- sync-root: (\S+) -->/) || [])[1];   // 404.html only: "/kayaa/" maps to html/
+  const resolveLocal = (u) => (syncRoot && u.startsWith(syncRoot) ? path.join(htmlDir, clean(u).slice(syncRoot.length)) : path.resolve(path.dirname(file), clean(u)));
   const text = raw.replace(/<!--[\s\S]*?-->/g, '');   // ignore markup that only appears in comments
 
   for (const m of text.matchAll(/<(?:link|script|img|source)\b[^>]*>/g)) {
@@ -96,12 +98,12 @@ for (const file of walk(htmlDir, '.html')) {
     for (const u of attrs) {
       if (!isLocal(u)) continue;
       if (isLink && !/\.css(\?|$)/.test(u)) continue;   // only stylesheets
-      if (!fs.existsSync(path.resolve(path.dirname(file), clean(u)))) errors.push(`${label}: ${u} does not exist`);
+      if (!fs.existsSync(resolveLocal(u))) errors.push(`${label}: ${u} does not exist`);
     }
     for (const s of [...tag.matchAll(/\bsrcset="([^"]+)"/g)]) {
       for (const part of s[1].split(',')) {
         const u = part.trim().split(/\s+/)[0];
-        if (isLocal(u) && !fs.existsSync(path.resolve(path.dirname(file), clean(u)))) errors.push(`${label}: srcset ${u} does not exist`);
+        if (isLocal(u) && !fs.existsSync(resolveLocal(u))) errors.push(`${label}: srcset ${u} does not exist`);
       }
     }
   }

@@ -71,6 +71,14 @@
     $$('[data-guest-only]').forEach(function (n) { n.hidden = true; });
   })();
 
+  /* ---------- Error pages: [data-history-back] goes back one page (the href is the fallback when there is no history),
+     [data-reload] reloads the current page. ---------- */
+  document.addEventListener('click', function (e) {
+    var back = e.target.closest('[data-history-back]');
+    if (back && history.length > 1) { e.preventDefault(); history.back(); return; }
+    if (e.target.closest('[data-reload]')) { e.preventDefault(); location.reload(); }
+  });
+
   /* ---------- Active page: <body data-page="home"> marks matching [data-nav] links ----------
      Both attributes take space-separated tokens, e.g. data-page="account login". */
   (function () {
@@ -298,12 +306,15 @@
   var cart = $('[data-cart-drawer]');
   var store = window.KayaaCart;
 
+  // The wordmark link is {{root}}index.html, so it tells us the path to the site root from any folder (and for 404.html).
+  var siteRoot = (function () { var w = $('.wordmark'); return w ? (w.getAttribute('href') || '').replace(/index.html$/, '') : ''; })();
+
   function fillLine(li, it) {
     li.setAttribute('data-id', it.id);
     li.setAttribute('data-unit-price', it.unitPrice);
     var link = $('[data-item-name]', li);
     link.textContent = it.name;
-    link.setAttribute('href', 'product.html');
+    link.setAttribute('href', siteRoot + 'product.html');
     $('[data-item-meta]', li).textContent = 'Size ' + it.sizeLabel + ' · ' + it.colourLabel + (it.unavailable ? ' · No longer available' : '');
     $('[data-item-media]', li).style.setProperty('--tone', store.toneCss(it));
     $('[data-cart-remove]', li).setAttribute('aria-label', 'Remove ' + it.name);

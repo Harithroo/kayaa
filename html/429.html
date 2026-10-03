@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Profile | Kayaa</title>
-  <meta name="description" content="Your Kayaa account details.">
+  <title>Too many attempts | Kayaa</title>
+  <meta name="description" content="Too many attempts.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- partial: styles -->
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=3d3d6341">
-  <link rel="stylesheet" href="../assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="../assets/css/components.css?v=bc1114ec">
-  <link rel="stylesheet" href="../assets/css/layout.css?v=88051d6f">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
+  <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
+  <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="../assets/css/pages/account.css?v=58410501">
+  <link rel="stylesheet" href="assets/css/pages/errors.css?v=18fee8d9">
 </head>
-<body data-page="account">
+<body data-page="error error-429">
   <!-- partial: sprite -->
   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="display:none">
     <!-- Lucide icons (ISC licence), 24x24, outline. Stroke/fill/caps are set by .icon in base.css. -->
@@ -225,13 +225,13 @@
     <div class="container site-header__bar" data-header-bar>
       <button type="button" class="icon-btn icon-btn--plain site-header__menu" data-open-layer="menu" aria-label="Open menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-drawer"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg></button>
 
-      <a class="wordmark" href="../index.html" aria-label="Kayaa home">kayaa</a> <!-- TODO: replace with logo when ready -->
+      <a class="wordmark" href="index.html" aria-label="Kayaa home">kayaa</a> <!-- TODO: replace with logo when ready -->
 
       <nav class="primary-nav" aria-label="Primary">
         <ul>
           <!-- Split control: the link goes to the shop, the chevron toggles the mega menu -->
           <li class="primary-nav__split" data-mega>
-            <a class="primary-nav__link" href="../shop.html" data-nav="shop category product search">Shop</a>
+            <a class="primary-nav__link" href="shop.html" data-nav="shop category product search">Shop</a>
             <button type="button" class="primary-nav__chevron" data-mega-toggle aria-expanded="false" aria-controls="mega-shop" aria-label="Shop menu"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></button>
             <div class="mega" id="mega-shop" data-mega-panel inert>
               <div class="mega__panel">
@@ -239,22 +239,22 @@
                   <p class="eyebrow">Shop by age</p>
                   <ul class="mega__ages" role="list">
                     <!-- loop: age_groups -->
-                    <li><a class="mega-tile" href="../shop.html?age=newborn" style="--tone: var(--tone-1)"><span class="mega-tile__label"><span>Newborn</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="../shop.html?age=0-3-months" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>0–3</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="../shop.html?age=3-6-months" style="--tone: var(--tone-3)"><span class="mega-tile__label"><span>3–6</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="../shop.html?age=6-12-months" style="--tone: var(--tone-4)"><span class="mega-tile__label"><span>6–12</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="../shop.html?age=1-2-years" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>1–2</span><span>years</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <li><a class="mega-tile" href="shop.html?age=newborn" style="--tone: var(--tone-1)"><span class="mega-tile__label"><span>Newborn</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <li><a class="mega-tile" href="shop.html?age=0-3-months" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>0–3</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <li><a class="mega-tile" href="shop.html?age=3-6-months" style="--tone: var(--tone-3)"><span class="mega-tile__label"><span>3–6</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <li><a class="mega-tile" href="shop.html?age=6-12-months" style="--tone: var(--tone-4)"><span class="mega-tile__label"><span>6–12</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+                    <li><a class="mega-tile" href="shop.html?age=1-2-years" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>1–2</span><span>years</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
                     <!-- /loop -->
                   </ul>
                   <p class="eyebrow mega__eyebrow">Browse by category</p>
                   <ul class="chip-list" role="list">
                     <!-- loop: categories -->
-                    <li><a class="chip" href="../category.html?c=bodysuits">Bodysuits</a></li>
-                    <li><a class="chip" href="../category.html?c=sleepsuits">Sleepsuits</a></li>
-                    <li><a class="chip" href="../category.html?c=sets">Sets</a></li>
-                    <li><a class="chip" href="../category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
-                    <li><a class="chip" href="../category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
-                    <li><a class="chip" href="../category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
+                    <li><a class="chip" href="category.html?c=bodysuits">Bodysuits</a></li>
+                    <li><a class="chip" href="category.html?c=sleepsuits">Sleepsuits</a></li>
+                    <li><a class="chip" href="category.html?c=sets">Sets</a></li>
+                    <li><a class="chip" href="category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
+                    <li><a class="chip" href="category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
+                    <li><a class="chip" href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
                     <!-- /loop -->
                   </ul>
                 </div>
@@ -265,21 +265,21 @@
                     <p class="eyebrow">New this week</p>
                     <p class="mega__feature-title">Fresh styles just landed</p>
                     <p class="mega__feature-text">Placeholder text about the latest arrivals.</p>
-                    <a class="link-arrow" href="../shop.html?sort=new">Shop new in <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+                    <a class="link-arrow" href="shop.html?sort=new">Shop new in <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
                   </div>
                 </aside>
               </div>
             </div>
           </li>
-          <li><a class="primary-nav__link" href="../shop.html?sort=new">New in</a></li>
-          <li><a class="primary-nav__link" href="../shop.html?sale=1">Sale</a></li>
-          <li><a class="primary-nav__link" href="../size-guide.html" data-nav="size-guide">Size guide</a></li>
-          <li><a class="primary-nav__link" href="../about.html" data-nav="about">Our story</a></li>
+          <li><a class="primary-nav__link" href="shop.html?sort=new">New in</a></li>
+          <li><a class="primary-nav__link" href="shop.html?sale=1">Sale</a></li>
+          <li><a class="primary-nav__link" href="size-guide.html" data-nav="size-guide">Size guide</a></li>
+          <li><a class="primary-nav__link" href="about.html" data-nav="about">Our story</a></li>
         </ul>
       </nav>
 
       <div class="site-header__actions">
-        <form class="header-search" role="search" action="../search.html" method="get" data-header-search>
+        <form class="header-search" role="search" action="search.html" method="get" data-header-search>
           <button type="button" class="icon-btn header-search__toggle" data-search-toggle aria-expanded="false" aria-controls="header-search-field" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           <div class="header-search__field" id="header-search-field">
             <label class="visually-hidden" for="header-q">Search Kayaa</label>
@@ -288,7 +288,7 @@
           </div>
         </form>
         <!-- blade: @auth account/index.html @else account/login.html -->
-        <a class="icon-btn site-header__account" href="../account/login.html" data-nav="account" data-account-link aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
+        <a class="icon-btn site-header__account" href="account/login.html" data-nav="account" data-account-link aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
         <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
           <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg>
           <span class="icon-btn__count" data-cart-count aria-hidden="true">2</span>
@@ -300,12 +300,12 @@
       <div class="container">
         <ul>
           <!-- loop: categories -->
-          <li><a href="../category.html?c=bodysuits">Bodysuits</a></li>
-          <li><a href="../category.html?c=sleepsuits">Sleepsuits</a></li>
-          <li><a href="../category.html?c=sets">Sets</a></li>
-          <li><a href="../category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
-          <li><a href="../category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
-          <li><a href="../category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
+          <li><a href="category.html?c=bodysuits">Bodysuits</a></li>
+          <li><a href="category.html?c=sleepsuits">Sleepsuits</a></li>
+          <li><a href="category.html?c=sets">Sets</a></li>
+          <li><a href="category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
+          <li><a href="category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
+          <li><a href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
           <!-- /loop -->
         </ul>
       </div>
@@ -314,110 +314,18 @@
   <!-- /partial: header -->
 
   <main id="main">
-    <div class="container account">
-      <header class="account__head">
-        <h1>Profile</h1>
-        <p class="account__lede">Your details and password.</p>
-      </header>
-      <div class="account__layout">
-        <nav class="account-nav" aria-label="Account">
-          <ul>
-            <li><a class="account-nav__link" href="index.html">My orders</a></li>
-            <li><a class="account-nav__link" href="reviews.html">My reviews</a></li>
-            <li><a class="account-nav__link" href="profile.html" aria-current="page">Profile</a></li>
-          </ul>
-          <!-- TODO: action (assumption: POST /logout); @csrf -->
-          <form class="account-nav__logout" method="post" action="../index.html" data-logout-form>
-            <button type="submit" class="account-nav__link">Log out</button>
-          </form>
-        </nav>
-        <div class="account__content">
-          <div class="profile-grid" data-profile-page>
-            <section class="summary-card profile-card" aria-labelledby="pf-details">
-              <h2 id="pf-details">Your details</h2>
-              <div class="alert alert--error" role="alert" tabindex="-1" id="details-summary" data-error-summary hidden>
-          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
-          <div><p class="alert__title">Please check your details</p><ul class="alert__list" data-error-list></ul></div>
-        </div>
-              <div class="alert alert--success" role="status" tabindex="-1" data-profile-alert="details" hidden>
-                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
-                <div><p>Your details have been saved.</p></div>
-              </div>
-              <!-- TODO: form action (assumption: PATCH /account/profile); @csrf -->
-              <form class="profile-form profile-form--2" id="details-form" method="post" action="profile.html" novalidate data-auth-form data-summary="details-summary">
-                <input type="hidden" name="_method" value="PATCH">
-        <div class="field field--wide" data-field>
-          <label for="name">Full name</label>
-          <input id="name" name="name" type="text" required autocomplete="name" data-required-message="Enter your name">
-          
-          <p class="field__error" id="name-error" hidden></p>
-        </div>
-        <div class="field" data-field>
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" required autocomplete="email" inputmode="email" data-validate="email" data-required-message="Enter your email address" data-invalid-message="Enter a valid email address, for example name@example.com">
-          
-          <p class="field__error" id="email-error" hidden></p>
-        </div>
-        <div class="field" data-field>
-          <label for="phone">Mobile number</label>
-          <input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" data-validate="phone" data-required-message="Enter your mobile number" data-invalid-message="Enter a valid Sri Lankan mobile number, for example 071 234 5678">
-          
-          <p class="field__error" id="phone-error" hidden></p>
-        </div>
-                <div class="profile-form__actions"><button type="submit" class="btn btn--primary">Save changes</button></div>
-              </form>
-            </section>
+    <div class="container error-page">
+      <div class="error-card">
+        <span class="error-disc"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg></span>
+        <p class="error-code">429</p>
+        <h1>Too many attempts</h1>
+        <p class="error-text">Please wait a minute and try again.</p>
 
-            <section class="summary-card profile-card" aria-labelledby="pf-password">
-              <h2 id="pf-password">Change password</h2>
-              <div class="alert alert--error" role="alert" tabindex="-1" id="password-summary" data-error-summary hidden>
-          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
-          <div><p class="alert__title">Please check your details</p><ul class="alert__list" data-error-list></ul></div>
+        <div class="error-actions">
+          <a class="btn btn--primary btn--lg" href="index.html" data-history-back>Go back</a>
+          <a class="btn btn--secondary btn--lg" href="index.html">Home</a>
         </div>
-              <div class="alert alert--success" role="status" tabindex="-1" data-profile-alert="password" hidden>
-                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
-                <div><p>Your password has been changed.</p></div>
-              </div>
-              <!-- TODO: form action (assumption: PUT /account/password); @csrf -->
-              <form class="profile-form" id="password-form" method="post" action="profile.html" novalidate data-auth-form data-summary="password-summary">
-                <input type="hidden" name="_method" value="PUT">
-        <div class="field password-field" data-field>
-          <label for="current_password">Current password</label>
-          <div class="password-field__wrap">
-            <input id="current_password" name="current_password" type="password" required autocomplete="current-password" data-required-message="Enter your current password">
-            <button type="button" class="password-field__toggle" data-password-toggle aria-pressed="false" aria-controls="current_password" aria-label="Show password"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye"></use></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye-off"></use></svg></button>
-          </div>
-          
-          <p class="field__error" id="current_password-error" hidden></p>
-        </div>
-        <div class="field password-field" data-field>
-          <label for="password">New password</label>
-          <div class="password-field__wrap">
-            <input id="password" name="password" type="password" required autocomplete="new-password" aria-describedby="password-hint" data-minlength="8" data-minlength-message="Use at least 8 characters" data-required-message="Choose a new password">
-            <button type="button" class="password-field__toggle" data-password-toggle aria-pressed="false" aria-controls="password" aria-label="Show password"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye"></use></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye-off"></use></svg></button>
-          </div>
-          <p class="field__hint" id="password-hint">At least 8 characters</p>
-          <p class="field__error" id="password-error" hidden></p>
-        </div>
-        <div class="field password-field" data-field>
-          <label for="password_confirmation">Confirm new password</label>
-          <div class="password-field__wrap">
-            <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password" data-match="password" data-match-message="The passwords do not match" data-required-message="Confirm your new password">
-            <button type="button" class="password-field__toggle" data-password-toggle aria-pressed="false" aria-controls="password_confirmation" aria-label="Show password"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye"></use></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye-off"></use></svg></button>
-          </div>
-          
-          <p class="field__error" id="password_confirmation-error" hidden></p>
-        </div>
-                <div class="profile-form__actions"><button type="submit" class="btn btn--primary">Change password</button></div>
-              </form>
-            </section>
-
-            <!-- mobile: Log out sits at the bottom of the page (desktop has it in the sidebar) -->
-            <form class="account-logout-m" method="post" action="../index.html" data-logout-form>
-              <button type="submit" class="btn btn--secondary btn--block">Log out</button>
-            </form>
-          </div>
-        </div>
+        <p class="error-help">Need help? <a href="contact.html">Contact us</a></p>
       </div>
     </div>
   </main>
@@ -427,7 +335,7 @@
     <div class="container">
       <div class="footer__grid">
         <div class="footer__brand">
-          <a class="wordmark" href="../index.html" aria-label="Kayaa home">kayaa</a>
+          <a class="wordmark" href="index.html" aria-label="Kayaa home">kayaa</a>
           <p class="footer__blurb">Soft everyday clothing for babies, delivered across Sri Lanka.</p>
           <ul class="footer__contact" role="list">
             <li><a href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a></li> <!-- TODO: add WhatsApp number -->
@@ -437,29 +345,29 @@
         <nav aria-labelledby="footer-age">
           <h2 class="footer__title" id="footer-age">Shop by age</h2>
           <ul class="footer__list" role="list">
-            <li><a href="../shop.html?age=newborn">Newborn</a></li>
-            <li><a href="../shop.html?age=0-3-months">0–3 months</a></li>
-            <li><a href="../shop.html?age=3-6-months">3–6 months</a></li>
-            <li><a href="../shop.html?age=6-12-months">6–12 months</a></li>
-            <li><a href="../shop.html?age=1-2-years">1–2 years</a></li>
+            <li><a href="shop.html?age=newborn">Newborn</a></li>
+            <li><a href="shop.html?age=0-3-months">0–3 months</a></li>
+            <li><a href="shop.html?age=3-6-months">3–6 months</a></li>
+            <li><a href="shop.html?age=6-12-months">6–12 months</a></li>
+            <li><a href="shop.html?age=1-2-years">1–2 years</a></li>
           </ul>
         </nav>
         <nav aria-labelledby="footer-help">
           <h2 class="footer__title" id="footer-help">Help</h2>
           <ul class="footer__list" role="list">
-            <li><a href="../track.html">Track order</a></li>
-            <li><a href="../size-guide.html">Size guide</a></li>
-            <li><a href="../delivery.html">Delivery</a></li>
-            <li><a href="../returns.html">Returns</a></li>
-            <li><a href="../contact.html">Contact</a></li>
+            <li><a href="track.html">Track order</a></li>
+            <li><a href="size-guide.html">Size guide</a></li>
+            <li><a href="delivery.html">Delivery</a></li>
+            <li><a href="returns.html">Returns</a></li>
+            <li><a href="contact.html">Contact</a></li>
           </ul>
         </nav>
         <nav aria-labelledby="footer-company">
           <h2 class="footer__title" id="footer-company">Company</h2>
           <ul class="footer__list" role="list">
-            <li><a href="../about.html">Our story</a></li>
-            <li><a href="../privacy.html">Privacy policy</a></li>
-            <li><a href="../terms.html">Terms &amp; conditions</a></li>
+            <li><a href="about.html">Our story</a></li>
+            <li><a href="privacy.html">Privacy policy</a></li>
+            <li><a href="terms.html">Terms &amp; conditions</a></li>
           </ul>
         </nav>
       </div>
@@ -483,9 +391,9 @@
   <!-- partial: tabbar -->
   <nav class="tabbar" aria-label="Mobile">
     <ul>
-      <li><a class="tabbar__item" href="../index.html" data-nav="home"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></span><span>Home</span></a></li>
-      <li><a class="tabbar__item" href="../shop.html" data-nav="shop category product"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-layout-grid"></use></svg></span><span>Shop</span></a></li>
-      <li><a class="tabbar__item" href="../search.html" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
+      <li><a class="tabbar__item" href="index.html" data-nav="home"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></span><span>Home</span></a></li>
+      <li><a class="tabbar__item" href="shop.html" data-nav="shop category product"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-layout-grid"></use></svg></span><span>Shop</span></a></li>
+      <li><a class="tabbar__item" href="search.html" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
       <li>
         <button type="button" class="tabbar__item" data-open-layer="cart" data-nav="cart" aria-haspopup="dialog">
           <span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg><span class="icon-btn__count" data-cart-count aria-hidden="true">2</span></span>
@@ -493,7 +401,7 @@
         </button>
       </li>
       <!-- blade: @auth account/index.html @else account/login.html -->
-      <li><a class="tabbar__item" href="../account/login.html" data-nav="account" data-account-link><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
+      <li><a class="tabbar__item" href="account/login.html" data-nav="account" data-account-link><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
     </ul>
   </nav>
   <!-- /partial: tabbar -->
@@ -508,49 +416,49 @@
       <nav aria-label="Menu">
         <div class="menu-group">
           <ul role="list">
-            <li><a href="../shop.html" data-nav="shop category product search">Shop</a></li>
-            <li><a href="../shop.html?sort=new">New in</a></li>
-            <li><a href="../shop.html?sale=1">Sale</a></li>
-            <li><a href="../about.html" data-nav="about">Our story</a></li>
+            <li><a href="shop.html" data-nav="shop category product search">Shop</a></li>
+            <li><a href="shop.html?sort=new">New in</a></li>
+            <li><a href="shop.html?sale=1">Sale</a></li>
+            <li><a href="about.html" data-nav="about">Our story</a></li>
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Shop by age</p>
           <ul role="list">
-            <li><a href="../shop.html?age=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="../shop.html?age=0-3-months">0–3 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="../shop.html?age=3-6-months">3–6 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="../shop.html?age=6-12-months">6–12 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="../shop.html?age=1-2-years">1–2 years <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="shop.html?age=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="shop.html?age=0-3-months">0–3 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="shop.html?age=3-6-months">3–6 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="shop.html?age=6-12-months">6–12 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="shop.html?age=1-2-years">1–2 years <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Shop by category</p>
           <ul role="list">
-            <li><a href="../category.html?c=bodysuits">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="../category.html?c=sleepsuits">Sleepsuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="../category.html?c=sets">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="../category.html?c=dresses-rompers">Dresses &amp; Rompers <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="../category.html?c=hats-mitts">Hats &amp; Mitts <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="../category.html?c=swaddles-blankets">Swaddles &amp; Blankets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=bodysuits">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=sleepsuits">Sleepsuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=sets">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=dresses-rompers">Dresses &amp; Rompers <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=hats-mitts">Hats &amp; Mitts <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Help</p>
           <ul role="list">
-            <li><a href="../track.html" data-nav="track">Track order</a></li>
-            <li><a href="../size-guide.html" data-nav="size-guide">Size guide</a></li>
-            <li><a href="../delivery.html" data-nav="delivery">Delivery</a></li>
-            <li><a href="../returns.html" data-nav="returns">Returns</a></li>
-            <li><a href="../contact.html" data-nav="contact">Contact</a></li>
+            <li><a href="track.html" data-nav="track">Track order</a></li>
+            <li><a href="size-guide.html" data-nav="size-guide">Size guide</a></li>
+            <li><a href="delivery.html" data-nav="delivery">Delivery</a></li>
+            <li><a href="returns.html" data-nav="returns">Returns</a></li>
+            <li><a href="contact.html" data-nav="contact">Contact</a></li>
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Account</p>
           <!-- blade: @auth My account @else Log in / Register -->
           <ul role="list">
-            <li><a href="../account/login.html" data-nav="login" data-account-link><span data-account-label>Log in</span></a></li>
-            <li data-guest-only><a href="../account/register.html" data-nav="register">Register</a></li>
+            <li><a href="account/login.html" data-nav="login" data-account-link><span data-account-label>Log in</span></a></li>
+            <li data-guest-only><a href="account/register.html" data-nav="register">Register</a></li>
           </ul>
         </div>
       </nav>
@@ -582,7 +490,7 @@
             <li class="cart-item" data-cart-item data-key="Ruffle Sleeve Dress|Size 3-6M · Lilac" data-unit-price="3450">
               <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <div class="cart-item__body">
-                <p class="cart-item__name"><a href="../product.html" data-item-name>Ruffle Sleeve Dress</a></p>
+                <p class="cart-item__name"><a href="product.html" data-item-name>Ruffle Sleeve Dress</a></p>
                 <p class="cart-item__meta" data-item-meta>Size 3-6M · Lilac</p>
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
@@ -598,7 +506,7 @@
             <li class="cart-item" data-cart-item data-key="Cotton Sleepsuit|Size 0-3M · Cream" data-unit-price="2850">
               <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <div class="cart-item__body">
-                <p class="cart-item__name"><a href="../product.html" data-item-name>Cotton Sleepsuit</a></p>
+                <p class="cart-item__name"><a href="product.html" data-item-name>Cotton Sleepsuit</a></p>
                 <p class="cart-item__meta" data-item-meta>Size 0-3M · Cream</p>
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
@@ -618,8 +526,8 @@
           <p class="cart-summary"><span>Subtotal</span> <span class="cart-summary__value" data-cart-subtotal>Rs 6,300</span></p>
           <p class="cart-note">Delivery calculated at checkout · Pay securely by card</p>
           <div class="cart-actions">
-            <a class="btn btn--primary btn--lg btn--block" href="../checkout.html">Checkout</a>
-            <a class="btn btn--secondary btn--block" href="../cart.html">View bag</a>
+            <a class="btn btn--primary btn--lg btn--block" href="checkout.html">Checkout</a>
+            <a class="btn btn--secondary btn--block" href="cart.html">View bag</a>
           </div>
         </div>
       </div>
@@ -628,7 +536,7 @@
         <div class="empty-state">
           <span class="empty-state__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg></span>
           <h3 class="empty-state__title">Your bag is empty</h3>
-          <a class="btn btn--primary" href="../shop.html" data-autofocus-empty>Start shopping</a>
+          <a class="btn btn--primary" href="shop.html" data-autofocus-empty>Start shopping</a>
         </div>
       </div>
       <!-- /blade -->
@@ -638,7 +546,7 @@
     <li class="cart-item" data-cart-item data-key="|" data-unit-price="0">
       <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
       <div class="cart-item__body">
-        <p class="cart-item__name"><a href="../product.html" data-item-name></a></p>
+        <p class="cart-item__name"><a href="product.html" data-item-name></a></p>
         <p class="cart-item__meta" data-item-meta></p>
         <div class="cart-item__row">
           <div class="qty" data-qty>
@@ -668,7 +576,7 @@
         </div>
         <button type="button" class="icon-btn icon-btn--plain quick-add__close" data-close-layer aria-label="Close quick add"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
       </div>
-      <form data-quick-add-form action="../cart.html" method="post">
+      <form data-quick-add-form action="cart.html" method="post">
         <fieldset class="quick-add__group">
           <legend>Size</legend>
           <!-- TODO: sizes and stock come from the product variants -->
@@ -694,12 +602,8 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="../assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="../assets/js/app.js?v=65261b3f" defer></script>
+  <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=65261b3f" defer></script>
   <!-- /partial: scripts -->
-  <script src="../assets/js/proto-orders.js?v=565d0575" defer></script>
-  <script src="../assets/js/account.js?v=aad4c45d" defer></script>
-  <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="../assets/js/proto-account.js?v=9c223bd0" defer></script>
 </body>
 </html>

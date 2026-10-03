@@ -7,7 +7,7 @@
 // For each <!-- partial: NAME --> ... <!-- /partial: NAME --> pair in a page, the content between
 // the markers is replaced with tools/partials/NAME.html. The marker pair "sprite" is filled from
 // html/assets/icons/sprite.svg. In partials, {{root}} becomes "" for html/*.html and "../" for
-// html/account/*.html (one "../" per folder of depth). It also sets ?v=<first 8 hex of the sha1> on every
+// html/account/*.html (one "../" per folder of depth). A page may override that with <!-- sync-root: /kayaa/ --> (404.html only). It also sets ?v=<first 8 hex of the sha1> on every
 // local .css/.js reference so browsers never serve stale files (re-run it after editing any CSS or JS).
 // Everything else outside the markers is untouched.
 // Dev-only: this folder is never published. Plain Node, no dependencies.
@@ -63,11 +63,15 @@ let pages = 0;
 for (const file of walk(htmlDir).sort()) {
   pages++;
   const rel = path.relative(htmlDir, file).split(path.sep);
-  const root = '../'.repeat(rel.length - 1);
+  let root = '../'.repeat(rel.length - 1);
   const label = rel.join('/');
   const original = fs.readFileSync(file, 'utf8');
   const eol = original.includes('\r\n') ? '\r\n' : '\n';
   let text = toLF(original);
+  // Per-file override: <!-- sync-root: /kayaa/ --> makes {{root}} resolve to that prefix (used only by 404.html, because
+  // GitHub Pages serves it at the missing URL's path, so relative links would break). Local .css/.js are found under html/.
+  const override = text.match(/<!-- sync-root: (\S+) -->/);
+  if (override) root = override[1];
 
   const names = [...text.matchAll(/<!-- partial: ([\w-]+) -->/g)].map((m) => m[1]);
   for (const name of new Set(names)) {
@@ -89,7 +93,7 @@ for (const file of walk(htmlDir).sort()) {
 
   // Cache busting: every local .css/.js reference gets ?v=<first 8 hex of the file's sha1>.
   text = text.replace(/\b(href|src)="((?!https?:|\/\/|#|mailto:|tel:|data:)[^"?#]+\.(?:css|js))(?:\?v=[0-9a-f]*)?"/g, (m, attr, url) => {
-    const abs = path.resolve(path.dirname(file), url);
+    const abs = override && url.startsWith(root) ? path.join(htmlDir, url.slice(root.length)) : path.resolve(path.dirname(file), url);
     if (!fs.existsSync(abs)) { problems.push(`${label}: missing file ${url}`); return m; }
     return `${attr}="${url}?v=${hash(abs)}"`;
   });
