@@ -1,0 +1,15 @@
+  <nav class="tabbar" aria-label="Mobile">
+    <ul>
+      <li><a class="tabbar__item" href="{{root}}index.html" data-nav="home"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></span><span>Home</span></a></li>
+      <li><a class="tabbar__item" href="{{root}}shop.html" data-nav="shop category product"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-layout-grid"></use></svg></span><span>Shop</span></a></li>
+      <li><a class="tabbar__item" href="{{root}}search.html" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
+      <li>
+        <button type="button" class="tabbar__item" data-open-layer="cart" data-nav="cart" aria-haspopup="dialog">
+          <span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg><span class="icon-btn__count" data-cart-count aria-hidden="true">2</span></span>
+          <span>Bag</span>
+        </button>
+      </li>
+      <!-- blade: @auth account/index.html @else account/login.html -->
+      <li><a class="tabbar__item" href="{{root}}account/login.html" data-nav="account"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
+    </ul>
+  </nav>

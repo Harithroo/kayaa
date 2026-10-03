@@ -1,0 +1,58 @@
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <button type="button" class="icon-btn icon-btn--plain site-header__menu" data-open-layer="menu" aria-label="Open menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-drawer"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg></button>
+
+      <a class="wordmark" href="{{root}}index.html" aria-label="Kayaa home">kayaa</a> <!-- TODO: replace with logo when ready -->
+
+      <nav class="primary-nav" aria-label="Primary">
+        <ul>
+          <li class="has-dropdown" data-dropdown>
+            <button type="button" class="primary-nav__link" data-dropdown-toggle aria-expanded="false" aria-controls="age-menu">Shop by age <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></button>
+            <ul class="dropdown" id="age-menu" data-dropdown-panel hidden>
+              <!-- loop: age_groups -->
+              <li><a href="{{root}}shop.html?age=newborn">Newborn</a></li>
+              <li><a href="{{root}}shop.html?age=0-3-months">0–3 months</a></li>
+              <li><a href="{{root}}shop.html?age=3-6-months">3–6 months</a></li>
+              <li><a href="{{root}}shop.html?age=6-12-months">6–12 months</a></li>
+              <li><a href="{{root}}shop.html?age=1-2-years">1–2 years</a></li>
+              <!-- /loop -->
+            </ul>
+          </li>
+          <li><a class="primary-nav__link" href="{{root}}shop.html?sort=new">New in</a></li>
+          <li><a class="primary-nav__link" href="{{root}}shop.html?sale=1">Sale</a></li>
+          <li><a class="primary-nav__link" href="{{root}}size-guide.html" data-nav="size-guide">Size guide</a></li>
+          <li><a class="primary-nav__link" href="{{root}}about.html" data-nav="about">Our story</a></li>
+        </ul>
+      </nav>
+
+      <form class="header-search" role="search" action="{{root}}search.html" method="get">
+        <label class="visually-hidden" for="header-q">Search Kayaa</label>
+        <input id="header-q" type="search" name="q" placeholder="Search" autocomplete="off">
+        <button type="submit" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
+      </form>
+
+      <div class="site-header__actions">
+        <!-- blade: @auth account/index.html @else account/login.html -->
+        <a class="icon-btn site-header__account" href="{{root}}account/login.html" data-nav="account" aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
+        <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg>
+          <span class="icon-btn__count" data-cart-count aria-hidden="true">2</span>
+        </button>
+      </div>
+    </div>
+
+    <nav class="category-row" aria-label="Categories">
+      <div class="container">
+        <ul>
+          <!-- loop: categories -->
+          <li><a href="{{root}}category.html?c=bodysuits">Bodysuits</a></li>
+          <li><a href="{{root}}category.html?c=sleepsuits">Sleepsuits</a></li>
+          <li><a href="{{root}}category.html?c=sets">Sets</a></li>
+          <li><a href="{{root}}category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
+          <li><a href="{{root}}category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
+          <li><a href="{{root}}category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
+          <!-- /loop -->
+        </ul>
+      </div>
+    </nav>
+  </header>

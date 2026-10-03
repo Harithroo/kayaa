@@ -1,0 +1,34 @@
+  <div class="sheet" data-layer="quick-add" data-quick-add-sheet role="dialog" aria-modal="true" aria-labelledby="qa-title" aria-hidden="true">
+    <div class="sheet__backdrop" data-close-layer></div>
+    <div class="sheet__panel">
+      <div class="quick-add__head">
+        <div class="media media--tile quick-add__thumb" data-placeholder data-qa-thumb style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+        <div class="quick-add__title">
+          <h2 id="qa-title" data-qa-name>Product name</h2>
+          <p class="price"><span class="price__now" data-qa-price>Rs 0</span> <s class="price__was" data-qa-was hidden></s></p>
+        </div>
+        <button type="button" class="icon-btn icon-btn--plain quick-add__close" data-close-layer aria-label="Close quick add"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
+      </div>
+      <form data-quick-add-form action="{{root}}cart.html" method="post">
+        <fieldset class="quick-add__group">
+          <legend>Size</legend>
+          <!-- TODO: sizes and stock come from the product variants -->
+          <div class="quick-add__options">
+            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="0-3M"><span>0-3M</span></label>
+            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="3-6M" checked><span>3-6M</span></label>
+            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="6-9M"><span>6-9M</span></label>
+            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="9-12M" disabled><span>9-12M<span class="visually-hidden"> (out of stock)</span></span></label>
+          </div>
+        </fieldset>
+        <fieldset class="quick-add__group">
+          <legend>Colour</legend>
+          <div class="quick-add__options quick-add__options--colours">
+            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="Lilac" checked><span class="dot dot--lilac" aria-hidden="true"></span><span class="visually-hidden">Lilac</span></label>
+            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="Cream"><span class="dot dot--cream" aria-hidden="true"></span><span class="visually-hidden">Cream</span></label>
+            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="Sky"><span class="dot dot--sky" aria-hidden="true"></span><span class="visually-hidden">Sky</span></label>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn btn--primary btn--lg btn--block">Add to cart</button>
+      </form>
+    </div>
+  </div>

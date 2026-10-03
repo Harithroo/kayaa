@@ -1,0 +1,59 @@
+  <div class="drawer drawer--left" id="menu-drawer" data-layer="menu" role="dialog" aria-modal="true" aria-labelledby="menu-title" aria-hidden="true">
+    <div class="drawer__head">
+      <h2 class="drawer__title" id="menu-title"><span class="wordmark">kayaa</span><span class="visually-hidden"> menu</span></h2>
+      <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close menu"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
+    </div>
+    <div class="drawer__body">
+      <nav aria-label="Menu">
+        <div class="menu-group">
+          <ul role="list">
+            <li><a href="{{root}}shop.html?sort=new">New in</a></li>
+            <li><a href="{{root}}shop.html?sale=1">Sale</a></li>
+            <li><a href="{{root}}about.html" data-nav="about">Our story</a></li>
+          </ul>
+        </div>
+        <div class="menu-group">
+          <p class="menu-group__title">Shop by age</p>
+          <ul role="list">
+            <li><a href="{{root}}shop.html?age=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="{{root}}shop.html?age=0-3-months">0–3 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="{{root}}shop.html?age=3-6-months">3–6 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="{{root}}shop.html?age=6-12-months">6–12 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="{{root}}shop.html?age=1-2-years">1–2 years <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+          </ul>
+        </div>
+        <div class="menu-group">
+          <p class="menu-group__title">Shop by category</p>
+          <ul role="list">
+            <li><a href="{{root}}category.html?c=bodysuits">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="{{root}}category.html?c=sleepsuits">Sleepsuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="{{root}}category.html?c=sets">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="{{root}}category.html?c=dresses-rompers">Dresses &amp; Rompers <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="{{root}}category.html?c=hats-mitts">Hats &amp; Mitts <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="{{root}}category.html?c=swaddles-blankets">Swaddles &amp; Blankets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+          </ul>
+        </div>
+        <div class="menu-group">
+          <p class="menu-group__title">Help</p>
+          <ul role="list">
+            <li><a href="{{root}}track.html" data-nav="track">Track order</a></li>
+            <li><a href="{{root}}size-guide.html" data-nav="size-guide">Size guide</a></li>
+            <li><a href="{{root}}delivery.html" data-nav="delivery">Delivery</a></li>
+            <li><a href="{{root}}returns.html" data-nav="returns">Returns</a></li>
+            <li><a href="{{root}}contact.html" data-nav="contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="menu-group">
+          <p class="menu-group__title">Account</p>
+          <!-- blade: @auth My account @else Log in / Register -->
+          <ul role="list">
+            <li><a href="{{root}}account/login.html" data-nav="login">Log in</a></li>
+            <li><a href="{{root}}account/register.html" data-nav="register">Register</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="drawer__foot">
+      <a class="btn btn--secondary btn--block" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a> <!-- TODO: add WhatsApp number -->
+    </div>
+  </div>

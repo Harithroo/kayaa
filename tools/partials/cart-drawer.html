@@ -1,0 +1,92 @@
+  <!-- The inner .cart-panel is what the backend's /cart/panel returns; JS swaps it into [data-cart-drawer]. -->
+  <div class="drawer drawer--right" id="cart-drawer" data-layer="cart" data-cart-drawer role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
+    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500">
+      <div class="drawer__head">
+        <h2 class="drawer__title" id="cart-title">Your bag (<span data-cart-count-label>2</span>)</h2>
+        <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close bag"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
+      </div>
+
+      <!-- blade: @if cart has items -->
+      <div class="cart-panel__filled">
+        <div class="drawer__body">
+          <div class="cart-progress">
+            <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
+            <progress class="progress" value="6300" max="7500" data-cart-progress>84%</progress>
+          </div>
+          <ul class="cart-items" role="list" data-cart-items>
+            <!-- loop: cart_items -->
+            <li class="cart-item" data-cart-item data-key="Ruffle Sleeve Dress|Size 3-6M · Lilac" data-unit-price="3450">
+              <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <div class="cart-item__body">
+                <p class="cart-item__name"><a href="{{root}}product.html" data-item-name>Ruffle Sleeve Dress</a></p>
+                <p class="cart-item__meta" data-item-meta>Size 3-6M · Lilac</p>
+                <div class="cart-item__row">
+                  <div class="qty" data-qty>
+                    <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
+                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
+                  </div>
+                  <p class="price" data-line-total>Rs 3,450</p>
+                </div>
+              </div>
+              <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove Ruffle Sleeve Dress"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
+            </li>
+            <li class="cart-item" data-cart-item data-key="Cotton Sleepsuit|Size 0-3M · Cream" data-unit-price="2850">
+              <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <div class="cart-item__body">
+                <p class="cart-item__name"><a href="{{root}}product.html" data-item-name>Cotton Sleepsuit</a></p>
+                <p class="cart-item__meta" data-item-meta>Size 0-3M · Cream</p>
+                <div class="cart-item__row">
+                  <div class="qty" data-qty>
+                    <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
+                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
+                  </div>
+                  <p class="price" data-line-total>Rs 2,850</p>
+                </div>
+              </div>
+              <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove Cotton Sleepsuit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
+            </li>
+            <!-- /loop -->
+          </ul>
+        </div>
+        <div class="drawer__foot">
+          <p class="cart-summary"><span>Subtotal</span> <span class="cart-summary__value" data-cart-subtotal>Rs 6,300</span></p>
+          <p class="cart-note">Delivery calculated at checkout · Cash on delivery available</p>
+          <div class="cart-actions">
+            <a class="btn btn--primary btn--lg btn--block" href="{{root}}checkout.html">Checkout</a>
+            <a class="btn btn--secondary btn--block" href="{{root}}cart.html">View bag</a>
+          </div>
+        </div>
+      </div>
+      <!-- blade: @else empty state -->
+      <div class="cart-panel__empty">
+        <div class="empty-state">
+          <span class="empty-state__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg></span>
+          <h3 class="empty-state__title">Your bag is empty</h3>
+          <a class="btn btn--primary" href="{{root}}shop.html" data-autofocus-empty>Start shopping</a>
+        </div>
+      </div>
+      <!-- /blade -->
+    </div>
+  </div>
+  <template data-cart-item-template>
+    <li class="cart-item" data-cart-item data-key="|" data-unit-price="0">
+      <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+      <div class="cart-item__body">
+        <p class="cart-item__name"><a href="{{root}}product.html" data-item-name></a></p>
+        <p class="cart-item__meta" data-item-meta></p>
+        <div class="cart-item__row">
+          <div class="qty" data-qty>
+            <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
+            <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+            <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
+          </div>
+          <p class="price" data-line-total>Rs 0</p>
+        </div>
+      </div>
+      <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove "><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
+    </li>
+  </template>
+
+  <div class="overlay" data-overlay data-close-layer></div>

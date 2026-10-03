@@ -375,7 +375,8 @@ html.is-locked { overflow: hidden; }
   color: var(--ink);
   text-decoration: none;
 }
-.menu-group a:hover { color: var(--primary-deep); }
+.menu-group a:hover,
+.menu-group a[aria-current="page"] { color: var(--primary-deep); }
 .menu-group a .icon { color: var(--ink-soft); }
 
 /* Cart panel shell. Line-item and empty-state styles are in components.css. */

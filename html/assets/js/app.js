@@ -27,6 +27,17 @@
     }
   })();
 
+  /* ---------- Active page: <body data-page="home"> marks matching [data-nav] links ----------
+     Both attributes take space-separated tokens, e.g. data-page="account login". */
+  (function () {
+    var pages = (document.body.getAttribute('data-page') || '').split(/\s+/).filter(Boolean);
+    if (!pages.length) return;
+    $$('[data-nav]').forEach(function (el) {
+      var hit = el.getAttribute('data-nav').split(/\s+/).some(function (t) { return pages.indexOf(t) !== -1; });
+      if (hit) el.setAttribute('aria-current', 'page');
+    });
+  })();
+
   /* ---------- Layers: drawers and sheets (focus trap, ESC, focus return) ---------- */
   var overlay = $('[data-overlay]');
   var active = null; // { el, trigger }
