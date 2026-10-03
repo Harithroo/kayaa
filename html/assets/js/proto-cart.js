@@ -5,6 +5,7 @@
    Line item: { id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone }
    window.KayaaCart: get() totals() add(item, opts) update(id, qty) remove(id) clear() money(n) toneCss(item)
                      order.save/get/clear/nextRef (the simulated checkout order)
+                     session.get/set/clear (the demo signed-in flag: { name, email })
    Events on document: "kayaa:cart" after any change; "kayaa:open-cart" when add() is called with { open: true, trigger }.
    ?demo= on cart.html and checkout.html (oos-line, checkout-oos, low-stock, price-changed, free-delivery, empty) is applied
    as a view over the stored items and never saved, except empty, which clears the bag. */
@@ -136,13 +137,21 @@
     clear: function () { drop(ORDER_KEY); },
     // TODO: real reference format (the prototype counts up from KYA-10234)
     nextRef: function () {
-      var n = (parseInt(read(SEQ_KEY), 10) || 10233) + 1;
+      var n = (parseInt(read(SEQ_KEY), 10) || 10260) + 1;   // clear of the sample orders (KYA-10135 to KYA-10250)
       write(SEQ_KEY, String(n));
       return 'KYA-' + n;
     }
   };
 
+  var SESSION_KEY = 'kayaa.proto.session.v1';
+  var session = {
+    get: function () { try { return JSON.parse(read(SESSION_KEY)); } catch (e) { return null; } },
+    set: function (user) { write(SESSION_KEY, JSON.stringify(user)); },
+    clear: function () { drop(SESSION_KEY); }
+  };
+
   window.KayaaCart = {
+    session: session,
     get: get, totals: totals, add: add, update: update, remove: remove, clear: clear, order: order,
     money: money, slugify: slugify, MAX: MAX, FREE_AT: FREE_AT, FEE: FEE,
     toneCss: function (item) {

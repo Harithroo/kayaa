@@ -1,0 +1,10 @@
+# Classes that are intentionally unstyled structural hooks (BEM wrappers and modifiers used for markup structure or JS).
+# check-css.mjs does not warn about them. One class name per line; lines starting with # are comments.
+cart-layout__lines
+checkout-main
+hero__copy
+mega__feature-body
+rating-row__label
+site-header--minimal
+switch__label
+pagination__edge-label

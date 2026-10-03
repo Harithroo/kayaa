@@ -163,73 +163,6 @@
   .listing .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* ---------- Pagination ---------- */
-.pagination { margin-top: var(--space-6); }
-.pagination[hidden] { display: none; }
-.pagination__list {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  list-style: none;
-}
-.pagination__link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-width: var(--tap);
-  min-height: var(--tap);
-  padding: 0 var(--space-3);
-  border-radius: var(--radius-pill);
-  font-size: var(--fs-ui);
-  font-weight: 700;
-  color: var(--ink);
-  text-decoration: none;
-  transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
-}
-@media (hover: hover) and (pointer: fine) {
-  a.pagination__link:hover { background: var(--secondary); }
-}
-.pagination__link[aria-current="page"] {
-  background: var(--primary-deep);
-  color: #fff;
-}
-.pagination__link[aria-disabled="true"] {
-  color: var(--ink-soft);
-  opacity: 0.55;
-}
-.pagination__gap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  min-height: var(--tap);
-  color: var(--ink-soft);
-}
-.pagination__status {
-  padding-inline: var(--space-3);
-  font-size: var(--fs-dense);
-  font-weight: 600;
-  color: var(--ink);
-}
-.pagination__list > li { display: flex; }
-.pagination__edge { border: 1.5px solid var(--line); background: var(--surface); }
-@media (hover: hover) and (pointer: fine) {
-  a.pagination__edge:hover { border-color: var(--primary-deep); }
-}
-
-/* Mobile: Prev / "Page 1 of 2" / Next */
-@media (max-width: 599px) {
-  .pagination__num { display: none; }
-  .pagination__list { justify-content: space-between; }
-}
-@media (min-width: 600px) {
-  .pagination__status { display: none; }
-  .pagination__list { gap: var(--space-2); }
-  .pagination__edge { padding-inline: var(--space-4); }
-}
-
 /* ---------- Empty and no-results states ---------- */
 .listing-empty {
   margin-top: var(--space-4);
@@ -293,19 +226,4 @@
 @media (max-width: 899px) and (max-height: 500px) and (orientation: landscape) {
   .toolbar { position: static; }
   html { scroll-padding-top: calc(var(--header-h, 53px) + 8px); }
-}
-
-/* Narrow phones: Prev / Next become icon-only (the labels stay for screen readers) so the row fits at 320px */
-@media (max-width: 399px) {
-  .pagination__edge { min-width: var(--tap); padding-inline: 0; }
-  .pagination__edge-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
 }

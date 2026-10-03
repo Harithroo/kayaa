@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Track order | Kayaa</title>
-  <meta name="description" content="Track order page of the Kayaa prototype. Placeholder.">
+  <title>Track your order | Kayaa</title>
+  <meta name="description" content="Look up the status of your Kayaa order with its reference.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=7db20248">
+  <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
   <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/stub.css?v=eb5a12f5">
+  <link rel="stylesheet" href="assets/css/pages/track.css?v=7e009a09">
 </head>
 <body data-page="track">
   <!-- partial: sprite -->
@@ -154,6 +154,16 @@
       <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
       <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
     </symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24">
+      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+      <circle cx="12" cy="12" r="3" />
+    </symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24">
+      <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+      <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+      <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+      <path d="m2 2 20 20" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -236,7 +246,7 @@
           </div>
         </form>
         <!-- blade: @auth account/index.html @else account/login.html -->
-        <a class="icon-btn site-header__account" href="account/login.html" data-nav="account" aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
+        <a class="icon-btn site-header__account" href="account/login.html" data-nav="account" data-account-link aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
         <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
           <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg>
           <span class="icon-btn__count" data-cart-count aria-hidden="true">2</span>
@@ -261,21 +271,84 @@
   </header>
   <!-- /partial: header -->
 
-  <!-- prototype-stub: replace this whole main when the page is built -->
   <main id="main">
-    <div class="container stub">
-      <div class="stub__card">
-        <p class="eyebrow">Prototype</p>
-        <h1>Track order</h1>
-        <p class="stub__text">This screen is still being designed and will appear here in a later review round.</p>
-        <div class="stub__actions">
-          <a class="btn btn--primary" href="index.html">Back to home</a>
-          <a class="btn btn--secondary" href="review.html">Review index</a>
+    <div class="container track" data-track-page>
+      <h1>Track your order</h1>
+      <p class="track__lede">Enter the order reference from your confirmation page.</p>
+
+      <!-- TODO: should a second factor (the email or mobile used at checkout) be required to stop reference guessing? -->
+      <!-- TODO: form action (assumption: POST /track, limited to 20 requests a minute); @csrf -->
+      <form class="track-form" method="post" action="track.html" novalidate data-track-form>
+        <div class="track-form__row">
+          <div class="field">
+            <label for="ref">Order reference</label>
+            <input id="ref" name="ref" type="text" placeholder="KYA-10234" autocapitalize="characters" autocomplete="off" spellcheck="false" required>
+            <p class="field__error" id="ref-error" hidden></p>
+          </div>
+          <button type="submit" class="btn btn--primary btn--lg">Track order</button>
         </div>
+      </form>
+
+      <div class="track-alerts">
+        <!-- blade: @if no order has that reference -->
+        <div class="alert alert--error" role="alert" data-track-alert="notfound" hidden>
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
+          <div><p>We couldn't find an order with that reference. Check it and try again.</p></div>
+        </div>
+        <!-- blade: @if throttled -->
+        <div class="alert alert--error" role="alert" data-track-alert="throttle" hidden>
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
+          <div><p>Too many attempts. Please wait a minute and try again.</p></div>
+        </div>
+      </div>
+
+      <!-- blade: only status, payment status, items, totals, last-updated date and the delivery estimate. Never name, address, phone or email. -->
+      <div class="track-result" data-track-result hidden>
+        <section class="track-card" aria-labelledby="tr-title">
+          <h2 class="visually-hidden" id="tr-title">Order status</h2>
+          <div class="order-head">
+            <div>
+              <p class="order-head__ref" data-t-ref>KYA-10234</p>
+              <p class="order-head__meta"><span data-t-date>Placed 1 Oct 2026</span> · <span data-t-updated>Last updated 3 Oct 2026</span></p>
+            </div>
+            <div class="order-head__badges" data-t-badges></div>
+          </div>
+          <div data-stepper-root>
+            <ol class="stepper" data-stepper>
+              <li class="stepper__step is-done"><span class="stepper__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg></span><span class="stepper__label">Order placed<span class="visually-hidden"> (completed)</span></span></li>
+              <li class="stepper__step is-done"><span class="stepper__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg></span><span class="stepper__label">Confirmed<span class="visually-hidden"> (completed)</span></span></li>
+              <li class="stepper__step is-current" aria-current="step"><span class="stepper__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span><span class="stepper__label">Shipped<span class="visually-hidden"> (current step)</span></span></li>
+              <li class="stepper__step is-upcoming"><span class="stepper__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></span><span class="stepper__label">Delivered<span class="visually-hidden"> (upcoming)</span></span></li>
+            </ol>
+            <p class="stepper-note" data-stepper-note hidden></p>
+            <div data-order-banner hidden></div>
+            <!-- TODO: retry action for a failed payment (assumption: a route that restarts payment for the same order) -->
+            <a class="btn btn--primary track-retry" href="proto-onepay.html" data-retry-payment hidden>Try payment again</a>
+          </div>
+          <p class="track-eta" data-t-eta hidden><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg> <span data-t-eta-text>Delivery estimate: 2–3 working days</span></p>
+        </section>
+
+        <section class="track-card" aria-labelledby="tr-items">
+          <h2 id="tr-items">Items</h2>
+          <ul class="order-lines" role="list" data-t-lines></ul>
+          <dl class="totals">
+            <div class="totals__row"><dt>Subtotal</dt><dd data-t-subtotal>Rs 6,300</dd></div>
+            <div class="totals__row"><dt>Delivery</dt><dd data-t-delivery>Rs 450</dd></div>
+            <div class="totals__row totals__row--total"><dt>Total</dt><dd data-t-total>Rs 6,750</dd></div>
+          </dl>
+        </section>
+
+        <section class="track-card track-help" aria-labelledby="tr-help">
+          <div>
+            <h2 id="tr-help">Questions about your order?</h2>
+            <p>Chat to us on WhatsApp and quote <strong data-help-ref>KYA-10234</strong>.</p>
+          </div>
+          <!-- TODO: add the WhatsApp number -->
+          <a class="btn btn--secondary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
+        </section>
       </div>
     </div>
   </main>
-  <!-- /prototype-stub -->
 
   <!-- partial: footer -->
   <footer class="site-footer">
@@ -348,7 +421,7 @@
         </button>
       </li>
       <!-- blade: @auth account/index.html @else account/login.html -->
-      <li><a class="tabbar__item" href="account/login.html" data-nav="account"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
+      <li><a class="tabbar__item" href="account/login.html" data-nav="account" data-account-link><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
     </ul>
   </nav>
   <!-- /partial: tabbar -->
@@ -404,8 +477,8 @@
           <p class="menu-group__title">Account</p>
           <!-- blade: @auth My account @else Log in / Register -->
           <ul role="list">
-            <li><a href="account/login.html" data-nav="login">Log in</a></li>
-            <li><a href="account/register.html" data-nav="register">Register</a></li>
+            <li><a href="account/login.html" data-nav="login" data-account-link><span data-account-label>Log in</span></a></li>
+            <li data-guest-only><a href="account/register.html" data-nav="register">Register</a></li>
           </ul>
         </div>
       </nav>
@@ -549,8 +622,11 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/proto-cart.js?v=51cee244" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=b66a945b" defer></script>
+  <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=86051b1a" defer></script>
   <!-- /partial: scripts -->
+  <script src="assets/js/proto-orders.js?v=565d0575" defer></script>
+  <!-- PROTOTYPE ONLY: delete at Blade conversion -->
+  <script src="assets/js/proto-account.js?v=9c223bd0" defer></script>
 </body>
 </html>

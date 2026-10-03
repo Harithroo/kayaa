@@ -40,6 +40,13 @@ Conventions used by every page
 24. **Status component mapping** for order and payment statuses (section 3.8).
 25. **Order confirmation emails do not exist yet.** The pages never claim one was sent.
 
+26. **Optional accounts.** Guest checkout and /track always work. Customers and admins share the `users` table; register collects name, email, mobile (`users.phone`) and password (section 3.10).
+27. **`User::allOrders`**: orders with the customer's `user_id` plus earlier guest orders placed with the same email (section 3.11).
+28. **Track lookup by order reference** that exposes only status, payment status, items, totals, last-updated date and the delivery estimate, limited to 20 requests a minute (section 3.9).
+29. **Auth rate limits and safe responses:** login, register, forgot and reset are rate-limited; login errors never say which field was wrong; forgot-password never reveals whether an email exists; reset emails go through the configured mailer (section 3.10).
+30. **Review statuses for the customer:** one `approved` flag, so "Awaiting approval" covers pending and hidden; admins can reply; one review per customer per product (section 3.11).
+31. **Order status history timestamps** are not shown (the backend may not store them). TODO decide whether the stepper should get dates.
+
 ---
 
 ## 2. Shell (every page)
@@ -87,10 +94,11 @@ Route map (prototype file -> Laravel route). Status: **built** = designed in the
 | checkout.html | `/checkout` | built (minimal shell) |
 | thank-you.html | `/orders/{ref}/thank-you` | built (minimal shell) |
 | proto-onepay.html | none | prototype stand-in for the hosted payment page, delete at conversion |
-| track.html | `/track` | stub |
+| track.html | `/track` | built |
 | contact.html | `/contact` | stub |
 | size-guide.html, delivery.html, returns.html, about.html, privacy.html, terms.html | same names | stub |
-| account/register, login, forgot-password, reset-password, index (orders), order, reviews, profile | `/account/...` | stub |
+| account/register, login, forgot-password, reset-password | `/account/register`, `/account/login`, `/account/forgot-password`, `/account/reset-password` | built (calm minimal shell) |
+| account/index (orders), order, reviews, profile | `/account`, `/account/orders/{ref}`, `/account/reviews`, `/account/profile` | built |
 | review.html | none | review-only index, delete at conversion |
 
 ### 3.1 Home (`/`)
@@ -250,8 +258,80 @@ The order reference is shown large with a Copy button (clipboard; announces "Ord
 | `failed`, `cancelled` | error tint + x icon |
 | `refunded` | blue tint + rotate-ccw icon |
 
-### 3.9 Stub pages (track, contact, size-guide, delivery, returns, about, privacy, terms, account/*)
-Not designed yet. Only the route and the page name exist. Assumptions for planning, **not** from the prototype: contact will have name, email, message; track will take an order reference and reuse the `.status` component (section 3.8).
+### 3.9 Track order (`/track`)
+Full shell. Prototype-only: `?ref=` prefills and runs the lookup, `?demo=throttle`. Guests and signed-in customers use the same page; it always works without an account.
+
+Form: `POST` (action TODO; assumption `POST /track`), `@csrf`, **limited to 20 requests a minute**.
+| Field | Type | Required | Validation | Example |
+| --- | --- | --- | --- | --- |
+| `ref` | text (`autocapitalize="characters"`, `autocomplete="off"`) | yes | order reference, matched case-insensitively and trimmed | `KYA-10234` |
+
+The thank-you page's "Track your order" link carries `?ref=` (`/track?ref={reference}`) so the field is prefilled and the lookup runs (TODO decide whether a link should run the lookup or only prefill it).
+
+**Privacy rule:** the result shows only the status, the payment status, the items, the totals, the last-updated date and the delivery estimate. Never the name, address, phone or email. The estimate is shown while the order can still arrive (not for delivered, cancelled or refunded orders) and does not name the district.
+**Question for the backend dev:** should a second factor (the email or mobile used at checkout) be required to stop reference guessing? Sequential references can be enumerated.
+
+Result data: reference, order date, last-updated date, order status, payment status, items (name, size, colour, quantity, unit price, thumbnail), subtotal, delivery fee, total, delivery estimate text.
+
+States
+- Found: order head (reference, "Placed {date}", "Last updated {date}", status badge, payment badge), the status stepper, items and totals, and a help card "Questions about your order? Chat on WhatsApp" that quotes the reference.
+- Stepper (an `<ol>`: Order placed, Confirmed, Shipped, Delivered; horizontal from 900px, vertical below; completed steps show a check, the current step has `aria-current="step"` and a ring, future steps are muted; icon plus text always; **no per-step dates** because the backend may not store history, TODO):
+  - pending order + pending payment: step 1 current with the note "Waiting for payment confirmation".
+  - pending order + failed payment: step 1 shows the error status, a note, and a "Try payment again" button (retry action TBD).
+  - confirmed: step 2 current. shipped: step 3 current. delivered: all steps done, step 4 `aria-current`.
+  - cancelled: the stepper is replaced by the banner "This order was cancelled".
+  - refunded (payment status): the banner "This order was refunded" with the payment badge (takes precedence over cancelled).
+- Not found: alert "We couldn't find an order with that reference. Check it and try again." (`role="alert"`), the field marked invalid, the form kept.
+- Throttled: alert "Too many attempts. Please wait a minute and try again."
+
+### 3.10 Auth pages (`/account/register`, `/account/login`, `/account/forgot-password`, `/account/reset-password`)
+Accounts are optional: guest checkout and `/track` always work, and every auth page says so ("No account needed to order. You can check out as a guest and track an order any time." with links to the shop and to track). Customers and admins share the `users` table. The pages use the calm minimal shell (`header-auth`: wordmark and "Continue shopping"; `footer-minimal`). All four endpoints are **rate-limited** (login, register, forgot, reset; the prototype shows "Too many attempts. Please try again in 45 seconds."). Prototype `?demo=`: login `errors|throttle|success`; register `errors|throttle`; forgot-password `errors|throttle|sent`; reset-password `errors|invalid-link`.
+
+All forms: `POST`, `@csrf`, `novalidate`; the server repeats every rule. Error summary (`role="alert"`, focus moves to it, links to each field) plus inline messages with `aria-invalid` and `aria-describedby`. Password fields have a show/hide button (name "Show password", `aria-pressed`).
+
+**Login** - `POST /login` (TODO action):
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `email` | email, `autocomplete="username"` | yes | valid email |
+| `password` | password, `autocomplete="current-password"` | yes | |
+| `remember` | checkbox, value `1` | no | "Remember me" (TODO confirm) |
+Safe responses: a wrong email or password returns ONE alert, "These details don't match our records.", and never says which field was wrong. After a password reset the page shows the success alert "Your password has been updated. Log in with your new password." (a status flash).
+
+**Register** - `POST /register` (TODO action):
+| Field | Type | Required | Validation | Example |
+| --- | --- | --- | --- | --- |
+| `name` | text, `autocomplete="name"` | yes | non-empty | `Amaya Ranasinghe` |
+| `email` | email, `autocomplete="email"` | yes | valid, unique in `users` ("This email is already registered. Log in or use a different email.") | `amaya@example.com` |
+| `phone` | tel, `autocomplete="tel"` | yes (stored as `users.phone`) | Sri Lankan mobile `07X XXXXXXX` or `+94 7X XXXXXXX`, spaces and dashes allowed | `071 234 5678` |
+| `password` | password, `autocomplete="new-password"` | yes | at least 8 characters (TODO confirm the rule) | |
+| `password_confirmation` | password, `autocomplete="new-password"` | yes | must match | |
+Terms line links to `/terms` and `/privacy`. TODO: is email verification needed? On success the user is signed in and sent to `/account`.
+
+**Forgot password** - `POST /forgot-password` (TODO action): field `email` (email, required). The answer is ALWAYS "If that email is registered, we've sent a reset link." whether or not the email exists (never reveals which emails are registered, and never claims delivery beyond that sentence). The reset email goes through the configured mailer.
+
+**Reset password** - `POST /reset-password` (TODO action): hidden `token`; `email` (read-only); `password` and `password_confirmation` (new-password, at least 8, must match). Invalid or expired token: a page "This reset link is no longer valid." with a button to request a new link. Success redirects to `/account/login` with the success flash.
+
+### 3.11 Account area (`/account`, `/account/orders/{ref}`, `/account/reviews`, `/account/profile`)
+Full shell; `<body data-page="account">`. Desktop: a left sidebar (My orders, My reviews, Profile, Log out) and the content on the right; mobile: a scrollable chip nav (`aria-label="Account"`, `aria-current` on the active item) and the Log out button at the bottom of the profile page. Log out is `POST /logout` (TODO action). Pages are reachable by URL in the prototype; in Laravel they are guarded by auth.
+
+**My orders (`/account`)**: heading "Hi, {first name}". Orders = `User::allOrders`: the orders with the customer's `user_id` **plus earlier guest orders placed with the same email**; a quiet note says so ("Orders you placed as a guest with this email also appear here."). TODO: do guest orders attach automatically, and for how long? 6 per page (`?page=`), newest first. Each card: reference (link), order date, status badge, payment badge, item count with up to 3 thumbnails, total, "View order" link. Pagination reuses the shared component. Empty state: "No orders yet" with "Start shopping".
+
+**Order detail (`/account/orders/{ref}`, prototype `order.html?ref=`)**: reference, date, status and payment badges, the status stepper (same variants as 3.9), items (with a "Write a review" link per item to `/products/{slug}#write-review` for shipped or delivered orders), totals card (subtotal, delivery, total, payment method "Card - Onepay", payment status), delivery address (name, lines, city, district, phone) and delivery estimate (hidden for delivered, cancelled and refunded), actions: "Track this order" (`/track?ref=`), "Chat on WhatsApp", and "Try payment again" when the payment is pending or failed (retry action TBD, section 1.22). An order that is not this customer's, or does not exist, shows a not-found card with a link back to the list. Sample references in the prototype: KYA-10234 shipped, KYA-10201 delivered, KYA-10198 cancelled, KYA-10240 pending payment, KYA-10250 payment failed, KYA-10180 refunded.
+
+**My reviews (`/account/reviews`)**: the customer's reviews: product thumbnail and name (link), stars, comment, date, "Verified purchase" badge where applicable, a status badge and, when present, the admin reply ("Reply from Kayaa"). One review per signed-in customer per product. Reviews start unapproved and only approved ones show on the product page. The backend has ONE flag (approved), so a pending review and a hidden one look the same to the customer: **"Awaiting approval"** (neutral outline + clock) versus **"Published"** (lilac + check). Empty state: "You haven't written any reviews yet" with a link to My orders. Editing a review is not in the backend, so it is not designed.
+
+**Profile (`/account/profile`)**:
+| Form | Method / action | Fields |
+| --- | --- | --- |
+| Your details | `POST` + `_method=PATCH` -> `/account/profile` (TODO action) | `name` (required), `email` (required, valid, unique), `phone` (required, Sri Lankan mobile). Success alert "Your details have been saved." |
+| Change password | `POST` + `_method=PUT` -> `/account/password` (TODO action) | `current_password` (required, `current-password`), `password` (new-password, at least 8), `password_confirmation` (must match). Success alert "Your password has been changed." |
+Cancelling an order and deleting an account are not in the backend and are not designed (see Questions).
+
+### 3.12 Status component additions
+The `.status` mapping (3.8) is also used for the review statuses: "Published" = `status--confirmed` (lilac + check), "Awaiting approval" = `status--pending` (neutral outline + clock).
+
+### 3.13 Stub pages (contact, size-guide, delivery, returns, about, privacy, terms)
+Not designed yet. Only the route and the page name exist. Assumption for planning, **not** from the prototype: contact will have name, email and message.
 
 ---
 
@@ -293,7 +373,8 @@ The button carries `data-name`, `data-price`, optional `data-was`, `data-tone` (
 - `assets/js/proto-listing.js`: filters, sorts, searches and paginates the 24 sample cards from the query string; sets H1, intro, breadcrumb, counts, pagination and the empty states. The server does all of this.
 - `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `sale`, `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
 - `assets/js/proto-cart.js`: the demo cart (sessionStorage) behind the header counts, the drawer, the cart page and the checkout summary, plus the simulated order. Line shape: `{id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}`.
+- `assets/js/proto-orders.js` (twelve sample orders, the stepper renderer), `proto-account.js` (track, orders, order detail, reviews, profile, log out) and `proto-auth.js` (auth demo outcomes and the demo session). Demo session: `window.KayaaCart.session` (sessionStorage); when set, the Account links in the header, tab bar and menu drawer go to the dashboard. In Laravel the server renders `@auth` and `@guest`.
 - `assets/js/proto-cart-page.js`, `proto-checkout.js`, `proto-thankyou.js`, `proto-onepay.js` and `html/proto-onepay.html`: render the pages from the demo cart/order and fake the payment hand-off. Demo params: cart `empty`, `oos-line`, `low-stock`, `price-changed`, `free-delivery`, `checkout-oos`; checkout `errors`, `throttle`, `gateway-error`, `signed-in`, `empty`; thank-you `state=paid|pending|failed|cancelled`.
 - `html/review.html` is a review index for the client; remove it.
 
-Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, search toggle, steppers, active-nav marking), `product.js` (variants, gallery filtering, stock note, quantity cap, size validation, sticky bar, show-more reviews), `cart.js` (sticky checkout bar), `checkout.js` (validation, error summary, delivery estimate, loading state) and `thank-you.js` (copy reference, refresh). The drawer in `app.js` currently renders from the demo cart: in Laravel it swaps in the server panel. Remove the `data-demo-cart` attribute from the buy form when the real cart exists.
+Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, search toggle, steppers, active-nav marking), `product.js` (variants, gallery filtering, stock note, quantity cap, size validation, sticky bar, show-more reviews), `cart.js` (sticky checkout bar), `checkout.js` (validation, error summary, delivery estimate, loading state) and `thank-you.js` (copy reference, refresh) and `account.js` (auth and profile form validation, error summary, show/hide password). The drawer in `app.js` currently renders from the demo cart: in Laravel it swaps in the server panel. Remove the `data-demo-cart` attribute from the buy form when the real cart exists.

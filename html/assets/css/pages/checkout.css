@@ -115,6 +115,10 @@
 .checkout-terms { margin-top: var(--space-4); font-size: var(--fs-ui); color: var(--ink-soft); }
 /* inline links in a sentence: vertical padding on an inline box grows the tap area to 44px without changing the line height */
 .checkout-terms a { margin-inline: -4px; padding: 14px 4px; font-weight: 700; }
+@media (max-width: 599px) {
+  /* 44px line boxes: the padded tap areas of the two links never overlap, even when the sentence wraps */
+  .checkout-terms { line-height: 44px; }
+}
 .pay-btn { margin-top: var(--space-5); }   /* clears the padded tap area of the Terms and Returns links above */
 .pay-helper {
   display: flex;

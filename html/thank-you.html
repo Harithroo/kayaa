@@ -12,10 +12,10 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=7db20248">
+  <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
   <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/thank-you.css?v=72435f15">
+  <link rel="stylesheet" href="assets/css/pages/thank-you.css?v=f7e6cde9">
 </head>
 <body data-page="thank-you">
   <!-- partial: sprite -->
@@ -154,6 +154,16 @@
       <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
       <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
     </symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24">
+      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+      <circle cx="12" cy="12" r="3" />
+    </symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24">
+      <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+      <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+      <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+      <path d="m2 2 20 20" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -164,7 +174,7 @@
     <div class="container site-header__bar site-header__bar--minimal">
       <a class="wordmark" href="index.html" aria-label="Kayaa home">kayaa</a> <!-- TODO: replace with logo when ready -->
       <p class="secure-label"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-lock"></use></svg> Secure checkout</p>
-      <a class="back-link site-header__back" href="cart.html"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg> Back to bag</a>
+      <a class="back-link site-header__back" href="cart.html" data-back-link><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg> <span data-back-label>Back to bag</span></a>
     </div>
   </header>
   <!-- /partial: header-minimal -->
@@ -179,7 +189,8 @@
         <p class="thanks__lede">We’ll pack your order and send it to you. Use your order reference to track it.</p>
         <!-- TODO: show an "email sent" line once order emails exist -->
         <div class="thanks__actions">
-          <a class="btn btn--primary btn--lg" href="track.html">Track your order</a>
+          <!-- blade: href is /track?ref={reference} so the track page prefills it -->
+          <a class="btn btn--primary btn--lg" href="track.html?ref=KYA-10234" data-track-link>Track your order</a>
           <a class="btn btn--secondary btn--lg" href="shop.html">Continue shopping</a>
         </div>
       </section>
@@ -282,11 +293,11 @@
   <!-- /partial: footer-minimal -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/proto-cart.js?v=51cee244" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=b66a945b" defer></script>
+  <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=86051b1a" defer></script>
   <!-- /partial: scripts -->
   <script src="assets/js/thank-you.js?v=304c4094" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="assets/js/proto-thankyou.js?v=4d58c0e5" defer></script>
+  <script src="assets/js/proto-thankyou.js?v=fb2ad775" defer></script>
 </body>
 </html>

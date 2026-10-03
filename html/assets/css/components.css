@@ -1328,3 +1328,215 @@ body.has-sticky-atc .tabbar { display: none; }
 .order-line__price { font-size: var(--fs-dense); font-weight: 700; white-space: nowrap; }
 
 .order-lines + .totals { margin-top: var(--space-4); }
+
+/* ---------- Status stepper (Order placed, Confirmed, Shipped, Delivered) ----------
+   <ol class="stepper"><li class="stepper__step is-done|is-current|is-upcoming|is-error" aria-current="step">
+   <span class="stepper__icon">svg</span><span class="stepper__label">Confirmed<span class="visually-hidden"> (completed)</span></span></li>...
+   Vertical below 900px, horizontal from 900px. Icon + text on every step, never colour alone. No per-step dates (TODO: the backend may not store history). */
+.stepper { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.stepper__step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  color: var(--ink-soft);
+}
+.stepper__step::before {            /* connector to the previous step */
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 19px;
+  width: 2px;
+  height: 16px;
+  background: var(--line-strong);
+}
+.stepper__step:first-child::before { display: none; }
+.stepper__step.is-done::before,
+.stepper__step.is-current::before { background: var(--primary-deep); }
+.stepper__icon {
+  position: relative;
+  z-index: var(--z-base);
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-round);
+  background: var(--surface);
+  color: var(--ink-soft);
+}
+.stepper__label { font-size: var(--fs-body); font-weight: 600; }
+.stepper__step.is-done { color: var(--ink); }
+.stepper__step.is-done .stepper__icon { border-color: var(--primary); background: var(--tone-2); color: var(--primary-deep); }
+.stepper__step.is-current { color: var(--ink); }
+.stepper__step.is-current .stepper__label { font-weight: 800; }
+.stepper__step.is-current .stepper__icon {
+  border-color: var(--primary-deep);
+  color: var(--primary-deep);
+  box-shadow: 0 0 0 4px rgba(110, 90, 140, 0.15);
+}
+.stepper__step.is-error { color: var(--ink); }
+.stepper__step.is-error .stepper__label { font-weight: 800; }
+.stepper__step.is-error .stepper__icon { border-color: var(--error); background: var(--error-tint); color: var(--error); }
+.stepper-note { margin-top: var(--space-3); font-size: var(--fs-dense); font-weight: 700; color: var(--ink); }
+.stepper-note::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: var(--primary-deep); }
+@media (min-width: 900px) {
+  .stepper { flex-direction: row; }
+  .stepper__step { flex: 1; flex-direction: column; align-items: center; min-height: 0; text-align: center; }
+  .stepper__step::before { top: 19px; left: -50%; width: 100%; height: 2px; }
+}
+
+/* ---------- Password field with show/hide ----------
+   The toggle keeps the name "Show password" and exposes its state with aria-pressed. */
+.password-field__wrap { position: relative; }
+.password-field input { padding-right: 52px; }
+.password-field__toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-round);
+  background: none;
+  color: var(--ink-soft);
+}
+.password-field__toggle[aria-pressed="true"] { color: var(--primary-deep); }
+.password-field__toggle .icon:last-child { display: none; }
+.password-field__toggle[aria-pressed="true"] .icon:first-child { display: none; }
+.password-field__toggle[aria-pressed="true"] .icon:last-child { display: block; }
+
+/* ---------- Checkbox ---------- */
+.checkbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  font-size: var(--fs-dense);
+  cursor: pointer;
+}
+.checkbox input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+.checkbox__box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid var(--ink-soft);
+  border-radius: 8px;
+  background: var(--surface);
+  color: #fff;
+}
+.checkbox__box .icon { width: 16px; height: 16px; opacity: 0; }
+.checkbox input:checked + .checkbox__box { border-color: var(--primary-deep); background: var(--primary-deep); }
+.checkbox input:checked + .checkbox__box .icon { opacity: 1; }
+.checkbox input:focus-visible + .checkbox__box { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+
+/* ---------- Order head (reference, date, status badges): track result and order detail ---------- */
+.order-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--space-3) var(--space-4); }
+.order-head__ref { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: 700; line-height: 1.15; }
+.order-head__meta { margin-top: var(--space-1); font-size: var(--fs-dense); color: var(--ink-soft); }
+.order-head__badges { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+/* ---------- Pagination (listings, My orders) ---------- */
+.pagination { margin-top: var(--space-6); }
+.pagination[hidden] { display: none; }
+.pagination__list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  list-style: none;
+}
+.pagination__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: var(--tap);
+  min-height: var(--tap);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-ui);
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  a.pagination__link:hover { background: var(--secondary); }
+}
+.pagination__link[aria-current="page"] {
+  background: var(--primary-deep);
+  color: #fff;
+}
+.pagination__link[aria-disabled="true"] {
+  color: var(--ink-soft);
+  opacity: 0.55;
+}
+.pagination__gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: var(--tap);
+  color: var(--ink-soft);
+}
+.pagination__status {
+  padding-inline: var(--space-3);
+  font-size: var(--fs-dense);
+  font-weight: 600;
+  color: var(--ink);
+}
+.pagination__list > li { display: flex; }
+.pagination__edge { border: 1.5px solid var(--line); background: var(--surface); }
+@media (hover: hover) and (pointer: fine) {
+  a.pagination__edge:hover { border-color: var(--primary-deep); }
+}
+
+/* Mobile: Prev / "Page 1 of 2" / Next */
+@media (max-width: 599px) {
+  .pagination__num { display: none; }
+  .pagination__list { justify-content: space-between; }
+}
+@media (min-width: 600px) {
+  .pagination__status { display: none; }
+  .pagination__list { gap: var(--space-2); }
+  .pagination__edge { padding-inline: var(--space-4); }
+}
+
+/* Narrow phones: Prev / Next become icon-only (the labels stay for screen readers) so the row fits at 320px */
+@media (max-width: 399px) {
+  .pagination__edge { min-width: var(--tap); padding-inline: 0; }
+  .pagination__edge-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.empty-state--card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); }
+
+/* Delivery address and estimate (thank-you, order detail) */
+.address-block { font-style: normal; line-height: 1.6; }
+.eta-line { display: flex; align-items: flex-start; gap: var(--space-2); margin-top: var(--space-3); font-weight: 700; font-size: var(--fs-dense); }
+.eta-line .icon { flex: none; margin-top: 2px; color: var(--primary-deep); }

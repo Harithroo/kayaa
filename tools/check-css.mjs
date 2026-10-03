@@ -6,7 +6,8 @@
 // Reports:
 //   ERROR   brace balance and unterminated comments in every html/assets/css/**/*.css
 //   ERROR   local stylesheets, scripts, images and CSS url() targets that do not exist
-//   WARNING classes used in the HTML that no CSS file defines (is-*, js-* and has-* state hooks are ignored)
+//   WARNING classes used in the HTML that no CSS file defines (is-*, js-* and has-* state hooks are ignored,
+//           and so is every class listed in tools/check-css.allow)
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -25,6 +26,12 @@ const rel = (p) => path.relative(repo, p).split(path.sep).join('/');
 const isLocal = (u) => u && !/^(https?:|\/\/|#|mailto:|tel:|data:|\{\{)/.test(u);
 const clean = (u) => u.split('#')[0].split('?')[0];
 const lineOf = (text, idx) => text.slice(0, idx).split('\n').length;
+
+// intentional structural classes (tools/check-css.allow, one per line, # comments)
+const allowFile = path.join(repo, 'tools', 'check-css.allow');
+const allowed = new Set(fs.existsSync(allowFile)
+  ? fs.readFileSync(allowFile, 'utf8').split(String.fromCharCode(10)).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'))
+  : []);
 
 const errors = [];
 const warnings = [];
@@ -109,7 +116,7 @@ for (const file of walk(htmlDir, '.html')) {
 }
 
 for (const [c, pages] of [...used].sort((a, b) => a[0].localeCompare(b[0]))) {
-  if (!defined.has(c)) warnings.push(`class "${c}" is used in ${pages.size} page${pages.size > 1 ? 's' : ''} (${[...pages][0]}${pages.size > 1 ? ', ...' : ''}) but defined in no CSS file`);
+  if (!defined.has(c) && !allowed.has(c)) warnings.push(`class "${c}" is used in ${pages.size} page${pages.size > 1 ? 's' : ''} (${[...pages][0]}${pages.size > 1 ? ', ...' : ''}) but defined in no CSS file`);
 }
 
 /* ---------- report ---------- */

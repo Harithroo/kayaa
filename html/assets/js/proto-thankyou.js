@@ -43,6 +43,22 @@
   var first = (order.address.name || 'there').split(/\s+/)[0];
   $$('[data-customer-name]', page).forEach(function (n) { n.textContent = first; });
   $$('[data-order-ref]', page).forEach(function (n) { n.textContent = order.ref; });
+
+  // keep the outcome with the order so My orders and /track show the same status
+  if (!sample) { order.payment = order.payment || {}; order.payment.status = state; store.order.save(order); }
+
+  // the Track link carries the reference (the track page prefills it)
+  $$('[data-track-link]', page).forEach(function (a) { a.setAttribute('href', 'track.html?ref=' + encodeURIComponent(order.ref)); });
+
+  // after a paid or pending order the bag is empty: the minimal header offers Continue shopping instead of Back to bag
+  if (state === 'paid' || state === 'pending') {
+    var back = document.querySelector('[data-back-link]');
+    if (back) {
+      back.setAttribute('href', 'shop.html');
+      var label = back.querySelector('[data-back-label]');
+      if (label) label.textContent = 'Continue shopping';
+    }
+  }
   $('[data-order-lines]', page).innerHTML = order.items.map(function (it) {
     return '<li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: ' + store.toneCss(it) + '">' +
       '<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>' +

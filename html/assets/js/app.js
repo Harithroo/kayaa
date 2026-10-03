@@ -58,6 +58,19 @@
     if (el.form.requestSubmit) el.form.requestSubmit(); else el.form.submit();
   });
 
+  /* ---------- Demo session (PROTOTYPE): Account links go to the dashboard when signed in.
+     In Laravel the server renders @auth / @guest, so this block is deleted at conversion. ---------- */
+  (function () {
+    var session = window.KayaaCart && window.KayaaCart.session;
+    if (!session || !session.get()) return;
+    $$('[data-account-link]').forEach(function (a) {
+      a.setAttribute('href', a.getAttribute('href').replace(/login\.html$/, 'index.html'));
+      var label = $('[data-account-label]', a);
+      if (label) label.textContent = 'My account';
+    });
+    $$('[data-guest-only]').forEach(function (n) { n.hidden = true; });
+  })();
+
   /* ---------- Active page: <body data-page="home"> marks matching [data-nav] links ----------
      Both attributes take space-separated tokens, e.g. data-page="account login". */
   (function () {

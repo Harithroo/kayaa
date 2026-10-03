@@ -13,7 +13,7 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=7db20248">
+  <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
   <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/product.css?v=b6eec762">
@@ -178,6 +178,16 @@
       <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
       <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
     </symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24">
+      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+      <circle cx="12" cy="12" r="3" />
+    </symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24">
+      <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+      <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+      <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+      <path d="m2 2 20 20" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -260,7 +270,7 @@
           </div>
         </form>
         <!-- blade: @auth account/index.html @else account/login.html -->
-        <a class="icon-btn site-header__account" href="account/login.html" data-nav="account" aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
+        <a class="icon-btn site-header__account" href="account/login.html" data-nav="account" data-account-link aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
         <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
           <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg>
           <span class="icon-btn__count" data-cart-count aria-hidden="true">2</span>
@@ -943,7 +953,7 @@ Sample text. The real description comes from the product record in the backend.<
         </button>
       </li>
       <!-- blade: @auth account/index.html @else account/login.html -->
-      <li><a class="tabbar__item" href="account/login.html" data-nav="account"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
+      <li><a class="tabbar__item" href="account/login.html" data-nav="account" data-account-link><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
     </ul>
   </nav>
   <!-- /partial: tabbar -->
@@ -999,8 +1009,8 @@ Sample text. The real description comes from the product record in the backend.<
           <p class="menu-group__title">Account</p>
           <!-- blade: @auth My account @else Log in / Register -->
           <ul role="list">
-            <li><a href="account/login.html" data-nav="login">Log in</a></li>
-            <li><a href="account/register.html" data-nav="register">Register</a></li>
+            <li><a href="account/login.html" data-nav="login" data-account-link><span data-account-label>Log in</span></a></li>
+            <li data-guest-only><a href="account/register.html" data-nav="register">Register</a></li>
           </ul>
         </div>
       </nav>
@@ -1168,8 +1178,8 @@ Sample text. The real description comes from the product record in the backend.<
   </script>
 
   <!-- partial: scripts -->
-  <script src="assets/js/proto-cart.js?v=51cee244" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=b66a945b" defer></script>
+  <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=86051b1a" defer></script>
   <!-- /partial: scripts -->
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
   <script src="assets/js/proto-product.js?v=fcd1f4ce" defer></script>

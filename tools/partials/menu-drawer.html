@@ -48,8 +48,8 @@
           <p class="menu-group__title">Account</p>
           <!-- blade: @auth My account @else Log in / Register -->
           <ul role="list">
-            <li><a href="{{root}}account/login.html" data-nav="login">Log in</a></li>
-            <li><a href="{{root}}account/register.html" data-nav="register">Register</a></li>
+            <li><a href="{{root}}account/login.html" data-nav="login" data-account-link><span data-account-label>Log in</span></a></li>
+            <li data-guest-only><a href="{{root}}account/register.html" data-nav="register">Register</a></li>
           </ul>
         </div>
       </nav>

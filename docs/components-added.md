@@ -209,3 +209,26 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 - Checkout's mobile "Edit bag" link and the order summary list only available lines; unavailable lines are excluded from totals.
 - The thank-you pages keep a "Back to bag" link from the minimal header on every state.
 - Terms and Returns links in the pay card are inline links with a padded tap area rather than separate buttons.
+
+## Track order, auth pages and account area
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| `.stepper` | components.css | Status stepper (Order placed, Confirmed, Shipped, Delivered): `<ol>` with `is-done`, `is-current` (`aria-current="step"`, ring), `is-upcoming`, `is-error`. Vertical below 900px, horizontal from 900px, icon + text on every step, no per-step dates. Cancelled and refunded orders show an `.alert` banner instead. `.stepper-note` carries "Waiting for payment confirmation". |
+| `.password-field` | components.css | Input with a 44px show/hide button; the button keeps the name "Show password" and uses `aria-pressed`; `aria-controls` points at the input. |
+| `.checkbox` | components.css | Real checkbox, styled box with a check icon, 44px row, visible focus ring ("Remember me"). |
+| `.order-head` | components.css | Reference, date line and status badges (track result, order detail). |
+| `.pagination` | components.css | Moved from listing.css; reused by My orders. Prev/Next are icon-only under 400px. |
+| `.empty-state--card` | components.css | Empty state on a surface card (orders, reviews). |
+| Auth card (`.auth`, `.auth-card`, `.auth-form`, `.auth-row`, `.auth-link`, `.auth-guest`) | pages/auth.css | Centred card for login, register, forgot and reset, with the guest-checkout note under every form. |
+| `header-auth` partial | tools/partials | Wordmark and "Continue shopping" (the checkout header's "Secure checkout" label would be wrong on auth pages). |
+| Account layout and nav (`.account`, `.account-nav`) | pages/account.css | Sidebar from 900px, scrollable chip nav below with `aria-current`; the desktop sidebar holds Log out, mobile puts it at the bottom of the profile page. |
+| Order card (`.order-card`) | pages/account.css | Reference, date, status and payment badges, up to 3 thumbnails, item count, total, "View order". Stacked on mobile, one compact row from 900px. |
+| Review list item | pages/account.css | The shared `.review-card` with a product header and a `.status` badge: "Published" = `status--confirmed`, "Awaiting approval" = `status--pending`. |
+| Track page (`pages/track.css`) | track.html | Lookup form, found/not-found/throttle states, help card with the reference. |
+| `proto-orders.js`, `proto-account.js`, `proto-auth.js`, `account.js` | js | Sample orders and stepper renderer, page demos, auth demo outcomes (all prototype), and production form validation (account.js). |
+| `tools/check-css.allow` | tools | Allow-list of intentional structural classes for check-css. |
+
+### Assumptions
+- The track page, order detail and thank-you page share one status vocabulary (`.status` and the stepper); the delivered, cancelled and refunded orders hide the delivery estimate.
+- The stored checkout order replaces any sample order with the same reference; new references start at KYA-10261 so they never collide with the samples.
