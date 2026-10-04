@@ -58,6 +58,7 @@
   <link rel="stylesheet" href="assets/css/layout.css?v=e485861a">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/content.css?v=399c3a8d">
+  <link rel="stylesheet" href="assets/css/pages/size-guide.css?v=7195d150">
 </head>
 <body data-page="size-guide" data-print>
   <!-- partial: sprite -->
@@ -377,12 +378,12 @@
       </nav>
       <header class="content__head">
         <h1>Baby Size Guide by Age, Height and Weight</h1>
-        <p class="content__lede">Our sizes follow age bands, but every baby is different, so height and weight are the better guide. Check both against the chart. <mark class="todo"><span class="marker-label">To confirm</span> confirm the chart below with Kayaa. It is taken from the current test site.</mark></p>
-        <p class="content__updated">Last updated <mark class="todo"><span class="marker-label">To confirm</span> publication date</mark></p>
+        <p class="content__lede">Our sizes follow age bands, but every baby is different, so height and weight are the better guide. Check both against the chart.</p>
+        <p class="content__updated">Last updated <time datetime="2026-10-04">4 October 2026</time></p>
       </header>
       <div class="content__layout">
         <div class="content__main">
-          <div class="prose">
+          <div class="prose prose--split">
             <h2 id="chart">Size chart <a class="anchor" href="#chart" aria-label="Link to this section: Size chart"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
             <div class="table-wrap">
               <table class="size-table">
@@ -403,6 +404,45 @@
                 </tbody>
               </table>
             </div>
+            <p>Height in centimetres, weight in kilograms.</p>
+            <section class="sg-card" aria-labelledby="sg-title">
+              <h3 class="sg-card__title" id="sg-title">How to find your size</h3>
+              <div class="sg" role="group" aria-roledescription="carousel" aria-label="How to find your size" data-sg>
+                <div class="sg__track" tabindex="0" data-sg-track>
+                  <div class="sg__slide" role="group" aria-roledescription="slide" aria-label="1 of 3" id="sg-slide-1">
+                    <!-- photo: size-guide-1 -->
+                    <div class="sg__media"><img src="assets/img/size-guide/size-guide-1-800.webp" srcset="assets/img/size-guide/size-guide-1-480.webp 480w, assets/img/size-guide/size-guide-1-800.webp 800w, assets/img/size-guide/size-guide-1-1200.webp 1200w" sizes="(min-width: 1100px) 480px, (min-width: 600px) 640px, calc(100vw - 40px)" width="1200" height="900" alt="Illustration of a baby lying flat on a blanket with a tape measure running from head to heel, held in place by a hand." decoding="async" loading="eager" fetchpriority="high"></div>
+                    <!-- /photo: size-guide-1 -->
+                    <p class="sg__caption" data-sg-caption><strong>Measure height.</strong> With your baby lying flat, measure from the top of the head to the heel.</p>
+                  </div>
+                  <div class="sg__slide" role="group" aria-roledescription="slide" aria-label="2 of 3" id="sg-slide-2">
+                    <!-- photo: size-guide-2 -->
+                    <div class="sg__media"><img src="assets/img/size-guide/size-guide-2-800.webp" srcset="assets/img/size-guide/size-guide-2-480.webp 480w, assets/img/size-guide/size-guide-2-800.webp 800w, assets/img/size-guide/size-guide-2-1200.webp 1200w" sizes="(min-width: 1100px) 480px, (min-width: 600px) 640px, calc(100vw - 40px)" width="1200" height="900" alt="Illustration of a baby lying on a baby weighing scale beside a clinic record booklet." decoding="async" loading="lazy"></div>
+                    <!-- /photo: size-guide-2 -->
+                    <p class="sg__caption" data-sg-caption><strong>Check weight.</strong> The weight from the last clinic visit is fine.</p>
+                  </div>
+                  <div class="sg__slide" role="group" aria-roledescription="slide" aria-label="3 of 3" id="sg-slide-3">
+                    <!-- photo: size-guide-3 -->
+                    <div class="sg__media"><img src="assets/img/size-guide/size-guide-3-800.webp" srcset="assets/img/size-guide/size-guide-3-480.webp 480w, assets/img/size-guide/size-guide-3-800.webp 800w, assets/img/size-guide/size-guide-3-1200.webp 1200w" sizes="(min-width: 1100px) 480px, (min-width: 600px) 640px, calc(100vw - 40px)" width="1200" height="900" alt="Illustration of two baby bodysuits laid flat, a smaller one with an arrow pointing to a larger one that has a check mark above it." decoding="async" loading="lazy"></div>
+                    <!-- /photo: size-guide-3 -->
+                    <p class="sg__caption" data-sg-caption><strong>Between two sizes?</strong> Go up. A slightly roomy fit is more comfortable in the heat.</p>
+                  </div>
+                </div>
+                <div class="sg__controls" data-sg-controls hidden>
+                  <button type="button" class="sg__btn" data-sg-prev aria-label="Previous step" aria-disabled="true"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg></button>
+                  <div class="sg__status">
+                    <ul class="sg__dots" role="list">
+                      <li><button type="button" class="sg__dot" data-sg-dot aria-label="Go to step 1" aria-current="true"></button></li>
+                      <li><button type="button" class="sg__dot" data-sg-dot aria-label="Go to step 2"></button></li>
+                      <li><button type="button" class="sg__dot" data-sg-dot aria-label="Go to step 3"></button></li>
+                    </ul>
+                    <p class="sg__count"><span data-sg-now>1</span> of 3</p>
+                  </div>
+                  <button type="button" class="sg__btn" data-sg-next aria-label="Next step"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></button>
+                </div>
+                <p class="visually-hidden" role="status" aria-live="polite" data-sg-live></p>
+              </div>
+            </section>
             <h2 id="between">Between two sizes? <a class="anchor" href="#between" aria-label="Link to this section: Between two sizes?"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
             <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div>
             <p>Go up. Babies grow quickly, and a slightly roomy fit is more comfortable in Sri Lanka's heat.</p>
@@ -429,7 +469,7 @@
               <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
               <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
             </ul>
-            <p class="chip-list__label">. Or browse by type:</p>
+            <p class="chip-list__label">Or browse by type:</p>
             <ul class="chip-list" role="list">
               <li><a class="chip" href="category.html?c=newborn">newborn</a></li>
               <li><a class="chip" href="category.html?c=bodysuits">bodysuits</a></li>
@@ -775,5 +815,6 @@
   <script src="assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
   <script src="assets/js/content.js?v=bdf3d4f5" defer></script>
+  <script src="assets/js/size-guide.js?v=6087ecb3" defer></script>
 </body>
 </html>

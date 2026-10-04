@@ -4,10 +4,10 @@ h1: Baby Size Guide by Age, Height and Weight
 meta_title: Baby Size Guide by Age, Height & Weight | Kayaa
 meta_description: Find the right Kayaa size from Newborn to 3Y. Our sizes follow age bands, with height and weight to guide you, plus how to measure at home.
 robots: index,follow
-updated: [[TODO: publication date]]
+updated: 4 October 2026
 ---
 
-Our sizes follow age bands, but every baby is different, so height and weight are the better guide. Check both against the chart. [[TODO: confirm the chart below with Kayaa. It is taken from the current test site.]]
+Our sizes follow age bands, but every baby is different, so height and weight are the better guide. Check both against the chart.
 
 ## Size chart
 
@@ -22,6 +22,8 @@ Our sizes follow age bands, but every baby is different, so height and weight ar
 | 18–24m | 86–92 cm | 12–13.5 kg |
 | 2Y | 92–98 cm | 13.5–15 kg |
 | 3Y | 98–104 cm | 15–17 kg |
+
+Height in centimetres, weight in kilograms.
 
 ## Between two sizes?
 

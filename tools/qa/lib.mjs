@@ -46,6 +46,7 @@ export function states() {
   add('quick-add sheet open', 'index.html', async (pg) => { await pg.locator('[data-quick-add]').first().click(); await pg.waitForTimeout(500); });
   add('mega menu open', 'index.html', async (pg) => { const t = pg.locator('[data-mega-toggle]').first(); if (!(await t.isVisible())) return 'na'; await t.click(); await pg.waitForTimeout(400); });
   add('cancel dialog open', 'account/order.html?ref=KY-261003-A3F9', async (pg) => { await pg.locator('[data-o-cancel]').click(); await pg.waitForTimeout(400); });
+  add('product size guide panel + slider open', 'product.html', async (pg) => { await pg.locator('[data-size-guide-toggle]').click(); await pg.locator('.sg-disclosure__summary').click(); await pg.waitForTimeout(600); });
   add('track result (cash, paid)', 'track.html?ref=KY-260930-C0D2', async (pg) => { await pg.fill('#phone', '071 234 5678'); await pg.locator('[data-track-form] button[type=submit]').click(); await pg.waitForSelector('[data-track-result]:not([hidden])'); });
   return s;
 }

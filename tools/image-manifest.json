@@ -1,0 +1,14 @@
+{
+  "note": "Written by tools/process-images.mjs: the files it generated under html/assets/img. It deletes only files listed here.",
+  "files": [
+    "size-guide/size-guide-1-1200.webp",
+    "size-guide/size-guide-1-480.webp",
+    "size-guide/size-guide-1-800.webp",
+    "size-guide/size-guide-2-1200.webp",
+    "size-guide/size-guide-2-480.webp",
+    "size-guide/size-guide-2-800.webp",
+    "size-guide/size-guide-3-1200.webp",
+    "size-guide/size-guide-3-480.webp",
+    "size-guide/size-guide-3-800.webp"
+  ]
+}

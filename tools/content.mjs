@@ -1,7 +1,6 @@
 // Builds the content-pack parts of the pages (dev-only; used through tools/catalogue.mjs by sync-shell.mjs).
 //   gen: content NAME   a whole content page body (breadcrumb, h1, intro, table of contents, prose, help card) from docs/content/*.md
 //   gen: faqs PLACEMENT the FAQ accordion items for "product", "contact" or "size guide" (docs/content/faqs.md)
-//   gen: home-intro     the short intro under the home hero (docs/content/home.md)
 //   gen: district-eta   the { slug: { min, max } } JSON of the delivery estimate (same data on checkout and the delivery page)
 //   gen: todo-counts    the "Content to approve" card on review.html
 // Edit docs/content, never the html text.
@@ -53,7 +52,7 @@ function linkRun(text, ctx) {
       out.push(`  <li>${inline(`[${p.label}](${p.href})`, ctx).replace('<a href', '<a class="chip" href')}</li>`);
     } else {
       const words = p.text.replace(/[\s,.;:]+/g, ' ').replace(/\b(and|or)\b/gi, '').trim();
-      if (words) { if (open) { out.push('</ul>'); open = false; } out.push(`<p class="chip-list__label">${inline(p.text.trim(), ctx)}</p>`); }
+      if (words) { if (open) { out.push('</ul>'); open = false; } out.push(`<p class="chip-list__label">${inline(p.text.trim().replace(/^[\s,.;]+/, ''), ctx)}</p>`); }
     }
   }
   if (open) out.push('</ul>');
@@ -155,10 +154,12 @@ export function renderContentPage(name, ctx) {
   let noticeOpen = false;
   const closeNotice = () => { if (noticeOpen) { body.push('  </div></div>'); noticeOpen = false; } };
   let lastHeading = '';
+  let cardDone = false;
   for (let i = 0; i < rest.length; i++) {
     const b = rest[i];
     if (b.type === 'h2' || b.type === 'h3') {
       closeNotice();
+      if (b.type === 'h2' && page.card && !cardDone && section === page.card.after) { body.push(renderSizeGuideSlider(ctx, 'page')); cardDone = true; }
       const id = idFor(b.text);
       const tag = b.type;
       if (tag === 'h2') { tocItems.push([id, plain(b.text, ctx.cfgText)]); section = b.text; }
@@ -217,11 +218,11 @@ ${tocItems.map(([id, t]) => `    <li><a href="#${id}">${escapeHtml(t)}</a></li>`
   </nav>
   <header class="content__head">
     <h1>${inl(front.h1 || page.label)}</h1>${lede ? `\n    <p class="content__lede">${inl(lede).replace(/\n/g, '<br>')}</p>` : ''}
-    <p class="content__updated">Last updated ${inl(front.updated || '[[TODO: publication date]]')}</p>
+    <p class="content__updated">Last updated ${updatedHtml(front.updated, inl)}</p>
   </header>
   <div class="content__layout${page.toc ? ' content__layout--toc' : ''}">
 ${toc ? toc.split('\n').map((l) => '    ' + l).join('\n') + '\n' : ''}    <div class="content__main">
-      <div class="prose">
+      <div class="prose${page.split ? ' prose--split' : ''}">
 ${body.join('\n').split('\n').map((l) => '        ' + l).join('\n')}
       </div>
 ${help.split('\n').map((l) => '      ' + l).join('\n')}
@@ -231,13 +232,58 @@ ${help.split('\n').map((l) => '      ' + l).join('\n')}
   return out.join('\n');
 }
 
-export function renderHomeIntro(ctx) {
-  const { blocks } = loadHome(ctx.repo);
-  const p = blocks.find((b) => b.type === 'p');
-  return `<section class="home-intro" aria-label="About Kayaa">
-  <div class="container">
-    <p class="home-intro__text">${inline(p.text, ctx)}</p>
+// "4 October 2026" becomes <time datetime="2026-10-04">4 October 2026</time>; anything else (a marker) goes through the normal inline rules
+const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+function updatedHtml(value, inl) {
+  const m = String(value || '').trim().match(/^(\d{1,2}) ([A-Za-z]+) (\d{4})$/);
+  const mi = m ? MONTHS.indexOf(m[2].toLowerCase()) : -1;
+  if (mi < 0) return inl(value || '[[TODO: publication date]]');
+  const iso = `${m[3]}-${String(mi + 1).padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+  return `<time datetime="${iso}">${m[1]} ${m[2]} ${m[3]}</time>`;
+}
+
+/* ---------- size guide slider: "How to find your size" (size guide page card and the product page panel) ----------
+   Three steps, each an illustration (a photo marker pair that tools/process-images.mjs fills) and a caption in HTML text.
+   Without JavaScript the slides stack; assets/js/size-guide.js turns them into a scroll-snap slider with buttons and dots. */
+const SG_STEPS = [
+  { lead: 'Measure height.', text: 'With your baby lying flat, measure from the top of the head to the heel.' },
+  { lead: 'Check weight.', text: 'The weight from the last clinic visit is fine.' },
+  { lead: 'Between two sizes?', text: 'Go up. A slightly roomy fit is more comfortable in the heat.' },
+];
+export function renderSizeGuideSlider(ctx, variant = 'page') {
+  const panel = variant === 'panel';
+  const suffix = panel ? '-panel' : '';
+  const p = panel ? 'sgp' : 'sg';
+  const n = SG_STEPS.length;
+  const label = panel ? 'How to measure your baby' : 'How to find your size';
+  const placeholder = `<div class="sg__media" data-placeholder>${icon('image', 24)}</div>`;
+  const slides = SG_STEPS.map((s, i) => `<div class="sg__slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${n}" id="${p}-slide-${i + 1}">
+  <!-- photo: size-guide-${i + 1}${suffix} -->
+  ${placeholder}
+  <!-- /photo: size-guide-${i + 1}${suffix} -->
+  <p class="sg__caption" data-sg-caption><strong>${s.lead}</strong> ${s.text}</p>
+</div>`).join('\n');
+  const dots = SG_STEPS.map((s, i) => `<li><button type="button" class="sg__dot" data-sg-dot aria-label="Go to step ${i + 1}"${i === 0 ? ' aria-current="true"' : ''}></button></li>`).join('\n        ');
+  const slider = `<div class="sg" role="group" aria-roledescription="carousel" aria-label="${label}" data-sg>
+  <div class="sg__track" tabindex="0" data-sg-track>
+${slides.split('\n').map((l) => '    ' + l).join('\n')}
   </div>
+  <div class="sg__controls" data-sg-controls hidden>
+    <button type="button" class="sg__btn" data-sg-prev aria-label="Previous step" aria-disabled="true">${icon('chevron-left', 24)}</button>
+    <div class="sg__status">
+      <ul class="sg__dots" role="list">
+        ${dots}
+      </ul>
+      <p class="sg__count"><span data-sg-now>1</span> of ${n}</p>
+    </div>
+    <button type="button" class="sg__btn" data-sg-next aria-label="Next step">${icon('chevron-right', 24)}</button>
+  </div>
+  <p class="visually-hidden" role="status" aria-live="polite" data-sg-live></p>
+</div>`;
+  if (panel) return slider;
+  return `<section class="sg-card" aria-labelledby="sg-title">
+  <h3 class="sg-card__title" id="sg-title">How to find your size</h3>
+${slider.split('\n').map((l) => '  ' + l).join('\n')}
 </section>`;
 }
 

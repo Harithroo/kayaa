@@ -2,7 +2,7 @@
   "_note": "How each docs/content/*.md page is built into its html page (tools/content.mjs, run by sync-shell). The text lives in docs/content: edit the markdown, never the html. 'ids' keeps the heading ids that existed before the content pack (anchors and the table of contents stay stable); any other heading gets an id made from its text. 'callouts' are sections shown in a lilac notice, 'steps' are numbered lists shown as icon steps, 'faqs' appends the matching group from faqs.md.",
   "pages": {
     "size-guide": {
-      "file": "size-guide.md", "label": "Size guide", "toc": false,
+      "file": "size-guide.md", "label": "Size guide", "toc": false, "split": true, "card": { "after": "Size chart" },
       "ids": { "Size chart": "chart", "Between two sizes?": "between", "How to measure": "measure", "Shop by size": "sizes" },
       "callouts": ["Between two sizes?", "Buying a gift?"],
       "steps": { "How to measure": ["ruler", "scale", "list-checks"] },

@@ -14,7 +14,7 @@ import { load, start, open, seedBag, write, BASE, outDir } from './lib.mjs';
 import path from 'node:path';
 
 const { chromium } = load('playwright');
-const KEY = ['index.html', 'shop.html', 'category.html?c=bodysuits', 'product.html', 'cart.html', 'checkout.html', 'checkout.html?demo=cod-on', 'thank-you.html?state=cod', 'track.html', 'account/login.html', 'contact.html', 'delivery.html', 'privacy.html'];
+const KEY = ['index.html', 'size-guide.html', 'shop.html', 'category.html?c=bodysuits', 'product.html', 'cart.html', 'checkout.html', 'checkout.html?demo=cod-on', 'thank-you.html?state=cod', 'track.html', 'account/login.html', 'contact.html', 'delivery.html', 'privacy.html'];
 const results = [];
 const note = (mode, url, ok, detail) => results.push({ mode, url, ok, detail });
 

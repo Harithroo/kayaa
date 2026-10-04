@@ -459,6 +459,8 @@ The prototype's head is built from `tools/seo.json`; the Blade views build the s
 9. **Fonts:** self-hosted (`assets/fonts`); nothing loads from Google Fonts, so no third-party request blocks rendering.
 
 ### Content pages from the content pack
+The size chart in `docs/content/size-guide.md` is final (supplied by the client). The size guide also carries a three-step "How to find your size" slider (three illustrations in `html/assets/img/size-guide/`, 480, 800 and 1200px wide WebP, 4:3, with captions as HTML text; the same slider appears lazily in the product page's size guide panel). The slider is plain markup plus `assets/js/size-guide.js`, so it ports to Blade as is; the images are static assets.
+
 Size guide, Delivery, Returns, About, Privacy and Terms are static Blade views whose text comes from `docs/content/*.md` (the prototype renders the same files). The pack's `{{cfg:key}}` values are the site config keys (section 3.17); `[[TODO]]` and `[[PROPOSED]]` markers must all be replaced with approved text before launch (`node tools/list-todos.mjs --fail-on-open`). The size chart is data shared by the size guide and the product page. FAQs come in three placements (product, contact, size guide): the prototype reads `docs/content/faqs.md`. **Question for the client:** do they want an admin editor (Filament rich-text pages) for these pages, or Blade views a developer edits?
 
 ---

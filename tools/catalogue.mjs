@@ -9,13 +9,14 @@
 //   size-chips-mega | size-chips-drawer | size-links-footer | size-tiles-home   the nine sizes
 //   size-chips FILE                           listing chips: "All ages" + the nine sizes (shop.html, category.html, search.html)
 //   size-rows                                 <tr> rows of the size table on the product page (the rows come from docs/content/size-guide.md)
+//   size-guide-slider [panel]                 the three-step "How to find your size" slider (tools/content.mjs; used in the product page panel)
 //   decisions                                 the open-decisions table for html/review-decisions.html (tools/build-decisions.mjs)
-//   content NAME | faqs PLACEMENT | home-intro | district-eta | todo-counts | listing-intro KIND/SLUG   built from docs/content (see tools/content.mjs)
+//   content NAME | faqs PLACEMENT | district-eta | todo-counts | listing-intro KIND/SLUG   built from docs/content (see tools/content.mjs)
 //   product-grid SCOPE                        <li> cards: all | new | featured | related:SLUG
 import fs from 'node:fs';
 import path from 'node:path';
 import { renderDecisions } from './build-decisions.mjs';
-import { renderContentPage, renderFaqs, renderHomeIntro, renderDistrictEtaJson, renderTodoCounts, sizeTableRows } from './content.mjs';
+import { renderSizeGuideSlider, renderContentPage, renderFaqs, renderDistrictEtaJson, renderTodoCounts, sizeTableRows } from './content.mjs';
 
 export function loadCatalogue(repo) {
   const cat = JSON.parse(fs.readFileSync(path.join(repo, 'tools', 'catalogue.json'), 'utf8'));
@@ -108,6 +109,7 @@ export function generate(name, args, ctx) {
     case 'size-links-footer':
       return S.map((s) => `<li><a href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
     case 'decisions': return renderDecisions(ctx.repo);
+    case 'size-guide-slider': return renderSizeGuideSlider(ctx, (args || 'page').trim());
     case 'size-tiles-home': {
       // growth steps: --step (0 to 8) drives the tint and, from 1100px, the height; height and weight come from the size chart in docs/content/size-guide.md
       const pack = sizeTableRows(ctx.repo);
@@ -132,7 +134,6 @@ export function generate(name, args, ctx) {
     }
     case 'content': return renderContentPage((args || '').trim(), ctx);
     case 'faqs': return renderFaqs((args || '').trim(), ctx);
-    case 'home-intro': return renderHomeIntro(ctx);
     case 'listing-intro': {
       const [kind, slug] = (args || '').trim().split('/');
       const i = ctx.intros[kind] && ctx.intros[kind][slug];

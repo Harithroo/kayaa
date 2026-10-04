@@ -18,7 +18,7 @@ The "Staging site says" column is what the current test site already shows. Plea
 | 12 | "In stock, ships from Colombo" | Stated on product pages | Confirm |
 | 13 | Fabric claims: "OEKO-TEX certified combed cotton", "breathable cotton and bamboo", "no harsh dyes", "tested for sensitive skin" | Stated on Home and product pages | Required: certificate evidence before launch. Certification claims must be true and provable |
 | 14 | Care instructions | Machine wash cold, gentle cycle; tumble dry low or line dry in shade; do not bleach (bodysuit sample) | Per product |
-| 15 | Size chart | 9 sizes, Newborn to 3Y, height and weight (see size-guide.md) | Confirm |
+| 15 | Size chart | 9 sizes, Newborn to 3Y, height and weight (see size-guide.md) | Final, supplied by the client |
 | 16 | Size positioning | "Sized by age"; height and weight are the better guide; between sizes go up | Confirm |
 | 17 | Payment gateway name | Footer still says "Payments secured by PayHere" | Required: the client chose Onepay, so update every mention |
 | 18 | Cash on delivery | Removed from every static page | Kept only as an admin on/off switch for emergencies; shown at checkout and on that order's pages, never in static text. Decided |

@@ -1,0 +1,122 @@
+/* Size guide slider: "How to find your size" (a card beside the chart on the size guide page, a disclosure in the product page's size panel).
+   Three steps: an illustration (4:3, never cropped) and a caption in HTML text.
+   Without JavaScript the steps stack. assets/js/size-guide.js adds .is-enhanced: a scroll-snap track (swipe), buttons, dots and a counter. */
+
+/* ---------- Card ---------- */
+.sg-card {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.prose .sg-card__title { margin: 0 0 var(--space-3); font-size: var(--fs-h3); }
+
+/* ---------- Slider ---------- */
+.sg__track { display: grid; gap: var(--space-5); }   /* no JavaScript: the slides stack */
+.sg.is-enhanced .sg__track {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.sg__track::-webkit-scrollbar { display: none; }
+.sg__track:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.sg__slide { flex: 0 0 100%; min-width: 0; scroll-snap-align: center; scroll-snap-stop: always; }   /* flex row: every slide is as tall as the tallest, so nothing below moves */
+.sg__media {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--secondary);   /* the illustration background: a letter-boxed image blends in */
+  border-radius: var(--radius-card);
+}
+.sg__media img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.sg__media[data-placeholder] .icon { width: 40px; height: 40px; color: var(--primary); }
+.sg__caption { margin-top: var(--space-3); font-size: var(--fs-body); line-height: 1.5; color: var(--ink); }
+.sg__caption strong { font-weight: 800; }
+
+/* ---------- Controls ---------- */
+.sg__controls { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin-top: var(--space-3); }
+.sg__controls[hidden] { display: none; }
+.sg__btn {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-round);
+  background: var(--surface);
+  color: var(--primary-deep);
+  cursor: pointer;
+}
+.sg__btn[aria-disabled="true"] { opacity: 0.45; cursor: default; }
+@media (hover: hover) and (pointer: fine) {
+  .sg__btn:not([aria-disabled="true"]):hover { background: var(--tone-2); }
+}
+.sg__status { display: grid; justify-items: center; gap: 2px; min-width: 0; }
+.sg__dots { display: flex; gap: var(--space-2); list-style: none; }
+.sg__dot { position: relative; width: var(--tap); height: var(--tap); padding: 0; border: 0; background: none; cursor: pointer; }
+.sg__dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-round);
+  background: var(--line-strong);
+  transform: translate(-50%, -50%);
+  transition: width var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
+}
+.sg__dot[aria-current="true"]::before { width: 20px; border-radius: var(--radius-pill); background: var(--primary-deep); }
+.sg__count { font-size: var(--fs-ui); color: var(--ink-soft); }
+@media (prefers-reduced-motion: reduce) {
+  .sg__dot::before { transition: none; }
+}
+
+/* ---------- Size guide page: two columns from 1100px ---------- */
+.prose--split .table-wrap + p, .size-guide__units { font-size: var(--fs-ui); color: var(--ink-soft); }
+@media (min-width: 1100px) {
+  .prose--split { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--space-7); max-width: none; }
+  .prose--split > * { grid-column: 1; }
+  .prose--split > .sg-card { grid-column: 2; grid-row: 1 / span 40; align-self: start; margin-top: 0; }
+}
+/* sticky under the header only when the viewport is clearly taller than the card (about 560px): otherwise it scrolls with the page */
+@media (min-width: 1100px) and (min-height: 720px) {
+  .prose--split > .sg-card { position: sticky; top: calc(var(--header-h) + 24px); }
+}
+
+/* ---------- Product page: the disclosure in the size guide panel ---------- */
+.sg-disclosure { margin-top: var(--space-3); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-input); }
+.sg-disclosure__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  padding: var(--space-2) var(--space-4);
+  font-weight: 700;
+  list-style: none;
+  cursor: pointer;
+}
+.sg-disclosure__summary::-webkit-details-marker { display: none; }
+.sg-disclosure__summary .icon { flex: none; transition: transform var(--dur-fast) var(--ease); }
+.sg-disclosure[open] > .sg-disclosure__summary .icon { transform: rotate(180deg); }
+.sg-disclosure__body { padding: 0 var(--space-3) var(--space-3); }
+.sg-disclosure .sg__caption { font-size: var(--fs-dense); }
+@media (prefers-reduced-motion: reduce) {
+  .sg-disclosure__summary .icon { transition: none; }
+}
+
+/* Narrow containers (the product page panel on a 320px phone is about 250px wide): five 44px targets with 8px gaps need 252px,
+   so the previous and next buttons share the first row and the dots with the counter sit on the second. */
+.sg { container-type: inline-size; }
+@container (max-width: 299px) {
+  .sg__controls { flex-wrap: wrap; row-gap: 0; }
+  .sg__status { order: 3; flex-basis: 100%; }
+}

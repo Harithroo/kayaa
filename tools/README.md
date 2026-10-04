@@ -12,7 +12,7 @@ Dev-only scripts, all zero-dependency Node (no `npm install`). Run from the repo
 | `node tools/check-budget.mjs` | Page weight: estimated gzip size of the CSS and JS each page loads and its font bytes. Budgets CSS 70 KB, JS 60 KB, fonts 120 KB; exit 1 when over. |
 | `node tools/list-todos.mjs` | Open `[[TODO]]` and `[[PROPOSED]]` content markers, grouped by page. `--fail-on-open` exits 1 (the day before launch). |
 | `node tools/build-decisions.mjs` | Renders `docs/content/01-open-decisions.md` to `html/review-decisions.html` (sync-shell runs it). |
-| `node tools/process-images.mjs` | Turns originals in `tools/image-source/` into the published images (originals are never committed or published). |
+| `node tools/process-images.mjs` | Turns originals in `tools/image-source/` into the published images (originals are never committed or published). Also the three size guide illustrations (4:3, never cropped or upscaled; a WebP original is copied unchanged when it fits). It deletes only files listed in `tools/image-manifest.json`. |
 
 Browser audits (axe, keyboard, zoom and text size, Lighthouse, three engines, HTML validity, colours) are in `tools/qa/`; see `tools/qa/README.md` for how to install their tools outside the repo.
 

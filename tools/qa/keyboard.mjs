@@ -8,7 +8,7 @@
 import { load, start, open, seedBag, write, BASE, VIEWPORTS } from './lib.mjs';
 
 const { chromium } = load('playwright');
-const FLOWS = ['index.html', 'shop.html', 'product.html', 'cart.html', 'checkout.html', 'track.html', 'account/login.html', 'contact.html'];
+const FLOWS = ['index.html', 'size-guide.html', 'shop.html', 'product.html', 'cart.html', 'checkout.html', 'track.html', 'account/login.html', 'contact.html'];
 
 function describe() {
   const el = document.activeElement;
