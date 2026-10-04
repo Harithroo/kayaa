@@ -237,3 +237,7 @@
 .prose .chip-list { margin-top: var(--space-2); }
 .size-table td > span { min-width: 0; text-align: right; }
 @media (min-width: 420px) { .size-table td > span { text-align: left; } }
+
+/* chip lists inside prose: the prose list rules (indent, space between items) must not apply, or the first chip sits higher and further left than the rest */
+.prose .chip-list { padding-left: 0; }
+.prose .chip-list li + li { margin-top: 0; }

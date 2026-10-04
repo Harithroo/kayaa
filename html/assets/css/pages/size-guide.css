@@ -120,3 +120,27 @@
   .sg__controls { flex-wrap: wrap; row-gap: 0; }
   .sg__status { order: 3; flex-basis: 100%; }
 }
+
+/* Controls on one grid: previous, dots and next share the first row (centres aligned), the counter sits under the dots.
+   (Replaces the stacked .sg__status layout above, which put the dots higher than the buttons.) */
+.sg__controls { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: var(--space-2); row-gap: 0; }
+.sg__controls[hidden] { display: none; }
+.sg__status { display: contents; }
+.sg__controls [data-sg-prev] { grid-column: 1; grid-row: 1; }
+.sg__controls [data-sg-next] { grid-column: 3; grid-row: 1; }
+.sg__dots { grid-column: 2; grid-row: 1; justify-content: center; }
+.sg__count { grid-column: 1 / -1; grid-row: 2; text-align: center; }
+@container (max-width: 299px) {
+  .sg__controls { flex-wrap: initial; }
+  .sg__dots { grid-column: 1 / -1; grid-row: 2; }
+  .sg__count { grid-row: 3; }
+  .sg__status { flex-basis: auto; order: 0; }
+}
+
+/* inside .prose the generic list rules (indent, space between items) pushed dots 2 and 3 down by 8px */
+.prose .sg__dots { padding-left: 0; }
+.prose .sg__dots li + li { margin-top: 0; }
+.sg__dot { display: block; }   /* an inline-block button left a descender gap: the dots sat 4px above the arrow buttons */
+@container (max-width: 299px) {
+  .sg__controls { row-gap: var(--space-2); }   /* the arrows and the dots are separate rows: keep 8px between their targets */
+}
