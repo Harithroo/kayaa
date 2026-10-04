@@ -233,9 +233,10 @@
     gap: 12px;
     align-items: end;
   }
-  .scroller--age > li { align-self: end; height: calc(150px + var(--step) * 10px); }
+  .scroller--age > li { display: grid; align-self: end; min-height: calc(150px + var(--step) * 10px); }   /* min-height: the tile grows rather than clipping when the text size is increased */
+  .scroller--age .age-tile { min-width: 0; }
   .age-tile { min-height: 0; padding: var(--space-4) 10px var(--space-3); }
-  .age-tile__label { font-size: clamp(18px, 1.2vw + 5px, 22px); overflow-wrap: anywhere; }
+  .age-tile__label { font-size: var(--fs-step); overflow-wrap: anywhere; }
   .age-tile__meta { font-size: 13.5px; }
 }
 @media (min-width: 1280px) {

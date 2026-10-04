@@ -140,7 +140,7 @@ window.KAYAA_CATALOGUE = {
       "napkins": {
         "h1": "Baby Napkins",
         "metaTitle": "Baby Napkins in Sri Lanka | Kayaa",
-        "metaDescription": "[TODO: one sentence describing Kayaa's napkins]. Island-wide delivery across Sri Lanka with secure card payment.",
+        "metaDescription": "Baby napkins from Kayaa. Island-wide delivery across Sri Lanka with secure checkout.",
         "intro": "<mark class=\"todo\"><span class=\"marker-label\">To confirm</span> describe what Kayaa's napkins are (for example cloth nappies or muslin squares) and who they suit.</mark> Check each product page for the fabric, size and care instructions."
       },
       "accessories": {

@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { escapeHtml, plain } from './markdown.mjs';
-import { loadHome } from './content.mjs';
+import { loadHome, safeMeta } from './content.mjs';
 
 export function loadSeo(repo) {
   return JSON.parse(fs.readFileSync(path.join(repo, 'tools', 'seo.json'), 'utf8'));
@@ -21,7 +21,7 @@ export function metaOf(label, ctx) {
   const cfgText = ctx.cfgText;
   if (e.content) {
     const front = e.content === 'home' ? loadHome(ctx.repo).front : ctx.content.pages[e.content].front;
-    return { title: plain(front.meta_title, cfgText), description: plain(front.meta_description, cfgText) };
+    return { title: safeMeta(front.meta_title, front.meta_title_fallback, cfgText), description: safeMeta(front.meta_description, front.meta_description_fallback, cfgText) };
   }
   if (e.intro) {
     const [kind, slug] = e.intro.split('/');

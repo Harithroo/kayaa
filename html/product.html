@@ -155,6 +155,9 @@
   </script>
   <!-- /partial: seo -->
   <!-- partial: styles -->
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#FAF7FB">
+  <link rel="icon" href="data:,"> <!-- TODO: replace with the real favicon once the logo exists; data:, stops browsers asking for /favicon.ico (a 404 on every first visit) -->
   <script>
     /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
        Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
@@ -164,12 +167,12 @@
     });
   </script>
   <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
-  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
-  <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=186fb5f1">
-  <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=a117fc0c">
+  <link rel="stylesheet" href="assets/css/base.css?v=c7479e07">
+  <link rel="stylesheet" href="assets/css/components.css?v=86a4ca95">
+  <link rel="stylesheet" href="assets/css/layout.css?v=e485861a">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/product.css?v=cf08a9e3">
+  <link rel="stylesheet" href="assets/css/pages/product.css?v=ab1fea93">
 </head>
 <body data-page="product">
   <!-- partial: sprite -->
@@ -369,11 +372,11 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- partial: announcement -->
-  <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
-  <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
+  <!-- blade: @if topbar banner is active (style: lilac | sky) -->
+  <section class="topbar topbar--lilac" data-topbar aria-label="Announcement">
     <p class="topbar__text"><span>Island-wide delivery in <span data-cfg="delivery_island_days">2–4</span> days</span><span class="topbar__extra"> · Free over <span data-cfg="free_shipping_over">Rs. 7,500</span></span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
-  </div>
+  </section>
   <!-- /partial: announcement -->
 
   <!-- partial: header -->
@@ -442,7 +445,7 @@
       </nav>
 
       <div class="site-header__actions">
-        <form class="header-search" role="search" action="search.html" method="get" data-header-search>
+        <form class="header-search" role="search" aria-label="Site search" action="search.html" method="get" data-header-search>
           <button type="button" class="icon-btn header-search__toggle" data-search-toggle aria-expanded="false" aria-controls="header-search-field" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           <div class="header-search__field" id="header-search-field">
             <label class="visually-hidden" for="header-q">Search Kayaa</label>
@@ -478,7 +481,7 @@
   </header>
   <!-- /partial: header -->
 
-  <main id="main">
+  <main id="main" tabindex="-1">
     <div class="container product" data-product-page>
 
       <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -497,63 +500,63 @@
         <section class="gallery" aria-roledescription="carousel" aria-label="Product photos" data-gallery>
           <div class="gallery__stage">
             <!-- img: first photo eager (above the fold): <img width height fetchpriority="high" decoding="async">; photos 2-5 loading="lazy" decoding="async"; the 4:5 aspect-ratio box stays so nothing shifts -->
-            <ul class="gallery__track" role="list" data-gallery-track>
-            <li class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+            <div class="gallery__track" role="group" aria-label="Photo gallery" tabindex="0" data-gallery-track>
+            <div class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
               <!-- photo: product-lilac-1 -->
               <div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-lilac-1 -->
-            </li>
-            <li class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 2 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 2 of 5">
               <!-- photo: product-lilac-2 -->
               <div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-lilac-2 -->
-            </li>
-            <li class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 3 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 3 of 5">
               <!-- photo: product-lilac-3 -->
               <div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-lilac-3 -->
-            </li>
-            <li class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 4 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="lilac" role="group" aria-roledescription="slide" aria-label="Photo 4 of 5">
               <!-- photo: product-lilac-4 -->
               <div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-lilac-4 -->
-            </li>
-            <li class="gallery__slide" data-colour="cream" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="cream" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
               <!-- photo: product-cream-1 -->
               <div class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-cream-1 -->
-            </li>
-            <li class="gallery__slide" data-colour="cream" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="cream" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
               <!-- photo: product-cream-2 -->
               <div class="media" data-colour="cream" data-placeholder style="--tone: var(--cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-cream-2 -->
-            </li>
-            <li class="gallery__slide" data-colour="cream" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="cream" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
               <!-- photo: product-cream-3 -->
               <div class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-cream-3 -->
-            </li>
-            <li class="gallery__slide" data-colour="sky" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="sky" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
               <!-- photo: product-sky-1 -->
               <div class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-sky-1 -->
-            </li>
-            <li class="gallery__slide" data-colour="sky" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="sky" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
               <!-- photo: product-sky-2 -->
               <div class="media" data-colour="sky" data-placeholder style="--tone: var(--accent)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-sky-2 -->
-            </li>
-            <li class="gallery__slide" data-colour="sky" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="sky" hidden role="group" aria-roledescription="slide" aria-label="Photo 1 of 5">
               <!-- photo: product-sky-3 -->
               <div class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-sky-3 -->
-            </li>
-            <li class="gallery__slide" data-colour="all" role="group" aria-roledescription="slide" aria-label="Photo 5 of 5">
+            </div>
+            <div class="gallery__slide" data-colour="all" role="group" aria-roledescription="slide" aria-label="Photo 5 of 5">
               <!-- photo: product-1 -->
               <div class="media" data-colour="all" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
               <!-- /photo: product-1 -->
-            </li>
-            </ul>
+            </div>
+            </div>
             <!-- blade: badge priority @if sale Sale (accent) @elseif new New (lilac) -->
             <span class="badge badge--accent gallery__badge" data-product-badge>Sale</span>
             <p class="gallery__count" data-gallery-count aria-hidden="true">1 / 5</p>
@@ -566,17 +569,17 @@
           <button type="button" class="gallery__dot" data-gallery-dot aria-label="Show photo 5 of 5"></button>
           </div>
           <ul class="gallery__thumbs" role="list" aria-label="Photo thumbnails" data-gallery-thumbs>
-          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 1 of 5" aria-current="true"><!-- photo: product-lilac-1-thumb --><div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-lilac-1-thumb --></button></li>
-          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 2 of 5" tabindex="-1"><!-- photo: product-lilac-2-thumb --><div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-lilac-2-thumb --></button></li>
-          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 3 of 5" tabindex="-1"><!-- photo: product-lilac-3-thumb --><div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-lilac-3-thumb --></button></li>
-          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 4 of 5" tabindex="-1"><!-- photo: product-lilac-4-thumb --><div class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-lilac-4-thumb --></button></li>
-          <li hidden><button type="button" class="gallery__thumb" data-colour="cream" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-cream-1-thumb --><div class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-cream-1-thumb --></button></li>
-          <li hidden><button type="button" class="gallery__thumb" data-colour="cream" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-cream-2-thumb --><div class="media" data-colour="cream" data-placeholder style="--tone: var(--cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-cream-2-thumb --></button></li>
-          <li hidden><button type="button" class="gallery__thumb" data-colour="cream" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-cream-3-thumb --><div class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-cream-3-thumb --></button></li>
-          <li hidden><button type="button" class="gallery__thumb" data-colour="sky" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-sky-1-thumb --><div class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-sky-1-thumb --></button></li>
-          <li hidden><button type="button" class="gallery__thumb" data-colour="sky" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-sky-2-thumb --><div class="media" data-colour="sky" data-placeholder style="--tone: var(--accent)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-sky-2-thumb --></button></li>
-          <li hidden><button type="button" class="gallery__thumb" data-colour="sky" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-sky-3-thumb --><div class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-sky-3-thumb --></button></li>
-          <li><button type="button" class="gallery__thumb" data-colour="all" data-gallery-thumb aria-label="Show photo 5 of 5" tabindex="-1"><!-- photo: product-1-thumb --><div class="media" data-colour="all" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><!-- /photo: product-1-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 1 of 5" aria-current="true"><!-- photo: product-lilac-1-thumb --><span class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-lilac-1-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 2 of 5" tabindex="-1"><!-- photo: product-lilac-2-thumb --><span class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-lilac-2-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 3 of 5" tabindex="-1"><!-- photo: product-lilac-3-thumb --><span class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-lilac-3-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="lilac" data-gallery-thumb aria-label="Show photo 4 of 5" tabindex="-1"><!-- photo: product-lilac-4-thumb --><span class="media" data-colour="lilac" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-lilac-4-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="cream" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-cream-1-thumb --><span class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-cream-1-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="cream" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-cream-2-thumb --><span class="media" data-colour="cream" data-placeholder style="--tone: var(--cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-cream-2-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="cream" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-cream-3-thumb --><span class="media" data-colour="cream" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-cream-3-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="sky" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-sky-1-thumb --><span class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-sky-1-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="sky" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-sky-2-thumb --><span class="media" data-colour="sky" data-placeholder style="--tone: var(--accent)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-sky-2-thumb --></button></li>
+          <li hidden><button type="button" class="gallery__thumb" data-colour="sky" data-gallery-thumb aria-label="Show photo 1 of 5" tabindex="-1"><!-- photo: product-sky-3-thumb --><span class="media" data-colour="sky" data-placeholder style="--tone: var(--sky-tint)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-sky-3-thumb --></button></li>
+          <li><button type="button" class="gallery__thumb" data-colour="all" data-gallery-thumb aria-label="Show photo 5 of 5" tabindex="-1"><!-- photo: product-1-thumb --><span class="media" data-colour="all" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></span><!-- /photo: product-1-thumb --></button></li>
           </ul>
         </section>
 
@@ -1284,7 +1287,7 @@
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
                     <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
                   <p class="price" data-line-total>Rs. 3,450</p>
@@ -1300,7 +1303,7 @@
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
                     <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
                   <p class="price" data-line-total>Rs. 2,850</p>
@@ -1340,7 +1343,7 @@
         <div class="cart-item__row">
           <div class="qty" data-qty>
             <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-            <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+            <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
             <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
           </div>
           <p class="price" data-line-total>Rs. 0</p>
@@ -1417,13 +1420,13 @@
 
   <!-- partial: scripts -->
   <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
-  <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=28afb4aa" defer></script>
+  <script src="assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
   <script src="assets/js/proto-product.js?v=dfdcb2ae" defer></script>
-  <script src="assets/js/product.js?v=8654d034" defer></script>
+  <script src="assets/js/product.js?v=f7912c00" defer></script>
   <script src="assets/js/proto-wishlist.js?v=4ca323b8" defer></script>
 </body>
 </html>

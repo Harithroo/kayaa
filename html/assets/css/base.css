@@ -6,6 +6,13 @@
   box-sizing: border-box;
 }
 
+/* Header height for sticky offsets. These are the measured heights of the three headers, so nothing has to be written at run time: setting a
+   custom property on :root re-styles the whole page (about 100ms on a slow phone). app.js writes it only when the real height differs by more
+   than 1px (for example when large text wraps the header). */
+:root { --header-h: 61px; }
+@media (min-width: 900px) { :root { --header-h: 122px; } }
+:root:has(.site-header--minimal) { --header-h: 73px; }
+
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -145,6 +152,9 @@ hr {
   outline: var(--focus-ring);
   outline-offset: var(--focus-offset);
 }
+
+/* the skip link moves focus to main (tabindex="-1"): it is a landing point, not a control, so it gets no ring */
+main:focus { outline: none; }
 
 /* Utilities */
 .visually-hidden {

@@ -89,7 +89,7 @@
       return set.length ? set : slides;
     }
 
-    function showColour(colour) {
+    function showColour(colour, initial) {
       visible = pick(colour);
       var name = COLOUR_NAME[colour] || '';
       slides.forEach(function (s, k) {
@@ -114,7 +114,7 @@
         d.addEventListener('click', function () { goTo(k); });
         dotsBox.appendChild(d);
       });
-      track.scrollTo({ left: 0, behavior: 'auto' });
+      if (!initial) track.scrollTo({ left: 0, behavior: 'auto' });   // on load the track is already at the start: scrolling would force an early layout
       setActive(0);
     }
 
@@ -213,7 +213,7 @@
   var wantedInput = wanted && colourInputs.filter(function (i) { return i.value === wanted; })[0];
   if (wantedInput) wantedInput.checked = true;
   lastColour = selected().colour;
-  gallery.showColour(lastColour);
+  gallery.showColour(lastColour, true);
   refresh();
 
   function showSizeError() {

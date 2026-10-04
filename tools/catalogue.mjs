@@ -114,7 +114,7 @@ export function generate(name, args, ctx) {
       return S.map((s, i) => {
         const row = pack.find((x) => x.size === s.label);
         if (!row) throw new Error('size chart in docs/content/size-guide.md has no row for ' + s.label);
-        return `<li style="--step: ${i}"><a class="age-tile" href="${sizeHref(s)}" aria-label="Shop size ${esc(s.label)}"><span class="age-tile__label">${esc(s.label)}</span><span class="age-tile__meta"><span>${esc(row.height)}</span><span>${esc(row.weight)}</span></span><span class="age-tile__go">Shop ${icon('arrow-right', 16)}</span></a></li>`;
+        return `<li style="--step: ${i}"><a class="age-tile" href="${sizeHref(s)}"><span class="age-tile__label">${esc(s.label)}</span><span class="age-tile__meta"><span>${esc(row.height)}</span><span>${esc(row.weight)}</span></span><span class="age-tile__go">Shop ${icon('arrow-right', 16)}</span></a></li>`;
       }).join('\n');
     }
     case 'size-chips': {

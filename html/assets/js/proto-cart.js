@@ -34,7 +34,7 @@
     delete memory[k];
   }
   var clone = function (x) { return JSON.parse(JSON.stringify(x)); };
-  var money = function (n) { var p = (window.KAYAA_CONFIG && window.KAYAA_CONFIG.currency_prefix) || ''; return p + ' ' + Math.round(n).toLocaleString('en-US'); };
+  var money = function (n) { var p = (window.KAYAA_CONFIG && window.KAYAA_CONFIG.currency_prefix) || ''; return p + ' ' + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
   var slugify = function (s) { return String(s).toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); };
 
   var SEED = [

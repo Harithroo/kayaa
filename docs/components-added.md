@@ -43,7 +43,7 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | `i-ruler` icon | sprite.svg | Lucide, for the hero tag. |
 | `--cream` #FBF6EE, `--sky-tint` #DDE7F3, `--line-strong`, `--scrim` | tokens.css | Derived: topbar/promo variants, footer dividers, drawer scrim (Ink at 40%). |
 | `--swatch-*`, `.dot`, `.swatch` | tokens / components | Product colour dots (lilac, sky, cream, blush, dove). No green. Selectable swatch is a radio with a ring. |
-| `.topbar` (--lilac / --cream / --sky) | layout.css | Dismiss remembered in sessionStorage. |
+| `.topbar` (--lilac / --sky) | layout.css | Dismiss remembered in sessionStorage. |
 | `.site-header`, `.primary-nav`, `.header-search`, `.category-row` | layout.css | See the refinement round below for the Shop mega menu and search. |
 | `.drawer`, `.overlay`, `.sheet` | layout.css | Shared layer system in app.js: focus trap, ESC, focus return, scroll lock. |
 | `.tabbar` | layout.css | Below 900px only. Active tab = Primary Deep + 3px top indicator. Labels are Ink (Ink Soft is not allowed at 12.5px). |
@@ -96,7 +96,7 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | `.topbar` dismiss | app.js / layout.css | No storage at all: it returns on every load. Height collapses over 200ms (`.is-collapsing`), instant under reduced motion, then `--header-h` is re-measured. `.topbar__extra` (second segment) is hidden below 600px so the bar stays on one line. |
 | `i-credit-card` icon | sprite.svg | Lucide. Used for "Secure online payment" (trust strip) and "Secure card payments" (footer). `i-banknote` stays in the sprite but is unused. |
 | `.primary-nav__split`, `.primary-nav__chevron` | layout.css | "Shop" is a split control: link to shop.html plus a 44px chevron button (`aria-expanded`, `aria-controls="mega-shop"`). The old "Shop by age" dropdown (`.dropdown`, `.has-dropdown`, `[data-dropdown]`) is removed. |
-| `.mega`, `.mega__panel`, `.mega-tile`, `.mega__feature`, `.mega-scrim` | layout.css | Shop mega menu inside the split item (so Tab flows chevron -> panel). Attached to the bottom of the 72px header bar, spans the container width and covers the category row. Hover intent 120ms open / 250ms close, click/Enter/Space toggles, ESC returns focus to the chevron, outside click and focus leaving close it, `inert` + `visibility` while closed. Below 1100px the feature card is hidden so the five age tiles keep a readable width. Scrim is Ink at 8%. |
+| `.mega`, `.mega__panel`, `.mega__feature`, `.mega-scrim` | layout.css | Shop mega menu inside the split item (so Tab flows chevron -> panel). Attached to the bottom of the 72px header bar, spans the container width and covers the category row. Hover intent 120ms open / 250ms close, click/Enter/Space toggles, ESC returns focus to the chevron, outside click and focus leaving close it, `inert` + `visibility` while closed. Below 1100px the feature card is hidden so the five age tiles keep a readable width. Scrim is Ink at 8%. |
 | `--scrim-light`, `--shift-panel` | tokens.css | Mega backdrop and panel slide distance (zeroed under reduced motion). |
 | `.header-search` (rebuilt) | layout.css | 1100px+: 240px pill that grows to 320px on focus. 900-1099px: icon button (`data-search-toggle`) that opens an inline field over the nav; ESC closes and returns focus. Search sits in the right-hand group with account and cart. |
 | `.chip-list` | components.css | Moved here from listing.css (used by the mega menu and no-results). |

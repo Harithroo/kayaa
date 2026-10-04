@@ -18,6 +18,9 @@
   <meta name="twitter:description" content="Something went wrong on our side. Please try again in a moment, or message Kayaa on WhatsApp if you need help with an order.">
   <!-- /partial: seo -->
   <!-- partial: styles -->
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#FAF7FB">
+  <link rel="icon" href="data:,"> <!-- TODO: replace with the real favicon once the logo exists; data:, stops browsers asking for /favicon.ico (a 404 on every first visit) -->
   <script>
     /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
        Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
@@ -27,10 +30,10 @@
     });
   </script>
   <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
-  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
-  <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=186fb5f1">
-  <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=a117fc0c">
+  <link rel="stylesheet" href="assets/css/base.css?v=c7479e07">
+  <link rel="stylesheet" href="assets/css/components.css?v=86a4ca95">
+  <link rel="stylesheet" href="assets/css/layout.css?v=e485861a">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/errors.css?v=18fee8d9">
 </head>
@@ -239,7 +242,7 @@
   </header>
   <!-- /partial: header-error -->
 
-  <main id="main">
+  <main id="main" tabindex="-1">
     <div class="container error-page">
       <div class="error-card">
         <span class="error-disc"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-triangle-alert"></use></svg></span>
@@ -259,6 +262,7 @@
   <!-- partial: footer-minimal -->
   <footer class="site-footer site-footer--minimal">
     <div class="container footer-min">
+      <nav aria-label="Help and policies">
       <ul class="footer-min__links" role="list">
         <li><a href="delivery.html">Delivery</a></li>
         <li><a href="returns.html">Returns</a></li>
@@ -266,6 +270,7 @@
         <li><a href="terms.html">Terms</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
+      </nav>
       <p class="footer-min__copy">&copy; 2026 Kayaa</p>
     </div>
   </footer>
@@ -273,9 +278,9 @@
 
   <!-- partial: scripts -->
   <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
-  <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=28afb4aa" defer></script>
+  <script src="assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
 </body>
 </html>

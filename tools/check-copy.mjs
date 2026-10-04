@@ -20,7 +20,7 @@ const ALLOWED = [
   'html/checkout.html', 'html/thank-you.html', 'html/track.html', 'html/account/order.html', 'html/account/index.html',
   'html/assets/js/', 'html/assets/css/',
   'tools/check-copy.mjs', 'tools/README.md', 'tools/site-config.json',
-  'docs/backend-contract.md', 'docs/components-added.md', 'CLAUDE.md',
+  'docs/backend-contract.md', 'docs/components-added.md', 'docs/qa/real-device-checklist.md', 'CLAUDE.md',
   // the client decisions list names the switch once (row 18); the review page renders it
   'docs/content/01-open-decisions.md', 'docs/01-open-decisions.md', 'html/review-decisions.html'
 ];

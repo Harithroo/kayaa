@@ -42,6 +42,9 @@
   </script>
   <!-- /partial: seo -->
   <!-- partial: styles -->
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#FAF7FB">
+  <link rel="icon" href="data:,"> <!-- TODO: replace with the real favicon once the logo exists; data:, stops browsers asking for /favicon.ico (a 404 on every first visit) -->
   <script>
     /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
        Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
@@ -51,12 +54,12 @@
     });
   </script>
   <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
-  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
-  <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=186fb5f1">
-  <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=a117fc0c">
+  <link rel="stylesheet" href="assets/css/base.css?v=c7479e07">
+  <link rel="stylesheet" href="assets/css/components.css?v=86a4ca95">
+  <link rel="stylesheet" href="assets/css/layout.css?v=e485861a">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/home.css?v=ca62c45e">
+  <link rel="stylesheet" href="assets/css/pages/home.css?v=08965942">
 </head>
 <body data-page="home">
   <!-- partial: sprite -->
@@ -256,11 +259,11 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- partial: announcement -->
-  <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
-  <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
+  <!-- blade: @if topbar banner is active (style: lilac | sky) -->
+  <section class="topbar topbar--lilac" data-topbar aria-label="Announcement">
     <p class="topbar__text"><span>Island-wide delivery in <span data-cfg="delivery_island_days">2–4</span> days</span><span class="topbar__extra"> · Free over <span data-cfg="free_shipping_over">Rs. 7,500</span></span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
-  </div>
+  </section>
   <!-- /partial: announcement -->
 
   <!-- partial: header -->
@@ -329,7 +332,7 @@
       </nav>
 
       <div class="site-header__actions">
-        <form class="header-search" role="search" action="search.html" method="get" data-header-search>
+        <form class="header-search" role="search" aria-label="Site search" action="search.html" method="get" data-header-search>
           <button type="button" class="icon-btn header-search__toggle" data-search-toggle aria-expanded="false" aria-controls="header-search-field" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           <div class="header-search__field" id="header-search-field">
             <label class="visually-hidden" for="header-q">Search Kayaa</label>
@@ -365,7 +368,7 @@
   </header>
   <!-- /partial: header -->
 
-  <main id="main">
+  <main id="main" tabindex="-1">
 
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-title">
@@ -441,15 +444,15 @@
         <div class="age-steps__row">
         <ul class="scroller scroller--age" role="list">
           <!-- gen: size-tiles-home -->
-          <li style="--step: 0"><a class="age-tile" href="shop.html?size=newborn" aria-label="Shop size Newborn"><span class="age-tile__label">Newborn</span><span class="age-tile__meta"><span>Up to 50 cm</span><span>Up to 3.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 1"><a class="age-tile" href="shop.html?size=0-3m" aria-label="Shop size 0–3m"><span class="age-tile__label">0–3m</span><span class="age-tile__meta"><span>50–58 cm</span><span>3.5–5.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 2"><a class="age-tile" href="shop.html?size=3-6m" aria-label="Shop size 3–6m"><span class="age-tile__label">3–6m</span><span class="age-tile__meta"><span>58–66 cm</span><span>5.5–7.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 3"><a class="age-tile" href="shop.html?size=6-9m" aria-label="Shop size 6–9m"><span class="age-tile__label">6–9m</span><span class="age-tile__meta"><span>66–72 cm</span><span>7.5–9 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 4"><a class="age-tile" href="shop.html?size=9-12m" aria-label="Shop size 9–12m"><span class="age-tile__label">9–12m</span><span class="age-tile__meta"><span>72–78 cm</span><span>9–10.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 5"><a class="age-tile" href="shop.html?size=12-18m" aria-label="Shop size 12–18m"><span class="age-tile__label">12–18m</span><span class="age-tile__meta"><span>78–86 cm</span><span>10.5–12 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 6"><a class="age-tile" href="shop.html?size=18-24m" aria-label="Shop size 18–24m"><span class="age-tile__label">18–24m</span><span class="age-tile__meta"><span>86–92 cm</span><span>12–13.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 7"><a class="age-tile" href="shop.html?size=2y" aria-label="Shop size 2Y"><span class="age-tile__label">2Y</span><span class="age-tile__meta"><span>92–98 cm</span><span>13.5–15 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 8"><a class="age-tile" href="shop.html?size=3y" aria-label="Shop size 3Y"><span class="age-tile__label">3Y</span><span class="age-tile__meta"><span>98–104 cm</span><span>15–17 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 0"><a class="age-tile" href="shop.html?size=newborn"><span class="age-tile__label">Newborn</span><span class="age-tile__meta"><span>Up to 50 cm</span><span>Up to 3.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 1"><a class="age-tile" href="shop.html?size=0-3m"><span class="age-tile__label">0–3m</span><span class="age-tile__meta"><span>50–58 cm</span><span>3.5–5.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 2"><a class="age-tile" href="shop.html?size=3-6m"><span class="age-tile__label">3–6m</span><span class="age-tile__meta"><span>58–66 cm</span><span>5.5–7.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 3"><a class="age-tile" href="shop.html?size=6-9m"><span class="age-tile__label">6–9m</span><span class="age-tile__meta"><span>66–72 cm</span><span>7.5–9 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 4"><a class="age-tile" href="shop.html?size=9-12m"><span class="age-tile__label">9–12m</span><span class="age-tile__meta"><span>72–78 cm</span><span>9–10.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 5"><a class="age-tile" href="shop.html?size=12-18m"><span class="age-tile__label">12–18m</span><span class="age-tile__meta"><span>78–86 cm</span><span>10.5–12 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 6"><a class="age-tile" href="shop.html?size=18-24m"><span class="age-tile__label">18–24m</span><span class="age-tile__meta"><span>86–92 cm</span><span>12–13.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 7"><a class="age-tile" href="shop.html?size=2y"><span class="age-tile__label">2Y</span><span class="age-tile__meta"><span>92–98 cm</span><span>13.5–15 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 8"><a class="age-tile" href="shop.html?size=3y"><span class="age-tile__label">3Y</span><span class="age-tile__meta"><span>98–104 cm</span><span>15–17 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
           <!-- /gen: size-tiles-home -->
         </ul>
         </div>
@@ -977,7 +980,7 @@
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
                     <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
                   <p class="price" data-line-total>Rs. 3,450</p>
@@ -993,7 +996,7 @@
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
                     <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
                   <p class="price" data-line-total>Rs. 2,850</p>
@@ -1033,7 +1036,7 @@
         <div class="cart-item__row">
           <div class="qty" data-qty>
             <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-            <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+            <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
             <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
           </div>
           <p class="price" data-line-total>Rs. 0</p>
@@ -1081,9 +1084,9 @@
 
   <!-- partial: scripts -->
   <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
-  <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=28afb4aa" defer></script>
+  <script src="assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
 </body>
 </html>

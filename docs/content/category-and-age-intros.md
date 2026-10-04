@@ -38,6 +38,7 @@ Each entry gives the h1, meta title, meta description and a short intro for the 
 - h1: Baby Napkins
 - meta_title: Baby Napkins in Sri Lanka | Kayaa
 - meta_description: [[TODO: one sentence describing Kayaa's napkins]]. Island-wide delivery across Sri Lanka with secure card payment.
+- meta_fallback: Baby napkins from Kayaa. Island-wide delivery across Sri Lanka with secure checkout.
 - intro: [[TODO: describe what Kayaa's napkins are (for example cloth nappies or muslin squares) and who they suit.]] Check each product page for the fabric, size and care instructions.
 
 ### Accessories (slug: accessories)

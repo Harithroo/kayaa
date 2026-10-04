@@ -20,6 +20,9 @@
   <meta name="twitter:description" content="Update your name, email and mobile number, or change your password. Your details are used for your orders and your Kayaa account.">
   <!-- /partial: seo -->
   <!-- partial: styles -->
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#FAF7FB">
+  <link rel="icon" href="data:,"> <!-- TODO: replace with the real favicon once the logo exists; data:, stops browsers asking for /favicon.ico (a 404 on every first visit) -->
   <script>
     /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
        Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
@@ -29,12 +32,12 @@
     });
   </script>
   <link rel="stylesheet" href="../assets/css/fonts.css?v=92b3d5a5">
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=844f337a">
-  <link rel="stylesheet" href="../assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="../assets/css/components.css?v=186fb5f1">
-  <link rel="stylesheet" href="../assets/css/layout.css?v=d6181657">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=a117fc0c">
+  <link rel="stylesheet" href="../assets/css/base.css?v=c7479e07">
+  <link rel="stylesheet" href="../assets/css/components.css?v=86a4ca95">
+  <link rel="stylesheet" href="../assets/css/layout.css?v=e485861a">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="../assets/css/pages/account.css?v=bbd69f18">
+  <link rel="stylesheet" href="../assets/css/pages/account.css?v=709acd64">
 </head>
 <body data-page="account">
   <!-- partial: sprite -->
@@ -234,11 +237,11 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- partial: announcement -->
-  <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
-  <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
+  <!-- blade: @if topbar banner is active (style: lilac | sky) -->
+  <section class="topbar topbar--lilac" data-topbar aria-label="Announcement">
     <p class="topbar__text"><span>Island-wide delivery in <span data-cfg="delivery_island_days">2–4</span> days</span><span class="topbar__extra"> · Free over <span data-cfg="free_shipping_over">Rs. 7,500</span></span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
-  </div>
+  </section>
   <!-- /partial: announcement -->
 
   <!-- partial: header -->
@@ -307,7 +310,7 @@
       </nav>
 
       <div class="site-header__actions">
-        <form class="header-search" role="search" action="../search.html" method="get" data-header-search>
+        <form class="header-search" role="search" aria-label="Site search" action="../search.html" method="get" data-header-search>
           <button type="button" class="icon-btn header-search__toggle" data-search-toggle aria-expanded="false" aria-controls="header-search-field" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           <div class="header-search__field" id="header-search-field">
             <label class="visually-hidden" for="header-q">Search Kayaa</label>
@@ -343,7 +346,7 @@
   </header>
   <!-- /partial: header -->
 
-  <main id="main">
+  <main id="main" tabindex="-1">
     <!-- blade: @auth @unless email_verified. Dismissal is remembered for the session only (sessionStorage, account.js). -->
     <div class="container verify-wrap">
       <div class="verify-banner" role="region" aria-label="Verify your email" data-verify-banner hidden>
@@ -649,7 +652,7 @@
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
                     <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
                   <p class="price" data-line-total>Rs. 3,450</p>
@@ -665,7 +668,7 @@
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
                     <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
                   <p class="price" data-line-total>Rs. 2,850</p>
@@ -705,7 +708,7 @@
         <div class="cart-item__row">
           <div class="qty" data-qty>
             <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-            <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+            <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
             <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
           </div>
           <p class="price" data-line-total>Rs. 0</p>
@@ -752,12 +755,12 @@
 
   <!-- partial: scripts -->
   <script src="../assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="../assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
-  <script src="../assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="../assets/js/app.js?v=28afb4aa" defer></script>
+  <script src="../assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="../assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="../assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
-  <script src="../assets/js/proto-orders.js?v=b3e906e5" defer></script>
-  <script src="../assets/js/account.js?v=1cfcd927" defer></script>
+  <script src="../assets/js/proto-orders.js?v=a8ea506c" defer></script>
+  <script src="../assets/js/account.js?v=b84ef63e" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
   <script src="../assets/js/proto-account.js?v=02eedce1" defer></script>
 </body>

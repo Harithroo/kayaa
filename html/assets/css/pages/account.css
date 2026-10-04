@@ -10,7 +10,17 @@
 }
 
 /* ---------- Account nav: scrollable chips on mobile, sidebar from 900px ---------- */
-.account-nav { min-width: 0; }
+.account-nav { position: relative; min-width: 0; }
+.account-nav::after {   /* soft right-edge fade: the row scrolls sideways on small screens */
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: calc(var(--gutter) * -1);
+  width: 36px;
+  background: linear-gradient(to right, transparent, var(--bg));
+  pointer-events: none;
+}
 .account-nav ul {
   display: flex;
   gap: var(--space-2);
@@ -18,11 +28,13 @@
   padding: 2px var(--gutter);
   overflow-x: auto;
   overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gutter);
   scrollbar-width: none;
   list-style: none;
 }
 .account-nav ul::-webkit-scrollbar { display: none; }
-.account-nav li { flex: none; }
+.account-nav li { flex: none; scroll-snap-align: start; }
 .account-nav__link {
   display: inline-flex;
   align-items: center;
@@ -44,6 +56,7 @@
   .account-nav__link[aria-current="page"]:hover { background: var(--primary); }
 }
 @media (min-width: 900px) {
+  .account-nav::after { display: none; }
   .account-nav { position: sticky; top: calc(var(--header-h, 117px) + var(--space-4)); }
   .account-nav ul { flex-direction: column; gap: var(--space-1); margin-inline: 0; padding: 0; overflow: visible; }
   .account-nav__link { display: flex; width: 100%; padding: 0 var(--space-4); border: 0; border-radius: var(--radius-input); background: none; }
@@ -120,7 +133,6 @@
 .review-card__product .media[data-placeholder] > .icon { width: 18px; height: 18px; }
 .review-card__product-name { font-weight: 700; }
 .review-card__product-name a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--ink); }
-.review-card__status { margin-left: auto; }
 .review-card__top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-3); }
 
 /* ---------- Profile ---------- */

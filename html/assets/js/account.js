@@ -14,6 +14,13 @@
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
 
+  // account chip nav (a scrolling row on small screens): bring the current chip into view on load, so nothing looks cut off
+  (function () {
+    var row = $('.account-nav ul');
+    var cur = row && $('[aria-current="page"]', row);
+    if (cur && row.scrollWidth > row.clientWidth) row.scrollLeft = Math.max(0, cur.offsetLeft - (row.clientWidth - cur.offsetWidth) / 2);
+  })();
+
   var RULES = {
     email: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); },
     // Sri Lankan mobile: 07X XXXXXXX (10 digits) or +94 7X XXXXXXX, spaces and dashes allowed

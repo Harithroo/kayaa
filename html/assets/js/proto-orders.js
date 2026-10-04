@@ -1,5 +1,5 @@
 /* PROTOTYPE ONLY - delete at Blade conversion: orders come from the database.
-   Fourteen sample orders with stable references (format KY-YYMMDD-XXXX), plus the order stored by the simulated checkout (shown first).
+   Fifteen sample orders with stable references (format KY-YYMMDD-XXXX), plus the order stored by the simulated checkout (shown first).
    window.KayaaOrders: all() find(ref, phone) page(n, per) money(n) date(iso) badge(kind, value) methodBadge(order) methodLabel(order) linesHtml(order)
                        renderStepper(root, order) canResume(order) canCancel(order) cancel(ref) STATUS_LABEL
    find(ref) matches the reference only (the account pages); find(ref, phone) needs the reference AND the mobile number (track).
@@ -8,6 +8,7 @@
    KY-261003-P7X2 payment failed, KY-260828-H4N8 refunded, KY-261002-W5N7 paid and waiting to be confirmed (shows the refund line in
    the cancel dialog), KY-260720-E8Z5 delivered with missing history dates (the stepper shows no date for those steps),
    KY-261001-C0D1 placed with the cash-on-delivery option (method cod, payment pending until the courier collects it, no "Resume payment"),
+   KY-260930-C0D2 a cash order that was delivered and paid (badge "Paid on delivery"),
    plus five more delivered orders for pagination.
    Cancelling an order on the order page is remembered for the session (key kayaa.proto.cancelled.v1). */
 (function () {
@@ -54,6 +55,7 @@
     make('KY-261001-C0D1', '2026-10-01', '2026-10-01', [item('bodysuit', '0–3m'), item('swaddle', 'Newborn')], 'pending', 'pending', { placed: '2026-10-01' }, 'cod'),
     make('KY-261002-W5N7', '2026-10-02', '2026-10-02', [item('romper', '3–6m', 2)], 'pending', 'paid'),
     make('KY-261001-K8D3', '2026-10-01', '2026-10-03', [item('dress', '3–6m'), item('sleepsuit', '0–3m')], 'shipped', 'paid', { placed: '2026-10-01', confirmed: '2026-10-01', shipped: '2026-10-03' }),
+    make('KY-260930-C0D2', '2026-09-30', '2026-10-02', [item('sleepsuit', '3–6m'), item('bonnet', 'Newborn')], 'delivered', 'paid', full('2026-09-30', '2026-10-01', '2026-10-02'), 'cod'),
     make('KY-260914-T5R7', '2026-09-14', '2026-09-19', [item('bodysuit', '3–6m', 2), item('swaddle', 'Newborn')], 'delivered', 'paid', full('2026-09-14', '2026-09-16', '2026-09-19')),
     make('KY-260910-B2W6', '2026-09-10', '2026-09-10', [item('romper', '6–9m')], 'cancelled', 'failed', { placed: '2026-09-10', cancelled: '2026-09-10' }),
     make('KY-260828-H4N8', '2026-08-28', '2026-09-02', [item('dress', '3–6m')], 'cancelled', 'refunded', { placed: '2026-08-28', confirmed: '2026-08-28', cancelled: '2026-09-02' }),
@@ -138,9 +140,13 @@
   }
 
   function methodLabel(o) { return METHOD_LABEL[o.method] || METHOD_LABEL.online; }
-  // "Pay on delivery" badge: outline, neutral, banknote icon plus text; shown only for an order paid by the cash option
+  // Cash badge by state: pending = "Pay on delivery" (outline neutral, banknote icon); paid = "Paid on delivery" (lilac check treatment).
+  // Text always carries the meaning; the icon is decoration. Only an order that uses the cash option gets one.
   function methodBadge(o) {
-    return o.method === 'cod' ? '<span class="badge badge--outline pay-badge"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg><span class="visually-hidden">Payment method: </span>Pay on delivery</span>' : '';
+    if (o.method !== 'cod') return '';
+    var paid = o.paymentStatus === 'paid';
+    return '<span class="badge badge--outline pay-badge' + (paid ? ' pay-badge--paid' : '') + '"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-' + (paid ? 'check' : 'banknote') + '"></use></svg>' +
+      '<span class="visually-hidden">Payment method: </span>' + (paid ? 'Paid on delivery' : 'Pay on delivery') + '</span>';
   }
   // "Resume payment": only while the payment is pending or failed, the method is the online gateway and the order is not cancelled
   function canResume(o) {

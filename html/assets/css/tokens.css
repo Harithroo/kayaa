@@ -1,6 +1,8 @@
 /* Kayaa design tokens. Source: design/kayaa-final-design-system.html (light mode only, no green). */
 
 :root {
+  color-scheme: light;   /* light mode only: phone browsers must never force a dark mode */
+
   /* Colour */
   --bg: #FAF7FB;
   --surface: #FFFFFF;
@@ -9,9 +11,9 @@
   --accent: #A9C2E0;           /* Periwinkle Sky: ONE highlight per view */
   --secondary: #EAE0F2;        /* section backgrounds, ghost buttons, placeholders */
   --ink: #3D3547;              /* body text, headings. Never pure black */
-  --ink-soft: #79708A;         /* secondary text. 14px and up only */
+  --ink-soft: #635C71;         /* secondary text. AA (4.5:1+) on Bg, Secondary and the lilac tints. Darkened from the design file value #79708A (4.4:1 on Bg), see docs/qa/known-issues.md */
   --line: #E9E1F0;             /* borders, dividers, disabled fills */
-  --error: #C1584B;
+  --error: #A34A3F;            /* AA (4.5:1+) as text on white, Bg and the error tint, and as a button fill under white text. Darkened from #C1584B (4.4:1), see docs/qa/known-issues.md */
 
   /* Soft lilac tints for .media placeholders (derived, see docs/components-added.md) */
   --tone-1: #EAE0F2;
@@ -20,7 +22,7 @@
   --tone-4: #D9CBE9;
 
   /* Derived tints (see docs/components-added.md) */
-  --cream: #FBF6EE;            /* announcement bar --cream */
+  --cream: #FBF6EE;            /* pale tint for the Butter (cream) product colour photo placeholders only: not a UI colour */
   --sky-tint: #DDE7F3;         /* Periwinkle Sky at ~40% on white: announcement bar / promo --sky */
   --error-tint: #FBEFED;                    /* alert --error background (Error at ~8% on white) */
   --line-strong: rgba(110, 90, 140, 0.2);   /* dividers on Secondary backgrounds (footer) */
@@ -48,6 +50,8 @@
   --fs-body: 16px;
   --fs-dense: 14.5px;          /* cards, meta, dense UI only */
   --fs-ui: 14px;               /* buttons, labels: the floor for interactive text */
+  --fs-ui-lg: 15px;            /* large buttons */
+  --fs-step: clamp(18px, 1.2vw + 5px, 22px);   /* the size labels of the home growth steps (1100px and up, nine tiles in one row) */
   --fs-caption: 12.5px;        /* captions, overlines: the only size below 14px */
 
   --lh-display: 1.05;
@@ -74,6 +78,10 @@
   --radius-tile: 14px;         /* icon tiles */
   --radius-input: 12px;        /* inputs, size boxes */
   --radius-round: 50%;         /* avatars, icon buttons */
+  --radius-xs: 4px;            /* content marker label */
+  --radius-sm: 6px;            /* content marker highlight */
+  --radius-md: 8px;            /* checkbox box */
+  --radius-xl: 24px;           /* bottom corners of the mega menu panel */
 
   /* Shadows */
   --shadow-card-hover: 0 22px 40px -20px rgba(61, 53, 71, 0.25);

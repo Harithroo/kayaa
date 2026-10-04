@@ -105,13 +105,11 @@
 }
 .notice > .icon { flex: none; margin-top: 2px; color: var(--primary-deep); }
 .notice p + p { margin-top: var(--space-2); }
-.notice__title { font-weight: 800; }
 
 /* ---------- Tables inside prose: the shared .size-table stacks into labelled cards under 420px ---------- */
 .table-wrap { margin-top: var(--space-3); }
 @media (min-width: 420px) { .size-table--two { table-layout: fixed; } .size-table--two th:first-child { width: 42%; } }
 .table-wrap .size-table caption { padding-bottom: var(--space-2); text-align: left; font-weight: 700; }
-.table-note { margin-top: var(--space-2); font-size: var(--fs-ui); color: var(--ink-soft); }
 
 /* ---------- Numbered steps with icons (how to measure, how delivery works) ---------- */
 .how-steps { display: grid; gap: var(--space-3); padding: 0; list-style: none; counter-reset: step; }
@@ -164,14 +162,12 @@
 /* ---------- About ---------- */
 .values { display: grid; gap: var(--space-3); padding: 0; list-style: none; }
 .values li { padding: var(--space-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); }
-.values__icon { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: var(--space-3); border-radius: var(--radius-tile); background: var(--tone-1); color: var(--primary-deep); }
 .values h3 { margin: 0; font-size: var(--fs-h4); }
 .values p { margin-top: var(--space-1); font-size: var(--fs-dense); color: var(--ink-soft); }
 @media (min-width: 900px) { .values { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .about-media { display: grid; gap: var(--space-3); margin-top: var(--space-5); }
 .about-media .media { border-radius: var(--radius-card); }
 @media (min-width: 600px) { .about-media { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.content__cta { margin-top: var(--space-6); }
 
 /* ---------- Contact ---------- */
 .contact-cards { display: grid; gap: var(--space-3); padding: 0; list-style: none; margin-top: var(--space-5); }

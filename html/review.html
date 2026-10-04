@@ -8,6 +8,9 @@
   <title>Kayaa prototype - review</title>
   <meta name="description" content="Index of every screen in the Kayaa prototype, with review status.">
   <!-- partial: styles -->
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#FAF7FB">
+  <link rel="icon" href="data:,"> <!-- TODO: replace with the real favicon once the logo exists; data:, stops browsers asking for /favicon.ico (a 404 on every first visit) -->
   <script>
     /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
        Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
@@ -17,10 +20,10 @@
     });
   </script>
   <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
-  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
-  <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=186fb5f1">
-  <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=a117fc0c">
+  <link rel="stylesheet" href="assets/css/base.css?v=c7479e07">
+  <link rel="stylesheet" href="assets/css/components.css?v=86a4ca95">
+  <link rel="stylesheet" href="assets/css/layout.css?v=e485861a">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/review.css?v=5e1e6081">
 </head>
@@ -222,11 +225,11 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- partial: announcement -->
-  <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
-  <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
+  <!-- blade: @if topbar banner is active (style: lilac | sky) -->
+  <section class="topbar topbar--lilac" data-topbar aria-label="Announcement">
     <p class="topbar__text"><span>Island-wide delivery in <span data-cfg="delivery_island_days">2–4</span> days</span><span class="topbar__extra"> · Free over <span data-cfg="free_shipping_over">Rs. 7,500</span></span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
-  </div>
+  </section>
   <!-- /partial: announcement -->
 
   <!-- partial: header -->
@@ -295,7 +298,7 @@
       </nav>
 
       <div class="site-header__actions">
-        <form class="header-search" role="search" action="search.html" method="get" data-header-search>
+        <form class="header-search" role="search" aria-label="Site search" action="search.html" method="get" data-header-search>
           <button type="button" class="icon-btn header-search__toggle" data-search-toggle aria-expanded="false" aria-controls="header-search-field" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           <div class="header-search__field" id="header-search-field">
             <label class="visually-hidden" for="header-q">Search Kayaa</label>
@@ -331,7 +334,7 @@
   </header>
   <!-- /partial: header -->
 
-  <main id="main">
+  <main id="main" tabindex="-1">
     <div class="container review">
       <header class="review__head">
         <p class="eyebrow">Prototype</p>
@@ -413,7 +416,7 @@
             <li class="review__item">
               <div class="review__text"><a class="review__name" href="track.html">Track order</a><p class="review__note">Find an order with its order number AND the mobile number (every sample order uses 071 234 5678). The links prefill the order number only; type the number and press Find my order.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="track.html?ref=KY-261001-K8D3">Shipped</a></li><li><a href="track.html?ref=KY-260914-T5R7">Delivered</a></li><li><a href="track.html?ref=KY-260910-B2W6">Cancelled</a></li><li><a href="track.html?ref=KY-261003-A3F9">Pending payment</a></li><li><a href="track.html?ref=KY-261003-P7X2">Payment failed (Resume payment)</a></li><li><a href="track.html?ref=KY-261001-C0D1">Sample order with the second payment option</a></li><li><a href="track.html?ref=KY-260828-H4N8">Refunded</a></li><li><a href="track.html?ref=KY-260720-E8Z5">Missing step dates</a></li><li><a href="track.html?ref=KY-000000-NONE">Not found (unknown order number)</a></li><li><a href="track.html?demo=throttle">Rate limited</a></li></ul></div>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="track.html?ref=KY-261001-K8D3">Shipped</a></li><li><a href="track.html?ref=KY-260914-T5R7">Delivered</a></li><li><a href="track.html?ref=KY-260910-B2W6">Cancelled</a></li><li><a href="track.html?ref=KY-261003-A3F9">Pending payment</a></li><li><a href="track.html?ref=KY-261003-P7X2">Payment failed (Resume payment)</a></li><li><a href="track.html?ref=KY-261001-C0D1">Sample order with the second payment option</a></li><li><a href="track.html?ref=KY-260930-C0D2">Same, delivered and paid</a></li><li><a href="track.html?ref=KY-260828-H4N8">Refunded</a></li><li><a href="track.html?ref=KY-260720-E8Z5">Missing step dates</a></li><li><a href="track.html?ref=KY-000000-NONE">Not found (unknown order number)</a></li><li><a href="track.html?demo=throttle">Rate limited</a></li></ul></div>
             </li>
           </ul>
         </section>
@@ -447,14 +450,14 @@
               <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/verify-email.html">Check your email</a></li><li><a href="account/verify-email.html?demo=sent">Link resent</a></li><li><a href="account/verify-email.html?demo=throttle">Rate limited</a></li><li><a href="account/verify-email.html?demo=verified">Email verified (landing)</a></li><li><a href="account/verify-email.html?demo=invalid">Invalid or expired link</a></li></ul></div>
             </li>
             <li class="review__item">
-              <div class="review__text"><a class="review__name" href="account/index.html">My orders</a><p class="review__note">Order cards with status badges, pagination (14 samples, 3 pages; the second sample on page 1 uses the second payment option) and the guest-orders note, which depends on email verification.</p></div>
+              <div class="review__text"><a class="review__name" href="account/index.html">My orders</a><p class="review__note">Order cards with status badges, pagination (15 samples, 3 pages; two of them use the second payment option) and the guest-orders note, which depends on email verification.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
               <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/index.html?page=2">Page 2</a></li><li><a href="account/index.html?page=3">Page 3</a></li><li><a href="account/index.html?demo=empty">Empty</a></li><li><a href="account/index.html?demo=unverified">Unverified (banner and note)</a></li><li><a href="account/index.html?demo=verified">Verified</a></li></ul></div>
             </li>
             <li class="review__item">
               <div class="review__text"><a class="review__name" href="account/order.html">Order details</a><p class="review__note">One order with the stepper (a date per step when known), items, totals, delivery and actions: Track, Resume payment and Cancel order (pending orders only).</p></div>
               <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/order.html?ref=KY-261001-K8D3">Shipped</a></li><li><a href="account/order.html?ref=KY-260914-T5R7">Delivered</a></li><li><a href="account/order.html?ref=KY-260910-B2W6">Cancelled (with date)</a></li><li><a href="account/order.html?ref=KY-261003-A3F9">Pending payment (cancel, resume)</a></li><li><a href="account/order.html?ref=KY-261003-P7X2">Payment failed (cancel, resume)</a></li><li><a href="account/order.html?ref=KY-261001-C0D1">Sample order with the second payment option (cancel, no resume)</a></li><li><a href="account/order.html?ref=KY-261002-W5N7">Paid, waiting (cancel with refund line)</a></li><li><a href="account/order.html?ref=KY-260828-H4N8">Refunded</a></li><li><a href="account/order.html?ref=KY-260720-E8Z5">Missing step dates</a></li><li><a href="account/order.html?ref=KY-000000-NONE">Not found</a></li></ul></div>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/order.html?ref=KY-261001-K8D3">Shipped</a></li><li><a href="account/order.html?ref=KY-260914-T5R7">Delivered</a></li><li><a href="account/order.html?ref=KY-260910-B2W6">Cancelled (with date)</a></li><li><a href="account/order.html?ref=KY-261003-A3F9">Pending payment (cancel, resume)</a></li><li><a href="account/order.html?ref=KY-261003-P7X2">Payment failed (cancel, resume)</a></li><li><a href="account/order.html?ref=KY-261001-C0D1">Sample order with the second payment option (cancel, no resume)</a></li><li><a href="account/order.html?ref=KY-260930-C0D2">Same, delivered and paid</a></li><li><a href="account/order.html?ref=KY-261002-W5N7">Paid, waiting (cancel with refund line)</a></li><li><a href="account/order.html?ref=KY-260828-H4N8">Refunded</a></li><li><a href="account/order.html?ref=KY-260720-E8Z5">Missing step dates</a></li><li><a href="account/order.html?ref=KY-000000-NONE">Not found</a></li></ul></div>
             </li>
             <li class="review__item">
               <div class="review__text"><a class="review__name" href="account/reviews.html">My reviews</a><p class="review__note">The customer’s reviews with Published and Awaiting approval badges and an admin reply.</p></div>
@@ -738,7 +741,7 @@
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
                     <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
                   <p class="price" data-line-total>Rs. 3,450</p>
@@ -754,7 +757,7 @@
                 <div class="cart-item__row">
                   <div class="qty" data-qty>
                     <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-                    <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
                   <p class="price" data-line-total>Rs. 2,850</p>
@@ -794,7 +797,7 @@
         <div class="cart-item__row">
           <div class="qty" data-qty>
             <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
-            <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+            <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
             <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
           </div>
           <p class="price" data-line-total>Rs. 0</p>
@@ -841,9 +844,9 @@
 
   <!-- partial: scripts -->
   <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
-  <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=28afb4aa" defer></script>
+  <script src="assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
 </body>
 </html>

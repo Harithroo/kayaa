@@ -20,6 +20,9 @@
   <meta name="twitter:description" content="Your Kayaa order confirmation, with your order number, items, delivery details and payment status. Keep your order number to track it.">
   <!-- /partial: seo -->
   <!-- partial: styles -->
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#FAF7FB">
+  <link rel="icon" href="data:,"> <!-- TODO: replace with the real favicon once the logo exists; data:, stops browsers asking for /favicon.ico (a 404 on every first visit) -->
   <script>
     /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
        Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
@@ -29,12 +32,12 @@
     });
   </script>
   <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
-  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
-  <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=186fb5f1">
-  <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=a117fc0c">
+  <link rel="stylesheet" href="assets/css/base.css?v=c7479e07">
+  <link rel="stylesheet" href="assets/css/components.css?v=86a4ca95">
+  <link rel="stylesheet" href="assets/css/layout.css?v=e485861a">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/thank-you.css?v=6945e5de">
+  <link rel="stylesheet" href="assets/css/pages/thank-you.css?v=5ff82a3d">
 </head>
 <body data-page="thank-you">
   <!-- partial: sprite -->
@@ -243,7 +246,7 @@
   </header>
   <!-- /partial: header-minimal -->
 
-  <main id="main">
+  <main id="main" tabindex="-1">
     <div class="container thanks" data-thanks-page>
       <!-- blade: one state block per outcome (paid, pending, failed, cancelled, expired). This page is reached ONLY through a signed, expiring link supplied by the backend (for example after the gateway returns); it is never built from the order number. ?state= and ?demo=emails-on are prototype only. -->
 
@@ -372,6 +375,7 @@
   <!-- partial: footer-minimal -->
   <footer class="site-footer site-footer--minimal">
     <div class="container footer-min">
+      <nav aria-label="Help and policies">
       <ul class="footer-min__links" role="list">
         <li><a href="delivery.html">Delivery</a></li>
         <li><a href="returns.html">Returns</a></li>
@@ -379,6 +383,7 @@
         <li><a href="terms.html">Terms</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
+      </nav>
       <p class="footer-min__copy">&copy; 2026 Kayaa</p>
     </div>
   </footer>
@@ -386,9 +391,9 @@
 
   <!-- partial: scripts -->
   <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
-  <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=28afb4aa" defer></script>
+  <script src="assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
   <script src="assets/js/thank-you.js?v=d86d4512" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->

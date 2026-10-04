@@ -250,6 +250,12 @@ export function sizeTableRows(repo) {
 }
 
 /* ---------- category and size intros (category-and-age-intros.md) ---------- */
+// A head value (title, meta description, JSON-LD) never carries a content marker: when the text still holds [[TODO]] or [[PROPOSED]],
+// the page's meta_fallback is used instead (the visible page keeps the marker). Without a fallback the bracketed text stays and check-seo fails.
+export function safeMeta(raw, fallback, cfgText) {
+  return /\[\[(TODO|PROPOSED)/.test(String(raw)) && fallback ? plain(fallback, cfgText) : plain(raw, cfgText);
+}
+
 export function loadIntros(repo, ctx) {
   const lines = fs.readFileSync(path.join(repo, 'docs', 'content', 'category-and-age-intros.md'), 'utf8').replace(/\r\n/g, '\n').split('\n');
   const out = { categories: {}, sizes: {} };
@@ -258,7 +264,7 @@ export function loadIntros(repo, ctx) {
     let m;
     if ((m = l.match(/^## (Categories|Sizes)/))) { kind = m[1] === 'Categories' ? 'categories' : 'sizes'; cur = null; continue; }
     if ((m = l.match(/^### .*\(slug:\s*([^)]+)\)/)) && kind) { cur = out[kind][m[1].trim()] = {}; continue; }
-    if ((m = l.match(/^- (h1|meta_title|meta_description|intro):\s*(.*)$/)) && cur) cur[m[1]] = m[2].trim();
+    if ((m = l.match(/^- (h1|meta_title|meta_description|meta_fallback|intro):\s*(.*)$/)) && cur) cur[m[1]] = m[2].trim();
   }
   const shaped = {};
   for (const kind2 of ['categories', 'sizes']) {
@@ -267,7 +273,7 @@ export function loadIntros(repo, ctx) {
       shaped[kind2][slug] = {
         h1: plain(v.h1, ctx.cfgText),
         metaTitle: plain(v.meta_title, ctx.cfgText),
-        metaDescription: plain(v.meta_description, ctx.cfgText),
+        metaDescription: safeMeta(v.meta_description, v.meta_fallback, ctx.cfgText),
         intro: inline(v.intro, ctx)
       };
     }

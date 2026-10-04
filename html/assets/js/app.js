@@ -9,7 +9,8 @@
   // one currency helper: "Rs. 2,450" (the prefix comes from the site config)
   function formatMoney(n) {
     var prefix = (window.KAYAA_CONFIG && window.KAYAA_CONFIG.currency_prefix) || '';
-    return prefix + ' ' + Math.round(n).toLocaleString('en-US');
+    // thousands separators by hand: the first toLocaleString call loads the locale data (about 25ms on a phone, on every page load)
+    return prefix + ' ' + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
   window.Kayaa = window.Kayaa || {};
   window.Kayaa.formatMoney = formatMoney;
@@ -62,10 +63,15 @@
   (function () {
     var header = $('.site-header');
     if (!header) return;
-    function set() { root.style.setProperty('--header-h', header.getBoundingClientRect().height + 'px'); }
-    set();
+    function set() {
+      var h = header.getBoundingClientRect().height;
+      var css = parseFloat(getComputedStyle(root).getPropertyValue('--header-h'));
+      if (!(Math.abs(h - css) > 1)) return;   // the CSS default is right: no write, no re-style of the page
+      root.style.setProperty('--header-h', h + 'px');
+    }
     window.addEventListener('resize', set);
-    if (window.ResizeObserver) new ResizeObserver(set).observe(header);
+    // the observer reports the first size after the first layout, so nothing forces an early reflow while the page loads (CSS has a fallback value)
+    if (window.ResizeObserver) new ResizeObserver(set).observe(header); else set();
   })();
 
   /* ---------- Auto-submit: [data-autosubmit] controls submit their form on change.
@@ -122,6 +128,19 @@
     return $('[data-layer="' + name + '"]');
   }
 
+  // While a drawer or sheet is open, the page behind is inert: not focusable and hidden from screen readers (the Tab trap below stays as well)
+  var inerted = [];
+  function setBackground(el) {
+    inerted.forEach(function (n) { n.removeAttribute('inert'); });
+    inerted = [];
+    if (!el) return;
+    Array.prototype.forEach.call(document.body.children, function (n) {
+      if (n === el || n === overlay || n.contains(el) || n.hasAttribute('inert') || /^(SCRIPT|STYLE|LINK|SVG)$/i.test(n.tagName)) return;
+      n.setAttribute('inert', '');
+      inerted.push(n);
+    });
+  }
+
   function openLayer(el, trigger) {
     if (!el) return;
     if (active && active.el !== el) closeLayer({ restore: false, keep: true });
@@ -131,6 +150,7 @@
     if (overlay) overlay.classList.add('is-visible');
     root.style.setProperty('--scrollbar-w', Math.max(0, window.innerWidth - root.clientWidth) + 'px');   // no layout jump when the scrollbar disappears
     root.classList.add('is-locked');
+    setBackground(el);
     if (trigger && trigger.hasAttribute('aria-expanded')) trigger.setAttribute('aria-expanded', 'true');
     var first = $('[data-autofocus]', el) || focusables(el)[0];
     if (first) first.focus();
@@ -146,6 +166,7 @@
     if (trigger && trigger.hasAttribute && trigger.hasAttribute('aria-expanded')) trigger.setAttribute('aria-expanded', 'false');
     active = null;
     if (!opts.keep) {
+      setBackground(null);
       if (overlay) overlay.classList.remove('is-visible');
       root.classList.remove('is-locked');
     }

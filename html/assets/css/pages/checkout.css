@@ -45,7 +45,7 @@
 .checkout-summary-m__body { padding: 0 var(--space-4) var(--space-4); }
 .checkout-summary-m__body .totals { margin-top: var(--space-3); }
 
-.summary-edit { margin-top: var(--space-3); }
+.summary-edit { margin-top: var(--space-3); min-height: var(--tap); }
 
 /* ---------- Numbered cards ---------- */
 .checkout-card {

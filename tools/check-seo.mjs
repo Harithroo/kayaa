@@ -3,7 +3,8 @@
 //   node tools/check-seo.mjs        errors exit 1; warnings are reported only
 //
 // Errors:  not exactly one <title>, meta description and h1; no canonical (or one on a page that must have none);
-//          a duplicate title or description; a skipped heading level; an <img> without alt, width or height;
+//          a content marker ([[...]], [TODO...], [PROPOSED...]) or the word TODO inside <head> (title, meta, JSON-LD) or inside a runtime title or
+//          meta description in catalogue-data.js; a duplicate title or description; a skipped heading level; an <img> without alt, width or height;
 //          an internal link that does not resolve; invalid JSON-LD; an indexable page (except Home) without a BreadcrumbList.
 // Warnings: a title over 60 characters; a description outside 120 to 160 characters; missing Open Graph tags;
 //          on staging, a robots tag that is not noindex,nofollow.
@@ -77,6 +78,10 @@ for (const file of walk(htmlDir).sort()) {
   if (title) titles.set(title, [...(titles.get(title) || []), label]);
   if (desc) descriptions.set(desc, [...(descriptions.get(desc) || []), label]);
 
+  // markers belong on the visible page only; head content, JSON-LD included, uses the page's meta fallback
+  const head = (noComments.match(/<head>([\s\S]*?)<\/head>/) || [])[1] || '';
+  if (/\[\[|\[(TODO|PROPOSED)\b|\bTODO\b/.test(head)) err(label, 'a content marker or TODO reaches <head> (title, meta or JSON-LD); add a meta_fallback in docs/content');
+
   const robots = (noComments.match(/<meta name="robots" content="([^"]*)">/) || [])[1];
   if (!robots) err(label, 'no robots meta');
   else if (seo.staging !== false && robots !== 'noindex,nofollow') warn(label, `staging is on but robots is "${robots}"`);
@@ -120,6 +125,14 @@ for (const file of walk(htmlDir).sort()) {
   }
   const indexable = /^index/.test(entry.robots || '');
   if (indexable && label !== 'index.html' && !hasBreadcrumb) err(label, 'indexable page without a BreadcrumbList');
+}
+
+// runtime titles and descriptions (category and size states) come from catalogue-data.js
+const dataJs = path.join(htmlDir, 'assets', 'js', 'catalogue-data.js');
+if (fs.existsSync(dataJs)) {
+  for (const m of fs.readFileSync(dataJs, 'utf8').matchAll(/"(metaTitle|metaDescription)":\s*"((?:[^"\\]|\\.)*)"/g)) {
+    if (/\[\[|\[(TODO|PROPOSED)\b|\bTODO\b/.test(m[2])) err('assets/js/catalogue-data.js', `${m[1]} carries a content marker: "${m[2].slice(0, 60)}"`);
+  }
 }
 
 for (const [map, what] of [[titles, 'title'], [descriptions, 'description']]) {
