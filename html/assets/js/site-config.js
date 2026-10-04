@@ -17,7 +17,25 @@ window.KAYAA_CONFIG = {
   "faulty_report_days": 7,
   "support_hours": "Mon–Sat 9am–6pm",
   "whatsapp_display": "077 000 0000",
-  "currency_prefix": "Rs."
+  "currency_prefix": "Rs.",
+  "popular_searches": [
+    {
+      "label": "Newborn essentials",
+      "url": "shop.html?tag=newborn-essentials"
+    },
+    {
+      "label": "Bodysuits",
+      "url": "category.html?c=bodysuits"
+    },
+    {
+      "label": "Gift idea",
+      "url": "shop.html?tag=gift-idea"
+    },
+    {
+      "label": "Sleepwear",
+      "url": "category.html?c=sleepwear"
+    }
+  ]
 };
 window.KAYAA_SEO = {
   "staging": true,

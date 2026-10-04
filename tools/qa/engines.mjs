@@ -144,6 +144,32 @@ for (const engineName of ENGINES) {
       await snap('contact-errors');
     });
 
+    await step('search suggestions', async () => {
+      if (vpName === 'desktop') {
+        await page.goto(BASE + 'index.html', { waitUntil: 'networkidle' });
+        await page.locator('#header-q').click();
+        await page.keyboard.type('bod');
+        await page.waitForSelector('.suggest:not([hidden]) [role=option]');
+        await page.waitForTimeout(300);
+        const n = await page.locator('.suggest:not([hidden]) [role=option]').count();
+        await page.keyboard.press('ArrowDown');
+        const sel = await page.evaluate(() => { const i = document.querySelector('#header-q'); const o = document.getElementById(i.getAttribute('aria-activedescendant')); return !!o && o.getAttribute('aria-selected') === 'true' && document.activeElement === i; });
+        ok('search: header suggestions for "bod" open and the arrow keys highlight a row', n === 7 && sel, n + ' options');
+        await snap('search-suggest');
+      } else {
+        await page.goto(BASE + 'search.html?focus=1', { waitUntil: 'networkidle' });
+        await page.keyboard.type('gift');
+        await page.waitForSelector('.suggest--page:not([hidden]) [role=option]');
+        await page.waitForTimeout(300);
+        const n = await page.locator('.suggest--page:not([hidden]) [role=option]').count();
+        const hidden = await page.evaluate(() => getComputedStyle(document.querySelector('[data-listing-results]')).display === 'none');
+        ok('search: the phone page shows the suggestions inline and hides the results', n === 7 && hidden, n + ' options');
+        await snap('search-suggest');
+      }
+      await page.goto(BASE + 'shop.html?tag=gift-idea', { waitUntil: 'networkidle' });
+      ok('tags: the tag listing filters and titles itself', (await page.locator('h1').innerText()) === 'Tagged: Gift idea' && (await page.locator('[data-listing-count]').innerText()) === '8 products');
+    });
+
     ok('no console or page errors', errs.length === 0, errs.slice(0, 3).join(' | '));
     await ctx.close();
   }

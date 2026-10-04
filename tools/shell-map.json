@@ -1,0 +1,20 @@
+{
+  "_note": "Which shell each page renders. full = announcement bar, header with the category row, footer, mobile tab bar, menu drawer, cart drawer, quick-add sheet. checkout = header-minimal + footer-minimal (fewer exits at payment). error = header-error + footer-minimal (the 500 and 503 views cannot rely on the database or session). none = no shell (the prototype stand-in for the payment gateway). tools/check-shell.mjs checks every page against this file; add a new page here.",
+  "variants": {
+    "full": ["seo", "styles", "sprite", "announcement", "header", "footer", "tabbar", "menu-drawer", "cart-drawer", "quick-add", "scripts"],
+    "checkout": ["seo", "styles", "sprite", "header-minimal", "footer-minimal", "scripts"],
+    "error": ["seo", "styles", "sprite", "header-error", "footer-minimal", "scripts"],
+    "none": ["styles"]
+  },
+  "pages": {
+    "404.html": "full", "419.html": "full", "429.html": "full", "500.html": "error", "503.html": "error",
+    "about.html": "full",
+    "account/forgot-password.html": "full", "account/index.html": "full", "account/login.html": "full", "account/order.html": "full",
+    "account/profile.html": "full", "account/register.html": "full", "account/reset-password.html": "full", "account/reviews.html": "full",
+    "account/verify-email.html": "full",
+    "cart.html": "full", "categories.html": "full", "category.html": "full", "checkout.html": "checkout", "contact.html": "full",
+    "delivery.html": "full", "index.html": "full", "privacy.html": "full", "product.html": "full", "proto-onepay.html": "none",
+    "returns.html": "full", "review-decisions.html": "full", "review.html": "full", "search.html": "full", "shop.html": "full",
+    "size-guide.html": "full", "terms.html": "full", "thank-you.html": "full", "track.html": "full", "wishlist.html": "full"
+  }
+}

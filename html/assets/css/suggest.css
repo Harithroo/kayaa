@@ -1,0 +1,127 @@
+/* Search suggestions: the combobox panel under the header field, the search page field and the 404 field (assets/js/search-suggest.js).
+   Desktop: the panel hangs under the field, 480px wide at most, 20px radius, card shadow, above the header and sticky bars, scrolls inside.
+   Below 900px the search page field shows the panel inline, full width, below the field (48px rows), and hides the results while it is open. */
+
+.listing-search.suggest-host, .error-search.suggest-host { position: relative; }   /* the header field is already positioned (absolute from 900px, relative from 1100px) */
+.suggest__box { position: relative; display: flex; flex: 1 1 auto; min-width: 0; }
+.suggest__box > input { width: 100%; padding-right: 44px; }
+.suggest__clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap);
+  height: 100%;
+  min-height: var(--tap);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-round);
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.suggest__clear[hidden], .suggest__spinner[hidden], .suggest__empty[hidden] { display: none; }
+.suggest__clear .icon { width: 18px; height: 18px; }
+.suggest__spinner {
+  position: absolute;
+  top: 50%;
+  right: 44px;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  border: 2px solid var(--line);
+  border-top-color: var(--primary-deep);
+  border-radius: var(--radius-round);
+  animation: suggest-spin 700ms linear infinite;
+}
+@keyframes suggest-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .suggest__spinner { animation-duration: 0.01ms; animation-iteration-count: 1; } }
+
+/* ---------- Panel ---------- */
+.suggest {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: var(--z-modal);
+  max-height: 70vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-2);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card-hover);
+}
+.suggest[hidden] { display: none; }
+.suggest--header { left: auto; width: min(480px, 90vw); }
+.suggest__group + .suggest__group, .suggest__list > .suggest__opt--all { margin-top: var(--space-1); }
+.suggest__label { padding: var(--space-2) var(--space-3) var(--space-1); font-size: var(--fs-caption); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+.suggest__empty { padding: var(--space-3); font-size: var(--fs-dense); font-weight: 700; }
+
+.suggest__opt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 48px;
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-input);
+  font-size: var(--fs-dense);
+  color: var(--ink);
+  text-decoration: none;
+}
+.suggest__opt strong { font-weight: 800; }
+@media (hover: hover) and (pointer: fine) { .suggest__opt:hover { background: var(--tone-2); } }
+.suggest__opt[aria-selected="true"] { background: var(--tone-1); outline: 2px solid var(--primary-deep); outline-offset: -2px; }   /* an outline as well as the fill: not colour alone */
+.suggest__thumb {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-tile);
+  background: var(--tone, var(--tone-1));
+  color: var(--primary-deep);
+}
+.suggest__thumb .icon { width: 20px; height: 20px; opacity: 0.7; }
+.suggest__text { display: grid; flex: 1; min-width: 0; line-height: 1.3; }
+.suggest__meta { font-size: var(--fs-ui); color: var(--ink-soft); }
+.suggest__name { flex: 1; min-width: 0; }
+.suggest__price { display: grid; flex: none; justify-items: end; font-size: var(--fs-ui); line-height: 1.3; }
+.suggest__now { font-weight: 800; color: var(--primary-deep); }
+.suggest__was { color: var(--ink-soft); }
+.suggest__count { flex: none; font-size: var(--fs-ui); color: var(--ink-soft); }
+.suggest__opt--all { justify-content: space-between; font-weight: 700; color: var(--primary-deep); border-top: 1px solid var(--line); border-radius: 0 0 var(--radius-input) var(--radius-input); }
+.suggest__opt--all .icon { flex: none; }
+.suggest__opt--chip { display: inline-flex; min-height: var(--tap); margin: 0 var(--space-1) var(--space-1) 0; padding: 0 var(--space-4); border: 1.5px solid var(--line); border-radius: var(--radius-pill); font-weight: 700; }
+.suggest__group:has(.suggest__opt--chip) { padding: 0 var(--space-2) var(--space-1); }
+
+@media (forced-colors: active) {
+  .suggest { border: 1px solid CanvasText; }
+  .suggest__opt[aria-selected="true"] { outline: 2px solid Highlight; }
+}
+
+/* ---------- The search page field and the 404 field ---------- */
+.listing-search, .error-search { flex-wrap: wrap; }
+@media (max-width: 899px) {
+  /* a phone: the panel is part of the page, below the field, and the results wait until a row or Enter is chosen */
+  .suggest--page { position: static; z-index: auto; flex: 0 0 100%; max-height: none; margin-top: var(--space-2); box-shadow: none; }
+  .suggest--page .suggest__opt { min-height: 48px; }
+  .is-suggesting [data-listing-results], .is-suggesting [data-state], .is-suggesting .toolbar, .is-suggesting .listing-head__count { display: none; }
+}
+
+/* the field moved into .suggest__box: the box takes the input's old flex role */
+.listing-search .suggest__box { flex: 1 1 220px; }
+.error-search .suggest__box { flex: 1 1 0; }
+.listing-search .suggest__box > input, .error-search .suggest__box > input { flex: none; }
+
+/* the 404 field: the panel is part of the page below the field (a short page, so the page scrolls instead of the panel) */
+.suggest--error { position: static; z-index: auto; flex: 0 0 100%; max-height: none; margin-top: var(--space-2); box-shadow: none; }
+.error-search { flex-wrap: wrap; }
+
+/* the browser's own clear button would double ours */
+.suggest__box > input::-webkit-search-cancel-button, .suggest__box > input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; display: none; }
+.suggest__box > input::-ms-clear { display: none; }

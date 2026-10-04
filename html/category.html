@@ -62,8 +62,9 @@
   <link rel="stylesheet" href="assets/css/base.css?v=c7479e07">
   <link rel="stylesheet" href="assets/css/components.css?v=86a4ca95">
   <link rel="stylesheet" href="assets/css/layout.css?v=e485861a">
+  <link rel="stylesheet" href="assets/css/suggest.css?v=954ddad4">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/listing.css?v=0871c9bf">
+  <link rel="stylesheet" href="assets/css/pages/listing.css?v=8b87091a">
 </head>
 <body data-page="category">
   <!-- partial: sprite -->
@@ -336,7 +337,7 @@
       </nav>
 
       <div class="site-header__actions">
-        <form class="header-search" role="search" aria-label="Site search" action="search.html" method="get" data-header-search>
+        <form class="header-search" role="search" aria-label="Site search" action="search.html" method="get" data-header-search data-search="header">
           <button type="button" class="icon-btn header-search__toggle" data-search-toggle aria-expanded="false" aria-controls="header-search-field" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           <div class="header-search__field" id="header-search-field">
             <label class="visually-hidden" for="header-q">Search Kayaa</label>
@@ -412,6 +413,7 @@
       <form class="toolbar" method="get" action="category.html" data-listing-form>
         <!-- blade: hidden inputs keep the other active params (size, c, q) -->
         <input type="hidden" name="size" value="" data-keep="size" disabled>
+        <input type="hidden" name="tag" value="" data-keep="tag" disabled>
         <input type="hidden" name="c" value="" data-keep="c" disabled>
         <p class="toolbar__count" data-listing-range>Showing 1-12 of 24</p>
         <div class="toolbar__controls">
@@ -440,7 +442,7 @@
           <!-- img (below the fold): <img src alt="{{ name }}" width height loading="lazy" decoding="async"> replaces the .media placeholder; keep the aspect-ratio box so nothing shifts -->
           <!-- blade: badge priority @if out_of_stock Out of stock @elseif sale Sale (accent) @elseif new New (lilac); @if out_of_stock hide quick-add. Meta line: "{N} colours · {min}–{max}" -->
           <!-- gen: product-grid all -->
-          <li data-product data-slug="ribbed-cotton-bodysuit" data-name="Ribbed Cotton Bodysuit" data-price="2450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m" data-category="bodysuits" data-new="0" data-sale="1" data-featured="1" data-added="90">
+          <li data-product data-slug="ribbed-cotton-bodysuit" data-name="Ribbed Cotton Bodysuit" data-price="2450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m" data-category="bodysuits" data-new="0" data-sale="1" data-featured="1" data-added="90" data-tags="everyday-basics breathable-cotton layering">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -457,7 +459,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-size="9-12m 12-18m 18-24m" data-category="sets" data-new="1" data-sale="0" data-featured="2" data-added="98">
+          <li data-product data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-size="9-12m 12-18m 18-24m" data-category="sets" data-new="1" data-sale="0" data-featured="2" data-added="98" data-tags="festive-wear gift-idea breathable-cotton">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -474,7 +476,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="muslin-sleep-bag-05-tog" data-name="Muslin Sleep Bag 0.5 TOG" data-price="4200" data-size="3-6m 6-9m 9-12m 12-18m 18-24m" data-category="sleepwear" data-new="0" data-sale="0" data-featured="3" data-added="80">
+          <li data-product data-slug="muslin-sleep-bag-05-tog" data-name="Muslin Sleep Bag 0.5 TOG" data-price="4200" data-size="3-6m 6-9m 9-12m 12-18m 18-24m" data-category="sleepwear" data-new="0" data-sale="0" data-featured="3" data-added="80" data-tags="sleep muslin lightweight">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -491,7 +493,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="bamboo-sleepsuit" data-name="Bamboo Sleepsuit" data-price="3650" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="sleepwear" data-new="0" data-sale="0" data-featured="4" data-added="85">
+          <li data-product data-slug="bamboo-sleepsuit" data-name="Bamboo Sleepsuit" data-price="3650" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="sleepwear" data-new="0" data-sale="0" data-featured="4" data-added="85" data-tags="sleep bamboo lightweight">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -508,7 +510,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="pointelle-romper" data-name="Pointelle Romper" data-price="3200" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="5" data-added="88">
+          <li data-product data-slug="pointelle-romper" data-name="Pointelle Romper" data-price="3200" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="5" data-added="88" data-tags="lightweight breathable-cotton festive-wear">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -525,7 +527,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="waffle-knit-cardigan" data-name="Waffle Knit Cardigan" data-price="3900" data-size="6-9m 9-12m 12-18m 18-24m" data-category="outerwear" data-new="0" data-sale="0" data-featured="6" data-added="75">
+          <li data-product data-slug="waffle-knit-cardigan" data-name="Waffle Knit Cardigan" data-price="3900" data-size="6-9m 9-12m 12-18m 18-24m" data-category="outerwear" data-new="0" data-sale="0" data-featured="6" data-added="75" data-tags="layering rainy-day">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -542,7 +544,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="newborn-hospital-set" data-name="Newborn Hospital Set" data-price="3450" data-size="newborn 0-3m" data-category="newborn" data-new="1" data-sale="0" data-featured="7" data-added="97">
+          <li data-product data-slug="newborn-hospital-set" data-name="Newborn Hospital Set" data-price="3450" data-size="newborn 0-3m" data-category="newborn" data-new="1" data-sale="0" data-featured="7" data-added="97" data-tags="newborn-essentials gift-idea breathable-cotton">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -559,7 +561,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="muslin-swaddle-wrap" data-name="Muslin Swaddle Wrap" data-price="2250" data-size="newborn 0-3m" data-category="newborn" data-new="0" data-sale="0" data-featured="8" data-added="78">
+          <li data-product data-slug="muslin-swaddle-wrap" data-name="Muslin Swaddle Wrap" data-price="2250" data-size="newborn 0-3m" data-category="newborn" data-new="0" data-sale="0" data-featured="8" data-added="78" data-tags="newborn-essentials muslin travel lightweight">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -576,7 +578,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="mittens-and-booties-set" data-name="Mittens &amp; Booties Set" data-price="1650" data-size="newborn 0-3m 3-6m" data-category="accessories" data-new="0" data-sale="0" data-featured="9" data-added="70">
+          <li data-product data-slug="mittens-and-booties-set" data-name="Mittens &amp; Booties Set" data-price="1650" data-size="newborn 0-3m 3-6m" data-category="accessories" data-new="0" data-sale="0" data-featured="9" data-added="70" data-tags="newborn-essentials gift-idea">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -593,7 +595,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="muslin-napkins-6-pack" data-name="Muslin Napkins 6-Pack" data-price="1950" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="napkins" data-new="0" data-sale="0" data-featured="10" data-added="50">
+          <li data-product data-slug="muslin-napkins-6-pack" data-name="Muslin Napkins 6-Pack" data-price="1950" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="napkins" data-new="0" data-sale="0" data-featured="10" data-added="50" data-tags="muslin everyday-basics travel">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -610,7 +612,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="hooded-fleece-jacket" data-name="Hooded Fleece Jacket" data-price="4650" data-size="12-18m 18-24m 2y 3y" data-category="outerwear" data-new="0" data-sale="0" data-featured="11" data-added="65">
+          <li data-product data-slug="hooded-fleece-jacket" data-name="Hooded Fleece Jacket" data-price="4650" data-size="12-18m 18-24m 2y 3y" data-category="outerwear" data-new="0" data-sale="0" data-featured="11" data-added="65" data-tags="rainy-day layering">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -627,7 +629,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="reversible-bib-pair" data-name="Reversible Bib Pair" data-price="1250" data-size="6-9m 9-12m 12-18m" data-category="accessories" data-new="0" data-sale="0" data-featured="12" data-added="60">
+          <li data-product data-slug="reversible-bib-pair" data-name="Reversible Bib Pair" data-price="1250" data-size="6-9m 9-12m 12-18m" data-category="accessories" data-new="0" data-sale="0" data-featured="12" data-added="60" data-tags="everyday-basics gift-idea travel">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -644,7 +646,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="kimono-bodysuit-2-pack" data-name="Kimono Bodysuit 2-Pack" data-price="2750" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="13" data-added="56">
+          <li data-product data-slug="kimono-bodysuit-2-pack" data-name="Kimono Bodysuit 2-Pack" data-price="2750" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="13" data-added="56" data-tags="newborn-essentials breathable-cotton">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -661,7 +663,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="bamboo-napkin-set" data-name="Bamboo Napkin Set" data-price="2450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="napkins" data-new="0" data-sale="0" data-featured="14" data-added="45">
+          <li data-product data-slug="bamboo-napkin-set" data-name="Bamboo Napkin Set" data-price="2450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="napkins" data-new="0" data-sale="0" data-featured="14" data-added="45" data-tags="bamboo everyday-basics gift-idea">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -678,7 +680,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="burp-cloth-and-napkin-duo" data-name="Burp Cloth &amp; Napkin Duo" data-price="1450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="napkins" data-new="1" data-sale="0" data-featured="15" data-added="96">
+          <li data-product data-slug="burp-cloth-and-napkin-duo" data-name="Burp Cloth &amp; Napkin Duo" data-price="1450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="napkins" data-new="1" data-sale="0" data-featured="15" data-added="96" data-tags="muslin newborn-essentials travel">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -695,7 +697,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="quilted-gilet" data-name="Quilted Gilet" data-price="3450" data-size="3-6m 6-9m 9-12m 12-18m 18-24m 2y" data-category="outerwear" data-new="0" data-sale="1" data-featured="16" data-added="52">
+          <li data-product data-slug="quilted-gilet" data-name="Quilted Gilet" data-price="3450" data-size="3-6m 6-9m 9-12m 12-18m 18-24m 2y" data-category="outerwear" data-new="0" data-sale="1" data-featured="16" data-added="52" data-tags="layering rainy-day travel">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -712,7 +714,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="cable-knit-jumper" data-name="Cable Knit Jumper" data-price="3750" data-size="6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="outerwear" data-new="0" data-sale="0" data-featured="17" data-added="48">
+          <li data-product data-slug="cable-knit-jumper" data-name="Cable Knit Jumper" data-price="3750" data-size="6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="outerwear" data-new="0" data-sale="0" data-featured="17" data-added="48" data-tags="layering festive-wear">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -729,7 +731,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="linen-shirt-and-shorts-set" data-name="Linen Shirt &amp; Shorts Set" data-price="4450" data-size="12-18m 18-24m 2y 3y" data-category="sets" data-new="1" data-sale="0" data-featured="18" data-added="99">
+          <li data-product data-slug="linen-shirt-and-shorts-set" data-name="Linen Shirt &amp; Shorts Set" data-price="4450" data-size="12-18m 18-24m 2y 3y" data-category="sets" data-new="1" data-sale="0" data-featured="18" data-added="99" data-tags="lightweight festive-wear breathable-cotton">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -746,7 +748,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="matching-pyjama-set" data-name="Matching Pyjama Set" data-price="3850" data-size="6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="sets" data-new="0" data-sale="0" data-featured="19" data-added="58">
+          <li data-product data-slug="matching-pyjama-set" data-name="Matching Pyjama Set" data-price="3850" data-size="6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="sets" data-new="0" data-sale="0" data-featured="19" data-added="58" data-tags="sleep gift-idea breathable-cotton">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -763,7 +765,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="cotton-dungaree-set" data-name="Cotton Dungaree Set" data-price="4250" data-size="9-12m 12-18m 18-24m 2y" data-category="sets" data-new="0" data-sale="1" data-featured="20" data-added="42">
+          <li data-product data-slug="cotton-dungaree-set" data-name="Cotton Dungaree Set" data-price="4250" data-size="9-12m 12-18m 18-24m 2y" data-category="sets" data-new="0" data-sale="1" data-featured="20" data-added="42" data-tags="everyday-basics gift-idea">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -780,7 +782,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="long-sleeve-bodysuit" data-name="Long-Sleeve Bodysuit" data-price="2150" data-size="0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="bodysuits" data-new="0" data-sale="0" data-featured="21" data-added="38">
+          <li data-product data-slug="long-sleeve-bodysuit" data-name="Long-Sleeve Bodysuit" data-price="2150" data-size="0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="bodysuits" data-new="0" data-sale="0" data-featured="21" data-added="38" data-tags="everyday-basics layering">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -797,7 +799,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="zip-sleepsuit" data-name="Zip Sleepsuit" data-price="3450" data-size="3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="sleepwear" data-new="1" data-sale="0" data-featured="22" data-added="94">
+          <li data-product data-slug="zip-sleepsuit" data-name="Zip Sleepsuit" data-price="3450" data-size="3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="sleepwear" data-new="1" data-sale="0" data-featured="22" data-added="94" data-tags="sleep newborn-essentials breathable-cotton">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -814,7 +816,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="short-sleeve-bodysuit-3-pack" data-name="Short-Sleeve Bodysuit 3-Pack" data-price="3950" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="23" data-added="36">
+          <li data-product data-slug="short-sleeve-bodysuit-3-pack" data-name="Short-Sleeve Bodysuit 3-Pack" data-price="3950" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="23" data-added="36" data-tags="everyday-basics lightweight gift-idea">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -831,7 +833,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="soft-knot-newborn-hat" data-name="Soft Knot Newborn Hat" data-price="990" data-size="newborn 0-3m" data-category="newborn" data-new="0" data-sale="0" data-featured="24" data-added="40">
+          <li data-product data-slug="soft-knot-newborn-hat" data-name="Soft Knot Newborn Hat" data-price="990" data-size="newborn 0-3m" data-category="newborn" data-new="0" data-sale="0" data-featured="24" data-added="40" data-tags="newborn-essentials travel">
             <article class="product-card product-card--oos">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -844,7 +846,7 @@
               </div>
             </article>
           </li>
-          <li data-product data-slug="sun-hat" data-name="Sun Hat" data-price="1350" data-size="6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="accessories" data-new="0" data-sale="0" data-featured="25" data-added="34">
+          <li data-product data-slug="sun-hat" data-name="Sun Hat" data-price="1350" data-size="6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="accessories" data-new="0" data-sale="0" data-featured="25" data-added="34" data-tags="lightweight travel">
             <article class="product-card">
               <div class="product-card__media">
                 <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
@@ -966,7 +968,7 @@
     <ul>
       <li><a class="tabbar__item" href="index.html" data-nav="home"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></span><span>Home</span></a></li>
       <li><a class="tabbar__item" href="shop.html" data-nav="shop category product"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-layout-grid"></use></svg></span><span>Shop</span></a></li>
-      <li><a class="tabbar__item" href="search.html" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
+      <li><a class="tabbar__item" href="search.html?focus=1" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
       <li>
         <button type="button" class="tabbar__item" data-open-layer="cart" data-nav="cart" aria-haspopup="dialog">
           <span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg><span class="icon-btn__count" data-cart-count aria-hidden="true">2</span></span>
@@ -1180,12 +1182,15 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/site-config.js?v=72f879c4" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=9716a851" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/search-core.js?v=dfafbf0c" defer></script> <!-- search matching rules (name, category, tags), shared by the suggestions and the results page -->
+  <script src="assets/js/search-suggest.js?v=51b29c75" defer></script> <!-- the suggestion combobox on every form[data-search] -->
   <script src="assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/proto-search.js?v=5cdf6905" defer></script> <!-- PROTOTYPE ONLY: answers the suggestion requests from catalogue-data.js; production calls GET /search/suggest?q= -->
   <script src="assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="assets/js/proto-listing.js?v=aeb43508" defer></script>
+  <script src="assets/js/proto-listing.js?v=0af77d3c" defer></script>
 </body>
 </html>

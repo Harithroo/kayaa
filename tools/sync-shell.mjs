@@ -2,7 +2,7 @@
 // Syncs the shared shell into every page under html/.
 //
 //   node tools/sync-shell.mjs           rewrite out-of-date pages
-//   node tools/sync-shell.mjs --check   write nothing; list out-of-date pages; exit 1 if any
+//   node tools/sync-shell.mjs --check   write nothing; list out-of-date pages; exit 1 if any (also runs tools/check-shell.mjs)
 //
 // For each <!-- partial: NAME --> ... <!-- /partial: NAME --> pair in a page, the content between
 // the markers is replaced with tools/partials/NAME.html. The marker pair "sprite" is filled from
@@ -22,6 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { checkShell } from './check-shell.mjs';
 import { loadCatalogue, generate, catalogueJs, checkCoverage } from './catalogue.mjs';
 import { loadContent, loadIntros } from './content.mjs';
 import { loadSeo, seoBlock, metaOf } from './seo.mjs';
@@ -176,12 +177,17 @@ for (const file of walk(htmlDir).sort()) {
   if (/\{\{root\}\}/.test(text)) problems.push(`${label}: unresolved {{root}} outside a partial`);
 }
 
+// every page renders the shell its variant allows (tools/shell-map.json)
+const shellProblems = checkShell(repo);
+shellProblems.forEach((p) => console.error('ERROR shell: ' + p));
+if (shellProblems.length) process.exitCode = 1;
+
 problems.forEach((p) => console.error('warning: ' + p));
 staleGenerated.forEach(([f]) => { stale.push(path.relative(htmlDir, f).split(path.sep).join('/') + ' (generated)'); pages++; });
 
 if (check) {
   stale.forEach((f) => console.log('out of date: html/' + f));
   console.log(`${stale.length} of ${pages} pages out of date`);
-  process.exit(stale.length || problems.some((p) => !p.includes('outside')) ? 1 : 0);
+  process.exit(stale.length || shellProblems.length || problems.some((p) => !p.includes('outside')) ? 1 : 0);
 }
 console.log(`${stale.length} of ${pages} pages updated`);

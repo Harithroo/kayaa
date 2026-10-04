@@ -52,6 +52,7 @@ Every title and description must be unique. Backend: optional `meta_title` and `
 | Product pages | index,follow | the product URL, without ?colour= |
 | Size guide, Delivery, Returns, About, Contact, Privacy, Terms | index,follow | itself |
 | Any sort or sale parameter, and combinations of filters | noindex,follow | the clean listing |
+| /shop?tag={slug} and /baby/{slug}?tag={slug} (tag listings) | noindex,follow | the clean listing (/shop or /baby/{slug}) |
 | Listing page 2 and beyond | index,follow | itself |
 | Search results | noindex,follow | itself |
 | Wishlist, cart, checkout, order confirmation, track, all account and auth pages | noindex,nofollow | itself |

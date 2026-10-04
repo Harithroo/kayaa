@@ -207,11 +207,66 @@ window.KAYAA_CATALOGUE = {
       }
     }
   },
+  "tags": [
+    {
+      "slug": "newborn-essentials",
+      "label": "Newborn essentials"
+    },
+    {
+      "slug": "gift-idea",
+      "label": "Gift idea"
+    },
+    {
+      "slug": "bamboo",
+      "label": "Bamboo"
+    },
+    {
+      "slug": "breathable-cotton",
+      "label": "Breathable cotton"
+    },
+    {
+      "slug": "festive-wear",
+      "label": "Festive wear"
+    },
+    {
+      "slug": "lightweight",
+      "label": "Lightweight"
+    },
+    {
+      "slug": "sleep",
+      "label": "Sleep"
+    },
+    {
+      "slug": "everyday-basics",
+      "label": "Everyday basics"
+    },
+    {
+      "slug": "rainy-day",
+      "label": "Rainy day"
+    },
+    {
+      "slug": "travel",
+      "label": "Travel"
+    },
+    {
+      "slug": "muslin",
+      "label": "Muslin"
+    },
+    {
+      "slug": "layering",
+      "label": "Layering"
+    }
+  ],
   "products": [
     {
       "slug": "ribbed-cotton-bodysuit",
       "name": "Ribbed Cotton Bodysuit",
       "category": "bodysuits",
+      "tags": [
+        "everyday-basics",
+        "breathable-cotton",
+        "layering"
+      ],
       "price": 2450,
       "was": 2950,
       "sizes": [
@@ -229,12 +284,20 @@ window.KAYAA_CATALOGUE = {
         "blush"
       ],
       "tone": 2,
-      "oos": false
+      "oos": false,
+      "featured": 1,
+      "added": 90,
+      "isNew": false
     },
     {
       "slug": "cotton-kurta-set",
       "name": "Cotton Kurta Set",
       "category": "sets",
+      "tags": [
+        "festive-wear",
+        "gift-idea",
+        "breathable-cotton"
+      ],
       "price": 4950,
       "was": 0,
       "sizes": [
@@ -248,12 +311,20 @@ window.KAYAA_CATALOGUE = {
         "lilac"
       ],
       "tone": 4,
-      "oos": false
+      "oos": false,
+      "featured": 2,
+      "added": 98,
+      "isNew": true
     },
     {
       "slug": "muslin-sleep-bag-05-tog",
       "name": "Muslin Sleep Bag 0.5 TOG",
       "category": "sleepwear",
+      "tags": [
+        "sleep",
+        "muslin",
+        "lightweight"
+      ],
       "price": 4200,
       "was": 0,
       "sizes": [
@@ -269,12 +340,20 @@ window.KAYAA_CATALOGUE = {
         "dove"
       ],
       "tone": 3,
-      "oos": false
+      "oos": false,
+      "featured": 3,
+      "added": 80,
+      "isNew": false
     },
     {
       "slug": "bamboo-sleepsuit",
       "name": "Bamboo Sleepsuit",
       "category": "sleepwear",
+      "tags": [
+        "sleep",
+        "bamboo",
+        "lightweight"
+      ],
       "price": 3650,
       "was": 0,
       "sizes": [
@@ -291,12 +370,19 @@ window.KAYAA_CATALOGUE = {
         "dove"
       ],
       "tone": 1,
-      "oos": false
+      "oos": false,
+      "featured": 4,
+      "added": 85,
+      "isNew": false
     },
     {
       "slug": "mittens-and-booties-set",
       "name": "Mittens & Booties Set",
       "category": "accessories",
+      "tags": [
+        "newborn-essentials",
+        "gift-idea"
+      ],
       "price": 1650,
       "was": 0,
       "sizes": [
@@ -310,12 +396,20 @@ window.KAYAA_CATALOGUE = {
         "dove"
       ],
       "tone": 2,
-      "oos": false
+      "oos": false,
+      "featured": 9,
+      "added": 70,
+      "isNew": false
     },
     {
       "slug": "reversible-bib-pair",
       "name": "Reversible Bib Pair",
       "category": "accessories",
+      "tags": [
+        "everyday-basics",
+        "gift-idea",
+        "travel"
+      ],
       "price": 1250,
       "was": 0,
       "sizes": [
@@ -328,12 +422,20 @@ window.KAYAA_CATALOGUE = {
         "lilac"
       ],
       "tone": 3,
-      "oos": false
+      "oos": false,
+      "featured": 12,
+      "added": 60,
+      "isNew": false
     },
     {
       "slug": "pointelle-romper",
       "name": "Pointelle Romper",
       "category": "bodysuits",
+      "tags": [
+        "lightweight",
+        "breathable-cotton",
+        "festive-wear"
+      ],
       "price": 3200,
       "was": 0,
       "sizes": [
@@ -349,12 +451,19 @@ window.KAYAA_CATALOGUE = {
         "lilac"
       ],
       "tone": 4,
-      "oos": false
+      "oos": false,
+      "featured": 5,
+      "added": 88,
+      "isNew": false
     },
     {
       "slug": "waffle-knit-cardigan",
       "name": "Waffle Knit Cardigan",
       "category": "outerwear",
+      "tags": [
+        "layering",
+        "rainy-day"
+      ],
       "price": 3900,
       "was": 0,
       "sizes": [
@@ -369,12 +478,20 @@ window.KAYAA_CATALOGUE = {
         "lilac"
       ],
       "tone": 1,
-      "oos": false
+      "oos": false,
+      "featured": 6,
+      "added": 75,
+      "isNew": false
     },
     {
       "slug": "newborn-hospital-set",
       "name": "Newborn Hospital Set",
       "category": "newborn",
+      "tags": [
+        "newborn-essentials",
+        "gift-idea",
+        "breathable-cotton"
+      ],
       "price": 3450,
       "was": 0,
       "sizes": [
@@ -387,12 +504,19 @@ window.KAYAA_CATALOGUE = {
         "blush"
       ],
       "tone": 2,
-      "oos": false
+      "oos": false,
+      "featured": 7,
+      "added": 97,
+      "isNew": true
     },
     {
       "slug": "soft-knot-newborn-hat",
       "name": "Soft Knot Newborn Hat",
       "category": "newborn",
+      "tags": [
+        "newborn-essentials",
+        "travel"
+      ],
       "price": 990,
       "was": 0,
       "sizes": [
@@ -405,12 +529,21 @@ window.KAYAA_CATALOGUE = {
         "blush"
       ],
       "tone": 4,
-      "oos": true
+      "oos": true,
+      "featured": 24,
+      "added": 40,
+      "isNew": false
     },
     {
       "slug": "muslin-swaddle-wrap",
       "name": "Muslin Swaddle Wrap",
       "category": "newborn",
+      "tags": [
+        "newborn-essentials",
+        "muslin",
+        "travel",
+        "lightweight"
+      ],
       "price": 2250,
       "was": 0,
       "sizes": [
@@ -422,12 +555,20 @@ window.KAYAA_CATALOGUE = {
         "cream"
       ],
       "tone": 1,
-      "oos": false
+      "oos": false,
+      "featured": 8,
+      "added": 78,
+      "isNew": false
     },
     {
       "slug": "muslin-napkins-6-pack",
       "name": "Muslin Napkins 6-Pack",
       "category": "napkins",
+      "tags": [
+        "muslin",
+        "everyday-basics",
+        "travel"
+      ],
       "price": 1950,
       "was": 0,
       "sizes": [
@@ -446,12 +587,20 @@ window.KAYAA_CATALOGUE = {
         "sky"
       ],
       "tone": 2,
-      "oos": false
+      "oos": false,
+      "featured": 10,
+      "added": 50,
+      "isNew": false
     },
     {
       "slug": "bamboo-napkin-set",
       "name": "Bamboo Napkin Set",
       "category": "napkins",
+      "tags": [
+        "bamboo",
+        "everyday-basics",
+        "gift-idea"
+      ],
       "price": 2450,
       "was": 0,
       "sizes": [
@@ -471,12 +620,20 @@ window.KAYAA_CATALOGUE = {
         "lilac"
       ],
       "tone": 3,
-      "oos": false
+      "oos": false,
+      "featured": 14,
+      "added": 45,
+      "isNew": false
     },
     {
       "slug": "burp-cloth-and-napkin-duo",
       "name": "Burp Cloth & Napkin Duo",
       "category": "napkins",
+      "tags": [
+        "muslin",
+        "newborn-essentials",
+        "travel"
+      ],
       "price": 1450,
       "was": 0,
       "sizes": [
@@ -495,12 +652,19 @@ window.KAYAA_CATALOGUE = {
         "lilac"
       ],
       "tone": 4,
-      "oos": false
+      "oos": false,
+      "featured": 15,
+      "added": 96,
+      "isNew": true
     },
     {
       "slug": "hooded-fleece-jacket",
       "name": "Hooded Fleece Jacket",
       "category": "outerwear",
+      "tags": [
+        "rainy-day",
+        "layering"
+      ],
       "price": 4650,
       "was": 0,
       "sizes": [
@@ -515,12 +679,20 @@ window.KAYAA_CATALOGUE = {
         "sky"
       ],
       "tone": 1,
-      "oos": false
+      "oos": false,
+      "featured": 11,
+      "added": 65,
+      "isNew": false
     },
     {
       "slug": "quilted-gilet",
       "name": "Quilted Gilet",
       "category": "outerwear",
+      "tags": [
+        "layering",
+        "rainy-day",
+        "travel"
+      ],
       "price": 3450,
       "was": 3950,
       "sizes": [
@@ -537,12 +709,19 @@ window.KAYAA_CATALOGUE = {
         "blush"
       ],
       "tone": 2,
-      "oos": false
+      "oos": false,
+      "featured": 16,
+      "added": 52,
+      "isNew": false
     },
     {
       "slug": "cable-knit-jumper",
       "name": "Cable Knit Jumper",
       "category": "outerwear",
+      "tags": [
+        "layering",
+        "festive-wear"
+      ],
       "price": 3750,
       "was": 0,
       "sizes": [
@@ -558,12 +737,20 @@ window.KAYAA_CATALOGUE = {
         "lilac"
       ],
       "tone": 3,
-      "oos": false
+      "oos": false,
+      "featured": 17,
+      "added": 48,
+      "isNew": false
     },
     {
       "slug": "linen-shirt-and-shorts-set",
       "name": "Linen Shirt & Shorts Set",
       "category": "sets",
+      "tags": [
+        "lightweight",
+        "festive-wear",
+        "breathable-cotton"
+      ],
       "price": 4450,
       "was": 0,
       "sizes": [
@@ -577,12 +764,20 @@ window.KAYAA_CATALOGUE = {
         "sky"
       ],
       "tone": 4,
-      "oos": false
+      "oos": false,
+      "featured": 18,
+      "added": 99,
+      "isNew": true
     },
     {
       "slug": "matching-pyjama-set",
       "name": "Matching Pyjama Set",
       "category": "sets",
+      "tags": [
+        "sleep",
+        "gift-idea",
+        "breathable-cotton"
+      ],
       "price": 3850,
       "was": 0,
       "sizes": [
@@ -600,12 +795,19 @@ window.KAYAA_CATALOGUE = {
         "blush"
       ],
       "tone": 1,
-      "oos": false
+      "oos": false,
+      "featured": 19,
+      "added": 58,
+      "isNew": false
     },
     {
       "slug": "cotton-dungaree-set",
       "name": "Cotton Dungaree Set",
       "category": "sets",
+      "tags": [
+        "everyday-basics",
+        "gift-idea"
+      ],
       "price": 4250,
       "was": 4950,
       "sizes": [
@@ -619,12 +821,20 @@ window.KAYAA_CATALOGUE = {
         "cream"
       ],
       "tone": 2,
-      "oos": false
+      "oos": false,
+      "featured": 20,
+      "added": 42,
+      "isNew": false
     },
     {
       "slug": "zip-sleepsuit",
       "name": "Zip Sleepsuit",
       "category": "sleepwear",
+      "tags": [
+        "sleep",
+        "newborn-essentials",
+        "breathable-cotton"
+      ],
       "price": 3450,
       "was": 0,
       "sizes": [
@@ -642,12 +852,20 @@ window.KAYAA_CATALOGUE = {
         "dove"
       ],
       "tone": 4,
-      "oos": false
+      "oos": false,
+      "featured": 22,
+      "added": 94,
+      "isNew": true
     },
     {
       "slug": "short-sleeve-bodysuit-3-pack",
       "name": "Short-Sleeve Bodysuit 3-Pack",
       "category": "bodysuits",
+      "tags": [
+        "everyday-basics",
+        "lightweight",
+        "gift-idea"
+      ],
       "price": 3950,
       "was": 0,
       "sizes": [
@@ -666,12 +884,19 @@ window.KAYAA_CATALOGUE = {
         "blush"
       ],
       "tone": 1,
-      "oos": false
+      "oos": false,
+      "featured": 23,
+      "added": 36,
+      "isNew": false
     },
     {
       "slug": "long-sleeve-bodysuit",
       "name": "Long-Sleeve Bodysuit",
       "category": "bodysuits",
+      "tags": [
+        "everyday-basics",
+        "layering"
+      ],
       "price": 2150,
       "was": 0,
       "sizes": [
@@ -689,12 +914,19 @@ window.KAYAA_CATALOGUE = {
         "dove"
       ],
       "tone": 3,
-      "oos": false
+      "oos": false,
+      "featured": 21,
+      "added": 38,
+      "isNew": false
     },
     {
       "slug": "kimono-bodysuit-2-pack",
       "name": "Kimono Bodysuit 2-Pack",
       "category": "bodysuits",
+      "tags": [
+        "newborn-essentials",
+        "breathable-cotton"
+      ],
       "price": 2750,
       "was": 0,
       "sizes": [
@@ -709,12 +941,19 @@ window.KAYAA_CATALOGUE = {
         "blush"
       ],
       "tone": 2,
-      "oos": false
+      "oos": false,
+      "featured": 13,
+      "added": 56,
+      "isNew": false
     },
     {
       "slug": "sun-hat",
       "name": "Sun Hat",
       "category": "accessories",
+      "tags": [
+        "lightweight",
+        "travel"
+      ],
       "price": 1350,
       "was": 0,
       "sizes": [
@@ -731,7 +970,10 @@ window.KAYAA_CATALOGUE = {
         "blush"
       ],
       "tone": 4,
-      "oos": false
+      "oos": false,
+      "featured": 25,
+      "added": 34,
+      "isNew": false
     }
   ]
 };

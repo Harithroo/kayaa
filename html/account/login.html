@@ -36,8 +36,9 @@
   <link rel="stylesheet" href="../assets/css/base.css?v=c7479e07">
   <link rel="stylesheet" href="../assets/css/components.css?v=86a4ca95">
   <link rel="stylesheet" href="../assets/css/layout.css?v=e485861a">
+  <link rel="stylesheet" href="../assets/css/suggest.css?v=954ddad4">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="../assets/css/pages/auth.css?v=a018f38a">
+  <link rel="stylesheet" href="../assets/css/pages/auth.css?v=d8fab076">
 </head>
 <body data-page="account login">
   <!-- partial: sprite -->
@@ -236,14 +237,115 @@
 
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- partial: header-auth -->
-  <header class="site-header site-header--minimal">
-    <div class="container site-header__bar site-header__bar--minimal">
+  <!-- partial: announcement -->
+  <!-- blade: @if topbar banner is active (style: lilac | sky) -->
+  <section class="topbar topbar--lilac" data-topbar aria-label="Announcement">
+    <p class="topbar__text"><span>Island-wide delivery in <span data-cfg="delivery_island_days">2–4</span> days</span><span class="topbar__extra"> · Free over <span data-cfg="free_shipping_over">Rs. 7,500</span></span></p>
+    <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
+  </section>
+  <!-- /partial: announcement -->
+
+  <!-- partial: header -->
+  <div class="mega-scrim" data-mega-scrim></div>
+  <header class="site-header">
+    <div class="container site-header__bar" data-header-bar>
+      <button type="button" class="icon-btn icon-btn--plain site-header__menu" data-open-layer="menu" aria-label="Open menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-drawer"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg></button>
+
       <a class="wordmark" href="../index.html" aria-label="Kayaa home">kayaa</a> <!-- TODO: replace with logo when ready -->
-      <a class="back-link site-header__back" href="../shop.html">Continue shopping <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a>
+
+      <nav class="primary-nav" aria-label="Primary">
+        <ul>
+          <!-- Split control: the link goes to the shop, the chevron toggles the mega menu -->
+          <li class="primary-nav__split" data-mega>
+            <a class="primary-nav__link" href="../shop.html" data-nav="shop category product search">Shop</a>
+            <button type="button" class="primary-nav__chevron" data-mega-toggle aria-expanded="false" aria-controls="mega-shop" aria-label="Shop menu"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></button>
+            <div class="mega" id="mega-shop" data-mega-panel inert>
+              <div class="mega__panel">
+                <div class="mega__main">
+                  <p class="eyebrow">Shop by size</p>
+                  <ul class="chip-list mega__sizes" role="list">
+                    <!-- gen: size-chips-mega -->
+                    <li><a class="chip" href="../shop.html?size=newborn">Newborn</a></li>
+                    <li><a class="chip" href="../shop.html?size=0-3m">0–3m</a></li>
+                    <li><a class="chip" href="../shop.html?size=3-6m">3–6m</a></li>
+                    <li><a class="chip" href="../shop.html?size=6-9m">6–9m</a></li>
+                    <li><a class="chip" href="../shop.html?size=9-12m">9–12m</a></li>
+                    <li><a class="chip" href="../shop.html?size=12-18m">12–18m</a></li>
+                    <li><a class="chip" href="../shop.html?size=18-24m">18–24m</a></li>
+                    <li><a class="chip" href="../shop.html?size=2y">2Y</a></li>
+                    <li><a class="chip" href="../shop.html?size=3y">3Y</a></li>
+                    <!-- /gen: size-chips-mega -->
+                  </ul>
+                  <p class="eyebrow mega__eyebrow">Browse by category</p>
+                  <ul class="chip-list" role="list">
+                    <!-- gen: cat-chips -->
+                    <li><a class="chip" href="../category.html?c=newborn">Newborn</a></li>
+                    <li><a class="chip" href="../category.html?c=bodysuits">Bodysuits</a></li>
+                    <li><a class="chip" href="../category.html?c=sleepwear">Sleepwear</a></li>
+                    <li><a class="chip" href="../category.html?c=sets">Sets</a></li>
+                    <li><a class="chip" href="../category.html?c=outerwear">Outerwear</a></li>
+                    <li><a class="chip" href="../category.html?c=napkins">Napkins</a></li>
+                    <li><a class="chip" href="../category.html?c=accessories">Accessories</a></li>
+                    <!-- /gen: cat-chips -->
+                  </ul>
+                </div>
+                <!-- TODO: placeholder copy, confirm with client -->
+                <aside class="mega__feature" aria-label="Featured">
+                  <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  <div class="mega__feature-body">
+                    <p class="eyebrow">New this week</p>
+                    <p class="mega__feature-title">Fresh styles just landed</p>
+                    <p class="mega__feature-text">Placeholder text about the latest arrivals.</p>
+                    <a class="link-arrow" href="../shop.html?sort=new">Shop new in <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+                  </div>
+                </aside>
+              </div>
+            </div>
+          </li>
+          <li><a class="primary-nav__link" href="../categories.html" data-nav="categories">Categories</a></li>
+          <li><a class="primary-nav__link" href="../shop.html?sort=new">New in</a></li>
+          <li><a class="primary-nav__link" href="../shop.html?sale=1">Sale</a></li>
+          <li><a class="primary-nav__link" href="../size-guide.html" data-nav="size-guide">Size guide</a></li>
+          <li><a class="primary-nav__link" href="../about.html" data-nav="about">Our story</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <form class="header-search" role="search" aria-label="Site search" action="../search.html" method="get" data-header-search data-search="header">
+          <button type="button" class="icon-btn header-search__toggle" data-search-toggle aria-expanded="false" aria-controls="header-search-field" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
+          <div class="header-search__field" id="header-search-field">
+            <label class="visually-hidden" for="header-q">Search Kayaa</label>
+            <input id="header-q" type="search" name="q" placeholder="Search" autocomplete="off">
+            <button type="submit" class="header-search__submit" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
+          </div>
+        </form>
+        <a class="icon-btn site-header__wishlist" href="../wishlist.html" data-nav="wishlist" aria-label="Wishlist"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg></a>
+        <!-- blade: @auth account/index.html @else account/login.html -->
+        <a class="icon-btn site-header__account" href="../account/login.html" data-nav="account" data-account-link aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
+        <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg>
+          <span class="icon-btn__count" data-cart-count aria-hidden="true">2</span>
+        </button>
+      </div>
     </div>
+
+    <nav class="category-row" aria-label="Categories">
+      <div class="container">
+        <ul>
+          <!-- gen: cat-row -->
+          <li><a href="../category.html?c=newborn">Newborn</a></li>
+          <li><a href="../category.html?c=bodysuits">Bodysuits</a></li>
+          <li><a href="../category.html?c=sleepwear">Sleepwear</a></li>
+          <li><a href="../category.html?c=sets">Sets</a></li>
+          <li><a href="../category.html?c=outerwear">Outerwear</a></li>
+          <li><a href="../category.html?c=napkins">Napkins</a></li>
+          <li><a href="../category.html?c=accessories">Accessories</a></li>
+          <!-- /gen: cat-row -->
+        </ul>
+      </div>
+    </nav>
   </header>
-  <!-- /partial: header-auth -->
+  <!-- /partial: header -->
 
   <main id="main" tabindex="-1">
     <div class="container auth" data-auth-page="login">
@@ -302,27 +404,298 @@
     </div>
   </main>
 
-  <!-- partial: footer-minimal -->
-  <footer class="site-footer site-footer--minimal">
-    <div class="container footer-min">
-      <nav aria-label="Help and policies">
-      <ul class="footer-min__links" role="list">
-        <li><a href="../delivery.html">Delivery</a></li>
-        <li><a href="../returns.html">Returns</a></li>
-        <li><a href="../privacy.html">Privacy</a></li>
-        <li><a href="../terms.html">Terms</a></li>
-        <li><a href="../contact.html">Contact</a></li>
-      </ul>
-      </nav>
-      <p class="footer-min__copy">&copy; 2026 Kayaa</p>
+  <!-- partial: footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a class="wordmark" href="../index.html" aria-label="Kayaa home">kayaa</a>
+          <p class="footer__blurb">Soft, honest clothing made for Sri Lankan weather.</p>
+          <p class="footer__place">Colombo, Sri Lanka</p> <!-- TODO: confirm with client -->
+          <ul class="footer__contact" role="list">
+            <li><a href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a></li> <!-- TODO: add WhatsApp number -->
+            <li><a href="mailto:hello@example.com">hello@example.com</a></li> <!-- TODO: confirm email with client -->
+          </ul>
+        </div>
+        <nav aria-labelledby="footer-age">
+          <h2 class="footer__title" id="footer-age">Shop by size</h2>
+          <ul class="footer__list footer__list--cols" role="list">
+            <!-- gen: size-links-footer -->
+            <li><a href="../shop.html?size=newborn">Newborn</a></li>
+            <li><a href="../shop.html?size=0-3m">0–3m</a></li>
+            <li><a href="../shop.html?size=3-6m">3–6m</a></li>
+            <li><a href="../shop.html?size=6-9m">6–9m</a></li>
+            <li><a href="../shop.html?size=9-12m">9–12m</a></li>
+            <li><a href="../shop.html?size=12-18m">12–18m</a></li>
+            <li><a href="../shop.html?size=18-24m">18–24m</a></li>
+            <li><a href="../shop.html?size=2y">2Y</a></li>
+            <li><a href="../shop.html?size=3y">3Y</a></li>
+            <!-- /gen: size-links-footer -->
+          </ul>
+        </nav>
+        <nav aria-labelledby="footer-help">
+          <h2 class="footer__title" id="footer-help">Help</h2>
+          <ul class="footer__list" role="list">
+            <li><a href="../track.html">Track order</a></li>
+            <li><a href="../wishlist.html">Wishlist</a></li>
+            <li><a href="../size-guide.html">Size guide</a></li>
+            <li><a href="../delivery.html">Delivery</a></li>
+            <li><a href="../returns.html">Returns</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <nav aria-labelledby="footer-company">
+          <h2 class="footer__title" id="footer-company">Company</h2>
+          <ul class="footer__list" role="list">
+            <li><a href="../categories.html">All categories</a></li>
+            <li><a href="../about.html">Our story</a></li>
+            <li><a href="../privacy.html">Privacy policy</a></li>
+            <li><a href="../terms.html">Terms &amp; conditions</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__base">
+        <ul class="footer__facts" role="list">
+          <!-- TODO: add official card marks and the Onepay badge from their brand kit -->
+          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg> Secure card payments</li>
+          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg> Island-wide delivery</li>
+        </ul>
+        <ul class="footer__social" role="list">
+          <!-- TODO: add real social URLs -->
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+        </ul>
+        <p>&copy; 2026 Kayaa</p>
+      </div>
     </div>
   </footer>
-  <!-- /partial: footer-minimal -->
+  <!-- /partial: footer -->
+
+  <!-- partial: tabbar -->
+  <nav class="tabbar" aria-label="Mobile">
+    <ul>
+      <li><a class="tabbar__item" href="../index.html" data-nav="home"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></span><span>Home</span></a></li>
+      <li><a class="tabbar__item" href="../shop.html" data-nav="shop category product"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-layout-grid"></use></svg></span><span>Shop</span></a></li>
+      <li><a class="tabbar__item" href="../search.html?focus=1" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
+      <li>
+        <button type="button" class="tabbar__item" data-open-layer="cart" data-nav="cart" aria-haspopup="dialog">
+          <span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg><span class="icon-btn__count" data-cart-count aria-hidden="true">2</span></span>
+          <span>Bag</span>
+        </button>
+      </li>
+      <!-- blade: @auth account/index.html @else account/login.html -->
+      <li><a class="tabbar__item" href="../account/login.html" data-nav="account" data-account-link><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></span><span>Account</span></a></li>
+    </ul>
+  </nav>
+  <!-- /partial: tabbar -->
+
+  <!-- partial: menu-drawer -->
+  <div class="drawer drawer--left" id="menu-drawer" data-layer="menu" role="dialog" aria-modal="true" aria-labelledby="menu-title" aria-hidden="true">
+    <div class="drawer__head">
+      <h2 class="drawer__title" id="menu-title"><span class="wordmark">kayaa</span><span class="visually-hidden"> menu</span></h2>
+      <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close menu"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
+    </div>
+    <div class="drawer__body">
+      <nav aria-label="Menu">
+        <div class="menu-group">
+          <ul role="list">
+            <li><a href="../shop.html" data-nav="shop category product search">Shop</a></li>
+            <li><a href="../categories.html" data-nav="categories">Categories</a></li>
+            <li><a href="../shop.html?sort=new">New in</a></li>
+            <li><a href="../shop.html?sale=1">Sale</a></li>
+            <li><a href="../wishlist.html" data-nav="wishlist">Wishlist</a></li>
+            <li><a href="../about.html" data-nav="about">Our story</a></li>
+          </ul>
+        </div>
+        <div class="menu-group">
+          <p class="menu-group__title">Shop by size</p>
+          <ul class="chip-list menu-group__chips" role="list">
+            <!-- gen: size-chips-drawer -->
+            <li><a class="chip" href="../shop.html?size=newborn">Newborn</a></li>
+            <li><a class="chip" href="../shop.html?size=0-3m">0–3m</a></li>
+            <li><a class="chip" href="../shop.html?size=3-6m">3–6m</a></li>
+            <li><a class="chip" href="../shop.html?size=6-9m">6–9m</a></li>
+            <li><a class="chip" href="../shop.html?size=9-12m">9–12m</a></li>
+            <li><a class="chip" href="../shop.html?size=12-18m">12–18m</a></li>
+            <li><a class="chip" href="../shop.html?size=18-24m">18–24m</a></li>
+            <li><a class="chip" href="../shop.html?size=2y">2Y</a></li>
+            <li><a class="chip" href="../shop.html?size=3y">3Y</a></li>
+            <!-- /gen: size-chips-drawer -->
+          </ul>
+        </div>
+        <div class="menu-group">
+          <p class="menu-group__title">Shop by category</p>
+          <ul role="list">
+            <!-- gen: cat-drawer -->
+            <li><a href="../category.html?c=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=bodysuits">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=sleepwear">Sleepwear <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=sets">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=outerwear">Outerwear <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=napkins">Napkins <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="../category.html?c=accessories">Accessories <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <!-- /gen: cat-drawer -->
+          </ul>
+        </div>
+        <div class="menu-group">
+          <p class="menu-group__title">Help</p>
+          <ul role="list">
+            <li><a href="../track.html" data-nav="track">Track order</a></li>
+            <li><a href="../size-guide.html" data-nav="size-guide">Size guide</a></li>
+            <li><a href="../delivery.html" data-nav="delivery">Delivery</a></li>
+            <li><a href="../returns.html" data-nav="returns">Returns</a></li>
+            <li><a href="../contact.html" data-nav="contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="menu-group">
+          <p class="menu-group__title">Account</p>
+          <!-- blade: @auth My account @else Sign in / register -->
+          <ul role="list">
+            <li><a href="../account/login.html" data-nav="login" data-account-link><span data-account-label>Sign in / register</span></a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="drawer__foot">
+      <a class="btn btn--secondary btn--block" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a> <!-- TODO: add WhatsApp number -->
+    </div>
+  </div>
+  <!-- /partial: menu-drawer -->
+
+  <!-- partial: cart-drawer -->
+  <!-- The inner .cart-panel is what the backend's /cart/panel returns; JS swaps it into [data-cart-drawer]. -->
+  <div class="drawer drawer--right" id="cart-drawer" data-layer="cart" data-cart-drawer role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
+    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500" data-cfg-attr="data-free-threshold:free_shipping_over">
+      <div class="drawer__head">
+        <h2 class="drawer__title" id="cart-title">Your bag (<span data-cart-count-label>2</span>)</h2>
+        <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close bag"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
+      </div>
+
+      <!-- blade: @if cart has items -->
+      <div class="cart-panel__filled">
+        <div class="drawer__body">
+          <div class="cart-progress">
+            <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs. 1,200 away from free delivery</p>
+            <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
+          </div>
+          <ul class="cart-items" role="list" data-cart-items>
+            <!-- loop: cart_items -->
+            <li class="cart-item" data-cart-item data-key="Ruffle Sleeve Dress|Size 3-6M · Lilac" data-unit-price="3450">
+              <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <div class="cart-item__body">
+                <p class="cart-item__name"><a href="../product.html" data-item-name>Ruffle Sleeve Dress</a></p>
+                <p class="cart-item__meta" data-item-meta>Size 3-6M · Lilac</p>
+                <div class="cart-item__row">
+                  <div class="qty" data-qty>
+                    <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
+                  </div>
+                  <p class="price" data-line-total>Rs. 3,450</p>
+                </div>
+              </div>
+              <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove Ruffle Sleeve Dress"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
+            </li>
+            <li class="cart-item" data-cart-item data-key="Cotton Sleepsuit|Size 0-3M · Cream" data-unit-price="2850">
+              <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+              <div class="cart-item__body">
+                <p class="cart-item__name"><a href="../product.html" data-item-name>Cotton Sleepsuit</a></p>
+                <p class="cart-item__meta" data-item-meta>Size 0-3M · Cream</p>
+                <div class="cart-item__row">
+                  <div class="qty" data-qty>
+                    <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
+                    <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+                    <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
+                  </div>
+                  <p class="price" data-line-total>Rs. 2,850</p>
+                </div>
+              </div>
+              <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove Cotton Sleepsuit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
+            </li>
+            <!-- /loop -->
+          </ul>
+        </div>
+        <div class="drawer__foot">
+          <p class="cart-summary"><span>Subtotal</span> <span class="cart-summary__value" data-cart-subtotal>Rs. 6,300</span></p>
+          <p class="cart-note">Delivery calculated at checkout · Pay securely by card</p>
+          <div class="cart-actions">
+            <a class="btn btn--primary btn--lg btn--block" href="../checkout.html">Checkout</a>
+            <a class="btn btn--secondary btn--block" href="../cart.html">View bag</a>
+          </div>
+        </div>
+      </div>
+      <!-- blade: @else empty state -->
+      <div class="cart-panel__empty">
+        <div class="empty-state">
+          <span class="empty-state__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg></span>
+          <h3 class="empty-state__title">Your bag is empty</h3>
+          <a class="btn btn--primary" href="../shop.html" data-autofocus-empty>Start shopping</a>
+        </div>
+      </div>
+      <!-- /blade -->
+    </div>
+  </div>
+  <template data-cart-item-template>
+    <li class="cart-item" data-cart-item data-key="|" data-unit-price="0">
+      <div class="media media--tile cart-item__media" data-placeholder data-item-media style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+      <div class="cart-item__body">
+        <p class="cart-item__name"><a href="../product.html" data-item-name></a></p>
+        <p class="cart-item__meta" data-item-meta></p>
+        <div class="cart-item__row">
+          <div class="qty" data-qty>
+            <button type="button" class="qty__btn" data-qty-minus aria-label="Decrease quantity" disabled><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg></button>
+            <input class="qty__input" type="text" name="qty[]" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
+            <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
+          </div>
+          <p class="price" data-line-total>Rs. 0</p>
+        </div>
+      </div>
+      <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove "><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
+    </li>
+  </template>
+
+  <div class="overlay" data-overlay data-close-layer></div>
+  <!-- /partial: cart-drawer -->
+
+  <!-- partial: quick-add -->
+  <div class="sheet" data-layer="quick-add" data-quick-add-sheet role="dialog" aria-modal="true" aria-labelledby="qa-title" aria-hidden="true">
+    <div class="sheet__backdrop" data-close-layer></div>
+    <div class="sheet__panel">
+      <div class="quick-add__head">
+        <div class="media media--tile quick-add__thumb" data-placeholder data-qa-thumb style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+        <div class="quick-add__title">
+          <h2 id="qa-title" data-qa-name>Product name</h2>
+          <p class="price"><span class="price__now" data-qa-price>Rs. 0</span> <s class="price__was" data-qa-was hidden></s></p>
+        </div>
+        <button type="button" class="icon-btn icon-btn--plain quick-add__close" data-close-layer aria-label="Close quick add"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
+      </div>
+      <form data-quick-add-form action="../cart.html" method="post">
+        <fieldset class="quick-add__group">
+          <legend>Size</legend>
+          <!-- TODO: sizes and stock come from the product variants; app.js fills this list from the card (data-sizes) -->
+          <div class="quick-add__options" data-qa-sizes>
+            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="3-6m" data-label="3–6m" checked><span>3–6m</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="quick-add__group">
+          <legend>Colour</legend>
+          <div class="quick-add__options quick-add__options--colours" data-qa-colours>
+            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="lilac" data-label="Lilac" checked><span class="dot dot--lilac" aria-hidden="true"></span><span class="visually-hidden">Lilac</span></label>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn btn--primary btn--lg btn--block">Add to cart</button>
+      </form>
+    </div>
+  </div>
+  <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="../assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="../assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="../assets/js/site-config.js?v=72f879c4" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="../assets/js/catalogue-data.js?v=9716a851" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="../assets/js/search-core.js?v=dfafbf0c" defer></script> <!-- search matching rules (name, category, tags), shared by the suggestions and the results page -->
+  <script src="../assets/js/search-suggest.js?v=51b29c75" defer></script> <!-- the suggestion combobox on every form[data-search] -->
   <script src="../assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="../assets/js/proto-search.js?v=5cdf6905" defer></script> <!-- PROTOTYPE ONLY: answers the suggestion requests from catalogue-data.js; production calls GET /search/suggest?q= -->
   <script src="../assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
   <script src="../assets/js/account.js?v=b84ef63e" defer></script>

@@ -116,3 +116,4 @@ span.review__name { color: var(--ink-soft); }
 }
 
 .review__footnote a { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 600; }
+.review__note--try { margin-top: var(--space-2); max-width: 70ch; }

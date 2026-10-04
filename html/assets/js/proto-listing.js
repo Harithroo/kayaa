@@ -2,7 +2,8 @@
    Reads the query string, then filters, sorts, searches and paginates the product cards on
    shop.html, category.html and search.html (selected by <body data-page>).
    Params: size (slug: newborn, 0-3m, 3-6m, 6-9m, 9-12m, 12-18m, 18-24m, 2y, 3y), sort (featured|new|price-asc|price-desc), sale=1,
-   c (category slug, category.html; documented as /baby/{slug}), q (search.html), page.
+   c (category slug, category.html; documented as /baby/{slug}), tag (tag slug, shop.html and category.html; combines with size, sale and sort),
+   q (search.html), page. The search page ranks with assets/js/search-core.js, the same rules as the suggestions (name, category, tags).
    The old encoded form ?size=0%E2%80%933m (en dash) is accepted and normalised to 0-3m. Categories and sizes come from
    window.KAYAA_CATALOGUE (assets/js/catalogue-data.js, generated from tools/catalogue.json). */
 (function () {
@@ -14,6 +15,8 @@
   var CATS = {};
   DATA.categories.forEach(function (c) { CATS[c.slug] = [c.label, c.blurb]; });
   var SIZES = DATA.sizes.map(function (s) { return [s.slug, s.label]; });
+  var TAGS = {};
+  (DATA.tags || []).forEach(function (t) { TAGS[t.slug] = t.label; });
   var INTROS = DATA.intros || { categories: {}, sizes: {} };   // h1, meta title, meta description and intro from docs/content/category-and-age-intros.md
   var SEO = window.KAYAA_SEO || { staging: true, siteUrl: '', pages: {} };
 
@@ -46,11 +49,15 @@
   var cat = page === 'category' ? (qs.get('c') || '') : '';
   var catKnown = !!CATS[cat];
   var q = page === 'search' ? (qs.get('q') || '').trim() : '';
+  var tag = page !== 'search' ? (qs.get('tag') || '').trim().toLowerCase() : '';
+  var tagKnown = !!TAGS[tag];
   var pageNo = Math.max(1, parseInt(qs.get('page'), 10) || 1);
 
   /* ---------- Filter, search, sort ---------- */
   var items = $$('[data-product]');
-  var words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  // search: the ranking comes from search-core.js (every token prefix-matches a word of the name, the category or a tag)
+  var rank = {};
+  if (page === 'search' && q && window.KayaaSearch) window.KayaaSearch.searchProducts(q).forEach(function (r, i) { rank[r.product.slug] = i; });
 
   function matches(li) {
     var d = li.dataset;
@@ -58,12 +65,8 @@
     if (sale && d.sale !== '1') return false;
     if (cat && d.category !== cat) return false;
     if (page === 'category' && cat && !catKnown) return false;
-    if (page === 'search') {
-      if (!words.length) return false;
-      var cname = CATS[d.category] ? CATS[d.category][0] : d.category;
-      var hay = (d.name + ' ' + cname + ' ' + d.category).toLowerCase();
-      return words.every(function (w) { return hay.indexOf(w) !== -1; });
-    }
+    if (tag && (!tagKnown || (' ' + d.tags + ' ').indexOf(' ' + tag + ' ') === -1)) return false;
+    if (page === 'search') return rank[d.slug] !== undefined;
     return true;
   }
 
@@ -75,7 +78,7 @@
     'price-desc': function (a, b) { return num(b, 'price') - num(a, 'price'); }
   };
 
-  var results = items.filter(matches).sort(sorters[sort]);
+  var results = items.filter(matches).sort(page === 'search' && !qs.has('sort') ? function (a, b) { return rank[a.dataset.slug] - rank[b.dataset.slug]; } : sorters[sort]);
   var total = results.length;
   var pages = Math.max(1, Math.ceil(total / PER_PAGE));
   if (pageNo > pages) pageNo = pages;
@@ -101,6 +104,9 @@
   if (page === 'search') {
     title = q ? 'Results for “' + q + '”' : 'Search';
     intro = q ? 'Everything in the shop that matches your search.' : 'Type what you are looking for.';
+  } else if (tag) {
+    title = 'Tagged: ' + (tagKnown ? TAGS[tag] : tag);
+    intro = tagKnown ? 'Baby clothing tagged “' + TAGS[tag] + '”.' : 'We could not find that tag.';
   } else if (page === 'category' && cat) {
     title = catKnown ? CATS[cat][0] : 'Category not found';
     intro = catKnown ? CATS[cat][1] : 'We could not find that category.';
@@ -123,15 +129,16 @@
   var introHtml = escText(intro);
   var metaTitle = title + ' | Kayaa';
   var metaDesc = (SEO.pages.shop && SEO.pages.shop.description) || '';
-  var fromPack = page === 'category' && catKnown ? INTROS.categories[cat] : (page !== 'category' && page !== 'search' && size ? INTROS.sizes[size] : null);
+  var fromPack = tag ? null : page === 'category' && catKnown ? INTROS.categories[cat] : (page !== 'category' && page !== 'search' && size ? INTROS.sizes[size] : null);
   if (fromPack) { title = fromPack.h1; introHtml = fromPack.intro; metaTitle = fromPack.metaTitle; metaDesc = fromPack.metaDescription; }
-  else if (page === 'search' && SEO.pages.search) { metaTitle = q ? title + ' | Kayaa' : SEO.pages.search.title; metaDesc = SEO.pages.search.description; }
+  else if (tag) { metaTitle = title + ' | Kayaa'; metaDesc = tagKnown ? 'Baby clothing tagged ' + TAGS[tag] + ' at Kayaa. Island-wide delivery across Sri Lanka.' : metaDesc; }
+  else if (page === 'search' && SEO.pages.search) { metaTitle = q ? (total ? total + (total === 1 ? ' result for “' : ' results for “') + q + '”' : 'No results for “' + q + '”') + ' | Kayaa' : SEO.pages.search.title; metaDesc = SEO.pages.search.description; }
   else if (page === 'shop' && !sale && sort === 'featured' && SEO.pages.shop) { metaTitle = SEO.pages.shop.title; }
   if (sale && page !== 'search' && (size || (page === 'category' && cat))) introHtml += ' Showing sale items only.';
 
   $('[data-listing-title]').textContent = title;
   $('[data-listing-intro]').innerHTML = introHtml;
-  $('[data-listing-count]').textContent = total + (total === 1 ? ' product' : ' products');
+  $('[data-listing-count]').textContent = page === 'search' && q ? total + (total === 1 ? ' result for “' : ' results for “') + q + '”' : total + (total === 1 ? ' product' : ' products');
 
   var crumbs = $('[data-breadcrumb]');
   var li = function (text, href) {
@@ -148,6 +155,9 @@
   crumbs.appendChild(li('Home', 'index.html'));
   if (page === 'search') {
     crumbs.appendChild(li('Search'));
+  } else if (tag) {
+    crumbs.appendChild(li('Shop', 'shop.html'));
+    crumbs.appendChild(li(tagKnown ? TAGS[tag] : tag));
   } else if (page === 'category' && catKnown) {
     crumbs.appendChild(li('Baby', 'categories.html'));   // department Baby -> /baby/{slug}; Baby links to the categories page
     crumbs.appendChild(li(CATS[cat][0]));
@@ -159,7 +169,8 @@
      Staging forces noindex,nofollow everywhere; the rule that applies once it is live is kept on the robots tag as data-live-robots.
        /baby/{slug}                    index,follow, canonical itself          /shop?size={slug}   index,follow, canonical itself
        /baby/{slug}?size={slug}        noindex,follow, canonical the category  sort or sale        noindex,follow, canonical the clean listing
-       ?page=2 and beyond              index,follow, canonical itself          search              noindex,follow, canonical itself */
+       ?page=2 and beyond              index,follow, canonical itself          search              noindex,follow, canonical itself
+       ?tag={slug}                     noindex,follow, canonical the clean listing (/shop or /baby/{slug}) */
   (function () {
     var enc = encodeURIComponent;
     var hasSort = qs.has('sort') && sort !== 'featured';
@@ -174,6 +185,7 @@
     if (pageNo > 1) canonical = clean + (keep.length ? '&' : '?') + 'page=' + pageNo;
     if (page === 'search') robots = 'noindex,follow';
     else if (hasSort || hasSale) { robots = 'noindex,follow'; canonical = clean; }
+    else if (tag) { robots = 'noindex,follow'; canonical = route; }
     else if (page === 'category' && size) { robots = 'noindex,follow'; canonical = route; }
     else if (page === 'category' && !catKnown) robots = 'noindex,follow';
     var set = function (sel, attr, value) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, value); };
@@ -191,7 +203,7 @@
     // BreadcrumbList for the state: Home / Baby / Category on a category page, Home / Shop on the shop
     var ld = $$('script[type="application/ld+json"]', document).filter(function (s) { return /BreadcrumbList/.test(s.textContent); })[0];
     if (ld && page !== 'search') {
-      var trail = page === 'category' && catKnown ? [['Home', '/'], ['Baby', '/categories'], [CATS[cat][0], '/baby/' + cat]] : [['Home', '/'], ['Shop', '/shop']];
+      var trail = tag ? [['Home', '/'], ['Shop', '/shop']] : page === 'category' && catKnown ? [['Home', '/'], ['Baby', '/categories'], [CATS[cat][0], '/baby/' + cat]] : [['Home', '/'], ['Shop', '/shop']];
       ld.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: trail.map(function (c, i) { return { '@type': 'ListItem', position: i + 1, name: c[0], item: (SEO.siteUrl || '') + c[1] }; }) }, null, 2);
     }
   })();
@@ -206,7 +218,7 @@
     if (slug === size) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
 
-  var keep = { size: size, c: cat, q: q };
+  var keep = { size: size, c: cat, q: q, tag: tag };
   $$('input[data-keep]').forEach(function (inp) {
     var v = keep[inp.getAttribute('data-keep')];
     inp.value = v || '';
@@ -270,5 +282,16 @@
     $('[data-no-results-title]', noResults).textContent = q ? 'No results for “' + q + '”' : 'What are you looking for?';
   }
   var clear = $('[data-clear-filters]');
-  if (clear) clear.setAttribute('href', url({ size: null, sort: null, sale: null, page: null }));
+  if (clear) clear.setAttribute('href', url({ size: null, sort: null, sale: null, tag: null, page: null }));
+
+  /* ---------- Search page: "Also matches" (categories and tags that match the query) ---------- */
+  var also = $('[data-also-matches]');
+  if (also && page === 'search' && q && window.KayaaSearch) {
+    var cats = window.KayaaSearch.searchCategories(q).slice(0, 3), tgs = window.KayaaSearch.searchTags(q).slice(0, 3);
+    var ul = $('[data-also-list]', also);
+    ul.textContent = '';
+    cats.forEach(function (c) { var l = document.createElement('li'), a = document.createElement('a'); a.className = 'chip'; a.href = 'category.html?c=' + c.slug; a.textContent = c.label + ' (category)'; l.appendChild(a); ul.appendChild(l); });
+    tgs.forEach(function (t) { var l = document.createElement('li'), a = document.createElement('a'); a.className = 'chip'; a.href = 'shop.html?tag=' + t.slug; a.textContent = t.label + ' (tag)'; l.appendChild(a); ul.appendChild(l); });
+    also.hidden = !(cats.length || tgs.length);
+  }
 })();

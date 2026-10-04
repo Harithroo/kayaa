@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="assets/css/base.css?v=c7479e07">
   <link rel="stylesheet" href="assets/css/components.css?v=86a4ca95">
   <link rel="stylesheet" href="assets/css/layout.css?v=e485861a">
+  <link rel="stylesheet" href="assets/css/suggest.css?v=954ddad4">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/checkout.css?v=22410f2f">
 </head>
@@ -524,9 +525,12 @@
   <!-- /partial: footer-minimal -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/site-config.js?v=72f879c4" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=9716a851" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/search-core.js?v=dfafbf0c" defer></script> <!-- search matching rules (name, category, tags), shared by the suggestions and the results page -->
+  <script src="assets/js/search-suggest.js?v=51b29c75" defer></script> <!-- the suggestion combobox on every form[data-search] -->
   <script src="assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/proto-search.js?v=5cdf6905" defer></script> <!-- PROTOTYPE ONLY: answers the suggestion requests from catalogue-data.js; production calls GET /search/suggest?q= -->
   <script src="assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
   <script src="assets/js/checkout.js?v=decc592e" defer></script>

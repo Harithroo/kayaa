@@ -352,3 +352,10 @@
   .gallery__dot::before { forced-color-adjust: none; background: ButtonText; }
   .gallery__dot[aria-current="true"]::before { background: Highlight; outline: 1px solid ButtonText; }
 }
+
+/* ---------- Tags row (end of the info column): a small label and chip links to shop.html?tag= ---------- */
+.product__tags { margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid var(--line); }
+.product__tags[hidden] { display: none; }
+.product__tags-label { margin-bottom: var(--space-2); font-size: var(--fs-ui); font-weight: 700; color: var(--ink-soft); }
+.product__tags .chip-list { gap: var(--space-2); }
+.product__tags .chip { min-height: var(--tap); }

@@ -8,6 +8,7 @@ Dev-only scripts, all zero-dependency Node (no `npm install`). Run from the repo
 | `node tools/check-css.mjs` | CSS hygiene report (unused or undefined tokens and classes). Report only. |
 | `node tools/check-links.mjs` | Every local `href`, `src` and `action` in `html/` points at a file that exists. |
 | `node tools/check-seo.mjs` | One title, description, canonical and h1 per page; length limits; unique titles; heading order; image alt; BreadcrumbList on indexable pages. Exit 1 on errors. |
+| `node tools/check-shell.mjs` | Every page renders the shell its variant allows (`tools/shell-map.json`: full, checkout, error, none): exact marker pairs and rendered landmarks. `sync-shell --check` runs it. |
 | `node tools/check-copy.mjs` | Fails if the cash payment option is worded anywhere except the checkout payment step and the order-specific pages (see the payment rule in CLAUDE.md). |
 | `node tools/check-budget.mjs` | Page weight: estimated gzip size of the CSS and JS each page loads and its font bytes. Budgets CSS 70 KB, JS 60 KB, fonts 120 KB; exit 1 when over. |
 | `node tools/list-todos.mjs` | Open `[[TODO]]` and `[[PROPOSED]]` content markers, grouped by page. `--fail-on-open` exits 1 (the day before launch). |

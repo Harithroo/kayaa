@@ -9,6 +9,7 @@
 //   size-chips-mega | size-chips-drawer | size-links-footer | size-tiles-home   the nine sizes
 //   size-chips FILE                           listing chips: "All ages" + the nine sizes (shop.html, category.html, search.html)
 //   size-rows                                 <tr> rows of the size table on the product page (the rows come from docs/content/size-guide.md)
+//   product-tags SLUG                         the "Tags" chip row of the product page (links to shop.html?tag=)
 //   size-guide-slider [panel]                 the three-step "How to find your size" slider (tools/content.mjs; used in the product page panel)
 //   decisions                                 the open-decisions table for html/review-decisions.html (tools/build-decisions.mjs)
 //   content NAME | faqs PLACEMENT | district-eta | todo-counts | listing-intro KIND/SLUG   built from docs/content (see tools/content.mjs)
@@ -29,6 +30,23 @@ export function loadCatalogue(repo) {
     if (!cat.catBySlug[p.category]) throw new Error('catalogue: unknown category for ' + p.slug);
     p.sizes = cat.sizes.slice(sizeIndex[p.from], sizeIndex[p.to] + 1).map((s) => s.slug);
   }
+  // tags: a table of {slug, label}; every product lists 2 to 4 of them by slug; every tag is used by at least 2 products
+  cat.tagBySlug = {};
+  for (const t of cat.tags || []) {
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(t.slug)) throw new Error('catalogue: tag slug must be ASCII lower case with hyphens: ' + t.slug);
+    if (cat.tagBySlug[t.slug]) throw new Error('catalogue: duplicate tag slug ' + t.slug);
+    // sentence case: the first letter is a capital and no later word starts with one
+    if (!/^[A-Z]/.test(t.label) || /\s[A-Z]/.test(t.label)) throw new Error('catalogue: tag label is not sentence case: ' + t.label);
+    cat.tagBySlug[t.slug] = t;
+  }
+  const used = {};
+  for (const p of cat.products) {
+    const list = p.tags || [];
+    if (list.length < 2 || list.length > 4) throw new Error(`catalogue: ${p.slug} has ${list.length} tags (need 2 to 4)`);
+    if (new Set(list).size !== list.length) throw new Error('catalogue: duplicate tag on ' + p.slug);
+    p.tagList = list.map((s) => { if (!cat.tagBySlug[s]) throw new Error(`catalogue: ${p.slug} uses unknown tag "${s}"`); used[s] = (used[s] || 0) + 1; return cat.tagBySlug[s]; });
+  }
+  for (const t of cat.tags || []) if ((used[t.slug] || 0) < 2) throw new Error(`catalogue: tag ${t.slug} is used by ${used[t.slug] || 0} products (need at least 2)`);
   return cat;
 }
 
@@ -55,7 +73,7 @@ function card(cat, cfg, p, root) {
     ? `<p class="price price--sale"><span class="visually-hidden">Sale price </span><span class="price__now">${money(cfg, p.price)}</span> <s class="price__was"><span class="visually-hidden">Was </span>${money(cfg, p.was)}</s></p>`
     : `<p class="price"><span class="price__now">${money(cfg, p.price)}</span></p>`;
   const n = p.colours.length;
-  return `<li data-product data-slug="${p.slug}" data-name="${esc(p.name)}" data-price="${p.price}" data-size="${p.sizes.join(' ')}" data-category="${p.category}" data-new="${p.new ? 1 : 0}" data-sale="${sale ? 1 : 0}" data-featured="${p.featured}" data-added="${p.added}">
+  return `<li data-product data-slug="${p.slug}" data-name="${esc(p.name)}" data-price="${p.price}" data-size="${p.sizes.join(' ')}" data-category="${p.category}" data-new="${p.new ? 1 : 0}" data-sale="${sale ? 1 : 0}" data-featured="${p.featured}" data-added="${p.added}" data-tags="${p.tags.join(' ')}">
   <article class="product-card${p.oos ? ' product-card--oos' : ''}">
     <div class="product-card__media">
       <div class="media" data-placeholder style="--tone: ${tone(p.tone)}">${icon('image')}</div>
@@ -124,6 +142,21 @@ export function generate(name, args, ctx) {
       return [`<li><a class="chip" href="${root}${file}" aria-current="page">All ages</a></li>`]
         .concat(S.map((s) => `<li><a class="chip" href="${root}${file}?size=${s.slug}">${esc(s.label)}</a></li>`)).join('\n');
     }
+    case 'product-tags': {
+      // the "Tags" row at the end of the product page's info column: chip links to shop.html?tag=
+      const p = cat.products.find((x) => x.slug === args.trim());
+      if (!p) throw new Error('product-tags: unknown product ' + args);
+      return `<div class="product__tags" data-product-tags>
+  <p class="product__tags-label" id="tags-label">Tags</p>
+  <nav aria-labelledby="tags-label" aria-label="Product tags">
+    <ul class="chip-list" role="list">
+      <!-- loop: tags -->
+${p.tagList.map((t) => `      <li><a class="chip" href="${root}shop.html?tag=${t.slug}">${esc(t.label)}</a></li>`).join('\n')}
+      <!-- /loop -->
+    </ul>
+  </nav>
+</div>`;
+    }
     case 'size-rows': {
       const pack = sizeTableRows(ctx.repo);
       return S.map((s) => {
@@ -170,7 +203,9 @@ export function catalogueJs(cat, intros) {
     colours: cat.colours,
     // h1, meta title, meta description and intro (html) per category and per size: docs/content/category-and-age-intros.md
     intros,
-    products: cat.products.map((p) => ({ slug: p.slug, name: p.name, category: p.category, price: p.price, was: p.was || 0, sizes: p.sizes, colours: p.colours, tone: p.tone, oos: !!p.oos }))
+    // tags: the table of {slug, label}; each product lists its tag slugs. featured, added and isNew feed the search ranking.
+    tags: (cat.tags || []).map(({ slug, label }) => ({ slug, label })),
+    products: cat.products.map((p) => ({ slug: p.slug, name: p.name, category: p.category, tags: p.tags, price: p.price, was: p.was || 0, sizes: p.sizes, colours: p.colours, tone: p.tone, oos: !!p.oos, featured: p.featured || 0, added: p.added || 0, isNew: !!p.new }))
   };
   return `/* Generated by tools/sync-shell.mjs from tools/catalogue.json. Do not edit by hand.
    Prototype data for the scripts (quick add sheet, listing filters, wishlist). Blade prints the real catalogue instead. */

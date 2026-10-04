@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="/kayaa/assets/css/base.css?v=c7479e07">
   <link rel="stylesheet" href="/kayaa/assets/css/components.css?v=86a4ca95">
   <link rel="stylesheet" href="/kayaa/assets/css/layout.css?v=e485861a">
+  <link rel="stylesheet" href="/kayaa/assets/css/suggest.css?v=954ddad4">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="/kayaa/assets/css/pages/errors.css?v=18fee8d9">
 </head>
@@ -310,7 +311,7 @@
       </nav>
 
       <div class="site-header__actions">
-        <form class="header-search" role="search" aria-label="Site search" action="/kayaa/search.html" method="get" data-header-search>
+        <form class="header-search" role="search" aria-label="Site search" action="/kayaa/search.html" method="get" data-header-search data-search="header">
           <button type="button" class="icon-btn header-search__toggle" data-search-toggle aria-expanded="false" aria-controls="header-search-field" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           <div class="header-search__field" id="header-search-field">
             <label class="visually-hidden" for="header-q">Search Kayaa</label>
@@ -353,7 +354,7 @@
         <p class="error-code">404</p>
         <h1>We can’t find that page</h1>
         <p class="error-text">The link may be old or mistyped. Try a search or head back to the shop.</p>
-        <form class="error-search" role="search" aria-label="Search the shop" action="/kayaa/search.html" method="get">
+        <form class="error-search" role="search" aria-label="Search the shop" action="/kayaa/search.html" method="get" data-search="error">
           <label class="visually-hidden" for="error-q">Search Kayaa</label>
           <input id="error-q" type="search" name="q" placeholder="Search for clothes" autocomplete="off">
           <button type="submit" class="btn btn--primary">Search</button>
@@ -453,7 +454,7 @@
     <ul>
       <li><a class="tabbar__item" href="/kayaa/index.html" data-nav="home"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></span><span>Home</span></a></li>
       <li><a class="tabbar__item" href="/kayaa/shop.html" data-nav="shop category product"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-layout-grid"></use></svg></span><span>Shop</span></a></li>
-      <li><a class="tabbar__item" href="/kayaa/search.html" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
+      <li><a class="tabbar__item" href="/kayaa/search.html?focus=1" data-nav="search"><span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span><span>Search</span></a></li>
       <li>
         <button type="button" class="tabbar__item" data-open-layer="cart" data-nav="cart" aria-haspopup="dialog">
           <span class="tabbar__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg><span class="icon-btn__count" data-cart-count aria-hidden="true">2</span></span>
@@ -667,9 +668,12 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="/kayaa/assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="/kayaa/assets/js/catalogue-data.js?v=203a730b" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="/kayaa/assets/js/site-config.js?v=72f879c4" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="/kayaa/assets/js/catalogue-data.js?v=9716a851" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="/kayaa/assets/js/search-core.js?v=dfafbf0c" defer></script> <!-- search matching rules (name, category, tags), shared by the suggestions and the results page -->
+  <script src="/kayaa/assets/js/search-suggest.js?v=51b29c75" defer></script> <!-- the suggestion combobox on every form[data-search] -->
   <script src="/kayaa/assets/js/proto-cart.js?v=6057f718" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="/kayaa/assets/js/proto-search.js?v=5cdf6905" defer></script> <!-- PROTOTYPE ONLY: answers the suggestion requests from catalogue-data.js; production calls GET /search/suggest?q= -->
   <script src="/kayaa/assets/js/app.js?v=5cf59ed9" defer></script>
   <!-- /partial: scripts -->
 </body>

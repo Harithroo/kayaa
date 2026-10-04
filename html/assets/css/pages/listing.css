@@ -227,3 +227,8 @@
   .toolbar { position: static; }
   html { scroll-padding-top: calc(var(--header-h, 53px) + 8px); }
 }
+
+/* Search page: categories and tags that also match the query, above the grid */
+.also-matches { margin-bottom: var(--space-4); }
+.also-matches[hidden] { display: none; }
+.also-matches__label { margin-bottom: var(--space-2); font-size: var(--fs-ui); font-weight: 700; color: var(--ink-soft); }

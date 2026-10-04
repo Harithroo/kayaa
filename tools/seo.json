@@ -1,5 +1,5 @@
 {
-  "_note": "Single source for every page's head: title, meta description, canonical, robots, Open Graph, Twitter card and BreadcrumbList JSON-LD (tools/seo.mjs, run by sync-shell). 'staging': true forces noindex,nofollow everywhere; set it to false at launch and the per-page 'robots' values (the matrix in docs/content/seo-guide.md section 4) take effect. 'content' reads the title and description from the docs/content front matter; 'intro' from docs/content/category-and-age-intros.md. 'path' is the Laravel route (the canonical is site.url + path), not the prototype file name. category.html and product.html are one sample each: proto-listing.js and product.js apply the same rules per state, and the Blade views build them per record (docs/backend-contract.md, 'SEO needs from the backend'). Pages without a 'crumbs' trail get no BreadcrumbList.",
+  "_note": "Single source for every page's head: title, meta description, canonical, robots, Open Graph, Twitter card and BreadcrumbList JSON-LD (tools/seo.mjs, run by sync-shell). 'staging': true forces noindex,nofollow everywhere; set it to false at launch and the per-page 'robots' values (the matrix in docs/content/seo-guide.md section 4) take effect. 'content' reads the title and description from the docs/content front matter; 'intro' from docs/content/category-and-age-intros.md. 'path' is the Laravel route (the canonical is site.url + path), not the prototype file name. category.html and product.html are one sample each: proto-listing.js and product.js apply the same rules per state, and the Blade views build them per record (docs/backend-contract.md, 'SEO needs from the backend'). Pages without a 'crumbs' trail get no BreadcrumbList. State rules that proto-listing.js and the Blade views apply on top of a page entry: a tag listing (?tag={slug}) is noindex,follow with the canonical pointing at the clean listing; the same for sort, sale and combined filters; search results are noindex,follow.",
   "staging": true,
   "site": { "name": "Kayaa", "url": "https://example.com", "locale": "en_LK" },
   "pages": {
@@ -30,6 +30,16 @@
       "title": "Your Bag | Kayaa",
       "description": "Review the items in your Kayaa bag, see your delivery fee and free-delivery progress, then continue to secure checkout with card payment.",
       "path": "/cart", "robots": "noindex,nofollow", "og": "website"
+    },
+    "review.html": {
+      "title": "Kayaa prototype review",
+      "description": "Index of every screen in the Kayaa prototype, with review status. Review only: removed when the site moves to Laravel.",
+      "path": "/review", "robots": "noindex,nofollow", "og": "website", "canonical": false
+    },
+    "review-decisions.html": {
+      "title": "Open decisions | Kayaa prototype review",
+      "description": "The open decisions for the client, rendered from docs/content/01-open-decisions.md. Review only: removed when the site moves to Laravel.",
+      "path": "/review-decisions", "robots": "noindex,nofollow", "og": "website", "canonical": false
     },
     "checkout.html": {
       "title": "Secure Checkout | Kayaa",

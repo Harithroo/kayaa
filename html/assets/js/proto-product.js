@@ -1,7 +1,7 @@
 /* PROTOTYPE ONLY - delete at Blade conversion.
    Loaded before product.js. The sample variant data lives in the <script id="product-variants"> block of the
    page; this file only applies the ?demo= states (regular, new, low-stock, oos, no-reviews, reviewed,
-   review-success, review-error, review-throttle) and fakes the review form submit. The sample product is on sale by default
+   review-success, review-error, review-throttle, no-tags) and fakes the review form submit. The sample product is on sale by default
    (the current price with the struck-through compare-at price).
    Every product card in the prototype opens this same sample product. */
 (function () {
@@ -21,6 +21,9 @@
     data.forEach(function (v) { v.stock = demo === 'oos' ? 0 : (v.stock > 0 ? Math.min(v.stock, 3) : 0); });
     block.textContent = JSON.stringify(data);
   }
+
+  /* ---- no tags: the whole Tags row is hidden (the page renders it only when the product has tags) ---- */
+  if (demo === 'no-tags') { var tagsRow = $('[data-product-tags]'); if (tagsRow) tagsRow.hidden = true; }
 
   /* ---- price and badge ---- */
   var form = $('[data-buy-form]');

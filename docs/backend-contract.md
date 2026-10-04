@@ -82,14 +82,15 @@ Conventions used by every page
 - Footer: tagline "Soft, honest clothing made for Sri Lankan weather.", "Colombo, Sri Lanka" (TODO confirm), "Shop by size" (nine links), help links (`/track`, `/wishlist`, `/size-guide`, `/delivery`, `/returns`, `/contact`), company links (`/categories`, `/about`, `/privacy`, `/terms`), WhatsApp link, contact email, social URLs, and "Secure card payments" (no gateway name).
 - Active nav states use `<body data-page="home|shop|category|product|search|cart|account|...">`; the server should set it per page (space-separated tokens allowed, e.g. `account login`).
 
-### Minimal shell (checkout and thank-you)
-These two pages use `header-minimal` and `footer-minimal` partials only: no announcement bar, menu drawer, tab bar or cart drawer.
+### Shell variants
+Every page uses the **full shell** (announcement bar, header with the category row, menu drawer, tab bar, cart drawer, quick-add sheet, footer) except: **checkout** (`header-minimal` + `footer-minimal`, no announcement bar, drawers or tab bar), **500 and 503** (`header-error` + `footer-minimal`: Laravel error views cannot rely on the database or session, so no category row or cart) and the prototype-only payment stand-in. The account auth pages and the thank-you page use the full shell. In Blade this is one layout for the full shell and two small layouts (checkout, error); `tools/shell-map.json` lists the pages and `tools/check-shell.mjs` checks them.
 
 ### Header search form
 | | |
 | --- | --- |
 | Route | `GET /search` |
 | Field | `q` (type `search`, optional on submit, example `romper`) |
+| Suggestions | the field is a combobox that asks `GET /search/suggest?q=` (see "Product tags and search" below) |
 
 ### Categories (department "Baby", fixed list)
 `newborn` Newborn, `bodysuits` Bodysuits, `sleepwear` Sleepwear, `sets` Sets, `outerwear` Outerwear, `napkins` Napkins, `accessories` Accessories (the home tile photo slots are `cat-<slug>`). **Question:** what are "Napkins" (cloth nappies, mealtime napkins?) and what size range do they have?
@@ -123,14 +124,14 @@ Route map (prototype file -> Laravel route). Status: **built** = designed in the
 | search.html | `/search?q=` | built |
 | product.html | `/products/{slug}` | built |
 | cart.html | `/cart` | built |
-| checkout.html | `/checkout` | built (minimal shell) |
-| thank-you.html | `/orders/{ref}/thank-you` | built (minimal shell) |
+| checkout.html | `/checkout` | built (checkout shell) |
+| thank-you.html | `/orders/{ref}/thank-you` | built (full shell) |
 | proto-onepay.html | none | prototype stand-in for the hosted payment page, delete at conversion |
 | track.html | `/track` | built |
 | contact.html | `/contact` | built |
 | size-guide.html, delivery.html, returns.html, about.html, privacy.html, terms.html | same names | built (content template; all facts are placeholders) |
 | 404.html, 419.html, 429.html, 500.html, 503.html | error views `resources/views/errors/*.blade.php` | built |
-| account/register, login, forgot-password, reset-password | `/account/register`, `/account/login`, `/account/forgot-password`, `/account/reset-password` | built (calm minimal shell) |
+| account/register, login, forgot-password, reset-password | `/account/register`, `/account/login`, `/account/forgot-password`, `/account/reset-password` | built (full shell, centred card) |
 | account/index (orders), order, reviews, profile | `/account`, `/account/orders/{ref}`, `/account/reviews`, `/account/profile` | built |
 | categories.html | `/categories` | built |
 | wishlist.html | `/wishlist` | built |
@@ -230,7 +231,7 @@ Empty state: icon, "Your bag is empty", "Start shopping" -> `/shop`, chips for t
 Mobile: a sticky bar (total + Checkout) shows when the main Checkout button leaves the viewport and replaces the tab bar (same component as the product page).
 
 ### 3.5 Checkout (`/checkout`)
-Minimal shell (reduces abandonment): `header-minimal` (wordmark, "Secure checkout" with a lock icon, "Back to bag" -> `/cart`) and `footer-minimal` (Delivery, Returns, Privacy, Terms, Contact). No menu drawer, tab bar, cart drawer or announcement bar. Prototype-only `?demo=`: `errors`, `throttle`, `gateway-error`, `signed-in`, `empty`.
+Checkout shell (reduces abandonment): `header-minimal` (wordmark, "Secure checkout" with a lock icon, "Back to bag" -> `/cart`) and `footer-minimal` (Delivery, Returns, Privacy, Terms, Contact). No menu drawer, tab bar, cart drawer or announcement bar. Prototype-only `?demo=`: `errors`, `throttle`, `gateway-error`, `signed-in`, `empty`.
 
 Empty bag: "Your bag is empty" with a link to `/shop` (the server should redirect or render this).
 
@@ -271,7 +272,7 @@ Card payment is primary, through the Onepay gateway (Visa/Mastercard); the steps
 7. Prototype stand-in: `html/proto-onepay.html` (no shell, no brand marks) with four buttons that go to `thank-you.html?state=paid|pending|failed|cancelled`. The simulated order is kept in sessionStorage with a generated reference `KY-<today YYMMDD>-<4 random A-Z0-9>`.
 
 ### 3.7 Thank-you
-Minimal shell as for checkout. **This page is reached only through the signed, expiring link the backend supplies; it is never built from the order reference** (no `/orders/{ref}/thank-you` URL is constructed anywhere in the frontend). A request with an invalid or expired signature shows the **expired** state. Prototype-only `?state=paid|pending|failed|cancelled|expired` (paid by default) and `?demo=emails-on`; in Laravel the state comes from the order's statuses.
+Full shell (the thank-you page keeps the header, tab bar and footer; see Shell variants). **This page is reached only through the signed, expiring link the backend supplies; it is never built from the order reference** (no `/orders/{ref}/thank-you` URL is constructed anywhere in the frontend). A request with an invalid or expired signature shows the **expired** state. Prototype-only `?state=paid|pending|failed|cancelled|expired` (paid by default) and `?demo=emails-on`; in Laravel the state comes from the order's statuses.
 
 Data needed for every state except expired: order reference, items (name, size, colour, quantity, price), subtotal, delivery fee, total, delivery address (name, lines, city, district, phone), the district's estimated delivery text, payment line with the method ("Card", or the cash method label and its badge, section 4b) and the payment status.
 
@@ -327,7 +328,7 @@ States
 - Throttled: alert "Too many attempts. Please wait a minute and try again."
 
 ### 3.10 Auth pages (`/account/register`, `/account/login`, `/account/forgot-password`, `/account/reset-password`, `/account/verify-email`)
-Accounts are optional: guest checkout and `/track` always work, and every auth page says so ("No account needed to order. You can check out as a guest and track an order any time." with links to the shop and to track). Customers and admins share the `users` table. The pages use the calm minimal shell (`header-auth`: wordmark and "Continue shopping"; `footer-minimal`). The login, register, forgot, reset and resend-verification endpoints are **rate-limited** (the prototype shows "Too many attempts. Please try again in 45 seconds."). Prototype `?demo=`: login `errors|throttle|success`; register `errors|throttle`; forgot-password `errors|throttle|sent`; reset-password `errors|invalid-link`; verify-email `verified|invalid|sent|throttle`.
+Accounts are optional: guest checkout and `/track` always work, and every auth page says so ("No account needed to order. You can check out as a guest and track an order any time." with links to the shop and to track). Customers and admins share the `users` table. The pages use the full shell with a centred card (the Account item is highlighted). The login, register, forgot, reset and resend-verification endpoints are **rate-limited** (the prototype shows "Too many attempts. Please try again in 45 seconds."). Prototype `?demo=`: login `errors|throttle|success`; register `errors|throttle`; forgot-password `errors|throttle|sent`; reset-password `errors|invalid-link`; verify-email `verified|invalid|sent|throttle`.
 
 All forms: `POST`, `@csrf`, `novalidate`; the server repeats every rule. Error summary (`role="alert"`, focus moves to it, links to each field) plus inline messages with `aria-invalid` and `aria-describedby`. Password fields have a show/hide button (name "Show password", `aria-pressed`). **Password rule everywhere: at least 8 characters, no complexity rules, no maximum** (helper "At least 8 characters"; no `maxlength`).
 
@@ -365,7 +366,7 @@ One template (`errors.css`): a lilac icon disc, a code label, h1, one sentence, 
 **GitHub Pages only (prototype):** Pages serves `/404.html` for any missing URL at that URL's path, so `html/404.html` carries `<!-- sync-root: /kayaa/ -->` and uses root-absolute `/kayaa/...` links. Blade does not need this: its error view uses the normal asset helpers.
 
 ### 3.16 Shell partials added
-`header-error` (wordmark only; 500 and 503). `header-auth` (wordmark and "Continue shopping"; the account auth pages). `header-minimal` stays for checkout and thank-you only.
+`header-error` (wordmark only; 500 and 503). `header-minimal` is for checkout only. There is no auth header: the account auth pages use the full shell (see "Shell variants" below).
 
 
 ### 3.17 Site config (`tools/site-config.json`)
@@ -447,6 +448,7 @@ The prototype's head is built from `tools/seo.json`; the Blade views build the s
    | Product pages | index,follow | the product URL without `?colour=` |
    | Size guide, Delivery, Returns, About, Contact, Privacy, Terms | index,follow | itself |
    | Any `sort` or `sale` parameter, and combinations of filters | noindex,follow | the clean listing (the same listing without sort, sale and page) |
+   | `/shop?tag={slug}` and `/baby/{slug}?tag={slug}` (tag listings) | noindex,follow | the clean listing (`/shop` or `/baby/{slug}`) |
    | Listing page 2 and beyond (`?page=2`) | index,follow | itself |
    | Search results | noindex,follow | itself |
    | Wishlist, cart, checkout, order confirmation, track, all account and auth pages | noindex,nofollow | itself |
@@ -481,6 +483,44 @@ These are product decisions. The backend dev confirms each one is feasible or sa
 - **Content pages** (Delivery, Returns, About, Privacy, Terms, Size guide) are Blade views with numbers from config; the FAQs stay admin-managed.
 - **No analytics in v1.**
 
+### Product tags and search
+
+**Tags** (a product has 2 to 4; the prototype uses 12 in `tools/catalogue.json`):
+
+| Table | Columns |
+|---|---|
+| `tags` | `id`, `name` (sentence case, for example "Gift idea", max 40 characters), `slug` (unique, ASCII lower case with hyphens), timestamps |
+| `product_tag` (pivot) | `product_id`, `tag_id`, unique pair |
+
+- Admin: a tag input on the product form (type to search existing tags or create one); a Tags resource to rename, merge or delete (a tag with fewer than 2 products is allowed but flagged). Limits: 2 to 4 tags per product, tag slugs generated from the name and never changed silently.
+- Product page: a "Tags" row at the end of the info column (label "Tags" and a `<nav aria-label="Product tags">` list of chip links to `/shop?tag={slug}`), rendered only when the product has tags. No tags on product cards.
+- Listing filter: `/shop?tag={slug}` and `/baby/{slug}?tag={slug}`, combinable with `size`, `sale` and `sort`. H1 "Tagged: {name}", breadcrumb Home > Shop > {name}, a "Clear filters" link that drops the tag, the empty state when nothing matches. An unknown tag is an empty listing (not a 404). Tag listings are **noindex,follow** with the canonical pointing at the clean listing.
+
+**Search matching** (`GET /search?q=`, the suggestions and the "Also matches" row all use the same rules; `assets/js/search-core.js` is the reference implementation):
+- It matches the product **name**, the **category** name and the **tag** names, never descriptions.
+- Normalise: lower case, strip diacritics, anything that is not a letter or a digit becomes a space, collapse spaces; split the query into tokens.
+- A product matches when every token prefix-matches a word of its name, its category or one of its tags; a token of 3 or more characters that only occurs inside a word is a weaker match.
+- Rank: (0) the name starts with the whole query, (1) every token starts a word of the name, (2) the match needs the category or a tag, (3) weaker substring matches; ties by featured order, then name.
+- No typo tolerance in v1. Later, Laravel Scout with Meilisearch (or database full text) can add it behind the same endpoint without changing the front end.
+- The results page shows the count ("12 results for "gift""), an "Also matches" row of matching categories and tags when any, then the grid in rank order unless a sort is chosen.
+
+**Suggest endpoint** `GET /search/suggest?q=`
+- Minimum 2 characters (shorter returns an empty set). Throttle 60 requests per minute per IP. A short cache (about 60 seconds) keyed on the normalised query. All text in the JSON is plain text; the front end builds the rows with `textContent` and the endpoint escapes anything it ever renders.
+- Limits: 5 products, 3 categories, 3 tags. Matching rules identical to `/search`.
+- Response:
+
+```json
+{
+  "query": "bod",
+  "products": [{ "name": "Ribbed Cotton Bodysuit", "url": "/products/ribbed-cotton-bodysuit", "category": "Bodysuits", "price": 2450, "compare_at": 2950 }],
+  "categories": [{ "name": "Bodysuits", "url": "/baby/bodysuits", "count": 5 }],
+  "tags": [{ "name": "Gift idea", "url": "/shop?tag=gift-idea", "count": 8 }]
+}
+```
+
+  `compare_at` is null when the product is not on sale; `image` (optional) can be added to a product row for a real thumbnail (the prototype draws a placeholder). The front end falls back to the results page when the request fails.
+- The empty-field state ("Popular") comes from the site config (`popular_searches`: a label and a URL each). `/search/suggest` is covered by the `Disallow: /search` line in robots.txt.
+
 ### Cash payment switch (`cod_enabled`)
 - **Admin setting `cod_enabled`, default off.** The prototype mirrors it in `tools/site-config.json` (`cod_enabled`, `cod_button_label` "Place order"; `pay_button_label` stays "Pay now") and `?demo=cod-on` on the checkout.
 - **`orders.payment_method`** is `online` or `cod`. `payment_status` is `pending` until the money is collected for a `cod` order.
@@ -496,6 +536,7 @@ Normalise Sri Lankan mobile numbers (`07X…`, `+947X…`, `947X…`) to one sto
 
 ## 5. Prototype-only behaviour (delete at conversion)
 
+- `assets/js/proto-search.js` answers the suggestion requests from `catalogue-data.js` through `search-core.js`. Delete it and the endpoint serves the same JSON. `search-core.js` is a spec for the backend's matching, not production code to keep; `search-suggest.js` stays.
 - `assets/js/proto-listing.js` (also the indexing demo, see section 4a): filters, sorts, searches and paginates the 26 sample cards from the query string (`size`, `sort`, `sale`, `c`, `q`, `page`); normalises the old encoded `?size=0%E2%80%933m`; sets H1, intro, breadcrumb (Home / Baby / Category), counts and pagination. `assets/js/catalogue-data.js` (generated from `tools/catalogue.json`) holds the categories, sizes, colours and products for the scripts (the quick-add sheet, the listing, the wishlist); the product cards and menus are generated from the same file by `node tools/sync-shell.mjs` (`<!-- gen: NAME -->` regions). `assets/js/proto-wishlist.js` is the sessionStorage wishlist.
 - `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `regular` (no sale), `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
 - `assets/js/proto-cart.js`: the demo cart (sessionStorage) behind the header counts, the drawer, the cart page and the checkout summary, plus the simulated order. Line shape: `{id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}`.

@@ -19,7 +19,7 @@ Static prototype of the Kayaa storefront. Backend (Laravel 12 + Filament 4) is o
 - Repeated data: render several static items and wrap them in <!-- loop: products --> ... <!-- /loop -->. Conditionals get <!-- blade: @if sale --> hints.
 - No inline styles (except --tone / --ratio custom properties), no inline event handlers. JS hooks use data-* attributes (never styling classes).
 - Cart drawer root is [data-cart-drawer]. Its inner markup is a self-contained panel, because the backend's /cart/panel returns HTML that JS swaps into it.
-- Checkout and Thank-you use a minimal shell to reduce abandonment: only the `header-minimal` (wordmark, "Secure checkout" with a lock icon, "Back to bag"; `header-auth` and `header-error` are wordmark-only variants for login and 500/503) and `footer-minimal` (Delivery, Returns, Privacy, Terms, Contact) partials, plus sprite, styles and scripts. No announcement bar, menu drawer, tab bar or cart drawer, and their marker pairs are omitted from those pages (sync-shell only fills the markers a page has). The cart page keeps the full shell.
+- Shell variants: see "Shell variants" below. Only checkout (header-minimal + footer-minimal), 500 and 503 (header-error + footer-minimal) and the prototype payment stand-in (no shell) leave the full shell; the thank-you page and every auth page use the full shell.
 - Delivery fee is the flat rule from config (TODO confirm it is not district-based). Stock is decremented permanently when the order is placed; nothing is held or released, so no copy ever promises held items. The cart is emptied when the order is created (not on paid or pending): after a failed or cancelled payment the bag is empty and no state links back to the bag. There are no promo codes or gift options. Order emails are off by default (`order_emails_enabled`): never claim an email was sent unless the config flag is on and an email was given.
 - Delivery ETA: the backend sends two integers per district (min_days, max_days); the prototype keeps them as {min, max} and `Kayaa.formatEta` (app.js) words them in one place: equal values "3 working days", 1 and 1 "1 working day", otherwise "2–4 working days" (en dash). Shown at checkout, in the summary, on thank-you, on track/order pages while the order can still arrive, and on the delivery page.
 - Prototype cart: assets/js/proto-cart.js keeps a demo cart in sessionStorage (seeded with two sample items; line shape {id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}). The header counts, the drawer, the cart page and the checkout summary all read it through window.KayaaCart (get, totals, add, update, remove, clear). Products are added with colour and size slugs plus labels, the same shape from the product page form and the quick-add sheet. It is deleted at Blade conversion (the server owns the cart).
@@ -76,7 +76,7 @@ Full detail for the backend dev is in docs/backend-contract.md. Summary:
 - Demo params: track.html ?ref=<reference> (prefills the reference only, never runs the lookup) and ?demo=throttle; thank-you.html ?state=paid | pending | failed | cancelled | expired and ?demo=emails-on; account/login.html ?demo=errors | throttle | success; register ?demo=errors | throttle; forgot-password ?demo=errors | throttle | sent; reset-password ?demo=errors | invalid-link; verify-email ?demo=verified | invalid | sent | throttle; any account page ?demo=unverified | verified (verification state, kept for the session); account/index.html ?demo=empty, ?page=2 | 3; account/order.html ?ref=<reference>; account/reviews.html ?demo=empty; account/profile.html ?demo=saved | errors. Testers: password "wrong" on login shows invalid credentials; email taken@example.com on register shows "already registered".
 - Track shows only status, payment status, items, totals, last-updated date and the delivery estimate, never name, address, phone or email. Login errors never say which field was wrong; forgot-password never reveals whether an email exists. Password rule: at least 8 characters, no complexity rules, no maximum. Review statuses for customers: "Awaiting approval" (pending or hidden, one approved flag) and "Published"; reviews are read-only after submission. Cancel order exists on the account order page only while the status is pending (native <dialog>; refund line when paid). Editing reviews and deleting accounts are not designed.
 - The status stepper (Order placed, Confirmed, Shipped, Delivered) uses icon + text on every step, shows one date per step when known and nothing when a step has no date (the backend adds delivered_at and cancelled_at), and uses a banner instead of the stepper for cancelled (with its date) and refunded orders.
-- Auth pages use the header-auth partial (wordmark and "Continue shopping") with footer-minimal; checkout and thank-you keep header-minimal.
+- Auth pages (sign in, register, forgot and reset password, verify email) use the full shell with a centred card; the Account item is highlighted in the header and the tab bar. The thank-you page uses the full shell and highlights nothing.
 - tools/check-css.allow lists intentional unstyled structural classes so check-css only reports real problems.
 
 ## Content pages and error pages
@@ -126,6 +126,19 @@ Most visitors are on phones. Every page is checked at 320, 360, 375, 390, 412 an
 - Do not commit or push. Do not touch files outside html/, docs/, design/, tools/, CLAUDE.md and .github/workflows/pages.yml.
 - Done = checked at 375px, 768px and 1280px: no horizontal scroll, no console errors, keyboard usable, and the mobile definition of done above. Also run `node tools/sync-shell.mjs --check` (exit 0), `node tools/check-links.mjs` (exit 0) and `node tools/check-css.mjs` (report only: fix errors, review warnings). Also run `node tools/check-seo.mjs` (exit 0), `node tools/check-copy.mjs` (exit 0), `node tools/check-budget.mjs` (exit 0) and `node tools/list-todos.mjs` (report the counts; markers stay open until the client approves the text).
 
+## Shell variants
+
+Every page uses the FULL shell (announcement bar, header with the category row, menu drawer, mobile tab bar, cart drawer, quick-add sheet, footer) EXCEPT:
+
+| Variant | Pages | Renders |
+|---|---|---|
+| checkout | checkout.html | header-minimal + footer-minimal (fewer exits at payment) |
+| error | 500.html, 503.html | header-error + footer-minimal (Laravel error views cannot rely on the database or session) |
+| none | proto-onepay.html | no shell (the prototype stand-in for the gateway) |
+| full | everything else, including every auth page and thank-you | all of the above |
+
+`tools/shell-map.json` lists every page and its variant; `tools/check-shell.mjs` verifies that each page has exactly the marker pairs and rendered landmarks (skip link, header, one main, footer, tab bar and layers for full) of its variant, and nothing else. `sync-shell --check` runs it. A new page must be added to the map; `tools/page-skeleton.html` is the full shell. The mobile tab bar's bottom padding is applied by `body:has(.tabbar)`, so a page with the tab bar needs no extra rule. Pages highlight their header and tab bar item through `<body data-page="...">` tokens (account pages carry `account`; thank-you carries nothing that matches).
+
 ## Illustrations (size guide slider)
 
 - Three AI-generated illustrations (Google Gemini, 4 October 2026), originals in `tools/image-source/` named `size-guide-1-height`, `size-guide-2-weight`, `size-guide-3-between-sizes` (any extension, any case). `node tools/process-images.mjs` writes `html/assets/img/size-guide/size-guide-N-{480,800,1200}.webp` and fills the photo markers on `size-guide.html` and in the product page panel. Rules: 4:3 frame, never cropped (a source more than 3% off 4:3 is letter-boxed on the lilac tint), never upscaled; a WebP original is copied unchanged when a variant has its own width and fits its budget (60 KB at 800w, 100 KB at 1200w), smaller widths are re-encoded at quality 88 (floor 72); metadata stripped.
@@ -144,6 +157,7 @@ node tools/check-css.mjs             # 0 errors, 0 warnings
 node tools/check-links.mjs           # exit 0
 node tools/check-seo.mjs             # exit 0, 0 warnings
 node tools/check-copy.mjs            # exit 0 (the cash payment wording rule)
+node tools/check-shell.mjs           # exit 0 (every page has the shell its variant allows; sync --check runs it too)
 node tools/check-budget.mjs          # exit 0 (CSS 70 KB, JS 60 KB, fonts 120 KB, gzip)
 node tools/list-todos.mjs            # report the counts; markers stay open until the client approves the text
 ```
@@ -151,3 +165,8 @@ node tools/list-todos.mjs            # report the counts; markers stay open unti
 **Before every client review** also run the browser audits in `tools/qa/` (setup in `tools/qa/README.md`; the tools live in a temp folder, never in the repo): `axe.mjs` (zero violations), `static-checks.mjs`, `keyboard.mjs`, `modes.mjs`, `engines.mjs` (Chromium, Firefox and WebKit), `validate.mjs`, `hygiene.mjs`, `design-audit.mjs`, and `lighthouse.mjs` (mobile targets: Performance 90+, Accessibility 100, Best Practices 95+, SEO 100 except "page is blocked from indexing" while staging is noindex; LCP under 2.5 s, CLS 0, TBT under 200 ms). Then do `docs/qa/real-device-checklist.md` on a real iPhone and a real Android phone, and read `docs/qa/known-issues.md` to see that nothing new has slipped in. Record the run in `docs/qa/qa-report.md`.
 
 **Before launch** additionally: `node tools/list-todos.mjs --fail-on-open` must exit 0, and `docs/seo/launch-checklist.md` is done.
+
+## Tags and search suggestions
+
+- Tags live in `tools/catalogue.json` (a `tags` table of {slug, label}, sentence case; every product lists 2 to 4 slugs; every tag is used by at least 2 products; sync-shell validates all of it). They appear only as the "Tags" chip row at the end of the product page's info column (`gen: product-tags`) and as the `?tag=` filter on shop.html and category.html (noindex,follow, canonical the clean listing). No tags on product cards.
+- Search: `assets/js/search-core.js` holds the matching rules (name, category and tag names, prefix match per word, ranking tiers) and is used by BOTH the suggestions and the results page, so they always agree. `assets/js/search-suggest.js` is the production combobox (every `form[data-search]`; WAI-ARIA list autocomplete, 2 characters minimum, 120ms debounce, aborts stale requests); it asks `window.KAYAA_SEARCH_PROVIDER`, which `proto-search.js` sets in the prototype and production leaves unset (it then calls `GET /search/suggest?q=`). Rows are always built with `textContent`. `popular_searches` in `tools/site-config.json` feeds the empty-field links. search-core.js plus search-suggest.js must stay under 8 KB gzip combined.

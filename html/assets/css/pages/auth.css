@@ -1,4 +1,4 @@
-/* Auth pages: login, register, forgot password, reset password (centred card, minimal shell) */
+/* Auth pages: login, register, forgot password, reset password (a centred card inside the full shell: header, footer, tab bar) */
 
 .auth { display: grid; justify-items: center; padding-block: var(--space-6) var(--space-7); }
 .auth-card {

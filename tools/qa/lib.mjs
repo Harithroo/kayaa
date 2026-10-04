@@ -47,6 +47,14 @@ export function states() {
   add('mega menu open', 'index.html', async (pg) => { const t = pg.locator('[data-mega-toggle]').first(); if (!(await t.isVisible())) return 'na'; await t.click(); await pg.waitForTimeout(400); });
   add('cancel dialog open', 'account/order.html?ref=KY-261003-A3F9', async (pg) => { await pg.locator('[data-o-cancel]').click(); await pg.waitForTimeout(400); });
   add('product size guide panel + slider open', 'product.html', async (pg) => { await pg.locator('[data-size-guide-toggle]').click(); await pg.locator('.sg-disclosure__summary').click(); await pg.waitForTimeout(600); });
+  add('product?demo=no-tags', 'product.html?demo=no-tags', null);
+  add('shop?tag=gift-idea', 'shop.html?tag=gift-idea', null);
+  add('search?q=gift (tag match)', 'search.html?q=gift', null);
+  add('search?q=zzz (no results)', 'search.html?q=zzz', null);
+  add('header suggestions open (bod)', 'index.html', async (pg) => { const f = pg.locator('#header-q'); if (!(await f.isVisible())) return 'na'; await f.click(); await pg.keyboard.type('bod'); await pg.waitForTimeout(500); });
+  add('header suggestions open (gift, row highlighted)', 'index.html', async (pg) => { const f = pg.locator('#header-q'); if (!(await f.isVisible())) return 'na'; await f.click(); await pg.keyboard.type('gift'); await pg.waitForTimeout(500); await pg.keyboard.press('ArrowDown'); });
+  add('search page suggestions inline (phone)', 'search.html?focus=1', async (pg) => { if ((await pg.viewportSize()).width >= 900) return 'na'; await pg.keyboard.type('gift'); await pg.waitForTimeout(500); });
+  add('404 suggestions open', '404.html', async (pg) => { await pg.locator('#error-q').click(); await pg.keyboard.type('bod'); await pg.waitForTimeout(500); });
   add('track result (cash, paid)', 'track.html?ref=KY-260930-C0D2', async (pg) => { await pg.fill('#phone', '071 234 5678'); await pg.locator('[data-track-form] button[type=submit]').click(); await pg.waitForSelector('[data-track-result]:not([hidden])'); });
   return s;
 }
