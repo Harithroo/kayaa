@@ -43,14 +43,14 @@
     if (demo === 'errors') {
       set('name', 'Amaya Ranasinghe'); set('email', 'taken@example.com'); set('phone', '071123'); set('password', 'abc'); set('password_confirmation', 'abd');
       submitEmpty();
-      window.KayaaForms.addError(form, 'email', 'This email is already registered. Log in or use a different email.');
+      window.KayaaForms.addError(form, 'email', 'This email is already registered. Sign in or use a different email.');
     }
     form.addEventListener('submit', function (e) {
       if (e.defaultPrevented) return;
       e.preventDefault();
       var email = document.getElementById('email').value.trim();
       if (email.toLowerCase() === 'taken@example.com') {
-        window.KayaaForms.addError(form, 'email', 'This email is already registered. Log in or use a different email.');
+        window.KayaaForms.addError(form, 'email', 'This email is already registered. Sign in or use a different email.');
         return;
       }
       // the account works unverified; verifying the email is what attaches earlier guest orders

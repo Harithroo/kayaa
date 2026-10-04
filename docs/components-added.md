@@ -222,7 +222,7 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | `.empty-state--card` | components.css | Empty state on a surface card (orders, reviews). |
 | Auth card (`.auth`, `.auth-card`, `.auth-form`, `.auth-row`, `.auth-link`, `.auth-guest`) | pages/auth.css | Centred card for login, register, forgot and reset, with the guest-checkout note under every form. |
 | `header-auth` partial | tools/partials | Wordmark and "Continue shopping" (the checkout header's "Secure checkout" label would be wrong on auth pages). |
-| Account layout and nav (`.account`, `.account-nav`) | pages/account.css | Sidebar from 900px, scrollable chip nav below with `aria-current`; the desktop sidebar holds Log out, mobile puts it at the bottom of the profile page. |
+| Account layout and nav (`.account`, `.account-nav`) | pages/account.css | Sidebar from 900px, scrollable chip nav below with `aria-current`; the desktop sidebar holds Sign out, mobile puts it at the bottom of the profile page. |
 | Order card (`.order-card`) | pages/account.css | Reference, date, status and payment badges, up to 3 thumbnails, item count, total, "View order". Stacked on mobile, one compact row from 900px. |
 | Review list item | pages/account.css | The shared `.review-card` with a product header and a `.status` badge: "Published" = `status--confirmed`, "Awaiting approval" = `status--pending`. |
 | Track page (`pages/track.css`) | track.html | Lookup form, found/not-found/throttle states, help card with the reference. |
@@ -272,3 +272,25 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | Verify-email page (`account/verify-email.html`, `.auth-card__icon`, `.verify-actions`) | pages/auth.css | Auth-card template with three states: waiting (Check your email), verified and invalid link. |
 | Track form fields (`.track-form__fields`) | pages/track.css | Reference and mobile number side by side from 600px, with the checkout-style error summary above. |
 | Thank-you "expired" state and email line (`.thanks__email`) | pages/thank-you.css | Expired signed link (no order details) and the optional confirmation-email line. |
+
+## Catalogue alignment (categories, sizes, wishlist, product page)
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| `tools/catalogue.json`, `tools/catalogue.mjs`, `<!-- gen: NAME args -->` regions, `catalogue-data.js` | tools/sync-shell.mjs | Single source for the seven categories, nine sizes, colours and 26 sample products. sync-shell regenerates the header category row and mega menu chips, the drawer lists, the footer sizes, the home tiles, the listing chips, every product grid, the related list and the size-table rows (idempotent; `--check` flags stale regions; photo markers keep what process-images wrote). Fails if a size has fewer than 4 products or a category fewer than 3. |
+| Product card meta line (`.product-card__meta`) | components.css | "4 colours · NB–18m" replaces the colour dots; one badge (Sale > New); the compare-at price is struck through. |
+| Size pills (`.mega__sizes`, `.menu-group__chips`) | layout.css | The nine sizes as a pill grid in the mega menu and the drawer; a two-column list in the footer (`.footer__list--cols`). |
+| Shop-by-age row | pages/home.css | Nine tiles that keep scrolling sideways at every width (the shared scroller becomes a grid at 900px; this one does not). |
+| Category tiles (`.cat-grid`, `.cat-tile`, `.cat-tile__count`) | components.css (moved from home.css) | Shared by the home page (seven tiles in one row from 1200px) and the categories page (with item counts). |
+| Categories page (`categories.html`) | pages/categories.css | "All categories": the seven tiles; Home / Baby breadcrumb. |
+| Wishlist (`wishlist.html`, `proto-wishlist.js`, `.wishlist-actions`) | pages/wishlist.css | Saved product cards with Remove and Choose size (opens the quick-add sheet), an empty state, and a heart link in the desktop header (`.site-header__wishlist`), the drawer and the footer. The product page has a Save toggle (`.buy__save`, `aria-pressed`). |
+| Quick-add sheet options | js/app.js | Sizes and colours are filled from the card (`data-sizes`, `data-colours`) with labels from `window.KAYAA_CATALOGUE`. |
+| Product page additions | pages/product.css | Eyebrow "Kayaa Essentials", "Colour — Butter", the dispatch line (`.buy__dispatch`), the care list (`.care-list`), review headline (`.review-card__headline`) and the sign-in note (`.review-form__signin`). |
+| Currency helper | js/app.js (`Kayaa.formatMoney`), tools/sync-shell.mjs | "Rs. 2,450" everywhere; the prefix is the site config `currency_prefix`. |
+| `contact` validation rule | js/account.js | One field that accepts a Sri Lankan mobile number or an email address. |
+| Header category row, announcement bar | tools/partials | "Island-wide delivery in 2–4 days · Free over Rs. 7,500" (config values). |
+
+### Assumptions
+- The sample catalogue (26 products) uses the names, categories, prices and size ranges the brief took from the staging site; all other product facts are placeholders.
+- Colours are labelled Butter, Lilac, Sky, Blush and Dove (slug `cream` is shown as "Butter"); there are no colour dots on cards because the backend supplies no colour values yet.
+- District ETA is seeded with two zones as `{min, max}` (Colombo 1–2, the rest of the island 2–4), TODO until per-district data arrives.

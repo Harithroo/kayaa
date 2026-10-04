@@ -1,0 +1,436 @@
+{
+  "_note": "Single source for the prototype catalogue: department Baby (route /baby/{slug}), the seven categories, the nine size slugs and the sample products. node tools/sync-shell.mjs fills every <!-- gen: NAME --> region from this file. Blade renders the same data from the database. Names and categories match the staging site; everything else is placeholder (TODO: confirm with client). Size table values (age, height, weight) are placeholders.",
+  "categories": [
+    { "slug": "newborn", "label": "Newborn", "tone": 1, "blurb": "Soft first pieces for the newborn weeks." },
+    { "slug": "bodysuits", "label": "Bodysuits", "tone": 2, "blurb": "Everyday bodysuits in soft cotton." },
+    { "slug": "sleepwear", "label": "Sleepwear", "tone": 3, "blurb": "Gowns, sleep bags and bamboo pieces for calm nights." },
+    { "slug": "sets", "label": "Sets", "tone": 4, "blurb": "Matching pieces, ready to wear together." },
+    { "slug": "outerwear", "label": "Outerwear", "tone": 1, "blurb": "Cardigans, jackets and layers for cooler days." },
+    { "slug": "napkins", "label": "Napkins", "tone": 2, "blurb": "Soft napkins and cloths for every day." },
+    { "slug": "accessories", "label": "Accessories", "tone": 3, "blurb": "Mittens, booties, bibs and hats." }
+  ],
+  "sizes": [
+    { "slug": "newborn", "label": "Newborn", "lo": "NB", "hi": "3m", "age": "Newborn", "height": "Up to 55 cm", "weight": "Up to 3.5 kg" },
+    { "slug": "0-3m", "label": "0–3m", "lo": "0m", "hi": "3m", "age": "0–3 months", "height": "55–62 cm", "weight": "3.5–6 kg" },
+    { "slug": "3-6m", "label": "3–6m", "lo": "3m", "hi": "6m", "age": "3–6 months", "height": "62–68 cm", "weight": "6–7.5 kg" },
+    { "slug": "6-9m", "label": "6–9m", "lo": "6m", "hi": "9m", "age": "6–9 months", "height": "68–74 cm", "weight": "7.5–9 kg" },
+    { "slug": "9-12m", "label": "9–12m", "lo": "9m", "hi": "12m", "age": "9–12 months", "height": "74–80 cm", "weight": "9–10 kg" },
+    { "slug": "12-18m", "label": "12–18m", "lo": "12m", "hi": "18m", "age": "12–18 months", "height": "80–86 cm", "weight": "10–11.5 kg" },
+    { "slug": "18-24m", "label": "18–24m", "lo": "18m", "hi": "24m", "age": "18–24 months", "height": "86–92 cm", "weight": "11.5–13 kg" },
+    { "slug": "2y", "label": "2Y", "lo": "2Y", "hi": "2Y", "age": "2 years", "height": "92–98 cm", "weight": "13–14.5 kg" },
+    { "slug": "3y", "label": "3Y", "lo": "3Y", "hi": "3Y", "age": "3 years", "height": "98–104 cm", "weight": "14.5–16.5 kg" }
+  ],
+  "colours": {
+    "cream": "Butter",
+    "lilac": "Lilac",
+    "sky": "Sky",
+    "blush": "Blush",
+    "dove": "Dove"
+  },
+  "products": [
+    {
+      "slug": "ribbed-cotton-bodysuit",
+      "name": "Ribbed Cotton Bodysuit",
+      "category": "bodysuits",
+      "price": 2450,
+      "was": 2950,
+      "from": "newborn",
+      "to": "12-18m",
+      "colours": [
+        "cream",
+        "lilac",
+        "sky",
+        "blush"
+      ],
+      "featured": 1,
+      "added": 90,
+      "tone": 2
+    },
+    {
+      "slug": "cotton-kurta-set",
+      "name": "Cotton Kurta Set",
+      "category": "sets",
+      "price": 4950,
+      "from": "9-12m",
+      "to": "18-24m",
+      "colours": [
+        "cream",
+        "sky",
+        "lilac"
+      ],
+      "new": true,
+      "featured": 2,
+      "added": 98,
+      "tone": 4
+    },
+    {
+      "slug": "muslin-sleep-bag-05-tog",
+      "name": "Muslin Sleep Bag 0.5 TOG",
+      "category": "sleepwear",
+      "price": 4200,
+      "from": "3-6m",
+      "to": "18-24m",
+      "colours": [
+        "cream",
+        "sky",
+        "dove"
+      ],
+      "featured": 3,
+      "added": 80,
+      "tone": 3
+    },
+    {
+      "slug": "bamboo-sleepsuit",
+      "name": "Bamboo Sleepsuit",
+      "category": "sleepwear",
+      "price": 3650,
+      "from": "newborn",
+      "to": "9-12m",
+      "colours": [
+        "lilac",
+        "cream",
+        "sky",
+        "dove"
+      ],
+      "featured": 4,
+      "added": 85,
+      "tone": 1
+    },
+    {
+      "slug": "mittens-and-booties-set",
+      "name": "Mittens & Booties Set",
+      "category": "accessories",
+      "price": 1650,
+      "from": "newborn",
+      "to": "3-6m",
+      "colours": [
+        "cream",
+        "blush",
+        "dove"
+      ],
+      "featured": 9,
+      "added": 70,
+      "tone": 2
+    },
+    {
+      "slug": "reversible-bib-pair",
+      "name": "Reversible Bib Pair",
+      "category": "accessories",
+      "price": 1250,
+      "from": "6-9m",
+      "to": "12-18m",
+      "colours": [
+        "sky",
+        "lilac"
+      ],
+      "featured": 12,
+      "added": 60,
+      "tone": 3
+    },
+    {
+      "slug": "pointelle-romper",
+      "name": "Pointelle Romper",
+      "category": "bodysuits",
+      "price": 3200,
+      "from": "newborn",
+      "to": "9-12m",
+      "colours": [
+        "blush",
+        "cream",
+        "lilac"
+      ],
+      "featured": 5,
+      "added": 88,
+      "tone": 4
+    },
+    {
+      "slug": "waffle-knit-cardigan",
+      "name": "Waffle Knit Cardigan",
+      "category": "outerwear",
+      "price": 3900,
+      "from": "6-9m",
+      "to": "18-24m",
+      "colours": [
+        "cream",
+        "dove",
+        "lilac"
+      ],
+      "featured": 6,
+      "added": 75,
+      "tone": 1
+    },
+    {
+      "slug": "newborn-hospital-set",
+      "name": "Newborn Hospital Set",
+      "category": "newborn",
+      "price": 3450,
+      "from": "newborn",
+      "to": "0-3m",
+      "colours": [
+        "cream",
+        "sky",
+        "blush"
+      ],
+      "new": true,
+      "featured": 7,
+      "added": 97,
+      "tone": 2
+    },
+    {
+      "slug": "soft-knot-newborn-hat",
+      "name": "Soft Knot Newborn Hat",
+      "category": "newborn",
+      "price": 990,
+      "from": "newborn",
+      "to": "0-3m",
+      "colours": [
+        "cream",
+        "sky",
+        "blush"
+      ],
+      "oos": true,
+      "featured": 24,
+      "added": 40,
+      "tone": 4
+    },
+    {
+      "slug": "muslin-swaddle-wrap",
+      "name": "Muslin Swaddle Wrap",
+      "category": "newborn",
+      "price": 2250,
+      "from": "newborn",
+      "to": "0-3m",
+      "colours": [
+        "sky",
+        "cream"
+      ],
+      "featured": 8,
+      "added": 78,
+      "tone": 1
+    },
+    {
+      "slug": "muslin-napkins-6-pack",
+      "name": "Muslin Napkins 6-Pack",
+      "category": "napkins",
+      "price": 1950,
+      "from": "newborn",
+      "to": "3y",
+      "colours": [
+        "cream",
+        "sky"
+      ],
+      "featured": 10,
+      "added": 50,
+      "tone": 2
+    },
+    {
+      "slug": "bamboo-napkin-set",
+      "name": "Bamboo Napkin Set",
+      "category": "napkins",
+      "price": 2450,
+      "from": "newborn",
+      "to": "3y",
+      "colours": [
+        "cream",
+        "dove",
+        "lilac"
+      ],
+      "featured": 14,
+      "added": 45,
+      "tone": 3
+    },
+    {
+      "slug": "burp-cloth-and-napkin-duo",
+      "name": "Burp Cloth & Napkin Duo",
+      "category": "napkins",
+      "price": 1450,
+      "from": "newborn",
+      "to": "3y",
+      "colours": [
+        "sky",
+        "lilac"
+      ],
+      "new": true,
+      "featured": 15,
+      "added": 96,
+      "tone": 4
+    },
+    {
+      "slug": "hooded-fleece-jacket",
+      "name": "Hooded Fleece Jacket",
+      "category": "outerwear",
+      "price": 4650,
+      "from": "12-18m",
+      "to": "3y",
+      "colours": [
+        "lilac",
+        "dove",
+        "sky"
+      ],
+      "featured": 11,
+      "added": 65,
+      "tone": 1
+    },
+    {
+      "slug": "quilted-gilet",
+      "name": "Quilted Gilet",
+      "category": "outerwear",
+      "price": 3450,
+      "was": 3950,
+      "from": "3-6m",
+      "to": "2y",
+      "colours": [
+        "cream",
+        "sky",
+        "blush"
+      ],
+      "featured": 16,
+      "added": 52,
+      "tone": 2
+    },
+    {
+      "slug": "cable-knit-jumper",
+      "name": "Cable Knit Jumper",
+      "category": "outerwear",
+      "price": 3750,
+      "from": "6-9m",
+      "to": "3y",
+      "colours": [
+        "cream",
+        "lilac"
+      ],
+      "featured": 17,
+      "added": 48,
+      "tone": 3
+    },
+    {
+      "slug": "linen-shirt-and-shorts-set",
+      "name": "Linen Shirt & Shorts Set",
+      "category": "sets",
+      "price": 4450,
+      "from": "12-18m",
+      "to": "3y",
+      "colours": [
+        "cream",
+        "sky"
+      ],
+      "new": true,
+      "featured": 18,
+      "added": 99,
+      "tone": 4
+    },
+    {
+      "slug": "matching-pyjama-set",
+      "name": "Matching Pyjama Set",
+      "category": "sets",
+      "price": 3850,
+      "from": "6-9m",
+      "to": "3y",
+      "colours": [
+        "lilac",
+        "cream",
+        "sky",
+        "blush"
+      ],
+      "featured": 19,
+      "added": 58,
+      "tone": 1
+    },
+    {
+      "slug": "cotton-dungaree-set",
+      "name": "Cotton Dungaree Set",
+      "category": "sets",
+      "price": 4250,
+      "was": 4950,
+      "from": "9-12m",
+      "to": "2y",
+      "colours": [
+        "sky",
+        "cream"
+      ],
+      "featured": 20,
+      "added": 42,
+      "tone": 2
+    },
+    {
+      "slug": "zip-sleepsuit",
+      "name": "Zip Sleepsuit",
+      "category": "sleepwear",
+      "price": 3450,
+      "from": "3-6m",
+      "to": "3y",
+      "colours": [
+        "lilac",
+        "cream",
+        "dove"
+      ],
+      "new": true,
+      "featured": 22,
+      "added": 94,
+      "tone": 4
+    },
+    {
+      "slug": "short-sleeve-bodysuit-3-pack",
+      "name": "Short-Sleeve Bodysuit 3-Pack",
+      "category": "bodysuits",
+      "price": 3950,
+      "from": "newborn",
+      "to": "18-24m",
+      "colours": [
+        "cream",
+        "sky",
+        "lilac",
+        "blush"
+      ],
+      "featured": 23,
+      "added": 36,
+      "tone": 1
+    },
+    {
+      "slug": "long-sleeve-bodysuit",
+      "name": "Long-Sleeve Bodysuit",
+      "category": "bodysuits",
+      "price": 2150,
+      "from": "0-3m",
+      "to": "3y",
+      "colours": [
+        "cream",
+        "dove"
+      ],
+      "featured": 21,
+      "added": 38,
+      "tone": 3
+    },
+    {
+      "slug": "kimono-bodysuit-2-pack",
+      "name": "Kimono Bodysuit 2-Pack",
+      "category": "bodysuits",
+      "price": 2750,
+      "from": "newborn",
+      "to": "9-12m",
+      "colours": [
+        "cream",
+        "blush"
+      ],
+      "featured": 13,
+      "added": 56,
+      "tone": 2
+    },
+    {
+      "slug": "sun-hat",
+      "name": "Sun Hat",
+      "category": "accessories",
+      "price": 1350,
+      "from": "6-9m",
+      "to": "3y",
+      "colours": [
+        "cream",
+        "sky",
+        "blush"
+      ],
+      "featured": 25,
+      "added": 34,
+      "tone": 4
+    }
+  ]
+}

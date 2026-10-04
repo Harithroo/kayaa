@@ -19,9 +19,11 @@ Kayaa is an online baby clothing store serving customers across Sri Lanka. In th
 
 **When you create an account.** Your name, email address, mobile number and a password. We store your password in a scrambled (hashed) form, so nobody at Kayaa can read it. We also record whether you have confirmed your email address.
 
-**When you write a review.** Your name, your rating and comments, and whether you bought the product from us, so we can show a "Verified purchase" label.
+**When you write a review.** Your name, an email address (never shown publicly), your rating, an optional headline and your comments. If you are signed in, we also record whether you bought the product from us, so we can show a "Verified purchase" label.
 
-**When you contact us.** Your name, email address and message. If you message us on WhatsApp, WhatsApp's own privacy policy also applies to that conversation.
+**When you contact us.** Your name, your mobile number or email, an optional order number and your message. If you message us on WhatsApp, WhatsApp's own privacy policy also applies to that conversation.
+
+**When you save items.** Items you add to your wishlist are stored [[TODO: with your account, or in your browser if you are not signed in]].
 
 **When you pay.** You enter your card details on the secure payment page of our payment provider, Onepay. We do not see or store your full card number. We receive the payment status and a reference so we know whether your order is paid.
 
@@ -32,7 +34,8 @@ We do not ask for your baby's name, date of birth or photo. The clothing size yo
 ## How we use your information
 
 - to process and deliver your order and keep you informed about it
-- to let you look up your order with your order reference and mobile number
+- to let you look up your order with your order number and mobile number
+- to send you updates about your order, including a WhatsApp message when your parcel is dispatched [[TODO: confirm]]
 - to run your account, including confirming your email address and resetting your password
 - to answer questions and handle returns and refunds
 - to publish reviews after we have checked them
@@ -94,7 +97,7 @@ Under the Personal Data Protection Act, No. 9 of 2022 you can ask us to:
 - stop using your information for direct marketing
 - accept your withdrawal of consent where we rely on consent
 
-To use any of these rights, email [[TODO: privacy email]] with your name, mobile number and order reference so we can check it is you. We will reply within the time the law requires [[TODO: confirm]]. If you are not happy with our answer you can complain to the Data Protection Authority of Sri Lanka.
+To use any of these rights, email [[TODO: privacy email]] with your name, mobile number and order number so we can check it is you. We will reply within the time the law requires [[TODO: confirm]]. If you are not happy with our answer you can complain to the Data Protection Authority of Sri Lanka.
 
 **Closing your account.** We must keep order records for accounting, so when you ask us to close your account we remove or anonymise your personal details rather than deleting the order record itself.
 

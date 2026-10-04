@@ -1,48 +1,48 @@
 # FAQs
 
-Each group has a placement. Product FAQs appear on product pages. Contact FAQs appear on the contact page. Size guide FAQs appear on the size guide page.
+Each group has a placement. Product FAQs appear on product pages, contact FAQs on the contact page, size guide FAQs on the size guide page. Facts come from the staging site and are marked to confirm.
 
 ## Product FAQs (placement: product)
 
 ### How do I choose the right size?
-Use our [size guide](size-guide.html) to match your baby's weight and height. If your baby is between sizes, [[PROPOSED: we suggest the larger size]]. Age labels such as 3-6M are a rough guide only.
+Our sizes follow age bands, but height and weight are the better guide. Check your baby against our [size guide](size-guide.html). If your baby is between two sizes, go up.
 
 ### How should I wash it?
-Please follow the care label on the garment. [[TODO: add Kayaa's care instructions, for example temperature and drying]] We suggest washing new baby clothes once before the first wear.
+Please follow the care label. As a general guide, machine wash cold on a gentle cycle, tumble dry low or line dry in the shade, and do not bleach. [[TODO: confirm care instructions per product]]
 
 ### How long does delivery take?
-We dispatch within [[PROPOSED: 1 to 2 working days]] of confirming your payment. Delivery time after that depends on your district; you will see the estimate at checkout once you choose your district. See [Delivery information](delivery.html).
+Colombo and suburbs usually take {{cfg:delivery_colombo_days}} working days and the rest of the island {{cfg:delivery_island_days}}. Orders placed before {{cfg:dispatch_cutoff}} on a working day are dispatched the same day [[TODO: confirm]]. See [Delivery](delivery.html).
 
-### What is your returns policy?
-You can return unworn, unwashed items with tags within [[PROPOSED: 7 days]] of delivery, and exchange for another size subject to stock. Full details are on our [Returns page](returns.html).
+### What if it does not fit?
+Exchange any unworn, unwashed item with its tags on within {{cfg:return_window_days}} days of delivery. We cover the return courier cost on size swaps. See [Returns & exchanges](returns.html).
 
 ### How can I pay?
-You pay online by card (Visa or Mastercard) through our payment partner, Onepay. You enter your card details on Onepay's secure page, and we never see your full card number.
+You pay online by card (Visa or Mastercard) through our payment partner. You enter your card details on a secure payment page and we never see your full card number. We do not offer cash on delivery.
 
 ## Contact FAQs (placement: contact)
 
 ### How quickly will you reply?
-[[PROPOSED: We reply within 1 working day.]] For the fastest answer, message us on WhatsApp at [[TODO: WhatsApp number]].
+WhatsApp is fastest: {{cfg:support_hours}} at [[TODO: WhatsApp number]]. [[PROPOSED: We reply to messages within 1 working day.]]
 
 ### Can I change my delivery address after ordering?
-[[PROPOSED: Contact us as soon as possible with your order reference and mobile number. We can change the address only if the order has not been dispatched.]]
+[[PROPOSED: Contact us as soon as possible with your order number and mobile number. We can change the address only if the order has not been dispatched.]]
 
 ### How do I track my order?
-Open [Track order](track.html) and enter your order reference (it looks like KY-261003-A3F9) and the mobile number you used at checkout.
+Open [Track order](track.html) and enter your order number (it looks like KY-261003-A3F9) and the mobile number you used at checkout.
 
 ### I paid but my order shows "pending". What should I do?
-Card payments can take a few minutes to be confirmed. Please do not pay again. Check your order on the [Track order](track.html) page. If it has not updated after [[PROPOSED: 30 minutes]], contact us with your order reference.
+Card payments can take a few minutes to be confirmed. Please do not pay again. Check your order on the [Track order](track.html) page. If it has not updated after [[PROPOSED: 30 minutes]], contact us with your order number.
 
 ## Size guide FAQs (placement: size guide)
 
 ### What if my baby is between sizes?
-[[PROPOSED: Choose the larger size.]] If your baby's weight and height point to different sizes, use the larger one.
+Go up. Babies grow quickly and a slightly roomy fit is more comfortable in the heat.
 
-### Do you size by age or by weight?
-By weight and height. The age label, such as 3-6M, is only a rough guide because babies grow at different rates.
+### Do you size by age or by height and weight?
+Our sizes follow age bands, but every baby is different, so height and weight are the better guide.
 
 ### Will the clothes shrink?
 [[TODO: confirm for each fabric, then answer. Until then, advise following the care label.]]
 
 ### Can I exchange for a different size?
-Yes, subject to stock, within [[PROPOSED: 7 days]] of delivery. See our [Returns page](returns.html).
+Yes, within {{cfg:return_window_days}} days of delivery, and we cover the return courier cost on size swaps. See [Returns & exchanges](returns.html).

@@ -1,0 +1,11 @@
+/* Wishlist: saved products as a grid, each with Remove and Choose size */
+
+.wishlist { padding-block: var(--space-2) var(--space-8); }
+.wishlist h1 { margin-top: var(--space-3); font-size: var(--fs-h1); }
+.wishlist__lede { margin: var(--space-2) 0 var(--space-6); color: var(--ink-soft); }
+.wishlist .product-card__quick { display: none; }   /* the page has its own Choose size button */
+.wishlist-actions { position: relative; z-index: var(--z-raised); display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }   /* above the card's stretched link */
+.wishlist-actions .btn { flex: 1 1 auto; }
+.wishlist [data-wishlist-grid] > li:not([data-saved]) { display: none; }
+.wishlist-empty { max-width: 520px; margin: var(--space-6) auto 0; }
+.wishlist-empty[hidden] { display: none; }

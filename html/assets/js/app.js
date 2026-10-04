@@ -6,9 +6,13 @@
   var $ = function (sel, ctx) { return (ctx || document).querySelector(sel); };
   var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
 
+  // one currency helper: "Rs. 2,450" (the prefix comes from the site config)
   function formatMoney(n) {
-    return 'Rs ' + Math.round(n).toLocaleString('en-US');
+    var prefix = (window.KAYAA_CONFIG && window.KAYAA_CONFIG.currency_prefix) || '';
+    return prefix + ' ' + Math.round(n).toLocaleString('en-US');
   }
+  window.Kayaa = window.Kayaa || {};
+  window.Kayaa.formatMoney = formatMoney;
 
   /* Delivery estimate wording, the one helper used by checkout, the delivery page and anything else that shows an ETA.
      The backend sends two integers per district (min_days, max_days); the wording belongs to the frontend:
@@ -433,11 +437,13 @@
       var btn = e.target.closest('[data-quick-add]');
       if (!btn) return;
       current = {
+        slug: btn.getAttribute('data-slug') || '',
         name: btn.getAttribute('data-name'),
         price: parseInt(btn.getAttribute('data-price'), 10),
         was: parseInt(btn.getAttribute('data-was'), 10) || 0,
         tone: btn.getAttribute('data-tone') || '1'
       };
+      fillSheetOptions(btn);
       $('[data-qa-name]', sheet).textContent = current.name;
       $('[data-qa-price]', sheet).textContent = formatMoney(current.price);
       var was = $('[data-qa-was]', sheet);
@@ -446,6 +452,24 @@
       setSheetTone();
       openLayer(sheet, btn);
     });
+
+    // sizes and colours of the chosen product come from the card (data-sizes, data-colours: slugs); labels from the catalogue
+    function fillSheetOptions(btn) {
+      var cat = window.KAYAA_CATALOGUE;
+      var sizes = (btn.getAttribute('data-sizes') || '').split(/\s+/).filter(Boolean);
+      var colours = (btn.getAttribute('data-colours') || '').split(/\s+/).filter(Boolean);
+      if (!cat || !sizes.length) return;   // fall back to the options in the markup
+      var sizeLabel = {};
+      cat.sizes.forEach(function (s) { sizeLabel[s.slug] = s.label; });
+      var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
+      $('[data-qa-sizes]', sheet).innerHTML = sizes.map(function (s, i) {
+        return '<label class="size-box"><input class="visually-hidden" type="radio" name="size" value="' + s + '" data-label="' + esc(sizeLabel[s] || s) + '"' + (i === 0 ? ' checked' : '') + '><span>' + esc(sizeLabel[s] || s) + '</span></label>';
+      }).join('');
+      $('[data-qa-colours]', sheet).innerHTML = colours.map(function (c, i) {
+        var label = cat.colours[c] || c;
+        return '<label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="' + c + '" data-label="' + esc(label) + '"' + (i === 0 ? ' checked' : '') + '><span class="dot dot--' + c + '" aria-hidden="true"></span><span class="visually-hidden">' + esc(label) + '</span></label>';
+      }).join('');
+    }
 
     // the thumbnail follows the selected colour
     function setSheetTone() {
@@ -464,11 +488,11 @@
       if (!store || !size || !colour) return;
       // same shape as the product page form: colour slug + label, size key + label
       store.add({
-        productSlug: store.slugify(current.name),
+        productSlug: current.slug || store.slugify(current.name),
         name: current.name,
         colourSlug: colour.value,
         colourLabel: colour.getAttribute('data-label') || colour.value,
-        sizeSlug: size.value.toLowerCase(),
+        sizeSlug: size.value,
         sizeLabel: size.getAttribute('data-label') || size.value,
         unitPrice: current.price,
         wasPrice: current.was,

@@ -19,7 +19,7 @@
   var CFG = window.KAYAA_CONFIG || {};   // tools/site-config.json via assets/js/site-config.js (Blade: view variables)
   var FREE_AT = CFG.free_shipping_over;  // free delivery from this subtotal
   var FEE = CFG.shipping_fee;            // flat delivery fee (TODO confirm it is not district-based)
-  var COLOUR_TONE = { lilac: 'var(--tone-4)', cream: 'var(--swatch-cream)', sky: 'var(--sky-tint)' };
+  var COLOUR_TONE = { lilac: 'var(--tone-4)', cream: 'var(--swatch-cream)', sky: 'var(--sky-tint)', blush: 'var(--swatch-blush)', dove: 'var(--swatch-dove)' };
 
   var memory = {};
   function read(k) {
@@ -34,12 +34,12 @@
     delete memory[k];
   }
   var clone = function (x) { return JSON.parse(JSON.stringify(x)); };
-  var money = function (n) { return 'Rs ' + Math.round(n).toLocaleString('en-US'); };
+  var money = function (n) { var p = (window.KAYAA_CONFIG && window.KAYAA_CONFIG.currency_prefix) || ''; return p + ' ' + Math.round(n).toLocaleString('en-US'); };
   var slugify = function (s) { return String(s).toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); };
 
   var SEED = [
-    { id: 'ruffle-sleeve-dress|lilac|3-6m', productSlug: 'ruffle-sleeve-dress', name: 'Ruffle Sleeve Dress', colourSlug: 'lilac', colourLabel: 'Lilac', sizeSlug: '3-6m', sizeLabel: '3-6M', unitPrice: 3450, wasPrice: 0, qty: 1, stock: 8, tone: 'lilac' },
-    { id: 'cotton-sleepsuit|cream|0-3m', productSlug: 'cotton-sleepsuit', name: 'Cotton Sleepsuit', colourSlug: 'cream', colourLabel: 'Cream', sizeSlug: '0-3m', sizeLabel: '0-3M', unitPrice: 2850, wasPrice: 0, qty: 1, stock: 9, tone: 'cream' }
+    { id: 'ribbed-cotton-bodysuit|lilac|3-6m', productSlug: 'ribbed-cotton-bodysuit', name: 'Ribbed Cotton Bodysuit', colourSlug: 'lilac', colourLabel: 'Lilac', sizeSlug: '3-6m', sizeLabel: '3–6m', unitPrice: 2450, wasPrice: 2950, qty: 1, stock: 8, tone: 'lilac' },
+    { id: 'bamboo-sleepsuit|cream|newborn', productSlug: 'bamboo-sleepsuit', name: 'Bamboo Sleepsuit', colourSlug: 'cream', colourLabel: 'Butter', sizeSlug: 'newborn', sizeLabel: 'Newborn', unitPrice: 3650, wasPrice: 0, qty: 1, stock: 9, tone: 'cream' }
   ];
 
   var page = document.body ? document.body.getAttribute('data-page') : '';
@@ -97,7 +97,7 @@
       name: item.name,
       colourSlug: item.colourSlug,
       colourLabel: item.colourLabel,
-      sizeSlug: item.sizeSlug || String(item.sizeLabel).toLowerCase(),
+      sizeSlug: item.sizeSlug || String(item.sizeLabel).toLowerCase().replace(/[\u2013\u2014]/g, '-'),
       sizeLabel: item.sizeLabel,
       unitPrice: item.unitPrice,
       wasPrice: item.wasPrice || 0,

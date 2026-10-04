@@ -1,6 +1,6 @@
 /* Product page behaviour (production code: stays after the Blade conversion).
    Reads the variants from <script type="application/json" id="product-variants">
-   ([{"colour":"lilac","size":"3-6M","stock":4}, ...]) and the low-stock threshold from
+   ([{"colour":"lilac","size":"3-6m","stock":4}, ...]; size is the size slug) and the low-stock threshold from
    data-low-stock-threshold on the buy form (the same value as window.KAYAA_CONFIG.low_stock_threshold). Blade generates both. */
 (function () {
   'use strict';
@@ -29,6 +29,8 @@
   var sizeInputs = $$('input[name="size"]', form);
   var COLOUR_NAME = {};
   colourInputs.forEach(function (i) { COLOUR_NAME[i.value] = $('span.visually-hidden', i.parentNode).textContent.trim(); });
+  var SIZE_LABEL = {};   // size slug -> the full label shown on the box ("3–6m", "Newborn")
+  sizeInputs.forEach(function (i) { SIZE_LABEL[i.value] = $('span', i.parentNode).textContent.trim(); });
   var allOut = variants.every(function (v) { return !(parseInt(v.stock, 10) > 0); });
 
   var stockNote = $('[data-stock-note]');
@@ -169,7 +171,7 @@
     if (allOut) { msg = 'Out of stock'; cls = 'is-out'; }
     else if (n === null) msg = 'Choose a size to see availability';
     else if (n >= 1 && n <= LOW) { msg = 'Only ' + n + ' left'; cls = 'is-low'; }
-    else msg = 'In stock';
+    else msg = stockNote.getAttribute('data-in-stock-text') || 'In stock';
     stockNote.textContent = msg;
     stockNote.className = 'buy__stock' + (cls ? ' ' + cls : '');
 
@@ -180,7 +182,7 @@
     addBtn.textContent = allOut ? 'Out of stock' : 'Add to cart';
     stickyBtn.disabled = allOut;
     stickyBtn.textContent = allOut ? 'Out of stock' : (sel.size ? 'Add to cart' : 'Choose size');
-    stickySize.textContent = sel.size ? 'Size ' + sel.size + ' · ' + COLOUR_NAME[sel.colour] : (allOut ? 'Currently unavailable' : 'Select a size');
+    stickySize.textContent = sel.size ? 'Size ' + SIZE_LABEL[sel.size] + ' · ' + COLOUR_NAME[sel.colour] : (allOut ? 'Currently unavailable' : 'Select a size');
     $('[data-sticky-price]').textContent = $('.price__now', form.parentNode).textContent;
 
     if (sel.size) hideSizeError();
@@ -231,8 +233,8 @@
         name: NAME,
         colourSlug: sel.colour,
         colourLabel: COLOUR_NAME[sel.colour],
-        sizeSlug: sel.size.toLowerCase(),
-        sizeLabel: sel.size,
+        sizeSlug: sel.size,
+        sizeLabel: SIZE_LABEL[sel.size],
         unitPrice: unitPrice(),
         wasPrice: parseInt(form.getAttribute('data-was-price'), 10) || 0,
         qty: Math.max(1, parseInt(qtyInput.value, 10) || 1),

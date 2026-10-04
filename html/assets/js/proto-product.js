@@ -1,7 +1,8 @@
 /* PROTOTYPE ONLY - delete at Blade conversion.
    Loaded before product.js. The sample variant data lives in the <script id="product-variants"> block of the
-   page; this file only applies the ?demo= states (sale, new, low-stock, oos, no-reviews, reviewed,
-   review-success, review-error, review-throttle) and fakes the review form submit.
+   page; this file only applies the ?demo= states (regular, new, low-stock, oos, no-reviews, reviewed,
+   review-success, review-error, review-throttle) and fakes the review form submit. The sample product is on sale by default
+   (the current price with the struck-through compare-at price).
    Every product card in the prototype opens this same sample product. */
 (function () {
   'use strict';
@@ -11,7 +12,7 @@
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
   var demo = new URLSearchParams(location.search).get('demo') || '';
-  var money = function (n) { return 'Rs ' + Math.round(n).toLocaleString('en-US'); };
+  var money = window.Kayaa.formatMoney;
 
   /* ---- stock states: rewrite the variants JSON that product.js reads ---- */
   if (demo === 'oos' || demo === 'low-stock') {
@@ -24,18 +25,14 @@
   /* ---- price and badge ---- */
   var form = $('[data-buy-form]');
   var badge = $('[data-product-badge]');
-  if (demo === 'sale') {
-    form.setAttribute('data-unit-price', '1190');
-    form.setAttribute('data-was-price', '1490');
-    badge.className = 'badge badge--accent gallery__badge';
-    badge.textContent = 'Sale';
-    $('[data-price-row]').innerHTML =
-      '<p class="price price--sale price--lg"><span class="visually-hidden">Sale price </span><span class="price__now">' + money(1190) +
-      '</span> <s class="price__was"><span class="visually-hidden">Was </span>' + money(1490) + '</s></p>' +
-      '<span class="badge badge--lilac">Save ' + money(300) + '</span>';
-  } else if (demo === 'new') {
-    badge.className = 'badge badge--lilac gallery__badge';
-    badge.textContent = 'New';
+  if (demo === 'regular' || demo === 'new') {
+    // no sale: the compare-at price and the Save badge go away
+    form.setAttribute('data-unit-price', '2950');
+    form.removeAttribute('data-was-price');
+    $('[data-price-row]').innerHTML = '<p class="price price--lg"><span class="price__now">' + money(2950) + '</span></p>';
+    if (demo === 'new') { badge.className = 'badge badge--lilac gallery__badge'; badge.textContent = 'New'; }
+    else badge.hidden = true;
+    $('[data-sticky-price]').textContent = money(2950);
   }
 
   /* ---- reviews ---- */
@@ -70,13 +67,17 @@
     var errors = [];
     var hasRating = !!$('input[name="rating"]:checked', rf);
     var name = $('[name="name"]', rf).value.trim();
-    var comment = $('[name="comment"]', rf).value.trim();
+    var email = $('[name="email"]', rf).value.trim();
+    var body = $('[name="body"]', rf).value.trim();
+    var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     setFieldError('rating', hasRating ? '' : 'Please choose a rating.');
     setFieldError('name', name ? '' : 'Please enter your name.');
-    setFieldError('comment', comment ? '' : 'Please write a few words about the product.');
+    setFieldError('email', !email ? 'Please enter your email.' : (emailOk ? '' : 'Enter a valid email address, for example name@example.com.'));
+    setFieldError('body', body ? '' : 'Please write a few words about the product.');
     if (!hasRating) errors.push('Choose a rating');
     if (!name) errors.push('Enter your name');
-    if (!comment) errors.push('Write a comment');
+    if (!emailOk) errors.push(email ? 'Enter a valid email address' : 'Enter your email');
+    if (!body) errors.push('Write your review');
     hideAlerts();
     if (errors.length) {
       $('[data-review-errors]').innerHTML = errors.map(function (m) { return '<li>' + m + '</li>'; }).join('');

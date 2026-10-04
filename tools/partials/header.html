@@ -14,26 +14,15 @@
             <div class="mega" id="mega-shop" data-mega-panel inert>
               <div class="mega__panel">
                 <div class="mega__main">
-                  <p class="eyebrow">Shop by age</p>
-                  <ul class="mega__ages" role="list">
-                    <!-- loop: age_groups -->
-                    <li><a class="mega-tile" href="{{root}}shop.html?age=newborn" style="--tone: var(--tone-1)"><span class="mega-tile__label"><span>Newborn</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="{{root}}shop.html?age=0-3-months" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>0–3</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="{{root}}shop.html?age=3-6-months" style="--tone: var(--tone-3)"><span class="mega-tile__label"><span>3–6</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="{{root}}shop.html?age=6-12-months" style="--tone: var(--tone-4)"><span class="mega-tile__label"><span>6–12</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="{{root}}shop.html?age=1-2-years" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>1–2</span><span>years</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <!-- /loop -->
+                  <p class="eyebrow">Shop by size</p>
+                  <ul class="chip-list mega__sizes" role="list">
+                    <!-- gen: size-chips-mega -->
+                    <!-- /gen: size-chips-mega -->
                   </ul>
                   <p class="eyebrow mega__eyebrow">Browse by category</p>
                   <ul class="chip-list" role="list">
-                    <!-- loop: categories -->
-                    <li><a class="chip" href="{{root}}category.html?c=bodysuits">Bodysuits</a></li>
-                    <li><a class="chip" href="{{root}}category.html?c=sleepsuits">Sleepsuits</a></li>
-                    <li><a class="chip" href="{{root}}category.html?c=sets">Sets</a></li>
-                    <li><a class="chip" href="{{root}}category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
-                    <li><a class="chip" href="{{root}}category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
-                    <li><a class="chip" href="{{root}}category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
-                    <!-- /loop -->
+                    <!-- gen: cat-chips -->
+                    <!-- /gen: cat-chips -->
                   </ul>
                 </div>
                 <!-- TODO: placeholder copy, confirm with client -->
@@ -49,6 +38,7 @@
               </div>
             </div>
           </li>
+          <li><a class="primary-nav__link" href="{{root}}categories.html" data-nav="categories">Categories</a></li>
           <li><a class="primary-nav__link" href="{{root}}shop.html?sort=new">New in</a></li>
           <li><a class="primary-nav__link" href="{{root}}shop.html?sale=1">Sale</a></li>
           <li><a class="primary-nav__link" href="{{root}}size-guide.html" data-nav="size-guide">Size guide</a></li>
@@ -65,6 +55,7 @@
             <button type="submit" class="header-search__submit" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           </div>
         </form>
+        <a class="icon-btn site-header__wishlist" href="{{root}}wishlist.html" data-nav="wishlist" aria-label="Wishlist"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg></a>
         <!-- blade: @auth account/index.html @else account/login.html -->
         <a class="icon-btn site-header__account" href="{{root}}account/login.html" data-nav="account" data-account-link aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
         <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
@@ -77,14 +68,8 @@
     <nav class="category-row" aria-label="Categories">
       <div class="container">
         <ul>
-          <!-- loop: categories -->
-          <li><a href="{{root}}category.html?c=bodysuits">Bodysuits</a></li>
-          <li><a href="{{root}}category.html?c=sleepsuits">Sleepsuits</a></li>
-          <li><a href="{{root}}category.html?c=sets">Sets</a></li>
-          <li><a href="{{root}}category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
-          <li><a href="{{root}}category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
-          <li><a href="{{root}}category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
-          <!-- /loop -->
+          <!-- gen: cat-row -->
+          <!-- /gen: cat-row -->
         </ul>
       </div>
     </nav>

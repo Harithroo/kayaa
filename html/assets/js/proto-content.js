@@ -16,7 +16,7 @@
   if (demo === 'sent') alertEl('sent').hidden = false;
   if (demo === 'throttle') alertEl('throttle').hidden = false;
   if (demo === 'errors') {
-    set('email', 'amaya@example');
+    set('contact', 'amaya@example');
     form.dispatchEvent(new Event('submit', { cancelable: true }));
   }
 

@@ -1,73 +1,106 @@
-# Category and age intros
+# Category and size intros
 
-Each entry gives the H1, the meta title, the meta description and a 60 to 90 word intro shown at the top of the listing. The intros are written to help shoppers first and search engines second. They make no claims about fabric or certification.
+Each entry gives the h1, meta title, meta description and a short intro for the top of the listing. Categories live at /baby/{slug} (prototype: category.html?c={slug}). Sizes are filters (prototype: shop.html?size={slug}). No intro makes a fabric or certification claim.
 
-## Categories
+## Categories (department: Baby)
 
-### Bodysuits (category.html?c=bodysuits)
-- h1: Baby Bodysuits
-- meta_title: Baby Bodysuits in Sri Lanka | Kayaa
-- meta_description: Shop soft baby bodysuits sized by weight and height. Everyday essentials for newborns to 2 years, with secure card payment and delivery across Sri Lanka.
-- intro: A bodysuit is the layer your baby wears most. It stays put under dresses, trousers and sleepsuits, and it is quick to change when you are doing it many times a day. Choose by your baby's weight and height rather than age alone, and use our size guide if you are unsure. Keeping a few in the next size up saves a rush when a growth spurt arrives.
-
-### Sleepsuits (category.html?c=sleepsuits)
-- h1: Baby Sleepsuits
-- meta_title: Baby Sleepsuits in Sri Lanka | Kayaa
-- meta_description: Browse baby sleepsuits for naps and nights, sized by weight and height. Secure card payment and delivery across Sri Lanka.
-- intro: Sleepsuits are the all-in-one outfit for naps, nights and slow mornings. Look for easy fastenings you can manage half asleep, and pick the size by weight and height. In the newborn weeks it helps to have several, because babies often need changing more than once a night. Not sure which size? Our size guide shows you how to measure.
-
-### Sets (category.html?c=sets)
-- h1: Baby Clothing Sets
-- meta_title: Baby Clothing Sets in Sri Lanka | Kayaa
-- meta_description: Matching baby clothing sets sized by weight and height. Easy outfits for everyday, gifts and special occasions, delivered across Sri Lanka.
-- intro: Matching sets take the guesswork out of getting dressed. They make easy gifts, and they are handy when you want a complete outfit in one go. [[TODO: describe what Kayaa's sets typically contain]] Choose your size by weight and height, and check each product page for what is included.
-
-### Dresses & Rompers (category.html?c=dresses-rompers)
-- h1: Baby Dresses & Rompers
-- meta_title: Baby Dresses & Rompers in Sri Lanka | Kayaa
-- meta_description: Baby dresses and rompers for play, outings and celebrations, sized by weight and height. Secure card payment and delivery across Sri Lanka.
-- intro: Rompers and dresses for everyday play and for the days that call for something special, from a first outing to a family celebration. Choose by your baby's weight and height, and think about layers: a bodysuit underneath makes changing easier and the outfit last longer.
-
-### Hats & Mitts (category.html?c=hats-mitts)
-- h1: Baby Hats & Mittens
-- meta_title: Baby Hats & Mittens in Sri Lanka | Kayaa
-- meta_description: Baby hats, bonnets and mittens in soft styles for newborns and little ones. Delivered across Sri Lanka with secure card payment.
-- intro: Small accessories do a lot of work. Hats protect little heads from the sun and the breeze, and mittens keep tiny scratching hands covered in the early weeks. Most accessories fit a range of sizes, so check the size notes on each product page.
-
-### Swaddles & Blankets (category.html?c=swaddles-blankets)
-- h1: Baby Swaddles & Blankets
-- meta_title: Baby Swaddles & Blankets in Sri Lanka | Kayaa
-- meta_description: Soft baby swaddles and blankets for settling, feeding and travelling. Secure card payment and delivery across Sri Lanka.
-- intro: Wraps, swaddles and blankets are useful from the first day: for settling, feeding, prams and car seats. Check the care label before washing. If you plan to swaddle, ask your child health clinic about safe-sleep advice for your baby's age.
-
-## Ages (shop.html?age=...)
-
-### Newborn (age=newborn)
+### Newborn (slug: newborn)
 - h1: Newborn Baby Clothes
 - meta_title: Newborn Baby Clothes in Sri Lanka | Kayaa
-- meta_description: Soft newborn baby clothes for the first weeks, sized by weight and height. Secure card payment and delivery across Sri Lanka.
-- intro: The first weeks call for easy-to-change pieces that are gentle against new skin. Babies often outgrow the smallest size quickly, so a few essentials usually go further than a full wardrobe. Check your baby's weight and length against our size guide.
+- meta_description: Soft newborn baby clothes for the first weeks, with a clear size guide. Secure card payment and island-wide delivery across Sri Lanka.
+- intro: Everything for the first weeks in one place: soft, easy-to-change pieces from Newborn size. Babies grow quickly at the start, so a few essentials often go further than a full wardrobe. Check your baby's height and weight against our size guide, and if you are between two sizes, go up.
 
-### 0 to 3 months (age=0-3-months)
-- h1: Baby Clothes for 0 to 3 Months
+### Bodysuits (slug: bodysuits)
+- h1: Baby Bodysuits
+- meta_title: Baby Bodysuits in Sri Lanka | Kayaa
+- meta_description: Soft baby bodysuits from Newborn to 3Y, with a clear size guide. Secure card payment and island-wide delivery across Sri Lanka.
+- intro: A bodysuit is the layer your baby wears most. It stays put under dresses, trousers and sleepsuits, and it is quick to change when you are doing it many times a day. Choose your size by age band and check it against height and weight in our size guide. A little stretch is forgiving if you are buying a gift.
+
+### Sleepwear (slug: sleepwear)
+- h1: Baby Sleepwear
+- meta_title: Baby Sleepwear in Sri Lanka | Kayaa
+- meta_description: Sleep bags, sleepsuits and vests for naps and nights. Soft baby sleepwear with a clear size guide and island-wide delivery in Sri Lanka.
+- intro: Sleep bags, sleepsuits and vests for naps and nights. Pick the size by age band and check it against height and weight; a slightly roomy fit is comfortable on warm nights. Follow the care label, and ask your child health clinic about safe-sleep advice for your baby's age.
+
+### Sets (slug: sets)
+- h1: Baby Clothing Sets
+- meta_title: Baby Clothing Sets in Sri Lanka | Kayaa
+- meta_description: Matching baby clothing sets from Kayaa. Easy outfits for everyday and gifts, with island-wide delivery across Sri Lanka.
+- intro: Matching sets take the guesswork out of getting dressed, and they make easy gifts. [[TODO: describe what Kayaa's sets typically contain]] Choose by age band, check height and weight in our size guide, and look at each product page to see what is included.
+
+### Outerwear (slug: outerwear)
+- h1: Baby Outerwear
+- meta_title: Baby Outerwear in Sri Lanka | Kayaa
+- meta_description: Soft baby cardigans and light layers for cooler evenings and rainy days. Secure card payment and island-wide delivery in Sri Lanka.
+- intro: Light layers for cooler evenings, air-conditioned rooms and rainy days. [[TODO: confirm the range, for example cardigans and jackets]] Choose by age band, and go up a size if your baby is between two sizes so the layer fits over a bodysuit.
+
+### Napkins (slug: napkins)
+- h1: Baby Napkins
+- meta_title: Baby Napkins in Sri Lanka | Kayaa
+- meta_description: [[TODO: one sentence describing Kayaa's napkins]]. Island-wide delivery across Sri Lanka with secure card payment.
+- intro: [[TODO: describe what Kayaa's napkins are (for example cloth nappies or muslin squares) and who they suit.]] Check each product page for the fabric, size and care instructions.
+
+### Accessories (slug: accessories)
+- h1: Baby Accessories
+- meta_title: Baby Accessories in Sri Lanka | Kayaa
+- meta_description: Baby mittens, booties, bibs and small essentials. Soft, practical accessories with island-wide delivery across Sri Lanka.
+- intro: Mittens, booties, bibs and other small essentials. Many accessories fit a range of ages, so check the size range shown on each product. They are also easy gifts to add to an order.
+
+## Sizes (shop.html?size=...)
+
+Size pages use the label with an en dash for display and an ASCII slug in the URL.
+
+### Newborn (slug: newborn)
+- h1: Clothes for Newborn Size
+- meta_title: Newborn Size Baby Clothes | Kayaa
+- meta_description: Soft baby clothes in Newborn size, up to about 50 cm and 3.5 kg. Island-wide delivery across Sri Lanka.
+- intro: Newborn size covers babies up to 50 cm and 3.5 kg. Check height and weight in the size guide, and go up if you are between sizes.
+
+### 0–3m (slug: 0-3m)
+- h1: Baby Clothes 0–3m
 - meta_title: Baby Clothes 0-3 Months | Kayaa
-- meta_description: Comfortable baby clothes for 0 to 3 months, chosen by weight and height. Delivered across Sri Lanka with secure card payment.
-- intro: Between bath, feeds and naps, babies at this stage need pieces that are quick to put on and comfortable to wear. Choose by weight and height, and think about layering so you can adapt to the weather through the day.
+- meta_description: Comfortable baby clothes in size 0-3m. Check height and weight in our size guide. Delivery across Sri Lanka.
+- intro: Size 0–3m fits roughly 50 to 58 cm and 3.5 to 5.5 kg. Easy-to-change pieces are the most useful at this stage.
 
-### 3 to 6 months (age=3-6-months)
-- h1: Baby Clothes for 3 to 6 Months
+### 3–6m (slug: 3-6m)
+- h1: Baby Clothes 3–6m
 - meta_title: Baby Clothes 3-6 Months | Kayaa
-- meta_description: Baby clothes for 3 to 6 months that move with your baby. Sized by weight and height, delivered across Sri Lanka.
-- intro: Babies are rolling, kicking and starting to reach for everything. Look for clothes with room to move that are still easy to change. Because growth is quick at this stage, check the size guide before ordering.
+- meta_description: Baby clothes in size 3-6m that move with your baby. Clear size guide, delivery across Sri Lanka.
+- intro: Size 3–6m fits roughly 58 to 66 cm and 5.5 to 7.5 kg. Babies are rolling and kicking, so look for room to move.
 
-### 6 to 12 months (age=6-12-months)
-- h1: Baby Clothes for 6 to 12 Months
-- meta_title: Baby Clothes 6-12 Months | Kayaa
-- meta_description: Everyday baby clothes for 6 to 12 months, from sitting up to first steps. Sized by weight and height, delivered across Sri Lanka.
-- intro: Sitting, crawling, pulling up: this stage is busy. Choose comfortable pieces that can handle floor time and frequent washing, and check the size guide to match your baby's weight and height.
+### 6–9m (slug: 6-9m)
+- h1: Baby Clothes 6–9m
+- meta_title: Baby Clothes 6-9 Months | Kayaa
+- meta_description: Everyday baby clothes in size 6-9m for sitting and crawling. Island-wide delivery in Sri Lanka.
+- intro: Size 6–9m fits roughly 66 to 72 cm and 7.5 to 9 kg. Choose pieces that cope with floor time and frequent washing.
 
-### 1 to 2 years (age=1-2-years)
-- h1: Clothes for 1 to 2 Years
-- meta_title: Toddler Clothes 1-2 Years | Kayaa
-- meta_description: Comfortable clothes for 1 to 2 year olds, sized by weight and height. Secure card payment and delivery across Sri Lanka.
-- intro: Toddlers are on the move, so comfort and easy changes matter. Choose by weight and height, leave a little room to grow, and use our size guide if your child is between sizes.
+### 9–12m (slug: 9-12m)
+- h1: Baby Clothes 9–12m
+- meta_title: Baby Clothes 9-12 Months | Kayaa
+- meta_description: Baby clothes in size 9-12m for pulling up and first steps. Clear size guide and delivery across Sri Lanka.
+- intro: Size 9–12m fits roughly 72 to 78 cm and 9 to 10.5 kg. Comfort and easy changes still matter most.
+
+### 12–18m (slug: 12-18m)
+- h1: Baby Clothes 12–18m
+- meta_title: Baby Clothes 12-18 Months | Kayaa
+- meta_description: Comfortable clothes in size 12-18m for little walkers. Secure card payment and delivery across Sri Lanka.
+- intro: Size 12–18m fits roughly 78 to 86 cm and 10.5 to 12 kg. Leave a little room to grow.
+
+### 18–24m (slug: 18-24m)
+- h1: Toddler Clothes 18–24m
+- meta_title: Toddler Clothes 18-24 Months | Kayaa
+- meta_description: Soft clothes in size 18-24m for busy toddlers. Clear size guide and island-wide delivery in Sri Lanka.
+- intro: Size 18–24m fits roughly 86 to 92 cm and 12 to 13.5 kg. Toddlers are on the move, so comfort wins.
+
+### 2Y (slug: 2y)
+- h1: Clothes for 2 Years
+- meta_title: Clothes for 2 Year Olds | Kayaa
+- meta_description: Comfortable clothes in size 2Y. Clear size guide, secure card payment, delivery across Sri Lanka.
+- intro: Size 2Y fits roughly 92 to 98 cm and 13.5 to 15 kg. Check height and weight, and go up if you are between sizes.
+
+### 3Y (slug: 3y)
+- h1: Clothes for 3 Years
+- meta_title: Clothes for 3 Year Olds | Kayaa
+- meta_description: Comfortable clothes in size 3Y. Clear size guide, secure card payment, delivery across Sri Lanka.
+- intro: Size 3Y fits roughly 98 to 104 cm and 15 to 17 kg. A little room to grow keeps them comfortable for longer.
+

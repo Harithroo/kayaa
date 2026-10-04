@@ -12,8 +12,8 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=6e87c2c7">
-  <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
+  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/checkout.css?v=badd490b">
 </head>
@@ -206,6 +206,9 @@
       <path d="M13 12h8" />
       <path d="M13 18h8" />
     </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -255,18 +258,18 @@
       <div class="checkout-layout" data-checkout-filled>
         <div class="checkout-main">
           <details class="checkout-summary-m">
-            <summary><span data-summary-heading>Order summary · 2 items · Rs 6,750</span><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+            <summary><span data-summary-heading>Order summary · 2 items · Rs. 6,550</span><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
             <div class="checkout-summary-m__body">
           <ul class="order-lines" role="list" data-summary-lines>
             <!-- loop: order lines -->
-            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Ruffle Sleeve Dress</p><p class="order-line__meta">Size 3-6M · Lilac · Qty 1</p></div><p class="order-line__price">Rs 3,450</p></li>
-            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Cotton Sleepsuit</p><p class="order-line__meta">Size 0-3M · Cream · Qty 1</p></div><p class="order-line__price">Rs 2,850</p></li>
+            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Ribbed Cotton Bodysuit</p><p class="order-line__meta">Size 3–6m · Lilac · Qty 1</p></div><p class="order-line__price">Rs. 2,450</p></li>
+            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Bamboo Sleepsuit</p><p class="order-line__meta">Size Newborn · Butter · Qty 1</p></div><p class="order-line__price">Rs. 3,650</p></li>
             <!-- /loop -->
           </ul>
           <dl class="totals">
-            <div class="totals__row"><dt>Subtotal</dt><dd data-summary-subtotal>Rs 6,300</dd></div>
-            <div class="totals__row"><dt>Delivery</dt><dd data-summary-delivery><span data-cfg="shipping_fee">Rs 450</span></dd></div>
-            <div class="totals__row totals__row--total"><dt>Total</dt><dd data-summary-total>Rs 6,750</dd></div>
+            <div class="totals__row"><dt>Subtotal</dt><dd data-summary-subtotal>Rs. 6,100</dd></div>
+            <div class="totals__row"><dt>Delivery</dt><dd data-summary-delivery><span data-cfg="shipping_fee">Rs. 450</span></dd></div>
+            <div class="totals__row totals__row--total"><dt>Total</dt><dd data-summary-total>Rs. 6,550</dd></div>
           </dl>
           <p class="eta-line" data-eta-summary hidden></p>
           <a class="link-arrow summary-edit" href="cart.html">Edit bag <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
@@ -278,8 +281,8 @@
 
             <section class="checkout-card" aria-labelledby="co-contact">
               <h2 class="checkout-card__title" id="co-contact"><span class="checkout-card__num" aria-hidden="true">1</span> Contact</h2>
-              <!-- blade: @guest "Have an account? Log in" @else "Signed in as {email} - Not you?" -->
-              <p class="checkout-card__aside" data-account-aside>Have an account? <a href="account/login.html">Log in</a></p>
+              <!-- blade: @guest "Have an account? Sign in" @else "Signed in as {email} - Not you?" -->
+              <p class="checkout-card__aside" data-account-aside>Have an account? <a href="account/login.html">Sign in</a></p>
               <div class="checkout-fields">
           <div class="field" data-field>
             <label for="email">Email (optional)</label>
@@ -370,7 +373,7 @@
                 <div>
                   <!-- TODO: delivery estimate data per district (placeholder table below); delivery fee is the flat rule from config -->
                   <p class="eta-card__title" data-eta-text aria-live="polite">Choose your district to see the delivery estimate</p>
-                  <p class="eta-card__fee" data-fee-text>Delivery: <span data-cfg="shipping_fee">Rs 450</span> (free from <span data-cfg="free_shipping_over">Rs 7,500</span>)</p>
+                  <p class="eta-card__fee" data-fee-text>Delivery: <span data-cfg="shipping_fee">Rs. 450</span> (free from <span data-cfg="free_shipping_over">Rs. 7,500</span>)</p>
                 </div>
               </div>
             </section>
@@ -390,7 +393,7 @@
               <p class="checkout-terms">By paying you agree to our <a href="terms.html">Terms</a> and <a href="returns.html">Returns policy</a>.</p>
               <button type="submit" class="btn btn--primary btn--lg btn--block pay-btn" data-pay-btn>
                 <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-lock"></use></svg>
-                <!-- The label comes from config (pay_button_label); it never contains the amount, the total is in the summary. --><span data-cfg="pay_button_label" data-pay-label>Continue to payment</span>
+                <!-- The label comes from config (pay_button_label); it never contains the amount, the total is in the summary. --><span data-cfg="pay_button_label" data-pay-label>Pay now</span>
                 <span class="spinner" aria-hidden="true" hidden></span>
               </button>
               <p class="pay-helper"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-lock"></use></svg> Secure payment via Onepay</p>
@@ -403,14 +406,14 @@
             <h2 id="co-summary">Order summary</h2>
           <ul class="order-lines" role="list" data-summary-lines>
             <!-- loop: order lines -->
-            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Ruffle Sleeve Dress</p><p class="order-line__meta">Size 3-6M · Lilac · Qty 1</p></div><p class="order-line__price">Rs 3,450</p></li>
-            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Cotton Sleepsuit</p><p class="order-line__meta">Size 0-3M · Cream · Qty 1</p></div><p class="order-line__price">Rs 2,850</p></li>
+            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Ribbed Cotton Bodysuit</p><p class="order-line__meta">Size 3–6m · Lilac · Qty 1</p></div><p class="order-line__price">Rs. 2,450</p></li>
+            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Bamboo Sleepsuit</p><p class="order-line__meta">Size Newborn · Butter · Qty 1</p></div><p class="order-line__price">Rs. 3,650</p></li>
             <!-- /loop -->
           </ul>
           <dl class="totals">
-            <div class="totals__row"><dt>Subtotal</dt><dd data-summary-subtotal>Rs 6,300</dd></div>
-            <div class="totals__row"><dt>Delivery</dt><dd data-summary-delivery><span data-cfg="shipping_fee">Rs 450</span></dd></div>
-            <div class="totals__row totals__row--total"><dt>Total</dt><dd data-summary-total>Rs 6,750</dd></div>
+            <div class="totals__row"><dt>Subtotal</dt><dd data-summary-subtotal>Rs. 6,100</dd></div>
+            <div class="totals__row"><dt>Delivery</dt><dd data-summary-delivery><span data-cfg="shipping_fee">Rs. 450</span></dd></div>
+            <div class="totals__row totals__row--total"><dt>Total</dt><dd data-summary-total>Rs. 6,550</dd></div>
           </dl>
           <p class="eta-line" data-eta-summary hidden></p>
           <a class="link-arrow summary-edit" href="cart.html">Edit bag <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
@@ -418,34 +421,34 @@
         </aside>
       </div>
 
-      <!-- TODO: placeholder estimates. The backend supplies two integers per district (min_days, max_days); the wording ("2–4 working days") is made by Kayaa.formatEta in app.js. Blade prints this block from the same data as the delivery page. -->
+      <!-- TODO: two zones for now (Colombo and suburbs 1–2 working days, the rest of the island 2–4) until per-district data arrives. The backend supplies two integers per district (min_days, max_days); the wording ("2–4 working days") is made by Kayaa.formatEta in app.js. Blade prints this block from the same data as the delivery page. -->
       <script type="application/json" id="district-eta">
   {
-    "ampara": { "min": 4, "max": 6 },
-    "anuradhapura": { "min": 4, "max": 6 },
-    "badulla": { "min": 4, "max": 6 },
-    "batticaloa": { "min": 4, "max": 6 },
-    "colombo": { "min": 2, "max": 3 },
-    "galle": { "min": 3, "max": 4 },
-    "gampaha": { "min": 2, "max": 3 },
-    "hambantota": { "min": 3, "max": 4 },
-    "jaffna": { "min": 4, "max": 6 },
-    "kalutara": { "min": 2, "max": 3 },
-    "kandy": { "min": 3, "max": 4 },
-    "kegalle": { "min": 3, "max": 4 },
-    "kilinochchi": { "min": 4, "max": 6 },
-    "kurunegala": { "min": 3, "max": 4 },
-    "mannar": { "min": 4, "max": 6 },
-    "matale": { "min": 3, "max": 4 },
-    "matara": { "min": 3, "max": 4 },
-    "monaragala": { "min": 4, "max": 6 },
-    "mullaitivu": { "min": 4, "max": 6 },
-    "nuwara-eliya": { "min": 3, "max": 4 },
-    "polonnaruwa": { "min": 4, "max": 6 },
-    "puttalam": { "min": 3, "max": 4 },
-    "ratnapura": { "min": 3, "max": 4 },
-    "trincomalee": { "min": 4, "max": 6 },
-    "vavuniya": { "min": 4, "max": 6 }
+    "ampara": { "min": 2, "max": 4 },
+    "anuradhapura": { "min": 2, "max": 4 },
+    "badulla": { "min": 2, "max": 4 },
+    "batticaloa": { "min": 2, "max": 4 },
+    "colombo": { "min": 1, "max": 2 },
+    "galle": { "min": 2, "max": 4 },
+    "gampaha": { "min": 2, "max": 4 },
+    "hambantota": { "min": 2, "max": 4 },
+    "jaffna": { "min": 2, "max": 4 },
+    "kalutara": { "min": 2, "max": 4 },
+    "kandy": { "min": 2, "max": 4 },
+    "kegalle": { "min": 2, "max": 4 },
+    "kilinochchi": { "min": 2, "max": 4 },
+    "kurunegala": { "min": 2, "max": 4 },
+    "mannar": { "min": 2, "max": 4 },
+    "matale": { "min": 2, "max": 4 },
+    "matara": { "min": 2, "max": 4 },
+    "monaragala": { "min": 2, "max": 4 },
+    "mullaitivu": { "min": 2, "max": 4 },
+    "nuwara-eliya": { "min": 2, "max": 4 },
+    "polonnaruwa": { "min": 2, "max": 4 },
+    "puttalam": { "min": 2, "max": 4 },
+    "ratnapura": { "min": 2, "max": 4 },
+    "trincomalee": { "min": 2, "max": 4 },
+    "vavuniya": { "min": 2, "max": 4 }
   }
       </script>
     </div>
@@ -467,9 +470,10 @@
   <!-- /partial: footer-minimal -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=2d353f92" defer></script>
+  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->
   <script src="assets/js/checkout.js?v=e9ee805d" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->

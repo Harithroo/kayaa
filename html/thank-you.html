@@ -12,10 +12,10 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=6e87c2c7">
-  <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
+  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/thank-you.css?v=a2e9de5e">
+  <link rel="stylesheet" href="assets/css/pages/thank-you.css?v=6945e5de">
 </head>
 <body data-page="thank-you">
   <!-- partial: sprite -->
@@ -206,6 +206,9 @@
       <path d="M13 12h8" />
       <path d="M13 18h8" />
     </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -223,12 +226,13 @@
 
   <main id="main">
     <div class="container thanks" data-thanks-page>
-      <!-- blade: one state block per outcome (paid, pending, failed, cancelled, expired). This page is reached ONLY through a signed, expiring link supplied by the backend (for example after the gateway returns); it is never built from the order reference. ?state= and ?demo=emails-on are prototype only. -->
+      <!-- blade: one state block per outcome (paid, pending, failed, cancelled, expired). This page is reached ONLY through a signed, expiring link supplied by the backend (for example after the gateway returns); it is never built from the order number. ?state= and ?demo=emails-on are prototype only. -->
 
       <section class="thanks__hero" data-state-block="paid">
         <span class="thanks__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg></span>
-        <h1 class="thanks__title">Thank you, <span data-customer-name>Amaya</span> - your order is confirmed</h1>
-        <p class="thanks__lede">We’ll pack your order and send it to you. Use your order reference to track it.</p>
+        <h1 class="thanks__title">Order confirmed</h1>
+        <p class="thanks__thanks">Thank you, <span data-customer-name>Amaya</span></p>
+        <p class="thanks__lede">We’ll pack your order and send it to you. Use your order number to track it.</p>
         <!-- blade: @if config('order_emails_enabled') and the order has an email. Never claim an email was sent otherwise. ?demo=emails-on shows it in the prototype. -->
         <p class="thanks__email" data-email-line hidden><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg> <span>A confirmation has been sent to <strong data-confirm-email>amaya@example.com</strong></span></p>
         <div class="thanks__actions">
@@ -252,7 +256,7 @@
       <section class="thanks__hero" data-state-block="failed" hidden>
         <span class="thanks__icon thanks__icon--error"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg></span>
         <h1 class="thanks__title">Your payment didn’t go through</h1>
-        <p class="thanks__lede">If you were charged, contact us with your order reference.</p>
+        <p class="thanks__lede">If you were charged, contact us with your order number.</p>
 
         <div class="thanks__actions">
           <!-- TODO: confirm the signed link supports resuming payment for this order (resume, not a redo of checkout); the prototype links to the stand-in gateway -->
@@ -264,7 +268,7 @@
       <section class="thanks__hero" data-state-block="cancelled" hidden>
         <span class="thanks__icon thanks__icon--error"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg></span>
         <h1 class="thanks__title">This order was cancelled.</h1>
-        <p class="thanks__lede">If you were charged, contact us with your order reference.</p>
+        <p class="thanks__lede">If you were charged, contact us with your order number.</p>
 
         <!-- blade: order status cancelled. No resume. TODO: ask the backend whether a payment cancelled at the gateway can leave the order resumable instead -->
         <div class="thanks__actions">
@@ -276,7 +280,7 @@
       <section class="thanks__hero" data-state-block="expired" hidden>
         <span class="thanks__icon thanks__icon--error"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-hourglass"></use></svg></span>
         <h1 class="thanks__title">This confirmation link has expired</h1>
-        <p class="thanks__lede">Use your order reference and mobile number to check your order.</p>
+        <p class="thanks__lede">Use your order number and mobile number to check your order.</p>
 
         <!-- blade: the signed link has expired. No order details on this page. -->
         <div class="thanks__actions">
@@ -290,10 +294,10 @@
         <section class="summary-card thanks__wide" aria-labelledby="ty-ref">
           <h2 class="visually-hidden" id="ty-ref">Order details</h2>
           <div class="order-ref">
-            <p class="order-ref__label">Order reference</p>
+            <p class="order-ref__label">Order number</p>
             <!-- reference format KY-YYMMDD-XXXX (uppercase, max 20 characters) -->
             <p class="order-ref__value" data-order-ref>KY-261003-A3F9</p>
-            <button type="button" class="btn btn--ghost btn--sm" data-copy-ref aria-label="Copy order reference"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-copy"></use></svg> <span data-copy-label>Copy</span></button>
+            <button type="button" class="btn btn--ghost btn--sm" data-copy-ref aria-label="Copy order number"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-copy"></use></svg> <span data-copy-label>Copy</span></button>
             <span class="visually-hidden" role="status" aria-live="polite" data-copy-status></span>
           </div>
           <div class="pay-line">
@@ -306,14 +310,14 @@
           <h2 id="ty-items">Items</h2>
           <ul class="order-lines" role="list" data-order-lines>
             <!-- loop: order lines -->
-            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Ruffle Sleeve Dress</p><p class="order-line__meta">Size 3-6M · Lilac · Qty 1</p></div><p class="order-line__price">Rs 3,450</p></li>
-            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Cotton Sleepsuit</p><p class="order-line__meta">Size 0-3M · Cream · Qty 1</p></div><p class="order-line__price">Rs 2,850</p></li>
+            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Ribbed Cotton Bodysuit</p><p class="order-line__meta">Size 3–6m · Lilac · Qty 1</p></div><p class="order-line__price">Rs. 2,450</p></li>
+            <li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: var(--swatch-cream)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div><div><p class="order-line__name">Bamboo Sleepsuit</p><p class="order-line__meta">Size Newborn · Butter · Qty 1</p></div><p class="order-line__price">Rs. 3,650</p></li>
             <!-- /loop -->
           </ul>
           <dl class="totals">
-            <div class="totals__row"><dt>Subtotal</dt><dd data-order-subtotal>Rs 6,300</dd></div>
-            <div class="totals__row"><dt>Delivery</dt><dd data-order-delivery><span data-cfg="shipping_fee">Rs 450</span></dd></div>
-            <div class="totals__row totals__row--total"><dt>Total</dt><dd data-order-total>Rs 6,750</dd></div>
+            <div class="totals__row"><dt>Subtotal</dt><dd data-order-subtotal>Rs. 6,100</dd></div>
+            <div class="totals__row"><dt>Delivery</dt><dd data-order-delivery><span data-cfg="shipping_fee">Rs. 450</span></dd></div>
+            <div class="totals__row totals__row--total"><dt>Total</dt><dd data-order-total>Rs. 6,550</dd></div>
           </dl>
         </section>
 
@@ -348,11 +352,12 @@
   <!-- /partial: footer-minimal -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=2d353f92" defer></script>
+  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->
-  <script src="assets/js/thank-you.js?v=304c4094" defer></script>
+  <script src="assets/js/thank-you.js?v=d86d4512" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
   <script src="assets/js/proto-thankyou.js?v=601b0aac" defer></script>
 </body>

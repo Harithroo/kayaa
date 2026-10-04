@@ -13,21 +13,21 @@
   'use strict';
 
   var cart = window.KayaaCart;
-  var money = cart ? cart.money : function (n) { return 'Rs ' + Math.round(n).toLocaleString('en-US'); };
+  var money = cart ? cart.money : function (n) { return String(n); };
   var CFG = window.KAYAA_CONFIG || {};
   var ONLINE = 'Card - Onepay';
   var CANCELLED_KEY = 'kayaa.proto.cancelled.v1';
 
   var P = {
-    dress: { name: 'Ruffle Sleeve Dress', slug: 'ruffle-sleeve-dress', unitPrice: 3450, tone: 'lilac' },
-    sleepsuit: { name: 'Cotton Sleepsuit', slug: 'cotton-sleepsuit', unitPrice: 2850, tone: 'cream' },
-    bodysuit: { name: 'Ribbed Cotton Bodysuit', slug: 'ribbed-cotton-bodysuit', unitPrice: 1490, tone: 'sky' },
+    dress: { name: 'Cotton Kurta Set', slug: 'cotton-kurta-set', unitPrice: 4950, tone: 'sky' },
+    sleepsuit: { name: 'Bamboo Sleepsuit', slug: 'bamboo-sleepsuit', unitPrice: 3650, tone: 'cream' },
+    bodysuit: { name: 'Ribbed Cotton Bodysuit', slug: 'ribbed-cotton-bodysuit', unitPrice: 2450, tone: 'lilac' },
     swaddle: { name: 'Muslin Swaddle Wrap', slug: 'muslin-swaddle-wrap', unitPrice: 2250, tone: 'sky' },
-    romper: { name: 'Terry Romper', slug: 'terry-romper', unitPrice: 1540, tone: 'cream' },
-    bonnet: { name: 'Knit Bonnet & Booties Set', slug: 'knit-bonnet-and-booties-set', unitPrice: 1760, tone: 'cream' },
-    cardigan: { name: 'Pointelle Knit Cardigan', slug: 'pointelle-knit-cardigan', unitPrice: 1120, tone: 'lilac' }
+    romper: { name: 'Pointelle Romper', slug: 'pointelle-romper', unitPrice: 3200, tone: 'cream' },
+    bonnet: { name: 'Mittens & Booties Set', slug: 'mittens-and-booties-set', unitPrice: 1650, tone: 'cream' },
+    cardigan: { name: 'Waffle Knit Cardigan', slug: 'waffle-knit-cardigan', unitPrice: 3900, tone: 'lilac' }
   };
-  var COLOUR = { lilac: 'Lilac', cream: 'Cream', sky: 'Sky' };
+  var COLOUR = { lilac: 'Lilac', cream: 'Butter', sky: 'Sky' };
   function item(key, size, qty) {
     var p = P[key];
     return { productSlug: p.slug, name: p.name, sizeLabel: size, colourLabel: COLOUR[p.tone], colourSlug: p.tone, tone: p.tone, qty: qty || 1, unitPrice: p.unitPrice };
@@ -46,20 +46,20 @@
   function full(placed, shipped, delivered) { return { placed: placed, confirmed: placed, shipped: shipped, delivered: delivered }; }
 
   var SAMPLES = [
-    make('KY-261003-P7X2', '2026-10-03', '2026-10-03', [item('sleepsuit', '0-3M')], 'pending', 'failed'),
-    make('KY-261003-A3F9', '2026-10-03', '2026-10-03', [item('bonnet', '0-3M'), item('cardigan', '3-6M')], 'pending', 'pending'),
-    make('KY-261002-W5N7', '2026-10-02', '2026-10-02', [item('romper', '3-6M', 2)], 'pending', 'paid'),
-    make('KY-261001-K8D3', '2026-10-01', '2026-10-03', [item('dress', '3-6M'), item('sleepsuit', '0-3M')], 'shipped', 'paid', { placed: '2026-10-01', confirmed: '2026-10-01', shipped: '2026-10-03' }),
-    make('KY-260914-T5R7', '2026-09-14', '2026-09-19', [item('bodysuit', '3-6M', 2), item('swaddle', 'NB')], 'delivered', 'paid', full('2026-09-14', '2026-09-16', '2026-09-19')),
-    make('KY-260910-B2W6', '2026-09-10', '2026-09-10', [item('romper', '6-9M')], 'cancelled', 'failed', { placed: '2026-09-10', cancelled: '2026-09-10' }),
-    make('KY-260828-H4N8', '2026-08-28', '2026-09-02', [item('dress', '3-6M')], 'cancelled', 'refunded', { placed: '2026-08-28', confirmed: '2026-08-28', cancelled: '2026-09-02' }),
-    make('KY-260815-C6Y1', '2026-08-15', '2026-08-19', [item('bodysuit', '0-3M')], 'delivered', 'paid', full('2026-08-15', '2026-08-17', '2026-08-19')),
-    make('KY-260802-J3V9', '2026-08-02', '2026-08-06', [item('swaddle', 'NB'), item('bonnet', 'NB')], 'delivered', 'paid', full('2026-08-02', '2026-08-04', '2026-08-06')),
+    make('KY-261003-P7X2', '2026-10-03', '2026-10-03', [item('sleepsuit', '0–3m')], 'pending', 'failed'),
+    make('KY-261003-A3F9', '2026-10-03', '2026-10-03', [item('bonnet', '0–3m'), item('cardigan', '3–6m')], 'pending', 'pending'),
+    make('KY-261002-W5N7', '2026-10-02', '2026-10-02', [item('romper', '3–6m', 2)], 'pending', 'paid'),
+    make('KY-261001-K8D3', '2026-10-01', '2026-10-03', [item('dress', '3–6m'), item('sleepsuit', '0–3m')], 'shipped', 'paid', { placed: '2026-10-01', confirmed: '2026-10-01', shipped: '2026-10-03' }),
+    make('KY-260914-T5R7', '2026-09-14', '2026-09-19', [item('bodysuit', '3–6m', 2), item('swaddle', 'Newborn')], 'delivered', 'paid', full('2026-09-14', '2026-09-16', '2026-09-19')),
+    make('KY-260910-B2W6', '2026-09-10', '2026-09-10', [item('romper', '6–9m')], 'cancelled', 'failed', { placed: '2026-09-10', cancelled: '2026-09-10' }),
+    make('KY-260828-H4N8', '2026-08-28', '2026-09-02', [item('dress', '3–6m')], 'cancelled', 'refunded', { placed: '2026-08-28', confirmed: '2026-08-28', cancelled: '2026-09-02' }),
+    make('KY-260815-C6Y1', '2026-08-15', '2026-08-19', [item('bodysuit', '0–3m')], 'delivered', 'paid', full('2026-08-15', '2026-08-17', '2026-08-19')),
+    make('KY-260802-J3V9', '2026-08-02', '2026-08-06', [item('swaddle', 'Newborn'), item('bonnet', 'Newborn')], 'delivered', 'paid', full('2026-08-02', '2026-08-04', '2026-08-06')),
     // older order: the backend has no history for the confirmed and shipped steps, so the stepper shows no date for them
-    make('KY-260720-E8Z5', '2026-07-20', '2026-07-24', [item('cardigan', '3-6M', 2)], 'delivered', 'paid', { placed: '2026-07-20', delivered: '2026-07-24' }),
-    make('KY-260705-U2G4', '2026-07-05', '2026-07-09', [item('sleepsuit', '3-6M')], 'delivered', 'paid', full('2026-07-05', '2026-07-07', '2026-07-09')),
-    make('KY-260622-M7S6', '2026-06-22', '2026-06-26', [item('romper', '3-6M')], 'delivered', 'paid', full('2026-06-22', '2026-06-24', '2026-06-26')),
-    make('KY-260610-D9L3', '2026-06-10', '2026-06-14', [item('dress', '6-9M'), item('bodysuit', '6-9M')], 'delivered', 'paid', full('2026-06-10', '2026-06-12', '2026-06-14'))
+    make('KY-260720-E8Z5', '2026-07-20', '2026-07-24', [item('cardigan', '3–6m', 2)], 'delivered', 'paid', { placed: '2026-07-20', delivered: '2026-07-24' }),
+    make('KY-260705-U2G4', '2026-07-05', '2026-07-09', [item('sleepsuit', '3–6m')], 'delivered', 'paid', full('2026-07-05', '2026-07-07', '2026-07-09')),
+    make('KY-260622-M7S6', '2026-06-22', '2026-06-26', [item('romper', '3–6m')], 'delivered', 'paid', full('2026-06-22', '2026-06-24', '2026-06-26')),
+    make('KY-260610-D9L3', '2026-06-10', '2026-06-14', [item('dress', '6–9m'), item('bodysuit', '6–9m')], 'delivered', 'paid', full('2026-06-10', '2026-06-12', '2026-06-14'))
   ];
 
   // the order stored by the simulated checkout / thank-you flow
@@ -180,7 +180,7 @@
     var states = STEPS.map(function (s, i) { return o.status === 'delivered' ? 'done' : (i < idx ? 'done' : (i === idx ? 'current' : 'upcoming')); });
     if (o.status === 'pending' && o.paymentStatus === 'failed') {
       states[0] = 'error';
-      note.hidden = false; note.textContent = 'Payment failed. If you were charged, contact us with your order reference.';
+      note.hidden = false; note.textContent = 'Payment failed. If you were charged, contact us with your order number.';
     } else if (o.status === 'pending' && o.paymentStatus === 'paid') {
       note.hidden = false; note.textContent = 'Payment received. We are confirming your order.';
     } else if (o.status === 'pending') {

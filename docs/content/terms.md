@@ -19,11 +19,11 @@ Use the site lawfully and fairly. Please do not copy it by automated means, try 
 
 ## 3. Your account
 
-An account is optional. You can order as a guest and look up an order with your order reference and mobile number. If you create an account you must give accurate details, confirm your email address and keep your password safe. You are responsible for activity under your account. We may suspend an account that is misused. To close your account, contact us.
+An account is optional. You can order as a guest and look up an order with your order number and mobile number. If you create an account you must give accurate details, confirm your email address and keep your password safe. You are responsible for activity under your account. We may suspend an account that is misused. To close your account, contact us.
 
 ## 4. Products and descriptions
 
-We describe and photograph our products as accurately as we can. Colours can look slightly different on different screens. Our size guide recommends sizes by your baby's weight and height; it is guidance, because babies vary. If you find a mistake in a description, tell us.
+We describe and photograph our products as accurately as we can. Colours can look slightly different on different screens. Our size guide recommends sizes by age band, with height and weight as the better guide; it is guidance, because babies vary. If you find a mistake in a description, tell us.
 
 ## 5. Prices and delivery charges
 
@@ -31,15 +31,15 @@ Prices are in Sri Lankan rupees (Rs). [[PROPOSED: All prices include any applica
 
 ## 6. Placing an order
 
-When you place an order you are making an offer to buy. Each order gets an order reference. Your order starts as "pending" and we confirm it once we have checked it. We may decline or cancel an order if an item is unavailable, if there is a pricing error or if we suspect misuse. If we cancel after you have paid, we refund you in full.
+When you place an order you are making an offer to buy. Each order gets an order number. Your order starts as "pending" and we confirm it once we have checked it. We may decline or cancel an order if an item is unavailable, if there is a pricing error or if we suspect misuse. If we cancel after you have paid, we refund you in full.
 
 ## 7. Payment
 
-We accept online card payment (Visa and Mastercard) through our payment provider, Onepay. You enter your card details on Onepay's secure page; we never see or store your full card number. If a payment fails or stays pending, please do not pay again: check your order with our Track order page, and if you were charged but the order shows as failed, contact us with your order reference.
+We accept online card payment (Visa and Mastercard) through our payment provider, Onepay. We do not offer cash on delivery. You enter your card details on Onepay's secure page; we never see or store your full card number. If a payment fails or stays pending, please do not pay again: check your order with our Track order page, and if you were charged but the order shows as failed, contact us with your order number.
 
 ## 8. Delivery
 
-We deliver across Sri Lanka. Delivery times are estimates, not guarantees, and depend on your district. Please read our [Delivery information](delivery.html). Ownership and risk pass to you when the parcel is delivered. Please check your parcel on arrival and tell us about any damage within [[PROPOSED: 48 hours]].
+We deliver across Sri Lanka. Delivery times are estimates, not guarantees, and depend on your district. Please read our [Delivery information](delivery.html). Ownership and risk pass to you when the parcel is delivered. Please check your parcel on arrival and tell us about any damage or fault within {{cfg:faulty_report_days}} days.
 
 ## 9. Returns and refunds
 
@@ -51,7 +51,7 @@ If you have an account, you can cancel an order from your order page while its s
 
 ## 11. Reviews
 
-Reviews should be honest and based on your own experience. We check reviews before they appear and may decline or remove any that are unlawful, abusive, irrelevant or not genuine. By submitting a review you allow us to display it on the site. Each account can review a product once. A "Verified purchase" label means the review comes from a customer whose order for that product was confirmed, shipped or delivered.
+Reviews should be honest and based on your own experience. We check reviews before they appear and may decline or remove any that are unlawful, abusive, irrelevant or not genuine. By submitting a review you allow us to display it on the site. Each account can review a product once. A "Verified purchase" label means the review comes from a signed-in customer whose order for that product was confirmed, shipped or delivered.
 
 ## 12. Our content
 

@@ -1,5 +1,5 @@
 /* Thank-you behaviour (production code: stays after the Blade conversion).
-   Copy button for the order reference, and "Refresh status" for the pending state. */
+   Copy button for the order number, and "Refresh status" for the pending state. */
 (function () {
   'use strict';
 
@@ -21,7 +21,7 @@
       var done = function (ok) {
         var label = copyBtn.querySelector('[data-copy-label]');
         if (label) label.textContent = ok ? 'Copied' : 'Copy failed';
-        announce(ok ? 'Order reference copied' : 'Could not copy. Select the reference and copy it manually.');
+        announce(ok ? 'Order number copied' : 'Could not copy. Select the order number and copy it manually.');
         setTimeout(function () { if (label) label.textContent = 'Copy'; }, 2000);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {

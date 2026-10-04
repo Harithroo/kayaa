@@ -190,7 +190,7 @@
 .contact-card p { font-size: var(--fs-dense); color: var(--ink-soft); }
 .contact-card__value { color: var(--ink); font-weight: 700; overflow-wrap: anywhere; }
 .contact-card .link-arrow { margin-top: var(--space-1); }
-@media (min-width: 900px) { .contact-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 600px) { .contact-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .contact-main { display: grid; gap: var(--space-7); max-width: 720px; margin-top: var(--space-6); }
 .contact-form { padding: var(--space-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); }
 .contact-form h2 { font-size: var(--fs-h3); }

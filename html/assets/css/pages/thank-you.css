@@ -46,3 +46,5 @@
 .thanks__email { display: inline-flex; align-items: flex-start; gap: var(--space-2); margin-top: var(--space-3); font-size: var(--fs-dense); color: var(--ink-soft); }
 .thanks__email[hidden] { display: none; }
 .thanks__email .icon { flex: none; margin-top: 2px; color: var(--primary-deep); }
+
+.thanks__thanks { margin-top: var(--space-2); font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 700; color: var(--primary-deep); }

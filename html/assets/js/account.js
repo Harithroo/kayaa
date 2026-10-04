@@ -17,7 +17,9 @@
   var RULES = {
     email: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); },
     // Sri Lankan mobile: 07X XXXXXXX (10 digits) or +94 7X XXXXXXX, spaces and dashes allowed
-    phone: function (v) { return /^(?:0|\+94)7[0-8]\d{7}$/.test(v.replace(/[\s\-().]/g, '')); }
+    phone: function (v) { return /^(?:0|\+94)7[0-8]\d{7}$/.test(v.replace(/[\s\-().]/g, '')); },
+    // the contact form has one field for either: a Sri Lankan mobile number or an email address
+    contact: function (v) { return RULES.email(v) || RULES.phone(v); }
   };
 
   function wrapOf(input) { return input.closest('[data-field]'); }

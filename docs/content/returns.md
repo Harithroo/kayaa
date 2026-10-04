@@ -2,48 +2,35 @@
 route: /returns
 h1: Returns & Exchanges
 meta_title: Returns & Exchanges | Kayaa
-meta_description: How to return or exchange baby clothing from Kayaa: the return window, item condition, how to start a return and when refunds reach your card.
+meta_description: Wrong size? Swap it free. How to exchange or return baby clothing from Kayaa within 14 days, how refunds work and what we cannot take back.
 robots: index,follow
 updated: [[TODO: publication date]]
 ---
 
-Babies grow quickly and sizes can be hard to judge. If something does not fit or is not right, we want to make it easy to put it right.
+Babies grow quickly and sizes can be hard to judge. If something does not fit or is not right, we want to make it easy to put it right. [[TODO: confirm the policy below with Kayaa. It is taken from the current test site.]]
 
 ## The short version
 
-- Return eligible items within [[PROPOSED: 7 days]] of delivery.
-- Items should be unworn, unwashed, with tags attached and in their original packaging.
-- Refunds go back to the card you paid with. Exchanges for another size depend on stock.
-- Faulty, damaged or wrong items: tell us within [[PROPOSED: 48 hours]] of delivery.
+- Exchange any unworn, unwashed item with its tags on within {{cfg:return_window_days}} days of delivery.
+- Wrong size? We cover the return courier cost on size swaps.
+- Prefer a refund? We refund the item price within {{cfg:refund_days}} days of receiving it back.
+- Faulty or wrong item? Send us a photo within {{cfg:faulty_report_days}} days.
 
-## What you can return
+## Wrong size? Swap it free
 
-Items in the condition described above. [[TODO: list any items that cannot be returned, for example personalised items. If none, delete this sentence.]]
-
-## How to return something
-
-1. Contact us on WhatsApp at [[TODO: WhatsApp number]] or through the [contact form](contact.html) within the return window.
-2. Give us your order reference (it looks like KY-261003-A3F9) and the mobile number you used at checkout, and tell us which item and why.
-3. We reply with how to send the item back [[TODO: return address or pickup arrangement]].
-4. When we receive and check the item, we confirm your exchange or refund.
-
-Please do not send an item back before we have confirmed the return.
-
-## Exchanges for a different size
-
-Tell us the size you need. If it is in stock we send it once we receive the original item. If it is not available, we refund the original item instead. Not sure which size to choose? Our [size guide](size-guide.html) matches sizes to weight and height.
+Message us on WhatsApp at [[TODO: WhatsApp number]] with your order number and the size you would like. We arrange the pick-up and cover the courier cost for size swaps. The new size is sent once we have received the original, subject to stock. If the size you need is sold out, we refund the item instead. Not sure which size to choose? See our [size guide](size-guide.html).
 
 ## Refunds
 
-Refunds are made to the card you paid with, through our payment provider Onepay. [[PROPOSED: We process your refund within 14 working days after we receive and check the item.]] Your bank may take extra time to show it. Original delivery charges are refunded only when the item was faulty, damaged or sent in error.
+If you would rather have a refund than a swap, we refund the price of the item within {{cfg:refund_days}} days of receiving it back. [[PROPOSED: The refund goes back to the card you paid with.]] Delivery fees are not refunded unless the item was faulty or we sent the wrong thing.
 
-## Faulty, damaged or wrong items
+## Faulty or wrong items
 
-If your order arrives damaged, faulty or not what you ordered, contact us within [[PROPOSED: 48 hours]] of delivery with your order reference and a photo. We will replace the item or refund you, and we cover the return delivery.
+If an item arrives faulty, damaged or not what you ordered, send us a photo within {{cfg:faulty_report_days}} days of delivery with your order number. We will replace it or refund it, including delivery.
 
-## Who pays for return delivery
+## What we cannot take back
 
-[[PROPOSED: If you are returning an item because you changed your mind or it does not fit, you pay the return delivery. If the item is faulty, damaged or wrong, we pay.]]
+For hygiene, we cannot accept returns on items that have been worn or washed, or on sale items marked final. [[TODO: confirm whether sale items are final, and whether any other items, such as napkins, are excluded]]
 
 ## Cancelling before dispatch
 
@@ -55,4 +42,4 @@ This policy does not affect your rights under Sri Lankan consumer law.
 
 ## Need help?
 
-WhatsApp us at [[TODO: WhatsApp number]] or use the [contact form](contact.html). Please have your order reference ready.
+WhatsApp us at [[TODO: WhatsApp number]] ({{cfg:support_hours}}) or use the [contact form](contact.html). Please have your order number ready.

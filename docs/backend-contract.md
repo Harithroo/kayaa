@@ -3,7 +3,8 @@
 Written from what the prototype in `html/` actually contains, so you do not need to open any HTML. Anything the prototype does not show is marked **(assumption)** or **TBD**. The prototype is static: its JS fakes server behaviour (see "Prototype-only behaviour" at the end). Keep this file in sync with the pages (see CLAUDE.md).
 
 Conventions used by every page
-- Money is whole rupees, shown as `Rs 1,490` (thousands separator). The delivery fee and the free-delivery threshold come from the site config (section 3.17), never typed into pages.
+- Money is whole rupees, shown as `Rs. 1,490` (with the full stop and a thousands separator; one helper formats it everywhere, prefix from the site config `currency_prefix`). A sale shows the current price and the struck-through compare-at price.
+- UI wording: "Order number" (not "reference"), "Sign in", "Sign out", "Create an account", "Sign in / register". Code and this file may keep "reference" as a technical name. The delivery fee and the free-delivery threshold come from the site config (section 3.17), never typed into pages.
 - One shared shell (header, footer, drawers, tab bar) wrapped in `<!-- partial: NAME -->` comments. `<!-- loop: ... -->` marks repeated data, `<!-- blade: ... -->` marks conditionals and generated values.
 - Order statuses: `pending`, `confirmed`, `shipped`, `delivered`, `cancelled`. Payment statuses: `pending`, `paid`, `failed`, `refunded`.
 - Product images are 4:5. Placeholders (`.media[data-placeholder]`) are replaced by `<img>` markup when photos exist.
@@ -15,18 +16,18 @@ Conventions used by every page
 
 1. **Images per colour.** A product image has a nullable colour. Photos with a colour show only when that colour is selected; photos without a colour (shared) show for every colour. A colour with no photos falls back to the shared set. Each image needs an order and, ideally, alt text. The page renders every image with `data-colour="<colour slug>"` or `data-colour="all"`; JS filters them. `?colour=<slug>` must preselect the colour (the page rewrites the URL with `history.replaceState`).
 2. **Low-stock threshold** as an admin-editable setting (default 5). Rendered on the buy form as `data-low-stock-threshold="5"`. The stock note says "Only N left" when `1 <= stock <= threshold`.
-3. **Product description** as a plain-text field with line breaks preserved. The page shows the first ~160 characters (cut at a word boundary, ellipsis) as a summary, and the whole text in an open "Description" accordion. The page carries the hint `Str::limit($product->description, 160)`; plain `Str::limit` can cut mid-word, so use word-boundary truncation (for example its `preserveWords` option if your Laravel version has it).
-4. **Variants JSON.** Per product page, an inline block `<script type="application/json" id="product-variants">[{"colour":"lilac","size":"3-6M","stock":4}, ...]</script>`: one row per colour+size variant, `colour` = colour slug, `size` = size label (same string as the size radio value). Sizes are rendered in size-scale order.
+3. **Product text.** The short description (a plain-text field; the page shows its first ~160 characters at a word boundary, with an ellipsis, above the buy form; use word-boundary truncation, for example a `Str::limit` with `preserveWords`) stays above the form. There is no separate "Description" accordion any more: **Fabric & care** (a composition line and a care list; the sample "95% combed cotton, 5% elastane" is a placeholder) and **Delivery & returns** (every value from the site config) are the accordions. **Question:** is there a full description field, and are composition and care separate fields?
+4. **Variants JSON.** Per product page, an inline block `<script type="application/json" id="product-variants">[{"colour":"lilac","size":"3-6m","stock":4}, ...]</script>`: one row per colour+size variant, `colour` = colour slug, `size` = **size slug** (the size radio value, for example `3-6m`; the box shows the full label "3–6m"). Sizes are rendered in size-scale order.
 5. **Review "show more".** The product page shows 5 reviews and a "See more reviews" control that reveals 5 more in place. Prototype: all reviews are in the HTML and JS reveals them. Production options (pick one): (a) render all approved reviews and let JS reveal them, or (b) an endpoint that returns the next page of review-card HTML, like `/cart/panel` (assumption: `GET /products/{slug}/reviews?page=2` returning `<li class="review-card">...</li>` items plus the new "Showing N of M" count). Either way the no-JS fallback is a plain link to the same product page with `?reviews=all#reviews`, which must render every approved review. There is no separate reviews page.
 6. **Rating average with decimals** (one decimal, e.g. `4.8`) plus review count and a 5-to-1 breakdown (counts). Stars: whole part = full stars; any fraction .1 to .9 adds one half star (4.0 = 4 stars, 4.1 to 4.9 = 4.5 stars). Individual review ratings are whole numbers 1 to 5.
 7. **Onepay payment flow.** Payment is online only, through the Onepay gateway (Visa/Mastercard). Assumption: checkout redirects to Onepay's hosted payment page. Orders start with `payment_status = pending` until the gateway confirms. The frontend has designed the paid, pending, failed, cancelled and expired states and "Resume payment"; the return URL, callback and resume route are needed (TBD). Section 3.6.
 8. **Delivery ETA** is shown at checkout (after the district is chosen), in the order summary, on the thank-you page, on the track result and the order page while the order can still arrive, and on the delivery page. The backend supplies **two integers per district (`min_days`, `max_days`)**; the wording is made by the frontend helper `Kayaa.formatEta` (section 3.5). The product page and the cart show no estimate.
-9. **Category data:** name, slug, one-line description (shown in the listing header band) and a photo (home page tile).
+9. **Categories (department "Baby", route `/baby/{slug}`):** `newborn` Newborn, `bodysuits` Bodysuits, `sleepwear` Sleepwear, `sets` Sets, `outerwear` Outerwear, `napkins` Napkins, `accessories` Accessories. Each has a name, slug, one-line description (shown in the listing header band; placeholder) and a photo (home tile). The prototype keeps `category.html?c={slug}` for `/baby/{slug}`. The staging site shows these seven; they replace the six categories the prototype first invented.
 10. **Admin-managed shell content:** announcement bar (`topbar`: text, style `lilac|cream|sky`, enabled), home promo banners (`home_promo`: style `lilac|sky`, eyebrow, headline, text, button label and URL, optional photo), WhatsApp number/link, contact email, social URLs.
-11. **Age groups** are fixed in the prototype (5 slugs, see Listing). Product-to-age mapping is needed (a product can fit several ages).
+11. **Sizes ("Shop by age")** are fixed: nine size slugs `newborn`, `0-3m`, `3-6m`, `6-9m`, `9-12m`, `12-18m`, `18-24m`, `2y`, `3y`, with the labels Newborn, 0–3m, 3–6m, 6–9m, 9–12m, 12–18m, 18–24m, 2Y, 3Y (en dash, lowercase m). Param `size`. Product-to-size mapping is needed: a product covers a range of sizes. See section 2.
 12. **Product flags:** `new`, `featured`, sale price (`was` price = regular, current = sale). Badge priority on cards: Out of stock > Sale > New > Featured (one badge max).
 13. **FAQs** from product, category and global FAQs (the product page shows five placeholder questions). TBD: how they are merged and ordered.
-14. **Size guide data**: one global table (size, age, weight, height) shown on `size-guide.html` and mirrored on the product page; placeholder ranges, confirm with the client. Per-product tables are not designed (section 3.13).
+14. **Size guide data**: one global table (size, age, height, weight) for the nine sizes, shown on `size-guide.html` and mirrored on the product page; placeholder ranges, confirm with the client. The brand sizes by age band; height and weight are the better guide. Per-product tables are not designed (section 3.13).
 15. **Cart drawer endpoints** (see section 4). The prototype does quantity changes and removal client-side; they need real endpoints.
 16. **Related products:** same category as the current product, excluding the current product, 4 items.
 17. **Fabric & care and Delivery & returns** accordions are static site-wide text (placeholders). TBD whether they become settings.
@@ -58,19 +59,27 @@ Conventions used by every page
 39. **Cancel order** from the account order page while the status is `pending` (`POST /account/orders/{ref}/cancel`, TODO route), with the refund line when the payment is `paid` (section 3.11).
 40. **Resume payment** for an existing order (pending or failed payment, online gateway, not cancelled): account order page, track result and the thank-you failed state (section 3.6).
 
+41. **`/categories` page** listing the seven categories with item counts (section 3.18).
+42. **Wishlist** (`/wishlist`, a Save toggle on the product page): needs storage; guest wishlists (browser or session) are an open question (section 3.19).
+43. **Review fields:** rating, name, email (not shown), optional headline, review text; reviews are moderated; the headline shows in bold on the card when present (section 3.3).
+44. **Contact fields:** name, mobile or email (one field), optional order number, message (section 3.14).
+45. **Site config keys** added: `delivery_colombo_days`, `delivery_island_days`, `dispatch_cutoff`, `return_window_days`, `refund_days`, `faulty_report_days`, `support_hours`, `whatsapp_display`, `currency_prefix`; `pay_button_label` is now "Pay now" (section 3.17).
+46. **District ETA** is seeded with two zones as `{min, max}`: Colombo and suburbs 1–2 working days, the rest of the island 2–4 (TODO until per-district data arrives).
+47. **Product fields observed on staging** (section 3.20).
+
 ---
 
 ## 2. Shell (every page)
 
 ### Announcement bar (admin "topbar")
-- Data: text (prototype: "Free delivery over Rs 7,500" + " · Secure online payment" as two segments; the second hides under 600px), style `lilac|cream|sky`, enabled.
+- Data: text (prototype: "Island-wide delivery in 2–4 days" + " · Free over Rs. 7,500", both from the site config), style `lilac|cream|sky`, enabled.
 - Dismiss hides it for the current page view only (nothing stored); it returns on every load.
 
 ### Header, menus, footer
-- Logo/wordmark -> `/`. Primary nav: Shop (`/shop`, with a mega menu), New in (`/shop?sort=new`), Sale (`/shop?sale=1`), Size guide (`/size-guide`), Our story (`/about`).
-- Mega menu: five age links `/shop?age=<slug>` and six category links `/{department}/{category}` (prototype: `category.html?c=<slug>`), plus a "New this week" feature card -> `/shop?sort=new` (placeholder copy, TBD).
-- Category row (desktop): the six categories. Account icon -> `/account` when signed in, else `/account/login`. Cart icon opens the cart drawer; the count is the sum of line quantities.
-- Footer: age links, help links (`/track`, `/size-guide`, `/delivery`, `/returns`, `/contact`), company links (`/about`, `/privacy`, `/terms`), WhatsApp link, contact email, social URLs.
+- Logo/wordmark -> `/`. Primary nav: Shop (`/shop`, with a mega menu), Categories (`/categories`), New in (`/shop?sort=new`), Sale (`/shop?sale=1`), Size guide (`/size-guide`), Our story (`/about`).
+- Mega menu: "Shop by size" as a pill grid of the nine sizes (`/shop?size=<slug>`) and "Browse by category" chips for the seven categories (`/baby/{slug}`; prototype `category.html?c=<slug>`), plus a "New this week" feature card -> `/shop?sort=new` (placeholder copy, TBD).
+- Category row (desktop): the seven categories. Utility group (desktop): search, **wishlist heart** (`/wishlist`), account (`/account` when signed in, else `/account/login`), cart (opens the cart drawer; the count is the sum of line quantities). Below 900px the mobile drawer carries Categories and Wishlist, sizes as a pill grid, categories as rows, and "Sign in / register".
+- Footer: tagline "Soft, honest clothing made for Sri Lankan weather.", "Colombo, Sri Lanka" (TODO confirm), "Shop by size" (nine links), help links (`/track`, `/wishlist`, `/size-guide`, `/delivery`, `/returns`, `/contact`), company links (`/categories`, `/about`, `/privacy`, `/terms`), WhatsApp link, contact email, social URLs, and "Secure card payments" (no gateway name).
 - Active nav states use `<body data-page="home|shop|category|product|search|cart|account|...">`; the server should set it per page (space-separated tokens allowed, e.g. `account login`).
 
 ### Minimal shell (checkout and thank-you)
@@ -82,11 +91,23 @@ These two pages use `header-minimal` and `footer-minimal` partials only: no anno
 | Route | `GET /search` |
 | Field | `q` (type `search`, optional on submit, example `romper`) |
 
-### Categories (fixed list in the prototype)
-`bodysuits` Bodysuits, `sleepsuits` Sleepsuits, `sets` Sets, `dresses-rompers` Dresses & Rompers, `hats-mitts` Hats & Mitts, `swaddles-blankets` Swaddles & Blankets (the home tile file name uses `cat-swaddles`).
+### Categories (department "Baby", fixed list)
+`newborn` Newborn, `bodysuits` Bodysuits, `sleepwear` Sleepwear, `sets` Sets, `outerwear` Outerwear, `napkins` Napkins, `accessories` Accessories (the home tile photo slots are `cat-<slug>`). **Question:** what are "Napkins" (cloth nappies, mealtime napkins?) and what size range do they have?
 
-### Age groups (fixed list in the prototype)
-`newborn` Newborn, `0-3-months` 0-3 months, `3-6-months` 3-6 months, `6-12-months` 6-12 months, `1-2-years` 1-2 years.
+### Sizes (fixed list; ASCII slugs in the URL)
+| Slug | Label |
+| --- | --- |
+| `newborn` | Newborn |
+| `0-3m` | 0–3m |
+| `3-6m` | 3–6m |
+| `6-9m` | 6–9m |
+| `9-12m` | 9–12m |
+| `12-18m` | 12–18m |
+| `18-24m` | 18–24m |
+| `2y` | 2Y |
+| `3y` | 3Y |
+The labels use an **en dash and a lowercase m**. The URL uses the ASCII slug (`?size=0-3m`); the prototype also accepts the old encoded form `?size=0%E2%80%933m` and normalises it to the slug. **Question:** can the backend's size URLs use slugs instead of the encoded en dash?
+Product cards show the range of sizes in short form (Newborn = NB): "4 colours · NB–18m".
 
 ---
 
@@ -111,12 +132,14 @@ Route map (prototype file -> Laravel route). Status: **built** = designed in the
 | 404.html, 419.html, 429.html, 500.html, 503.html | error views `resources/views/errors/*.blade.php` | built |
 | account/register, login, forgot-password, reset-password | `/account/register`, `/account/login`, `/account/forgot-password`, `/account/reset-password` | built (calm minimal shell) |
 | account/index (orders), order, reviews, profile | `/account`, `/account/orders/{ref}`, `/account/reviews`, `/account/profile` | built |
+| categories.html | `/categories` | built |
+| wishlist.html | `/wishlist` | built |
 | review.html | none | review-only index, delete at conversion |
 
 ### 3.1 Home (`/`)
 - No query params, no forms (the header search is the only form).
-- Data: hero (static copy + one photo), trust strip (four static items: free delivery over Rs 7,500 with "Standard delivery Rs 450", secure online payment with "Visa & Mastercard accepted", easy returns (window TBD), verified parent reviews), age tiles (5, link `/shop?age=<slug>`), category tiles (6, each with a photo and label, link to the category), "New this week" (4 products, newest first, link "View all" `/shop?sort=new`), promo banners (`home_promo`, 2), "Featured products" (8 products with the `featured` flag, button "Shop all" `/shop`).
-- Product card data: name, URL, current price, regular price when on sale, badge (see section 1.12), up to 4 colour dots plus "+N", out-of-stock flag, photo.
+- Data: hero (static copy + one photo; H1 "Soft cottons for the first two years.", lede "Breathable cotton and bamboo, cut for Sri Lankan weather. Sized by age, so you order once and it fits." TODO: the fabric claims need client confirmation), trust strip (four static items: "Swap sizes free" with "Exchange within 14 days, unworn" (days from the site config); "Tested for sensitive skin" with "OEKO-TEX certified cotton" (**TODO: needs certificate evidence before launch; never present it as verified**); "Free delivery over Rs. 7,500" with "Island-wide by courier"; "Secure card payment" with "Visa & Mastercard accepted"), "Shop by age" tiles (nine, link `/shop?size=<slug>`, scroll sideways), category tiles (seven, each with a photo and label, link to the category), "New this week" (4 products, newest first, link "View all" `/shop?sort=new`), promo banners (`home_promo`, 2), "Featured products" (8 products with the `featured` flag, button "Shop all" `/shop`).
+- Product card data: name, URL, current price, compare-at price when on sale (struck through), **one badge (Sale > New)**, out-of-stock flag, photo, and the meta line "{N} colours · {min}–{max}" (colour count and the size range, for example "4 colours · NB–18m"). The colour dots are not used: **add them back only if the backend supplies colour hex values** (see Questions).
 - States: out-of-stock card (muted, no quick add). Empty sections are not designed (assumption: hide the section).
 
 ### 3.2 Listing pages: Shop, Category, Search
@@ -126,7 +149,7 @@ Routes: `GET /shop`, `GET /{department}/{category}` (prototype `category.html?c=
 
 | Param | Where | Allowed values | Notes |
 | --- | --- | --- | --- |
-| `age` | all | `newborn`, `0-3-months`, `3-6-months`, `6-12-months`, `1-2-years` | Invalid value ignored (= all ages). Not shown on Search (no age chips there). |
+| `size` | all | `newborn`, `0-3m`, `3-6m`, `6-9m`, `9-12m`, `12-18m`, `18-24m`, `2y`, `3y` | Invalid value ignored (= all sizes). The old encoded form `0%E2%80%933m` is accepted and normalised. Not shown on Search (no size chips there). |
 | `sort` | all | `featured` (default), `new`, `price-asc`, `price-desc` | `new` is a sort (newest first), not a filter. Price directions are TBD with the backend dev. |
 | `sale` | all | `1` | Only products with a sale price. |
 | `c` | category only | category slug | Prototype stand-in for the route segment. Unknown slug -> "Category not found" with the empty state. No `c` behaves like Shop. |
@@ -138,17 +161,17 @@ Form (the toolbar): `GET` to the same page.
 | --- | --- | --- | --- |
 | `sort` | select | the four sorts above | Auto-submits on change; a Noscript Apply button exists. |
 | `sale` | checkbox (`role="switch"`) | `1` | Unchecked sends nothing. |
-| `age`, `c`, `q` | hidden | current values | Only rendered when set, so the other filters survive a submit. `page` is dropped on submit. |
+| `size`, `c`, `q` | hidden | current values | Only rendered when set, so the other filters survive a submit. `page` is dropped on submit. |
 
-Links: age chips (`All ages` + 5) keep `sort`, `sale`, `c`, `q` and drop `page`. Pagination links keep every other param. "Clear filters" removes `age`, `sort`, `sale` and `page` but keeps `c` and `q`.
+Links: size chips ("All ages" + the nine sizes) keep `sort`, `sale`, `c`, `q` and drop `page`; they also show on category pages. Pagination links keep every other param. "Clear filters" removes `size`, `sort`, `sale` and `page` but keeps `c` and `q`.
 
-H1 and intro by state (precedence): Search: `Results for "<q>"` (empty q: "Search"); Category: category name + its one-line description; age: `<age label> clothing`; `sale=1`: "Sale"; `sort=new`: "New in"; default: "All baby clothing". With age or category plus `sale`, the intro adds "Showing sale items only." Document title is `"<H1> | Kayaa"`. Breadcrumb: Home / Shop (/ Category); Search: Home / Search.
+H1 and intro by state (precedence): Search: `Results for "<q>"` (empty q: "Search"); Category: category name + its one-line description; size: "Size 0–3m" ("Newborn clothing" for newborn); `sale=1`: "Sale"; `sort=new`: "New in"; default: "All baby clothing". With size or category plus `sale`, the intro adds "Showing sale items only." Document title is `"<H1> | Kayaa"`. Breadcrumb: Shop: Home / Shop; Category: **Home / Baby / Category** (Baby links to `/categories`); Search: Home / Search. The sort values and the page size (12) are to be confirmed (see Questions). Sale is a filter (`sale=1`) in the prototype.
 
 Data per page: products (page of 12) with the card data from 3.1, total count (band shows "N products", toolbar shows "Showing 1-12 of 24"), page count.
 
 States
 - Empty (no products): package icon, "No products match these filters", "Clear filters" button.
-- Search no results: `No results for "<q>"`, three tips, links to the six categories and five ages. Empty `q` shows the same block titled "What are you looking for?".
+- Search no results: `No results for "<q>"`, three tips, links to the seven categories and the nine sizes. Empty `q` shows the same block titled "What are you looking for?".
 - Pagination: Prev / numbers / Next (ellipsis beyond 7 pages); under 600px it shows Prev / "Page N of M" / Next. Hidden when there is one page.
 
 ### 3.3 Product (`/products/{slug}`)
@@ -159,7 +182,7 @@ Query params: `colour` (colour slug; preselects the colour and its photos; inval
 | Field | Type | Required | Values / validation | Example |
 | --- | --- | --- | --- | --- |
 | `colour` | radio | yes | a colour slug of this product; one preselected | `lilac` |
-| `size` | radio | yes | size label of an in-stock variant for the chosen colour; out-of-stock variants render as disabled radios (+ sr-only "(out of stock)") | `3-6M` |
+| `size` | radio | yes | **size slug** of an in-stock variant for the chosen colour (the box shows the full label); out-of-stock variants render as disabled radios (+ sr-only "(out of stock)") | `3-6m` |
 | `quantity` | text, numeric | yes | integer 1 to 10, and at most the variant's stock | `1` |
 | product id | hidden | yes | (assumption) the product id or slug | |
 
@@ -167,29 +190,31 @@ Form attributes the page reads: `data-product-name`, `data-unit-price` (current 
 
 **Variants JSON**: see section 1.4.
 
-**Data the page needs:** name, slug, category (name, slug), price and sale price, flags (`new`, `featured`), description, colours (name, slug, swatch colour), sizes in scale order, variants (stock), images (url, alt, order, nullable colour), rating average (1 decimal), review count and 5-to-1 breakdown, approved reviews (author name, date, rating 1 to 5, comment, verified-purchase flag, optional admin reply), FAQs, related products (section 1.16), the user's "already reviewed" flag.
+**Data the page needs:** name, slug, eyebrow ("Kayaa Essentials": TODO the source field), category (name, slug), price and sale price (compare-at), flags (`new`, `featured`), short description, composition and care (see section 1.3), colours (name, slug; swatch colour only if supplied), sizes in scale order, variants (stock), images (url, alt, order, nullable colour), rating average (1 decimal), review count and 5-to-1 breakdown, approved reviews (author name, date, rating 1 to 5, optional headline, text, verified-purchase flag, optional admin reply), FAQs, related products (section 1.16: **"Goes well with"**, 4 items from the same category), the user's "already reviewed" flag, the wishlist state.
 
-**Badge** (top-left of the gallery, one max): Sale > New > Featured.
+**Badge** (top-left of the gallery, one max): Sale > New. **Buy area:** the colour legend reads "Colour — Butter" (the selected colour); the stock note reads "In stock · ships from Colombo" (TODO confirm), "Only N left" at or under the threshold; buttons "Add to cart" and a secondary **"Save"** (heart icon, toggles to "Saved", `aria-pressed`; the wishlist is in sessionStorage in the prototype); under them "Order before 2pm for same-day dispatch" (TODO confirm; site config `dispatch_cutoff`).
 
-**Reviews section** (`#reviews`): average, stars, "Based on N reviews", breakdown rows, "Write a review" button (anchor to `#write-review`), review cards (stars, name, date, optional "Verified purchase", comment, optional "Reply from Kayaa"; no titles), "Showing 5 of 12" count and "See more reviews" (section 1.5). Empty state: "No reviews yet. Be the first to review this product." with a button to the form.
+**Reviews section** (`#reviews`): average, stars, "Based on N reviews", breakdown rows, "Write a review" button (anchor to `#write-review`), review cards (stars, name, date, optional "Verified purchase", the **headline in bold when present**, text, optional "Reply from Kayaa"), "Showing 5 of 12" count and "See more reviews" (section 1.5). Empty state: "No reviews yet — be the first to tell other parents how it fits." with a button to the form.
 
 **Review form** (`#write-review`) - `POST` (action TODO; assumption: `POST /products/{slug}/reviews`), `@csrf`.
 | Field | Type | Required | Validation | Example |
 | --- | --- | --- | --- | --- |
 | `rating` | radio 1 to 5 (rendered as stars) | yes | integer 1 to 5 | `5` |
 | `name` | text | yes, for guests only (hide when signed in) | non-empty string | `Amaya R.` |
-| `comment` | textarea | yes | non-empty text (max length TBD) | `Lovely and soft.` |
+| `email` | email, `autocomplete="email"` | yes, for guests only; **not shown on the page** | valid email | `amaya@example.com` |
+| `headline` | text, `maxlength="100"` | no | optional short title, shown in bold on the review card | `Soft and true to size` |
+| `body` | textarea | yes | the review text; non-empty (max length TBD). Field names are TODO with the backend dev | `Lovely and soft.` |
 
-No review titles. Reviews are moderated: show "Thank you - your review will appear once it has been approved." States: field errors (message per field, `aria-invalid`, plus a summary alert "Please check your review" listing the errors), success alert, rate-limit alert "Too many attempts. Please wait a minute and try again.", and, for signed-in users who already reviewed, the form is replaced by "You've already reviewed this product."
+Helper under the text: "Reviews are checked by us before they appear." Signed-out note: "Sign in to have your review marked as a verified purchase." Reviews are moderated: show "Thank you - your review will appear once it has been approved." States: field errors (message per field, `aria-invalid`, plus a summary alert "Please check your review" listing the errors), success alert, rate-limit alert "Too many attempts. Please wait a minute and try again.", and, for signed-in users who already reviewed, the form is replaced by "You've already reviewed this product."
 
-Other: the size guide panel is a static placeholder table (TBD, section 1.14); the assurance list is static (free delivery over Rs 7,500; secure card payment, Visa & Mastercard; easy returns, window TBD). Related products and FAQs: sections 1.13 and 1.16.
+Other: the size guide panel is a static placeholder table of the nine sizes (age, height, weight; section 1.14); the assurance list is static (free delivery over Rs. 7,500; secure card payment, Visa & Mastercard; easy returns, window TBD). The accordions are "Fabric & care" and "Delivery & returns" (section 1.3). Related products and FAQs: sections 1.13 and 1.16.
 
 ### 3.4 Cart (`/cart`)
 Replaces the stub. No query params. Prototype-only `?demo=` (`empty`, `oos-line`, `low-stock`, `price-changed`, `free-delivery`, `checkout-oos`). Full shell (header, tab bar, drawers).
 
 Data: the cart lines and totals. Each line: product name and URL, colour (slug + label), size (key + label), unit price, regular price when on sale, quantity, current stock of that variant, thumbnail (the selected colour's first photo), availability, "price changed since added" flag. Totals: subtotal (available lines only), delivery fee, total, units count, "Rs X away from free delivery".
 
-Rules (config, TODO confirm the delivery fee is flat and not district-based): delivery is Rs 450 below a Rs 7,500 subtotal and free at Rs 7,500 or more. Quantity per line is 1 to 10 and never above the variant's stock.
+Rules (config, TODO confirm the delivery fee is flat and not district-based): delivery is Rs. 450 below a Rs. 7,500 subtotal and free at Rs. 7,500 or more. Quantity per line is 1 to 10 and never above the variant's stock.
 
 Forms (real forms, so the page works without JS; `@csrf`; actions are TODO, assumptions shown):
 | Form | Method / action | Fields |
@@ -227,11 +252,11 @@ Form: `POST` (action TODO; assumption `POST /checkout` creates the order, then t
 
 **Delivery estimate:** shown only here (and in the order summary, on the thank-you page, on the track result and the order page while the order can still arrive), after the district is chosen: "Estimated delivery to Colombo: 2–3 working days". The backend supplies **two integers per district (`min_days`, `max_days`)**; the prototype reads `<script type="application/json" id="district-eta">` mapping the district slug to `{ "min": 2, "max": 3 }` (placeholder numbers). **The wording belongs to the frontend** and lives in one helper, `Kayaa.formatEta(min, max)` in `app.js`: equal values `3 working days`, `1` and `1` `1 working day`, otherwise `2–4 working days` (en dash). Blade can reproduce those rules in one view helper. The delivery page (`/delivery`) shows the same data (section 3.13). Never shown on the product page or the cart.
 
-Contact states: guests see "Have an account? Log in" (`/account/login`); signed-in users see their fields prefilled and "Signed in as {email} - Not you?".
+Contact states: guests see "Have an account? Sign in" (`/account/login`); signed-in users see their fields prefilled and "Signed in as {email} - Not you?".
 
 Payment card (no radio cards, online only): credit-card icon, "Pay by card - Visa or Mastercard", "You'll be taken to Onepay's secure page to enter your card details. We never see or store your card number." (TODO confirm hosted redirect), plain-text Visa and Mastercard badges (TODO official marks and Onepay badge), and "By paying you agree to our Terms and Returns policy" (`/terms`, `/returns`).
 
-**Pay button:** the label comes from config (`pay_button_label`, default "Continue to payment"; `<span data-cfg="pay_button_label">`). **It never contains an amount** (the total is in the summary). Lock icon and the helper "Secure payment via Onepay" stay. On a valid submit the button is disabled with `aria-busy="true"`, shows a spinner and "Redirecting to secure payment..." and cannot be submitted twice.
+**Pay button:** the label comes from config (`pay_button_label`, default "Pay now"; `<span data-cfg="pay_button_label">`). **It never contains an amount** (the total is in the summary). The flow is checkout "Pay now" -> payment gateway -> order confirmed. Lock icon and the helper "Secure payment via Onepay" stay. On a valid submit the button is disabled with `aria-busy="true"`, shows a spinner and "Redirecting to secure payment..." and cannot be submitted twice.
 
 States: field errors (message under each field, `aria-invalid`, `aria-describedby`), an error summary at the top (`role="alert"`, focus moves to it, links to each invalid field), throttle alert ("Too many attempts. Please wait a minute and try again."), gateway error alert ("We couldn't start the payment. Please try again."), stock-ran-out redirect to `/cart`.
 
@@ -252,7 +277,7 @@ Data needed for every state except expired: order reference, items (name, size, 
 
 | State | Icon | Heading | Buttons | Status badge |
 | --- | --- | --- | --- | --- |
-| paid | check, Primary Deep on lilac tint | "Thank you, {first name} - your order is confirmed" + next steps; the confirmation-email line when enabled | Track your order (`/track?ref={reference}`), Continue shopping; guests also get "Create an account with the same email to see this order later" (`/account/register`) | `status--paid` |
+| paid | check, Primary Deep on lilac tint | "Order confirmed" with "Thank you, {first name}" beneath, then next steps; the confirmation-email line when enabled | Track your order (`/track?ref={reference}`), Continue shopping; guests also get "Create an account with the same email to see this order later" (`/account/register`) | `status--paid` |
 | pending | clock | "We're confirming your payment" - "This can take a few minutes. Please don't pay again." | Refresh status (reloads the page), Contact us (`/contact`) | `status--pending` |
 | failed | alert circle, error colour | "Your payment didn't go through" - "If you were charged, contact us with your order reference." (no promise about held items) | **Resume payment** (primary; TODO confirm the signed link supports it), Continue shopping | `status--failed` |
 | cancelled | alert circle, error colour | "This order was cancelled." - "If you were charged, contact us with your order reference." | Continue shopping, Contact us. No resume. | `status--cancelled` |
@@ -273,15 +298,15 @@ The "Track your order" link carries **`?ref=` only** (`/track?ref=KY-261003-A3F9
 | `refunded` | blue tint + rotate-ccw icon |
 
 ### 3.9 Track order (`/track`)
-Full shell. Guests and signed-in customers use the same page; it always works without an account. Prototype-only: `?ref=` prefills the reference, `?demo=throttle`.
+Full shell. Guests and signed-in customers use the same page; it always works without an account. Intro: "Enter the order number from your confirmation and the mobile number you used." Button: "Find my order". Prototype-only: `?ref=` prefills the reference, `?demo=throttle`.
 
 Form: `POST` (action TODO; assumption `POST /track`), `@csrf`, `novalidate`, **limited to 20 requests a minute**. **Both fields are required and are matched together** (an order is found only when the reference and the mobile number both belong to it).
 | Field | Type | Required | Validation | Example |
 | --- | --- | --- | --- | --- |
-| `ref` | text, `maxlength="20"`, `autocapitalize="characters"`, `autocomplete="off"`, no digit-only pattern | yes | order reference `KY-YYMMDD-XXXX` (uppercase, max 20 characters; **never assume digits only or a fixed length**); trim and uppercase before matching | `KY-261003-A3F9` |
-| `phone` | tel, `autocomplete="tel"`, `inputmode="tel"` | yes | the checkout's Sri Lankan mobile rule, normalised on the server; helper "The number you gave at checkout" | `071 234 5678` |
+| `ref` (label "Order number") | text, `maxlength="20"`, `autocapitalize="characters"`, `autocomplete="off"`, no digit-only pattern | yes | order reference `KY-YYMMDD-XXXX` (uppercase, max 20 characters; **never assume digits only or a fixed length**); trim and uppercase before matching | `KY-261003-A3F9` |
+| `phone` (label "Mobile number") | tel, `autocomplete="tel"`, `inputmode="tel"` | yes | the checkout's Sri Lankan mobile rule, normalised on the server; helper "The number you gave at checkout" | `071 234 5678` |
 
-The thank-you page's "Track your order" link carries **`?ref=` only**; the page prefills the reference and **never runs the lookup** (the shopper adds the mobile number and presses "Track order"). The mobile number is never put in a URL.
+The thank-you page's "Track your order" link carries **`?ref=` only**; the page prefills the reference and **never runs the lookup** (the shopper adds the mobile number and presses "Find my order"). The mobile number is never put in a URL.
 
 **Privacy rule:** the result shows only the status, the payment status, the items, the totals, the last-updated date and the delivery estimate. Never the name, address, phone or email. The estimate is shown while the order can still arrive (not for delivered, cancelled or refunded orders) and does not name the district.
 
@@ -312,77 +337,17 @@ All forms: `POST`, `@csrf`, `novalidate`; the server repeats every rule. Error s
 | `email` | email, `autocomplete="username"` | yes | valid email |
 | `password` | password, `autocomplete="current-password"` | yes | |
 | `remember` | checkbox, `name="remember"`, value `1` | no | label "Keep me signed in for 30 days" (the number is `remember_days` from the site config: `<span data-cfg="remember_days">`) |
-Safe responses: a wrong email or password returns ONE alert, "These details don't match our records.", and never says which field was wrong. After a password reset the page shows the success alert "Your password has been updated. Log in with your new password." (a status flash).
+Safe responses: a wrong email or password returns ONE alert, "These details don't match our records.", and never says which field was wrong. After a password reset the page shows the success alert "Your password has been updated. Sign in with your new password." (a status flash).
 
 **Register** - `POST /register` (TODO action). Fields: `name`, `email`, `phone`, `password`, `password_confirmation`.
 | Field | Type | Required | Validation | Example |
 | --- | --- | --- | --- | --- |
-| `name` | text, `autocomplete="name"` | yes | non-empty | `Amaya Ranasinghe` |
-| `email` | email, `autocomplete="email"` | yes | valid, unique in `users` ("This email is already registered. Log in or use a different email.") | `amaya@example.com` |
-| `phone` | tel, `autocomplete="tel"` | yes (stored as `users.phone`) | Sri Lankan mobile, normalised | `071 234 5678` |
-| `password` | password, `autocomplete="new-password"` | yes | at least 8 characters | |
-| `password_confirmation` | password, `autocomplete="new-password"` | yes | must match | |
-Terms line links to `/terms` and `/privacy`. **On success the user is signed in (the account works unverified) and sent to `/account/verify-email`.**
+| `name` (label "Your name") | text, `autocomplete="name"` | yes | non-empty | `Amaya Ranasinghe` |
+| `contact` (label "Mobile or email") | text, `autocomplete="email"` | yes | **one field**: a Sri Lankan mobile number (the checkout rule) or a valid email address | `071 234 5678` or `amaya@example.com` |
+| `order_number` (label "Order number (optional)") | text, `maxlength="20"`, `autocapitalize="characters"`, `autocomplete="off"` | no | order number `KY-YYMMDD-XXXX`, uppercase; no digit-only pattern | `KY-261003-A3F9` |
+| `message` (label "Message") | textarea (6 rows), `autocomplete="off"` | yes | non-empty (TODO: max length) | `Do you have the dress in 6-9m?` |
 
-**Forgot password** - `POST /forgot-password` (TODO action): field `email` (email, required). The answer is ALWAYS "If that email is registered, we've sent a reset link." whether or not the email exists (never reveals which emails are registered). The reset email goes through the configured mailer (needs real mail configuration before launch).
-
-**Reset password** - `POST /reset-password` (TODO action): hidden `token`; `email` (read-only); `password` and `password_confirmation` (new-password, at least 8, must match). Invalid or expired token: a page "This reset link is no longer valid." with a button to request a new link. Success redirects to `/account/login` with the success flash.
-
-**Email verification (required before any guest order is attached to an account; the account itself works unverified)**
-| Route | Page | Notes |
-| --- | --- | --- |
-| `GET /account/verify-email` | "Check your email" interstitial (after register) | The address, "We've sent a link to {email}", buttons **Resend email** (`POST /email/verification-notification`, TODO route, throttled; states: sent alert "We've sent another link to {email}.", throttle alert), **Change email** (-> `/account/profile`), **Continue to your account** (-> `/account`), and a Log out link (a `POST /logout` form). |
-| `GET /email/verify/{id}/{hash}` (signed link in the email; TODO route) | landing | **verified:** "Email verified. Orders you placed as a guest with this email are now in your account." + Continue to your account. **invalid or expired:** "This verification link is no longer valid." with Resend email. Both render on `/account/verify-email` in the prototype (`?demo=verified`, `?demo=invalid`). |
-A **banner** shows on every signed-in account page (orders, order, reviews, profile) while the email is unverified: "Verify your email to see orders you placed as a guest. We sent a link to {email}." with **Resend email** and a close button (`aria-label="Dismiss"`); it is a `role="region"` landmark labelled "Verify your email", not an alert. Dismissal is remembered for the session only (sessionStorage in `account.js`). Needs real mail configuration before launch (see Questions). The prototype stores `verified` in the demo session; `?demo=unverified` and `?demo=verified` on any account page switch it.
-
-### 3.11 Account area (`/account`, `/account/orders/{ref}`, `/account/reviews`, `/account/profile`)
-Full shell; `<body data-page="account">`. Desktop: a left sidebar (My orders, My reviews, Profile, Log out) and the content on the right; mobile: a scrollable chip nav (`aria-label="Account"`, `aria-current` on the active item) and the Log out button at the bottom of the profile page. Log out is `POST /logout` (TODO action). Pages are reachable by URL in the prototype; in Laravel they are guarded by auth. Every page carries the verification banner (above) while the email is unverified.
-
-**My orders (`/account`)**: heading "Hi, {first name}". Orders = `User::allOrders`: the orders with the customer's `user_id` **plus earlier guest orders placed with the same email, but only once the account's email is verified**. The note under the list says so: unverified "Orders you placed as a guest will appear here after you verify your email."; verified "Orders placed as a guest with this email also appear here." 6 per page (`?page=`), newest first. Each card: reference (link), order date, status badge, payment badge, item count with up to 3 thumbnails, total, "View order" link. Pagination reuses the shared component. Empty state: "No orders yet" with "Start shopping". The prototype has 13 sample orders (3 pages).
-
-**Order detail (`/account/orders/{ref}`, prototype `order.html?ref=`)**: reference, date, status and payment badges, the status stepper with per-step dates (same variants as 3.9), items (with a "Write a review" link per item to `/products/{slug}#write-review` for shipped or delivered orders), totals card (subtotal, delivery, total, payment method "Card - Onepay", payment status), delivery address (name, lines, city, district, phone) and delivery estimate (hidden for delivered, cancelled and refunded). Actions: "Track this order" (`/track?ref=` , the reference only), "Chat on WhatsApp", **"Resume payment"** (only when payment is pending or failed, the method is the online gateway and the order is not cancelled; route TBD) and **"Cancel order"**.
-- **Cancel order:** account order page only, visible **only while the order status is `pending`**. Secondary button "Cancel order" opens an accessible native `<dialog>` (focus trap, ESC closes, focus returns to the button): heading "Cancel this order?", "This can't be undone.", and **when the payment status is `paid`** "Your payment will be refunded to your card." (TODO: confirm refund timing). Buttons: "Keep order" (primary, initial focus) and "Yes, cancel order" (danger). Form: `POST /account/orders/{ref}/cancel` (TODO route), `@csrf`. On success the order status becomes `cancelled` (the backend adds `cancelled_at`), the page shows the alert "Your order has been cancelled." (`role="status"`, focus moves to it) and hides the button; stock restoration is a backend question (see Questions).
-- An order that is not this customer's, or does not exist, shows a not-found card with a link back to the list. Sample references in the prototype: KY-261001-K8D3 shipped, KY-260914-T5R7 delivered, KY-260910-B2W6 cancelled, KY-261003-A3F9 pending payment, KY-261003-P7X2 payment failed, KY-260828-H4N8 refunded, KY-261002-W5N7 paid and waiting to be confirmed (shows the refund line), KY-260720-E8Z5 delivered with missing step dates.
-
-**My reviews (`/account/reviews`)**: the customer's reviews: product thumbnail and name (link), stars, comment, date, "Verified purchase" badge where applicable, a status badge and, when present, the admin reply ("Reply from Kayaa"). One review per signed-in customer per product. Reviews start unapproved and only approved ones show on the product page. The backend has ONE flag (approved), so a pending review and a hidden one look the same to the customer: **"Awaiting approval"** (neutral outline + clock) versus **"Published"** (lilac + check). Empty state: "You haven't written any reviews yet" with a link to My orders. **Reviews are read-only after submission**: editing a review is not designed.
-
-**Profile (`/account/profile`)**:
-| Form | Method / action | Fields |
-| --- | --- | --- |
-| Your details | `POST` + `_method=PATCH` -> `/account/profile` (TODO action) | `name` (required), `email` (required, valid, unique), `phone` (required, Sri Lankan mobile). Success alert "Your details have been saved." (TODO: does changing the email reset verification?) |
-| Change password | `POST` + `_method=PUT` -> `/account/password` (TODO action) | `current_password` (required, `current-password`), `password` (new-password, at least 8 characters, no maximum), `password_confirmation` (must match). Success alert "Your password has been changed." |
-Deleting an account is not in the backend and is not designed.
-
-### 3.12 Status component additions
-The `.status` mapping (3.8) is also used for the review statuses: "Published" = `status--confirmed` (lilac + check), "Awaiting approval" = `status--pending` (neutral outline + clock).
-
-### 3.13 Content pages (size guide, delivery, returns, about, privacy, terms)
-Full shell, no forms. One template (`content.css`): breadcrumb, h1, one-line intro, "Last updated {date}" (TODO: from `updated_at` or a static date), then the content in a readable column (72ch). Delivery, Returns, Privacy and Terms add an "On this page" table of contents built from the h2 ids (a `<details>` block under the intro below 1100px, a sticky sidebar from 1100px); h2 and h3 carry ids and heading anchor links. Every content page except Contact ends with a "Still need help?" card (WhatsApp button + Contact link; reuse one Blade partial). Size guide, Delivery, Returns, Privacy and Terms carry `<body data-print>` and have a print stylesheet (shell hidden, link URLs printed after links).
-
-**Every fact on these pages is a placeholder** (shown in brackets, for example `[return window]`, plus `<!-- TODO: confirm with client -->`). Nothing is invented. Privacy and Terms are skeletons with a visible notice "Placeholder text. The final policy will be supplied by Kayaa." and one placeholder sentence per heading; the client supplies the real text.
-
-| Page | Route | Data the page needs |
-| --- | --- | --- |
-| Size guide | `/size-guide` | The size table: size, age, weight (kg), height (cm) for NB, 0-3M, 3-6M, 6-9M, 9-12M, 12-18M. **The product page table must mirror this one: one source** (global table; per-product tables are not designed). Placeholder ranges. Also: the "between sizes" advice, 4 size FAQs (static placeholders for now), age chips -> `/shop?age=<slug>`. |
-| Delivery | `/delivery` | The fee rule (Rs 450, free from Rs 7,500; TODO confirm it is flat) from config. **The district estimate table (25 districts grouped into 9 provinces) must come from the same data as the checkout ETA** (the `district-eta` JSON block on `/checkout`: district slug -> `{ "min": 2, "max": 3 }`, the two integers `min_days` and `max_days`; the cells are worded by `Kayaa.formatEta`); one source in Blade, keyed by district with its province for the grouping. The prototype fills the cells from that JSON in `content.js` and keeps the placeholder brackets (`data-eta-placeholder`) until the real data arrives. Static text: how delivery works (4 steps), "Not at home?", "Delivery questions". |
-| Returns | `/returns` | Static placeholder sections: return window, condition of items, how to start a return (order reference through WhatsApp or the contact form), exchanges for size, refunds (to the original card through Onepay, timeline TODO), items that can't be returned, damaged or wrong items. |
-| About ("Our story") | `/about` | Story text, three values (heading + sentence), two images. Placeholder copy. |
-| Privacy | `/privacy` | Skeleton, 8 headings: information we collect, how we use it, payments and Onepay, sharing with couriers, cookies, how long we keep it, your choices, contact. |
-| Terms | `/terms` | Skeleton, 9 headings: using the site, orders and pricing, payment, delivery, returns, accounts, reviews, changes to these terms, contact. |
-
-**Static or editable?** All six are static Blade views in the prototype. **Question for the client:** do they want an admin editor (Filament rich-text pages for About, Delivery, Returns, Privacy, Terms) or are Blade views that a developer edits enough? Either way, the size table and the delivery estimates are data, not copy.
-
-### 3.14 Contact (`/contact`)
-Full shell. Three info cards (WhatsApp with a lilac icon and no brand logo, email, hours: all placeholders, TODO confirm with the client), the message form and four FAQs. Prototype-only `?demo=`: `sent`, `errors`, `throttle`.
-
-Form: `POST /contact` (TODO action; assumption), `@csrf`, `novalidate`, **limited to 5 messages a minute**.
-| Field | Type | Required | Validation | Example |
-| --- | --- | --- | --- | --- |
-| `name` | text, `autocomplete="name"` | yes | non-empty | `Amaya Ranasinghe` |
-| `email` | email, `autocomplete="email"`, `inputmode="email"` | yes | valid email | `amaya@example.com` |
-| `message` | textarea (6 rows), `autocomplete="off"` | yes | non-empty (TODO: max length) | `Do you have the dress in 6-9M?` |
-
-Only these three fields. Extra fields to consider (not added): order reference, mobile number, topic.
+Only these four fields; button "Send message". (Considered and not added: topic, a separate mobile number.)
 States: success alert "Thanks, we'll get back to you soon." (flash after the redirect; the form comes back empty), error summary "Please check your message" (focus moves to it, links to each field) plus inline messages with `aria-invalid`, throttle alert "Too many messages. Please wait a minute and try again." Spam protection is TODO (honeypot field, Turnstile or reCAPTCHA: backend dev's call). What happens to the message (an email to the shop, a database row, both) is TBD. Never claim an email was sent to the customer.
 FAQs: the four on this page come from FAQs with the placement `contact` (wrapped in `<!-- loop: faqs (placement: contact) -->`).
 
@@ -404,15 +369,34 @@ One template (`errors.css`): a lilac icon disc, a code label, h1, one sentence, 
 
 
 ### 3.17 Site config (`tools/site-config.json`)
-The prototype keeps its single-source values in `tools/site-config.json`. `node tools/sync-shell.mjs` refreshes every `<span data-cfg="KEY">` (money keys print as `Rs 7,500`), sets attributes named in `data-cfg-attr="attribute:KEY"` (for example `max:free_shipping_over` on the free-delivery progress), and writes `assets/js/site-config.js` (`window.KAYAA_CONFIG`) for the scripts. **In Blade these become view variables**: print the values where the `data-cfg` spans are, and print `window.KAYAA_CONFIG` from the same config in the layout.
+The prototype keeps its single-source values in `tools/site-config.json`. `node tools/sync-shell.mjs` refreshes every `<span data-cfg="KEY">` (money keys print as `Rs. 7,500`), sets attributes named in `data-cfg-attr="attribute:KEY"` (for example `max:free_shipping_over` on the free-delivery progress), and writes `assets/js/site-config.js` (`window.KAYAA_CONFIG`) for the scripts. **In Blade these become view variables**: print the values where the `data-cfg` spans are, and print `window.KAYAA_CONFIG` from the same config in the layout.
 | Key | Value | Used for |
 | --- | --- | --- |
 | `shipping_fee` | 450 | delivery fee (cart, checkout, order totals, announcement bar, product page, delivery page) |
 | `free_shipping_over` | 7500 | free-delivery threshold and the progress bar maximum |
-| `pay_button_label` | "Continue to payment" | the checkout pay button (never contains an amount) |
+| `pay_button_label` | "Pay now" | the checkout pay button (never contains an amount) |
 | `order_emails_enabled` | false | the confirmation-email line on the thank-you page |
 | `remember_days` | 30 | the login "Keep me signed in for 30 days" label |
 | `low_stock_threshold` | 5 | "Only N left" on the product page, cart lines and the buy form |
+| `delivery_colombo_days` | "1–2" | working days for Colombo and suburbs (product accordion, delivery page, contact) |
+| `delivery_island_days` | "2–4" | working days for the rest of the island (announcement bar, product accordion, delivery page) |
+| `dispatch_cutoff` | "2pm" | "Order before 2pm for same-day dispatch" on the product page (TODO confirm) |
+| `return_window_days` | 14 | the exchange window (trust strip, product accordion, returns page; TODO confirm) |
+| `refund_days` | 7 | refunds go back to the card within N working days (returns page; TODO confirm) |
+| `faulty_report_days` | 7 | tell us within N days about a damaged or wrong item (returns page; TODO confirm) |
+| `support_hours` | "Mon–Sat 9am–6pm" | the Hours card on the contact page (TODO confirm) |
+| `whatsapp_display` | "077 000 0000" | the WhatsApp number shown in help cards and the contact page (placeholder number) |
+| `currency_prefix` | "Rs." | the prefix of every price, written "Rs. 2,450" (one helper formats it, including the free-delivery progress) |
+
+
+### 3.18 Categories (`/categories`)
+Full shell. Breadcrumb Home / Baby. H1 "All categories", a lede, and a grid of the seven categories: placeholder media (a photo later), the name with an arrow, "N items" and a link to the category (`/baby/{slug}`; prototype `category.html?c={slug}`). The grid is 2 columns on phones, 3 from 600px, 4 from 900px and all seven in one row from 1200px. The mega menu stays; "Categories" is a link after "Shop" in the desktop nav and in the mobile drawer. Data: name, slug, item count (active products), photo.
+
+### 3.19 Wishlist (`/wishlist`)
+Full shell. H1 "Your wishlist", "N saved products", and a grid of the saved products (the same product card plus **Remove** and **Choose size**, which opens the quick-add sheet with the product's sizes and colours). Empty state: "Nothing saved yet." "Tap Save on a product to keep it here." and a "Shop now" button (`?demo=empty` in the prototype). A heart link sits in the desktop header utility group; "Wishlist" is in the mobile drawer and the footer. The product page has the **Save** toggle ("Save" / "Saved", `aria-pressed`). Removing a card moves focus to the next Remove button (or the empty-state heading) and announces "<name> removed from your wishlist." **TODO / question:** guest wishlists (kept in the browser, or in the session until sign-in?) and whether signed-in wishlists live in the database. Prototype: sessionStorage (`proto-wishlist.js`, first visit starts with three saved products).
+
+### 3.20 Product fields observed on staging
+Names, categories, prices and the size range come from the staging site; everything else is placeholder. Sample catalogue (26 products, `tools/catalogue.json`): Ribbed Cotton Bodysuit (Bodysuits, sale Rs. 2,450 from Rs. 2,950, 4 colours, NB–18m), Cotton Kurta Set (Sets, new, 9m–24m, Rs. 4,950), Muslin Sleep Bag 0.5 TOG (Sleepwear, 3m–24m, Rs. 4,200), Bamboo Sleepsuit (Sleepwear, NB–12m, Rs. 3,650), Mittens & Booties Set (Accessories, NB–6m, Rs. 1,650), Reversible Bib Pair (Accessories, 6m–18m, Rs. 1,250), Pointelle Romper (Bodysuits, NB–12m, Rs. 3,200), Waffle Knit Cardigan (Outerwear, 6m–24m, Rs. 3,900), plus invented products so that every size has at least four products and every category at least three. Fields seen on a product: name, category, price and compare-at price, colours (names; the sample colours are Butter, Lilac, Sky, Blush, Dove), a size range, a "Kayaa Essentials" eyebrow, "Fabric & care" and "Delivery & returns" blocks, reviews with an optional headline, and a "Goes well with" related list. Currency is "Rs. 2,450". One size and category combination returns nothing for the empty-state demo (`shop.html?size=3y&sale=1`, `category.html?c=napkins&sale=1`).
 
 ---
 
@@ -451,8 +435,8 @@ The button carries `data-name`, `data-price`, optional `data-was`, `data-tone` (
 
 ## 5. Prototype-only behaviour (delete at conversion)
 
-- `assets/js/proto-listing.js`: filters, sorts, searches and paginates the 24 sample cards from the query string; sets H1, intro, breadcrumb, counts, pagination and the empty states. The server does all of this.
-- `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `sale`, `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
+- `assets/js/proto-listing.js`: filters, sorts, searches and paginates the 26 sample cards from the query string (`size`, `sort`, `sale`, `c`, `q`, `page`); normalises the old encoded `?size=0%E2%80%933m`; sets H1, intro, breadcrumb (Home / Baby / Category), counts and pagination. `assets/js/catalogue-data.js` (generated from `tools/catalogue.json`) holds the categories, sizes, colours and products for the scripts (the quick-add sheet, the listing, the wishlist); the product cards and menus are generated from the same file by `node tools/sync-shell.mjs` (`<!-- gen: NAME -->` regions). `assets/js/proto-wishlist.js` is the sessionStorage wishlist.
+- `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `regular` (no sale), `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
 - `assets/js/proto-cart.js`: the demo cart (sessionStorage) behind the header counts, the drawer, the cart page and the checkout summary, plus the simulated order. Line shape: `{id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}`.
 - `assets/js/proto-content.js` (the contact form demo outcomes). `assets/js/proto-orders.js` (thirteen sample orders, the stepper renderer), `proto-account.js` (track, orders, order detail, reviews, profile, log out) and `proto-auth.js` (auth demo outcomes and the demo session). Demo session: `window.KayaaCart.session` (sessionStorage); when set, the Account links in the header, tab bar and menu drawer go to the dashboard. In Laravel the server renders `@auth` and `@guest`.
 - `assets/js/proto-cart-page.js`, `proto-checkout.js`, `proto-thankyou.js`, `proto-onepay.js` and `html/proto-onepay.html`: render the pages from the demo cart/order and fake the payment hand-off. Demo params: cart `empty`, `oos-line`, `low-stock`, `price-changed`, `free-delivery`, `checkout-oos`; checkout `errors`, `throttle`, `gateway-error`, `signed-in`, `empty`; thank-you `state=paid|pending|failed|cancelled`.
@@ -471,3 +455,15 @@ Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, 
 5. **Refunds on cancel:** what happens, and how long does it take, when a paid order is cancelled? (The dialog says "Your payment will be refunded to your card" with a TODO for the timing.)
 6. **`confirmed_at`:** can the backend add a `confirmed_at` column? Until then the "paid or confirmed" step date uses `paid_at`.
 7. **Mail configuration:** verification and password-reset emails need real mail configuration before launch.
+
+### Catalogue alignment (staging comparison)
+8. **Size URLs:** can they use slugs (`0-3m`) instead of the encoded en dash (`0%E2%80%933m`)? The prototype accepts both.
+9. **Sort parameter values:** what are the backend's sort values (the prototype uses `featured`, `new`, `price-asc`, `price-desc`)?
+10. **Sale:** is Sale a filter (`sale=1`) only, or also a category or collection?
+11. **Colours:** do colours have hex values? Until then product cards show "{N} colours" and no dots.
+12. **Product text fields:** are there separate fabric & care (composition, care list) and full description fields?
+13. **Wishlist for guests:** kept in the browser, in the session, or only for signed-in accounts?
+14. **"Napkins":** what are they (the category has no obvious size range)?
+15. **Listing page size:** how many products per page (the prototype uses 12)?
+16. **"Kayaa Essentials":** where does the eyebrow come from (a product field, a collection)?
+17. **Cash on delivery and PayHere copy:** the staging site still shows both. When will they be removed? (The prototype has no cash on delivery and names no gateway except Onepay at checkout.)

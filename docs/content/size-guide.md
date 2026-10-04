@@ -1,41 +1,42 @@
 ---
 route: /size-guide
-h1: Baby Clothing Size Guide by Weight and Height
-meta_title: Baby Size Guide: Weight & Height Chart | Kayaa
-meta_description: Find your baby's clothing size by weight and height. A simple size chart, how to measure at home and what to do when your baby is between sizes.
+h1: Baby Size Guide by Age, Height and Weight
+meta_title: Baby Size Guide by Age, Height & Weight | Kayaa
+meta_description: Find the right Kayaa size from Newborn to 3Y. Our sizes follow age bands, with height and weight to guide you, plus how to measure at home.
 robots: index,follow
 updated: [[TODO: publication date]]
 ---
 
-Babies grow at their own pace, so age alone is not a reliable guide to size. We recommend choosing by your baby's weight and height, and we use the age label (for example 3-6M) as a rough guide only.
+Our sizes follow age bands, but every baby is different, so height and weight are the better guide. Check both against the chart. [[TODO: confirm the chart below with Kayaa. It is taken from the current test site.]]
 
 ## Size chart
 
-[[TABLE: size chart with Size, Age, Weight (kg) and Height (cm) columns. PROPOSED typical ranges below. Replace with Kayaa's own measured chart before launch.]]
+| Size | Height | Weight |
+|---|---|---|
+| Newborn | Up to 50 cm | Up to 3.5 kg |
+| 0–3m | 50–58 cm | 3.5–5.5 kg |
+| 3–6m | 58–66 cm | 5.5–7.5 kg |
+| 6–9m | 66–72 cm | 7.5–9 kg |
+| 9–12m | 72–78 cm | 9–10.5 kg |
+| 12–18m | 78–86 cm | 10.5–12 kg |
+| 18–24m | 86–92 cm | 12–13.5 kg |
+| 2Y | 92–98 cm | 13.5–15 kg |
+| 3Y | 98–104 cm | 15–17 kg |
 
-| Size | Age (guide) | Weight (kg) | Height (cm) |
-|---|---|---|---|
-| NB | Newborn | up to 3.5 | up to 55 |
-| 0-3M | 0 to 3 months | 3.5 to 6 | 55 to 62 |
-| 3-6M | 3 to 6 months | 6 to 7.5 | 62 to 68 |
-| 6-9M | 6 to 9 months | 7.5 to 9 | 68 to 74 |
-| 9-12M | 9 to 12 months | 9 to 10.5 | 74 to 80 |
-| 12-18M | 12 to 18 months | 10.5 to 12 | 80 to 86 |
+## Between two sizes?
+
+Go up. Babies grow quickly, and a slightly roomy fit is more comfortable in Sri Lanka's heat.
 
 ## How to measure
 
-1. **Weight.** Use your baby's latest weight from the clinic, or weigh yourself holding your baby and subtract your own weight.
-2. **Height.** Lay your baby flat on a firm surface and measure from the top of the head to the heel with a soft tape. It helps to have a second person to keep your baby still.
-3. **Compare.** Find the row that matches both measurements. If the two point to different sizes, use the larger one.
+1. **Height.** Lay your baby flat on a firm surface and measure from the top of the head to the heel with a soft tape. A second person helps to keep your baby still.
+2. **Weight.** The weight from the last clinic visit is fine.
+3. **Compare.** Find the row that matches both. If they point to different sizes, choose the larger.
 
-## Between sizes?
+## Buying a gift?
 
-[[PROPOSED: Choose the larger size. Babies grow quickly and a little room is more comfortable than a snug fit.]] Fastenings and stretchy fabrics are forgiving, but fit also depends on the style: check the details on each product page.
+If you do not know the height or weight, choose by age and pick something with a little stretch, such as a ribbed bodysuit.
 
 ## Shop by size
 
-Start from your baby's stage: [newborn](shop.html?age=newborn), [0 to 3 months](shop.html?age=0-3-months), [3 to 6 months](shop.html?age=3-6-months), [6 to 12 months](shop.html?age=6-12-months) or [1 to 2 years](shop.html?age=1-2-years). You can also browse by type: [bodysuits](category.html?c=bodysuits), [sleepsuits](category.html?c=sleepsuits), [sets](category.html?c=sets), [dresses and rompers](category.html?c=dresses-rompers), [hats and mitts](category.html?c=hats-mitts) and [swaddles and blankets](category.html?c=swaddles-blankets).
-
-## Size questions
-
-See the questions below, or [contact us](contact.html) and we will help you choose.
+[Newborn](shop.html?size=newborn), [0–3m](shop.html?size=0-3m), [3–6m](shop.html?size=3-6m), [6–9m](shop.html?size=6-9m), [9–12m](shop.html?size=9-12m), [12–18m](shop.html?size=12-18m), [18–24m](shop.html?size=18-24m), [2Y](shop.html?size=2y) and [3Y](shop.html?size=3y). Or browse by type: [newborn](category.html?c=newborn), [bodysuits](category.html?c=bodysuits), [sleepwear](category.html?c=sleepwear), [sets](category.html?c=sets), [outerwear](category.html?c=outerwear), [napkins](category.html?c=napkins) and [accessories](category.html?c=accessories).

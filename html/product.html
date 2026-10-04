@@ -13,10 +13,10 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=6e87c2c7">
-  <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
+  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/product.css?v=b6eec762">
+  <link rel="stylesheet" href="assets/css/pages/product.css?v=cf08a9e3">
   <!-- blade: generate this JSON-LD from the product (placeholder values) -->
   <script type="application/ld+json">
   {
@@ -230,6 +230,9 @@
       <path d="M13 12h8" />
       <path d="M13 18h8" />
     </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -238,7 +241,7 @@
   <!-- partial: announcement -->
   <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
   <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
-    <p class="topbar__text"><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span><span class="topbar__extra"> · Secure online payment</span></p>
+    <p class="topbar__text"><span>Island-wide delivery in <span data-cfg="delivery_island_days">2–4</span> days</span><span class="topbar__extra"> · Free over <span data-cfg="free_shipping_over">Rs. 7,500</span></span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
   </div>
   <!-- /partial: announcement -->
@@ -260,26 +263,31 @@
             <div class="mega" id="mega-shop" data-mega-panel inert>
               <div class="mega__panel">
                 <div class="mega__main">
-                  <p class="eyebrow">Shop by age</p>
-                  <ul class="mega__ages" role="list">
-                    <!-- loop: age_groups -->
-                    <li><a class="mega-tile" href="shop.html?age=newborn" style="--tone: var(--tone-1)"><span class="mega-tile__label"><span>Newborn</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="shop.html?age=0-3-months" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>0–3</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="shop.html?age=3-6-months" style="--tone: var(--tone-3)"><span class="mega-tile__label"><span>3–6</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="shop.html?age=6-12-months" style="--tone: var(--tone-4)"><span class="mega-tile__label"><span>6–12</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="shop.html?age=1-2-years" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>1–2</span><span>years</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <!-- /loop -->
+                  <p class="eyebrow">Shop by size</p>
+                  <ul class="chip-list mega__sizes" role="list">
+                    <!-- gen: size-chips-mega -->
+                    <li><a class="chip" href="shop.html?size=newborn">Newborn</a></li>
+                    <li><a class="chip" href="shop.html?size=0-3m">0–3m</a></li>
+                    <li><a class="chip" href="shop.html?size=3-6m">3–6m</a></li>
+                    <li><a class="chip" href="shop.html?size=6-9m">6–9m</a></li>
+                    <li><a class="chip" href="shop.html?size=9-12m">9–12m</a></li>
+                    <li><a class="chip" href="shop.html?size=12-18m">12–18m</a></li>
+                    <li><a class="chip" href="shop.html?size=18-24m">18–24m</a></li>
+                    <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
+                    <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
+                    <!-- /gen: size-chips-mega -->
                   </ul>
                   <p class="eyebrow mega__eyebrow">Browse by category</p>
                   <ul class="chip-list" role="list">
-                    <!-- loop: categories -->
+                    <!-- gen: cat-chips -->
+                    <li><a class="chip" href="category.html?c=newborn">Newborn</a></li>
                     <li><a class="chip" href="category.html?c=bodysuits">Bodysuits</a></li>
-                    <li><a class="chip" href="category.html?c=sleepsuits">Sleepsuits</a></li>
+                    <li><a class="chip" href="category.html?c=sleepwear">Sleepwear</a></li>
                     <li><a class="chip" href="category.html?c=sets">Sets</a></li>
-                    <li><a class="chip" href="category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
-                    <li><a class="chip" href="category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
-                    <li><a class="chip" href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
-                    <!-- /loop -->
+                    <li><a class="chip" href="category.html?c=outerwear">Outerwear</a></li>
+                    <li><a class="chip" href="category.html?c=napkins">Napkins</a></li>
+                    <li><a class="chip" href="category.html?c=accessories">Accessories</a></li>
+                    <!-- /gen: cat-chips -->
                   </ul>
                 </div>
                 <!-- TODO: placeholder copy, confirm with client -->
@@ -295,6 +303,7 @@
               </div>
             </div>
           </li>
+          <li><a class="primary-nav__link" href="categories.html" data-nav="categories">Categories</a></li>
           <li><a class="primary-nav__link" href="shop.html?sort=new">New in</a></li>
           <li><a class="primary-nav__link" href="shop.html?sale=1">Sale</a></li>
           <li><a class="primary-nav__link" href="size-guide.html" data-nav="size-guide">Size guide</a></li>
@@ -311,6 +320,7 @@
             <button type="submit" class="header-search__submit" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           </div>
         </form>
+        <a class="icon-btn site-header__wishlist" href="wishlist.html" data-nav="wishlist" aria-label="Wishlist"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg></a>
         <!-- blade: @auth account/index.html @else account/login.html -->
         <a class="icon-btn site-header__account" href="account/login.html" data-nav="account" data-account-link aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
         <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
@@ -323,14 +333,15 @@
     <nav class="category-row" aria-label="Categories">
       <div class="container">
         <ul>
-          <!-- loop: categories -->
+          <!-- gen: cat-row -->
+          <li><a href="category.html?c=newborn">Newborn</a></li>
           <li><a href="category.html?c=bodysuits">Bodysuits</a></li>
-          <li><a href="category.html?c=sleepsuits">Sleepsuits</a></li>
+          <li><a href="category.html?c=sleepwear">Sleepwear</a></li>
           <li><a href="category.html?c=sets">Sets</a></li>
-          <li><a href="category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
-          <li><a href="category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
-          <li><a href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
-          <!-- /loop -->
+          <li><a href="category.html?c=outerwear">Outerwear</a></li>
+          <li><a href="category.html?c=napkins">Napkins</a></li>
+          <li><a href="category.html?c=accessories">Accessories</a></li>
+          <!-- /gen: cat-row -->
         </ul>
       </div>
     </nav>
@@ -343,7 +354,7 @@
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
           <li><a href="index.html">Home</a></li>
-          <li><a href="shop.html">Shop</a></li>
+          <li><a href="categories.html">Baby</a></li>
           <li><a href="category.html?c=bodysuits">Bodysuits</a></li>
           <li aria-current="page">Ribbed Cotton Bodysuit</li>
         </ol>
@@ -413,8 +424,8 @@
               <!-- /photo: product-1 -->
             </li>
             </ul>
-            <!-- blade: badge priority @if sale Sale (accent) @elseif new New (lilac) @elseif featured Featured (outline) -->
-            <span class="badge badge--outline gallery__badge" data-product-badge>Featured</span>
+            <!-- blade: badge priority @if sale Sale (accent) @elseif new New (lilac) -->
+            <span class="badge badge--accent gallery__badge" data-product-badge>Sale</span>
             <p class="gallery__count" data-gallery-count aria-hidden="true">1 / 5</p>
           </div>
           <div class="gallery__dots">
@@ -441,7 +452,8 @@
 
         <!-- Info -->
         <div class="product__info">
-          <a class="product__eyebrow" href="category.html?c=bodysuits">Bodysuits</a>
+          <!-- TODO: source of "Kayaa Essentials" (a product field or a collection?): ask the backend dev -->
+          <p class="product__eyebrow">Kayaa Essentials</p>
           <h1 class="product__title">Ribbed Cotton Bodysuit</h1>
           <a class="rating-link" href="#reviews" data-rating-summary>
             <span class="stars" aria-hidden="true"><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><span class="star-half"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><svg class="icon is-on" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span></span>
@@ -450,22 +462,24 @@
           </a>
 
           <div class="product__price-row" data-price-row>
-            <!-- blade: @if sale price + was-price + "Save Rs X" (shown with ?demo=sale) -->
-            <p class="price price--lg"><span class="price__now">Rs 1,490</span></p>
+            <!-- blade: @if sale: the current price and the struck-through compare-at price, plus "Save Rs. X"; otherwise the price alone (?demo=regular) -->
+            <p class="price price--sale price--lg"><span class="visually-hidden">Sale price </span><span class="price__now">Rs. 2,450</span> <s class="price__was"><span class="visually-hidden">Was </span>Rs. 2,950</s></p>
+            <span class="badge badge--lilac">Save Rs. 500</span>
           </div>
           <!-- blade: Str::limit($product->description, 160) -->
           <p class="product__lede">A soft everyday bodysuit with a ribbed finish and easy snap closures at the shoulder and bottom, made to be worn on its own or layered. Sample text. The real…</p>
 
           <!-- TODO: confirm field names with the backend dev: colour, size, quantity (or a single variant id). Add @csrf and the product id. -->
           <!-- blade: data-low-stock-threshold comes from the admin setting; data-unit-price is the current (sale) price. Remove data-demo-cart (prototype cart drawer) at conversion. -->
-          <form class="buy" method="post" action="cart.html" data-buy-form data-product-name="Ribbed Cotton Bodysuit" data-product-slug="ribbed-cotton-bodysuit" data-unit-price="1490" data-low-stock-threshold="5" data-demo-cart novalidate data-cfg-attr="data-low-stock-threshold:low_stock_threshold">
+          <form class="buy" method="post" action="cart.html" data-buy-form data-product-name="Ribbed Cotton Bodysuit" data-product-slug="ribbed-cotton-bodysuit" data-unit-price="2450" data-was-price="2950" data-low-stock-threshold="5" data-demo-cart novalidate data-cfg-attr="data-low-stock-threshold:low_stock_threshold">
             <fieldset class="buy__group">
-              <legend class="buy__legend">Colour: <span data-colour-label>Lilac</span></legend>
+              <legend class="buy__legend">Colour — <span data-colour-label>Lilac</span></legend>
               <div class="buy__options buy__options--colours">
                 <!-- loop: colours -->
                 <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="lilac" checked><span class="dot dot--lilac" aria-hidden="true"></span><span class="visually-hidden">Lilac</span></label>
-                <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="cream"><span class="dot dot--cream" aria-hidden="true"></span><span class="visually-hidden">Cream</span></label>
+                <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="cream"><span class="dot dot--cream" aria-hidden="true"></span><span class="visually-hidden">Butter</span></label>
                 <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="sky"><span class="dot dot--sky" aria-hidden="true"></span><span class="visually-hidden">Sky</span></label>
+                <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="blush"><span class="dot dot--blush" aria-hidden="true"></span><span class="visually-hidden">Blush</span></label>
                 <!-- /loop -->
               </div>
             </fieldset>
@@ -476,39 +490,45 @@
                 <button type="button" class="link-btn" data-size-guide-toggle aria-expanded="false" aria-controls="size-guide-panel">Size guide</button>
               </div>
               <div class="buy__options" role="radiogroup" aria-labelledby="size-label" id="size-group" tabindex="-1" data-size-group>
-                <!-- loop: sizes (ordered by position in the size scale; disabled = out of stock for the chosen colour; values match the variants JSON) -->
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="NB" disabled><span>NB</span><span class="visually-hidden" data-oos-text> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="0-3M"><span>0-3M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="3-6M"><span>3-6M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="6-9M"><span>6-9M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="9-12M" disabled><span>9-12M</span><span class="visually-hidden" data-oos-text> (out of stock)</span></label>
-              <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="12-18M"><span>12-18M</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+                <!-- loop: sizes (ordered by position in the size scale; the value is the size slug, the text is the full label; disabled = out of stock for the chosen colour; values match the variants JSON) -->
+                <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="newborn"><span>Newborn</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+                <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="0-3m"><span>0–3m</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+                <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="3-6m"><span>3–6m</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+                <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="6-9m"><span>6–9m</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+                <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="9-12m"><span>9–12m</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
+                <label class="size-box size-box--lg"><input class="visually-hidden" type="radio" name="size" value="12-18m"><span>12–18m</span><span class="visually-hidden" data-oos-text hidden> (out of stock)</span></label>
                 <!-- /loop -->
               </div>
               <p class="buy__error" id="size-error" role="alert" data-size-error hidden><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg> <span>Please choose a size</span></p>
             </div>
 
             <div class="size-guide" id="size-guide-panel" data-size-guide hidden>
-              <!-- TODO: confirm with client (placeholder values, same data as size-guide.html) -->
+              <!-- The brand sizes by age band; height and weight are the better guide. TODO: confirm with client (placeholder values, one source with size-guide.html) -->
               <table class="size-table">
-                <caption class="visually-hidden">Size guide by age, weight and height</caption>
+                <caption class="visually-hidden">Size guide by age, height and weight</caption>
                 <thead>
-                  <tr><th scope="col">Size</th><th scope="col">Age</th><th scope="col">Weight</th><th scope="col">Height</th></tr>
+                  <tr><th scope="col">Size</th><th scope="col">Age</th><th scope="col">Height</th><th scope="col">Weight</th></tr>
                 </thead>
                 <tbody>
-              <tr><th scope="row">NB</th><td data-label="Age">Newborn</td><td data-label="Weight">Up to 3.5 kg</td><td data-label="Height">Up to 55 cm</td></tr>
-              <tr><th scope="row">0-3M</th><td data-label="Age">0–3 months</td><td data-label="Weight">3.5–6 kg</td><td data-label="Height">55–62 cm</td></tr>
-              <tr><th scope="row">3-6M</th><td data-label="Age">3–6 months</td><td data-label="Weight">6–7.5 kg</td><td data-label="Height">62–68 cm</td></tr>
-              <tr><th scope="row">6-9M</th><td data-label="Age">6–9 months</td><td data-label="Weight">7.5–9 kg</td><td data-label="Height">68–74 cm</td></tr>
-              <tr><th scope="row">9-12M</th><td data-label="Age">9–12 months</td><td data-label="Weight">9–10 kg</td><td data-label="Height">74–80 cm</td></tr>
-              <tr><th scope="row">12-18M</th><td data-label="Age">12–18 months</td><td data-label="Weight">10–11.5 kg</td><td data-label="Height">80–86 cm</td></tr>
+                  <!-- gen: size-rows -->
+                  <tr><th scope="row">Newborn</th><td data-label="Age">Newborn</td><td data-label="Height">Up to 55 cm</td><td data-label="Weight">Up to 3.5 kg</td></tr>
+                  <tr><th scope="row">0–3m</th><td data-label="Age">0–3 months</td><td data-label="Height">55–62 cm</td><td data-label="Weight">3.5–6 kg</td></tr>
+                  <tr><th scope="row">3–6m</th><td data-label="Age">3–6 months</td><td data-label="Height">62–68 cm</td><td data-label="Weight">6–7.5 kg</td></tr>
+                  <tr><th scope="row">6–9m</th><td data-label="Age">6–9 months</td><td data-label="Height">68–74 cm</td><td data-label="Weight">7.5–9 kg</td></tr>
+                  <tr><th scope="row">9–12m</th><td data-label="Age">9–12 months</td><td data-label="Height">74–80 cm</td><td data-label="Weight">9–10 kg</td></tr>
+                  <tr><th scope="row">12–18m</th><td data-label="Age">12–18 months</td><td data-label="Height">80–86 cm</td><td data-label="Weight">10–11.5 kg</td></tr>
+                  <tr><th scope="row">18–24m</th><td data-label="Age">18–24 months</td><td data-label="Height">86–92 cm</td><td data-label="Weight">11.5–13 kg</td></tr>
+                  <tr><th scope="row">2Y</th><td data-label="Age">2 years</td><td data-label="Height">92–98 cm</td><td data-label="Weight">13–14.5 kg</td></tr>
+                  <tr><th scope="row">3Y</th><td data-label="Age">3 years</td><td data-label="Height">98–104 cm</td><td data-label="Weight">14.5–16.5 kg</td></tr>
+                  <!-- /gen: size-rows -->
                 </tbody>
               </table>
               <a class="link-arrow" href="size-guide.html">Open the full size guide <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
             </div>
 
             <!-- TODO: low-stock threshold (5) to be confirmed -->
-            <p class="buy__stock" id="stock-note" aria-live="polite" data-stock-note>Choose a size to see availability</p>
+            <!-- TODO: confirm "ships from Colombo" with the client -->
+            <p class="buy__stock" id="stock-note" aria-live="polite" data-stock-note data-in-stock-text="In stock · ships from Colombo">Choose a size to see availability</p>
 
             <div class="buy__row">
               <div class="qty" data-qty data-qty-max="10">
@@ -517,33 +537,41 @@
                 <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
               </div>
               <button type="submit" class="btn btn--primary btn--lg buy__submit" data-add-btn>Add to cart</button>
+              <!-- Save toggles the product in the wishlist. Prototype: sessionStorage (proto-wishlist.js). TODO: guest wishlists (browser or session) are an open question for the backend dev -->
+              <button type="button" class="btn btn--secondary btn--lg buy__save" data-wishlist-toggle data-slug="ribbed-cotton-bodysuit" aria-pressed="false"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg> <span data-save-label>Save</span></button>
             </div>
+            <!-- TODO: confirm the dispatch cut-off with the client (site config: dispatch_cutoff) -->
+            <p class="buy__dispatch">Order before <span data-cfg="dispatch_cutoff">2pm</span> for same-day dispatch</p>
           </form>
 
           <ul class="assure" role="list">
             <!-- TODO: confirm the returns window with the client -->
             <!-- TODO: add official card marks and the Onepay badge from their brand kit -->
-            <li><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span></li>
+            <li><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span><span>Free delivery over <span data-cfg="free_shipping_over">Rs. 7,500</span></span></li>
             <li><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg></span><span>Secure card payment · Visa &amp; Mastercard</span></li>
             <li><a class="assure__link" href="returns.html"><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-rotate-ccw"></use></svg></span><span>Easy returns · see our returns page</span></a></li>
           </ul>
 
           <div class="accordion product__accordion">
             <details class="accordion__item" open>
-              <summary class="accordion__summary">Description <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <!-- blade: {{ $product->description }} (plain text; line breaks are kept with white-space: pre-line) -->
-              <div class="accordion__body accordion__body--text">A soft everyday bodysuit with a ribbed finish and easy snap closures at the shoulder and bottom, made to be worn on its own or layered.
-
-Sample text. The real description comes from the product record in the backend.</div>
-            </details>
-            <details class="accordion__item">
               <summary class="accordion__summary">Fabric &amp; care <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder: fabric and washing details. <!-- TODO: static content, not a backend field; confirm with the client --></p></div>
+              <!-- TODO: sample composition and care, confirm with the client. Open question for the backend dev: are composition and care separate fields, and is there a full description field? -->
+              <div class="accordion__body">
+                <p><strong>Composition:</strong> 95% combed cotton, 5% elastane</p>
+                <ul class="care-list" role="list">
+                  <li>Machine wash cold, gentle cycle</li>
+                  <li>Tumble dry low or line dry in shade</li>
+                  <li>Do not bleach</li>
+                </ul>
+              </div>
             </details>
             <details class="accordion__item">
               <summary class="accordion__summary">Delivery &amp; returns <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <!-- TODO: confirm with the client; every value comes from the site config -->
               <div class="accordion__body">
-                <p>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span>; standard delivery is <span data-cfg="shipping_fee">Rs 450</span>.</p>
+                <p>Colombo and suburbs <span data-cfg="delivery_colombo_days">1–2</span> working days, rest of the island <span data-cfg="delivery_island_days">2–4</span>.</p>
+                <p>Free over <span data-cfg="free_shipping_over">Rs. 7,500</span>, otherwise <span data-cfg="shipping_fee">Rs. 450</span>.</p>
+                <p>Exchange any unworn item within <span data-cfg="return_window_days">14</span> days with tags on. We cover return delivery on size swaps.</p>
                 <p><a class="link-arrow" href="delivery.html">Delivery information <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
                 <p><a class="link-arrow" href="returns.html">Returns information <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
               </div>
@@ -577,7 +605,7 @@ Sample text. The real description comes from the product record in the backend.<
             <!-- blade: @if approved reviews exist -->
             <div data-reviews-content>
               <ul class="reviews__list" role="list">
-                <!-- loop: reviews (approved only; no review titles) -->
+                <!-- loop: reviews (approved only; the optional headline shows in bold when present) -->
             <li class="review-card">
               <article tabindex="-1">
                 <header class="review-card__head">
@@ -586,6 +614,7 @@ Sample text. The real description comes from the product record in the backend.<
                   <time class="review-card__date" datetime="2026-09-28">28 Sep 2026</time>
                   <span class="badge badge--outline">Verified purchase</span>
                 </header>
+                <p class="review-card__headline">Soft and true to size</p>
                 <p class="review-card__text">Lovely soft feel and it fits as expected. Washes well.</p>
                 <!-- blade: @if admin reply -->
                 <div class="review-card__reply">
@@ -612,11 +641,12 @@ Sample text. The real description comes from the product record in the backend.<
                   <p class="review-card__name">Nimali S.</p>
                   <time class="review-card__date" datetime="2026-09-14">14 Sep 2026</time>
                 </header>
-                <p class="review-card__text">Good quality. I would size up if your baby is on the bigger side.</p>
+                <p class="review-card__headline">Good quality</p>
+                <p class="review-card__text">I would size up if your baby is on the bigger side.</p>
                 <!-- blade: @if admin reply -->
                 <div class="review-card__reply">
                   <p class="review-card__reply-title">Reply from Kayaa</p>
-                  <p>Thanks Nimali. Our size guide is a good starting point for height and weight.</p>
+                  <p>Thanks Nimali. Our size guide is a good starting point; height and weight are the better guide.</p>
                 </div>
               </article>
             </li>
@@ -628,6 +658,7 @@ Sample text. The real description comes from the product record in the backend.<
                   <time class="review-card__date" datetime="2026-09-03">3 Sep 2026</time>
                   <span class="badge badge--outline">Verified purchase</span>
                 </header>
+                <p class="review-card__headline">Our everyday favourite</p>
                 <p class="review-card__text">My favourite everyday bodysuit now.</p>
               </article>
             </li>
@@ -732,7 +763,7 @@ Sample text. The real description comes from the product record in the backend.<
             </div>
             <!-- blade: @else empty state -->
             <div class="reviews__empty" data-reviews-empty hidden>
-              <p>No reviews yet. Be the first to review this product.</p>
+              <p>No reviews yet — be the first to tell other parents how it fits.</p>
               <a class="btn btn--primary" href="#write-review">Write a review</a>
             </div>
           </div>
@@ -762,7 +793,7 @@ Sample text. The real description comes from the product record in the backend.<
             </div>
           </div>
 
-          <!-- TODO: form action and field names from the backend (rating, name, comment); add @csrf -->
+          <!-- TODO: form action and field names from the backend (rating, name, email, headline, body); add @csrf. Reviews are moderated. -->
           <form method="post" action="product.html" novalidate data-review-form>
             <div class="review-form__fields">
               <fieldset class="rating-input" data-field="rating">
@@ -776,18 +807,31 @@ Sample text. The real description comes from the product record in the backend.<
                 </div>
                 <p class="field__error" id="rating-error" hidden></p>
               </fieldset>
-              <!-- blade: name field is for guests only -->
+              <!-- blade: name and email are prefilled (and not asked again) when signed in -->
               <div class="field" data-field="name">
                 <label for="review-name">Name</label>
                 <input id="review-name" name="name" type="text" autocomplete="name" required>
                 <p class="field__error" id="name-error" hidden></p>
               </div>
-              <div class="field" data-field="comment">
-                <label for="review-comment">Your review</label>
-                <textarea id="review-comment" name="comment" rows="5" required></textarea>
-                <p class="field__hint" id="comment-hint">Reviews are checked before they appear.</p>
-                <p class="field__error" id="comment-error" hidden></p>
+              <div class="field" data-field="email">
+                <label for="review-email">Email</label>
+                <input id="review-email" name="email" type="email" inputmode="email" autocomplete="email" required aria-describedby="email-hint">
+                <p class="field__hint" id="email-hint">Not shown on the page.</p>
+                <p class="field__error" id="email-error" hidden></p>
               </div>
+              <div class="field" data-field="headline">
+                <label for="review-headline">Headline (optional)</label>
+                <input id="review-headline" name="headline" type="text" maxlength="100" autocomplete="off">
+                <p class="field__error" id="headline-error" hidden></p>
+              </div>
+              <div class="field" data-field="body">
+                <label for="review-body">Your review</label>
+                <textarea id="review-body" name="body" rows="5" required aria-describedby="body-hint"></textarea>
+                <p class="field__hint" id="body-hint">Reviews are checked by us before they appear.</p>
+                <p class="field__error" id="body-error" hidden></p>
+              </div>
+              <!-- blade: @guest -->
+              <p class="review-form__signin" data-review-signin>Sign in to have your review marked as a verified purchase. <a href="account/login.html">Sign in</a></p>
               <div><button type="submit" class="btn btn--primary">Submit review</button></div>
             </div>
           </form>
@@ -802,7 +846,7 @@ Sample text. The real description comes from the product record in the backend.<
           <!-- loop: faqs -->
           <details class="accordion__item">
             <summary class="accordion__summary">How do I choose the right size? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-            <div class="accordion__body"><p>Use the size guide to match your baby’s weight and height. If your baby is between sizes, we suggest the larger size.</p><p><a class="link-arrow" href="size-guide.html">Open the size guide <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p></div>
+            <div class="accordion__body"><p>We size by age band. Height and weight are the better guide, so check the size guide if your baby is between sizes.</p><p><a class="link-arrow" href="size-guide.html">Open the size guide <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p></div>
           </details>
           <details class="accordion__item">
             <summary class="accordion__summary">How should I wash it? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
@@ -828,87 +872,79 @@ Sample text. The real description comes from the product record in the backend.<
 
       <!-- blade: related products = same category as this product, excluding this product, 4 items -->
       <section class="related" aria-labelledby="related-title">
-        <h2 id="related-title">You may also like</h2>
+        <h2 id="related-title">Goes well with</h2>
         <ul class="scroller" role="list">
-          <!-- loop: related products -->
           <!-- img (below the fold): <img src alt="{{ name }}" width height loading="lazy" decoding="async"> replaces the .media placeholder -->
-            <li>
-              <article class="product-card">
-                <div class="product-card__media">
-                  <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                  <span class="badge badge--outline product-card__badge">Featured</span>
-                  <button type="button" class="product-card__quick" data-quick-add data-name="Wrap Front Bodysuit, 3 Pack" data-price="3290" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Wrap Front Bodysuit, 3 Pack">
-                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                    <span class="product-card__quick-label">Quick add</span>
-                  </button>
-                </div>
-                <div class="product-card__info">
-                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Wrap Front Bodysuit, 3 Pack</a></h3>
-                  <div class="product-card__row">
-                    <p class="price"><span class="price__now">Rs 3,290</span></p>
-                    <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Cream, Dove"><li class="dot dot--lilac"></li><li class="dot dot--cream"></li><li class="dot dot--dove"></li></ul>
-                  </div>
-                </div>
-              </article>
-            </li>
-            <li>
-              <article class="product-card">
-                <div class="product-card__media">
-                  <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                  <span class="badge badge--lilac product-card__badge">New</span>
-                  <button type="button" class="product-card__quick" data-quick-add data-name="Short Sleeve Bodysuit, 3 Pack" data-price="2990" data-tone="1" aria-haspopup="dialog" aria-label="Quick add, Short Sleeve Bodysuit, 3 Pack">
-                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                    <span class="product-card__quick-label">Quick add</span>
-                  </button>
-                </div>
-                <div class="product-card__info">
-                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Short Sleeve Bodysuit, 3 Pack</a></h3>
-                  <div class="product-card__row">
-                    <p class="price"><span class="price__now">Rs 2,990</span></p>
-                    <ul class="product-card__colours" role="list" aria-label="Colours: Cream, Blush, Sky"><li class="dot dot--cream"></li><li class="dot dot--blush"></li><li class="dot dot--sky"></li></ul>
-                  </div>
-                </div>
-              </article>
-            </li>
-            <li>
-              <article class="product-card">
-                <div class="product-card__media">
-                  <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                  
-                  <button type="button" class="product-card__quick" data-quick-add data-name="Long Sleeve Bodysuit" data-price="1690" data-tone="2" aria-haspopup="dialog" aria-label="Quick add, Long Sleeve Bodysuit">
-                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                    <span class="product-card__quick-label">Quick add</span>
-                  </button>
-                </div>
-                <div class="product-card__info">
-                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Long Sleeve Bodysuit</a></h3>
-                  <div class="product-card__row">
-                    <p class="price"><span class="price__now">Rs 1,690</span></p>
-                    <ul class="product-card__colours" role="list" aria-label="Colours: Lilac, Cream"><li class="dot dot--lilac"></li><li class="dot dot--cream"></li></ul>
-                  </div>
-                </div>
-              </article>
-            </li>
-            <li>
-              <article class="product-card">
-                <div class="product-card__media">
-                  <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                  <span class="badge badge--accent product-card__badge">Sale</span>
-                  <button type="button" class="product-card__quick" data-quick-add data-name="Pointelle Knit Cardigan" data-price="1120" data-was="1400" data-tone="3" aria-haspopup="dialog" aria-label="Quick add, Pointelle Knit Cardigan">
-                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                    <span class="product-card__quick-label">Quick add</span>
-                  </button>
-                </div>
-                <div class="product-card__info">
-                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Pointelle Knit Cardigan</a></h3>
-                  <div class="product-card__row">
-                    <p class="price price--sale"><span class="visually-hidden">Sale price </span><span class="price__now">Rs 1,120</span> <s class="price__was"><span class="visually-hidden">Was </span>Rs 1,400</s></p>
-                    <ul class="product-card__colours" role="list" aria-label="Colours: Blush, Cream, Lilac, Dove, Sky"><li class="dot dot--blush"></li><li class="dot dot--cream"></li><li class="dot dot--lilac"></li><li class="dot dot--dove"></li><li class="product-card__more" aria-hidden="true">+1</li></ul>
-                  </div>
-                </div>
-              </article>
-            </li>
-          <!-- /loop -->
+          <!-- gen: product-grid related:ribbed-cotton-bodysuit -->
+          <li data-product data-slug="pointelle-romper" data-name="Pointelle Romper" data-price="3200" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="5" data-added="88">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+                <button type="button" class="product-card__quick" data-quick-add data-slug="pointelle-romper" data-name="Pointelle Romper" data-price="3200" data-tone="4" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m" data-colours="blush cream lilac" aria-haspopup="dialog" aria-label="Quick add, Pointelle Romper">
+                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                  <span class="product-card__quick-label">Quick add</span>
+                </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Pointelle Romper</a></h3>
+                <p class="product-card__meta">3 colours · NB–12m</p>
+                <p class="price"><span class="price__now">Rs. 3,200</span></p>
+              </div>
+            </article>
+          </li>
+          <li data-product data-slug="kimono-bodysuit-2-pack" data-name="Kimono Bodysuit 2-Pack" data-price="2750" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="13" data-added="56">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+                <button type="button" class="product-card__quick" data-quick-add data-slug="kimono-bodysuit-2-pack" data-name="Kimono Bodysuit 2-Pack" data-price="2750" data-tone="2" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m" data-colours="cream blush" aria-haspopup="dialog" aria-label="Quick add, Kimono Bodysuit 2-Pack">
+                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                  <span class="product-card__quick-label">Quick add</span>
+                </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Kimono Bodysuit 2-Pack</a></h3>
+                <p class="product-card__meta">2 colours · NB–12m</p>
+                <p class="price"><span class="price__now">Rs. 2,750</span></p>
+              </div>
+            </article>
+          </li>
+          <li data-product data-slug="long-sleeve-bodysuit" data-name="Long-Sleeve Bodysuit" data-price="2150" data-size="0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="bodysuits" data-new="0" data-sale="0" data-featured="21" data-added="38">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+                <button type="button" class="product-card__quick" data-quick-add data-slug="long-sleeve-bodysuit" data-name="Long-Sleeve Bodysuit" data-price="2150" data-tone="3" data-sizes="0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-colours="cream dove" aria-haspopup="dialog" aria-label="Quick add, Long-Sleeve Bodysuit">
+                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                  <span class="product-card__quick-label">Quick add</span>
+                </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Long-Sleeve Bodysuit</a></h3>
+                <p class="product-card__meta">2 colours · 0m–3Y</p>
+                <p class="price"><span class="price__now">Rs. 2,150</span></p>
+              </div>
+            </article>
+          </li>
+          <li data-product data-slug="short-sleeve-bodysuit-3-pack" data-name="Short-Sleeve Bodysuit 3-Pack" data-price="3950" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="23" data-added="36">
+            <article class="product-card">
+              <div class="product-card__media">
+                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                
+                <button type="button" class="product-card__quick" data-quick-add data-slug="short-sleeve-bodysuit-3-pack" data-name="Short-Sleeve Bodysuit 3-Pack" data-price="3950" data-tone="1" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m" data-colours="cream sky lilac blush" aria-haspopup="dialog" aria-label="Quick add, Short-Sleeve Bodysuit 3-Pack">
+                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                  <span class="product-card__quick-label">Quick add</span>
+                </button>
+              </div>
+              <div class="product-card__info">
+                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Short-Sleeve Bodysuit 3-Pack</a></h3>
+                <p class="product-card__meta">4 colours · NB–24m</p>
+                <p class="price"><span class="price__now">Rs. 3,950</span></p>
+              </div>
+            </article>
+          </li>
+          <!-- /gen: product-grid -->
         </ul>
       </section>
 
@@ -917,7 +953,7 @@ Sample text. The real description comes from the product record in the backend.<
     <!-- Sticky add-to-cart bar (below 900px; replaces the tab bar while visible) -->
     <div class="sticky-atc" data-sticky-atc inert>
       <div class="sticky-atc__info">
-        <p class="sticky-atc__price" data-sticky-price>Rs 1,490</p>
+        <p class="sticky-atc__price" data-sticky-price>Rs. 2,450</p>
         <p class="sticky-atc__size" data-sticky-size>Select a size</p>
       </div>
       <button type="button" class="btn btn--primary" data-sticky-btn>Choose size</button>
@@ -930,26 +966,34 @@ Sample text. The real description comes from the product record in the backend.<
       <div class="footer__grid">
         <div class="footer__brand">
           <a class="wordmark" href="index.html" aria-label="Kayaa home">kayaa</a>
-          <p class="footer__blurb">Soft everyday clothing for babies, delivered across Sri Lanka.</p>
+          <p class="footer__blurb">Soft, honest clothing made for Sri Lankan weather.</p>
+          <p class="footer__place">Colombo, Sri Lanka</p> <!-- TODO: confirm with client -->
           <ul class="footer__contact" role="list">
             <li><a href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a></li> <!-- TODO: add WhatsApp number -->
             <li><a href="mailto:hello@example.com">hello@example.com</a></li> <!-- TODO: confirm email with client -->
           </ul>
         </div>
         <nav aria-labelledby="footer-age">
-          <h2 class="footer__title" id="footer-age">Shop by age</h2>
-          <ul class="footer__list" role="list">
-            <li><a href="shop.html?age=newborn">Newborn</a></li>
-            <li><a href="shop.html?age=0-3-months">0–3 months</a></li>
-            <li><a href="shop.html?age=3-6-months">3–6 months</a></li>
-            <li><a href="shop.html?age=6-12-months">6–12 months</a></li>
-            <li><a href="shop.html?age=1-2-years">1–2 years</a></li>
+          <h2 class="footer__title" id="footer-age">Shop by size</h2>
+          <ul class="footer__list footer__list--cols" role="list">
+            <!-- gen: size-links-footer -->
+            <li><a href="shop.html?size=newborn">Newborn</a></li>
+            <li><a href="shop.html?size=0-3m">0–3m</a></li>
+            <li><a href="shop.html?size=3-6m">3–6m</a></li>
+            <li><a href="shop.html?size=6-9m">6–9m</a></li>
+            <li><a href="shop.html?size=9-12m">9–12m</a></li>
+            <li><a href="shop.html?size=12-18m">12–18m</a></li>
+            <li><a href="shop.html?size=18-24m">18–24m</a></li>
+            <li><a href="shop.html?size=2y">2Y</a></li>
+            <li><a href="shop.html?size=3y">3Y</a></li>
+            <!-- /gen: size-links-footer -->
           </ul>
         </nav>
         <nav aria-labelledby="footer-help">
           <h2 class="footer__title" id="footer-help">Help</h2>
           <ul class="footer__list" role="list">
             <li><a href="track.html">Track order</a></li>
+            <li><a href="wishlist.html">Wishlist</a></li>
             <li><a href="size-guide.html">Size guide</a></li>
             <li><a href="delivery.html">Delivery</a></li>
             <li><a href="returns.html">Returns</a></li>
@@ -959,6 +1003,7 @@ Sample text. The real description comes from the product record in the backend.<
         <nav aria-labelledby="footer-company">
           <h2 class="footer__title" id="footer-company">Company</h2>
           <ul class="footer__list" role="list">
+            <li><a href="categories.html">All categories</a></li>
             <li><a href="about.html">Our story</a></li>
             <li><a href="privacy.html">Privacy policy</a></li>
             <li><a href="terms.html">Terms &amp; conditions</a></li>
@@ -969,7 +1014,7 @@ Sample text. The real description comes from the product record in the backend.<
         <ul class="footer__facts" role="list">
           <!-- TODO: add official card marks and the Onepay badge from their brand kit -->
           <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg> Secure card payments</li>
-          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg> Delivery across Sri Lanka</li>
+          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg> Island-wide delivery</li>
         </ul>
         <ul class="footer__social" role="list">
           <!-- TODO: add real social URLs -->
@@ -1011,30 +1056,41 @@ Sample text. The real description comes from the product record in the backend.<
         <div class="menu-group">
           <ul role="list">
             <li><a href="shop.html" data-nav="shop category product search">Shop</a></li>
+            <li><a href="categories.html" data-nav="categories">Categories</a></li>
             <li><a href="shop.html?sort=new">New in</a></li>
             <li><a href="shop.html?sale=1">Sale</a></li>
+            <li><a href="wishlist.html" data-nav="wishlist">Wishlist</a></li>
             <li><a href="about.html" data-nav="about">Our story</a></li>
           </ul>
         </div>
         <div class="menu-group">
-          <p class="menu-group__title">Shop by age</p>
-          <ul role="list">
-            <li><a href="shop.html?age=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=0-3-months">0–3 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=3-6-months">3–6 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=6-12-months">6–12 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=1-2-years">1–2 years <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+          <p class="menu-group__title">Shop by size</p>
+          <ul class="chip-list menu-group__chips" role="list">
+            <!-- gen: size-chips-drawer -->
+            <li><a class="chip" href="shop.html?size=newborn">Newborn</a></li>
+            <li><a class="chip" href="shop.html?size=0-3m">0–3m</a></li>
+            <li><a class="chip" href="shop.html?size=3-6m">3–6m</a></li>
+            <li><a class="chip" href="shop.html?size=6-9m">6–9m</a></li>
+            <li><a class="chip" href="shop.html?size=9-12m">9–12m</a></li>
+            <li><a class="chip" href="shop.html?size=12-18m">12–18m</a></li>
+            <li><a class="chip" href="shop.html?size=18-24m">18–24m</a></li>
+            <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
+            <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
+            <!-- /gen: size-chips-drawer -->
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Shop by category</p>
           <ul role="list">
+            <!-- gen: cat-drawer -->
+            <li><a href="category.html?c=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
             <li><a href="category.html?c=bodysuits">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=sleepsuits">Sleepsuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=sleepwear">Sleepwear <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
             <li><a href="category.html?c=sets">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=dresses-rompers">Dresses &amp; Rompers <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=hats-mitts">Hats &amp; Mitts <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=outerwear">Outerwear <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=napkins">Napkins <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=accessories">Accessories <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <!-- /gen: cat-drawer -->
           </ul>
         </div>
         <div class="menu-group">
@@ -1049,10 +1105,9 @@ Sample text. The real description comes from the product record in the backend.<
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Account</p>
-          <!-- blade: @auth My account @else Log in / Register -->
+          <!-- blade: @auth My account @else Sign in / register -->
           <ul role="list">
-            <li><a href="account/login.html" data-nav="login" data-account-link><span data-account-label>Log in</span></a></li>
-            <li data-guest-only><a href="account/register.html" data-nav="register">Register</a></li>
+            <li><a href="account/login.html" data-nav="login" data-account-link><span data-account-label>Sign in / register</span></a></li>
           </ul>
         </div>
       </nav>
@@ -1076,7 +1131,7 @@ Sample text. The real description comes from the product record in the backend.<
       <div class="cart-panel__filled">
         <div class="drawer__body">
           <div class="cart-progress">
-            <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
+            <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs. 1,200 away from free delivery</p>
             <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
           </div>
           <ul class="cart-items" role="list" data-cart-items>
@@ -1092,7 +1147,7 @@ Sample text. The real description comes from the product record in the backend.<
                     <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
-                  <p class="price" data-line-total>Rs 3,450</p>
+                  <p class="price" data-line-total>Rs. 3,450</p>
                 </div>
               </div>
               <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove Ruffle Sleeve Dress"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
@@ -1108,7 +1163,7 @@ Sample text. The real description comes from the product record in the backend.<
                     <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
-                  <p class="price" data-line-total>Rs 2,850</p>
+                  <p class="price" data-line-total>Rs. 2,850</p>
                 </div>
               </div>
               <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove Cotton Sleepsuit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
@@ -1117,7 +1172,7 @@ Sample text. The real description comes from the product record in the backend.<
           </ul>
         </div>
         <div class="drawer__foot">
-          <p class="cart-summary"><span>Subtotal</span> <span class="cart-summary__value" data-cart-subtotal>Rs 6,300</span></p>
+          <p class="cart-summary"><span>Subtotal</span> <span class="cart-summary__value" data-cart-subtotal>Rs. 6,300</span></p>
           <p class="cart-note">Delivery calculated at checkout · Pay securely by card</p>
           <div class="cart-actions">
             <a class="btn btn--primary btn--lg btn--block" href="checkout.html">Checkout</a>
@@ -1148,7 +1203,7 @@ Sample text. The real description comes from the product record in the backend.<
             <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
             <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
           </div>
-          <p class="price" data-line-total>Rs 0</p>
+          <p class="price" data-line-total>Rs. 0</p>
         </div>
       </div>
       <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove "><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
@@ -1166,27 +1221,22 @@ Sample text. The real description comes from the product record in the backend.<
         <div class="media media--tile quick-add__thumb" data-placeholder data-qa-thumb style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
         <div class="quick-add__title">
           <h2 id="qa-title" data-qa-name>Product name</h2>
-          <p class="price"><span class="price__now" data-qa-price>Rs 0</span> <s class="price__was" data-qa-was hidden></s></p>
+          <p class="price"><span class="price__now" data-qa-price>Rs. 0</span> <s class="price__was" data-qa-was hidden></s></p>
         </div>
         <button type="button" class="icon-btn icon-btn--plain quick-add__close" data-close-layer aria-label="Close quick add"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
       </div>
       <form data-quick-add-form action="cart.html" method="post">
         <fieldset class="quick-add__group">
           <legend>Size</legend>
-          <!-- TODO: sizes and stock come from the product variants -->
-          <div class="quick-add__options">
-            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="0-3M"><span>0-3M</span></label>
-            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="3-6M" checked><span>3-6M</span></label>
-            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="6-9M"><span>6-9M</span></label>
-            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="9-12M" disabled><span>9-12M<span class="visually-hidden"> (out of stock)</span></span></label>
+          <!-- TODO: sizes and stock come from the product variants; app.js fills this list from the card (data-sizes) -->
+          <div class="quick-add__options" data-qa-sizes>
+            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="3-6m" data-label="3–6m" checked><span>3–6m</span></label>
           </div>
         </fieldset>
         <fieldset class="quick-add__group">
           <legend>Colour</legend>
-          <div class="quick-add__options quick-add__options--colours">
+          <div class="quick-add__options quick-add__options--colours" data-qa-colours>
             <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="lilac" data-label="Lilac" checked><span class="dot dot--lilac" aria-hidden="true"></span><span class="visually-hidden">Lilac</span></label>
-            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="cream" data-label="Cream"><span class="dot dot--cream" aria-hidden="true"></span><span class="visually-hidden">Cream</span></label>
-            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="sky" data-label="Sky"><span class="dot dot--sky" aria-hidden="true"></span><span class="visually-hidden">Sky</span></label>
           </div>
         </fieldset>
         <button type="submit" class="btn btn--primary btn--lg btn--block">Add to cart</button>
@@ -1198,34 +1248,42 @@ Sample text. The real description comes from the product record in the backend.<
   <!-- blade: variants for this product (colour, size, stock) -->
   <script type="application/json" id="product-variants">
   [
-    { "colour": "lilac", "size": "NB", "stock": 0 },
-    { "colour": "lilac", "size": "0-3M", "stock": 8 },
-    { "colour": "lilac", "size": "3-6M", "stock": 3 },
-    { "colour": "lilac", "size": "6-9M", "stock": 12 },
-    { "colour": "lilac", "size": "9-12M", "stock": 0 },
-    { "colour": "lilac", "size": "12-18M", "stock": 6 },
-    { "colour": "cream", "size": "NB", "stock": 5 },
-    { "colour": "cream", "size": "0-3M", "stock": 0 },
-    { "colour": "cream", "size": "3-6M", "stock": 9 },
-    { "colour": "cream", "size": "6-9M", "stock": 2 },
-    { "colour": "cream", "size": "9-12M", "stock": 7 },
-    { "colour": "cream", "size": "12-18M", "stock": 0 },
-    { "colour": "sky", "size": "NB", "stock": 0 },
-    { "colour": "sky", "size": "0-3M", "stock": 4 },
-    { "colour": "sky", "size": "3-6M", "stock": 0 },
-    { "colour": "sky", "size": "6-9M", "stock": 10 },
-    { "colour": "sky", "size": "9-12M", "stock": 6 },
-    { "colour": "sky", "size": "12-18M", "stock": 3 }
+    { "colour": "lilac", "size": "newborn", "stock": 0 },
+    { "colour": "lilac", "size": "0-3m", "stock": 8 },
+    { "colour": "lilac", "size": "3-6m", "stock": 3 },
+    { "colour": "lilac", "size": "6-9m", "stock": 12 },
+    { "colour": "lilac", "size": "9-12m", "stock": 0 },
+    { "colour": "lilac", "size": "12-18m", "stock": 6 },
+    { "colour": "cream", "size": "newborn", "stock": 5 },
+    { "colour": "cream", "size": "0-3m", "stock": 0 },
+    { "colour": "cream", "size": "3-6m", "stock": 9 },
+    { "colour": "cream", "size": "6-9m", "stock": 2 },
+    { "colour": "cream", "size": "9-12m", "stock": 7 },
+    { "colour": "cream", "size": "12-18m", "stock": 0 },
+    { "colour": "sky", "size": "newborn", "stock": 0 },
+    { "colour": "sky", "size": "0-3m", "stock": 4 },
+    { "colour": "sky", "size": "3-6m", "stock": 0 },
+    { "colour": "sky", "size": "6-9m", "stock": 10 },
+    { "colour": "sky", "size": "9-12m", "stock": 6 },
+    { "colour": "sky", "size": "12-18m", "stock": 3 },
+    { "colour": "blush", "size": "newborn", "stock": 4 },
+    { "colour": "blush", "size": "0-3m", "stock": 6 },
+    { "colour": "blush", "size": "3-6m", "stock": 0 },
+    { "colour": "blush", "size": "6-9m", "stock": 5 },
+    { "colour": "blush", "size": "9-12m", "stock": 8 },
+    { "colour": "blush", "size": "12-18m", "stock": 2 }
 ]
   </script>
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=2d353f92" defer></script>
+  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="assets/js/proto-product.js?v=fcd1f4ce" defer></script>
-  <script src="assets/js/product.js?v=0ee55083" defer></script>
+  <script src="assets/js/proto-product.js?v=dfdcb2ae" defer></script>
+  <script src="assets/js/product.js?v=2d183834" defer></script>
+  <script src="assets/js/proto-wishlist.js?v=4ca323b8" defer></script>
 </body>
 </html>

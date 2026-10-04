@@ -33,7 +33,7 @@
   var user = session || { name: 'Amaya', email: 'amaya@example.com', verified: true };
   var verified = user.verified !== false;
 
-  /* ---------- Log out (a POST form in Laravel) ---------- */
+  /* ---------- Sign out (a POST form in Laravel) ---------- */
   $$('[data-logout-form]').forEach(function (f) {
     f.addEventListener('submit', function (e) {
       e.preventDefault();

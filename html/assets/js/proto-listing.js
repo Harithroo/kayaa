@@ -1,25 +1,24 @@
 /* PROTOTYPE ONLY - the server does this in Laravel; delete at Blade conversion.
    Reads the query string, then filters, sorts, searches and paginates the product cards on
    shop.html, category.html and search.html (selected by <body data-page>).
-   Params: age, sort (featured|new|price-asc|price-desc), sale=1, c (category.html), q (search.html), page. */
+   Params: size (slug: newborn, 0-3m, 3-6m, 6-9m, 9-12m, 12-18m, 18-24m, 2y, 3y), sort (featured|new|price-asc|price-desc), sale=1,
+   c (category slug, category.html; documented as /baby/{slug}), q (search.html), page.
+   The old encoded form ?size=0%E2%80%933m (en dash) is accepted and normalised to 0-3m. Categories and sizes come from
+   window.KAYAA_CATALOGUE (assets/js/catalogue-data.js, generated from tools/catalogue.json). */
 (function () {
   'use strict';
 
-  var PER_PAGE = 12;
-  var AGES = [
-    ['newborn', 'Newborn'], ['0-3-months', '0–3 months'], ['3-6-months', '3–6 months'],
-    ['6-12-months', '6–12 months'], ['1-2-years', '1–2 years']
-  ];
-  var SORTS = ['featured', 'new', 'price-asc', 'price-desc'];
-  // TODO: confirm category descriptions with client
-  var CATS = {
-    'bodysuits': ['Bodysuits', 'Everyday bodysuits for every stage.'],
-    'sleepsuits': ['Sleepsuits', 'Comfortable sleepsuits for day and night.'],
-    'sets': ['Sets', 'Matching pieces, ready to wear together.'],
-    'dresses-rompers': ['Dresses & Rompers', 'Easy dresses and rompers for little ones.'],
-    'hats-mitts': ['Hats & Mitts', 'Hats, mitts and booties.'],
-    'swaddles-blankets': ['Swaddles & Blankets', 'Swaddles and blankets for cosy moments.']
-  };
+  var PER_PAGE = 12;   // TODO: confirm the real listing page size with the backend dev
+  var DATA = window.KAYAA_CATALOGUE || { categories: [], sizes: [] };
+  var SORTS = ['featured', 'new', 'price-asc', 'price-desc'];   // TODO: confirm the backend's sort values
+  var CATS = {};
+  DATA.categories.forEach(function (c) { CATS[c.slug] = [c.label, c.blurb]; });
+  var SIZES = DATA.sizes.map(function (s) { return [s.slug, s.label]; });
+
+  // ?size=0%E2%80%933m (en dash, any case) -> 0-3m
+  function normaliseSize(v) {
+    return String(v || '').trim().toLowerCase().replace(/[\u2010-\u2015\u2212]/g, '-').replace(/\s+/g, '');
+  }
 
   var page = document.body.getAttribute('data-page');
   var root = document.querySelector('[data-listing]');
@@ -31,9 +30,15 @@
   var $$ = function (s, c) { return Array.prototype.slice.call((c || root).querySelectorAll(s)); };
 
   /* ---------- State from the query string ---------- */
-  var ageLabel = {};
-  AGES.forEach(function (a) { ageLabel[a[0]] = a[1]; });
-  var age = ageLabel[qs.get('age')] ? qs.get('age') : '';
+  var sizeLabel = {};
+  SIZES.forEach(function (s) { sizeLabel[s[0]] = s[1]; });
+  // an old ?size=0%E2%80%933m link is rewritten to the slug form in the address bar
+  if (qs.get('size') && normaliseSize(qs.get('size')) !== qs.get('size') && sizeLabel[normaliseSize(qs.get('size'))] && history.replaceState) {
+    qs.set('size', normaliseSize(qs.get('size')));
+    history.replaceState(null, '', location.pathname + '?' + qs.toString() + location.hash);
+  }
+  var rawSize = normaliseSize(qs.get('size'));
+  var size = sizeLabel[rawSize] ? rawSize : '';
   var sort = SORTS.indexOf(qs.get('sort')) !== -1 ? qs.get('sort') : 'featured';
   var sale = qs.get('sale') === '1';
   var cat = page === 'category' ? (qs.get('c') || '') : '';
@@ -47,7 +52,7 @@
 
   function matches(li) {
     var d = li.dataset;
-    if (age && (' ' + d.age + ' ').indexOf(' ' + age + ' ') === -1) return false;
+    if (size && (' ' + d.size + ' ').indexOf(' ' + size + ' ') === -1) return false;
     if (sale && d.sale !== '1') return false;
     if (cat && d.category !== cat) return false;
     if (page === 'category' && cat && !catKnown) return false;
@@ -97,9 +102,9 @@
   } else if (page === 'category' && cat) {
     title = catKnown ? CATS[cat][0] : 'Category not found';
     intro = catKnown ? CATS[cat][1] : 'We could not find that category.';
-  } else if (age) {
-    title = ageLabel[age] + ' clothing';
-    intro = age === 'newborn' ? 'Clothes for newborns.' : 'Clothes for babies aged ' + ageLabel[age] + '.';
+  } else if (size) {
+    title = size === 'newborn' ? 'Newborn clothing' : 'Size ' + sizeLabel[size];
+    intro = size === 'newborn' ? 'Clothes for newborns.' : 'Clothes for babies in size ' + sizeLabel[size] + '. Height and weight are the better guide.';
   } else if (sale) {
     title = 'Sale';
     intro = 'Selected styles at lower prices.';
@@ -108,9 +113,9 @@
     intro = 'The newest arrivals first.';
   } else {
     title = 'All baby clothing';
-    intro = 'Soft everyday essentials, sorted by age and stage.';
+    intro = 'Soft everyday essentials, sized by age.';
   }
-  if (sale && page !== 'search' && (age || (page === 'category' && cat))) intro += ' Showing sale items only.';
+  if (sale && page !== 'search' && (size || (page === 'category' && cat))) intro += ' Showing sale items only.';
 
   $('[data-listing-title]').textContent = title;
   $('[data-listing-intro]').textContent = intro;
@@ -133,7 +138,7 @@
   if (page === 'search') {
     crumbs.appendChild(li('Search'));
   } else if (page === 'category' && catKnown) {
-    crumbs.appendChild(li('Shop', 'shop.html'));
+    crumbs.appendChild(li('Baby', 'categories.html'));   // department Baby -> /baby/{slug}; Baby links to the categories page
     crumbs.appendChild(li(CATS[cat][0]));
   } else {
     crumbs.appendChild(li('Shop'));
@@ -144,12 +149,12 @@
   if (qInput) qInput.value = q;
 
   $$('.age-chips a').forEach(function (a, i) {
-    var slug = i === 0 ? '' : AGES[i - 1][0];
-    a.setAttribute('href', url({ age: slug, page: null }));
-    if (slug === age) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    var slug = i === 0 ? '' : SIZES[i - 1][0];
+    a.setAttribute('href', url({ size: slug, page: null }));
+    if (slug === size) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
 
-  var keep = { age: age, c: cat, q: q };
+  var keep = { size: size, c: cat, q: q };
   $$('input[data-keep]').forEach(function (inp) {
     var v = keep[inp.getAttribute('data-keep')];
     inp.value = v || '';
@@ -213,5 +218,5 @@
     $('[data-no-results-title]', noResults).textContent = q ? 'No results for “' + q + '”' : 'What are you looking for?';
   }
   var clear = $('[data-clear-filters]');
-  if (clear) clear.setAttribute('href', url({ age: null, sort: null, sale: null, page: null }));
+  if (clear) clear.setAttribute('href', url({ size: null, sort: null, sale: null, page: null }));
 })();

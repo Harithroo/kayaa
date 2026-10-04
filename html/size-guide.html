@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
   <title>Size guide | Kayaa</title>
-  <meta name="description" content="Find the right Kayaa size for your baby by age, weight and height.">
+  <meta name="description" content="Find the right Kayaa size for your baby. We size by age band; height and weight are the better guide.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=6e87c2c7">
-  <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
+  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/content.css?v=7a025b72">
+  <link rel="stylesheet" href="assets/css/pages/content.css?v=fd75bbea">
 </head>
 <body data-page="size-guide" data-print>
   <!-- partial: sprite -->
@@ -206,6 +206,9 @@
       <path d="M13 12h8" />
       <path d="M13 18h8" />
     </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    </symbol>
   </svg>
   <!-- /partial: sprite -->
 
@@ -214,7 +217,7 @@
   <!-- partial: announcement -->
   <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
   <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
-    <p class="topbar__text"><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span><span class="topbar__extra"> · Secure online payment</span></p>
+    <p class="topbar__text"><span>Island-wide delivery in <span data-cfg="delivery_island_days">2–4</span> days</span><span class="topbar__extra"> · Free over <span data-cfg="free_shipping_over">Rs. 7,500</span></span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
   </div>
   <!-- /partial: announcement -->
@@ -236,26 +239,31 @@
             <div class="mega" id="mega-shop" data-mega-panel inert>
               <div class="mega__panel">
                 <div class="mega__main">
-                  <p class="eyebrow">Shop by age</p>
-                  <ul class="mega__ages" role="list">
-                    <!-- loop: age_groups -->
-                    <li><a class="mega-tile" href="shop.html?age=newborn" style="--tone: var(--tone-1)"><span class="mega-tile__label"><span>Newborn</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="shop.html?age=0-3-months" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>0–3</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="shop.html?age=3-6-months" style="--tone: var(--tone-3)"><span class="mega-tile__label"><span>3–6</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="shop.html?age=6-12-months" style="--tone: var(--tone-4)"><span class="mega-tile__label"><span>6–12</span><span>months</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <li><a class="mega-tile" href="shop.html?age=1-2-years" style="--tone: var(--tone-2)"><span class="mega-tile__label"><span>1–2</span><span>years</span></span><span class="mega-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-                    <!-- /loop -->
+                  <p class="eyebrow">Shop by size</p>
+                  <ul class="chip-list mega__sizes" role="list">
+                    <!-- gen: size-chips-mega -->
+                    <li><a class="chip" href="shop.html?size=newborn">Newborn</a></li>
+                    <li><a class="chip" href="shop.html?size=0-3m">0–3m</a></li>
+                    <li><a class="chip" href="shop.html?size=3-6m">3–6m</a></li>
+                    <li><a class="chip" href="shop.html?size=6-9m">6–9m</a></li>
+                    <li><a class="chip" href="shop.html?size=9-12m">9–12m</a></li>
+                    <li><a class="chip" href="shop.html?size=12-18m">12–18m</a></li>
+                    <li><a class="chip" href="shop.html?size=18-24m">18–24m</a></li>
+                    <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
+                    <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
+                    <!-- /gen: size-chips-mega -->
                   </ul>
                   <p class="eyebrow mega__eyebrow">Browse by category</p>
                   <ul class="chip-list" role="list">
-                    <!-- loop: categories -->
+                    <!-- gen: cat-chips -->
+                    <li><a class="chip" href="category.html?c=newborn">Newborn</a></li>
                     <li><a class="chip" href="category.html?c=bodysuits">Bodysuits</a></li>
-                    <li><a class="chip" href="category.html?c=sleepsuits">Sleepsuits</a></li>
+                    <li><a class="chip" href="category.html?c=sleepwear">Sleepwear</a></li>
                     <li><a class="chip" href="category.html?c=sets">Sets</a></li>
-                    <li><a class="chip" href="category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
-                    <li><a class="chip" href="category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
-                    <li><a class="chip" href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
-                    <!-- /loop -->
+                    <li><a class="chip" href="category.html?c=outerwear">Outerwear</a></li>
+                    <li><a class="chip" href="category.html?c=napkins">Napkins</a></li>
+                    <li><a class="chip" href="category.html?c=accessories">Accessories</a></li>
+                    <!-- /gen: cat-chips -->
                   </ul>
                 </div>
                 <!-- TODO: placeholder copy, confirm with client -->
@@ -271,6 +279,7 @@
               </div>
             </div>
           </li>
+          <li><a class="primary-nav__link" href="categories.html" data-nav="categories">Categories</a></li>
           <li><a class="primary-nav__link" href="shop.html?sort=new">New in</a></li>
           <li><a class="primary-nav__link" href="shop.html?sale=1">Sale</a></li>
           <li><a class="primary-nav__link" href="size-guide.html" data-nav="size-guide">Size guide</a></li>
@@ -287,6 +296,7 @@
             <button type="submit" class="header-search__submit" aria-label="Search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></button>
           </div>
         </form>
+        <a class="icon-btn site-header__wishlist" href="wishlist.html" data-nav="wishlist" aria-label="Wishlist"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg></a>
         <!-- blade: @auth account/index.html @else account/login.html -->
         <a class="icon-btn site-header__account" href="account/login.html" data-nav="account" data-account-link aria-label="Account"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg></a>
         <button type="button" class="icon-btn" data-open-layer="cart" data-cart-aria aria-label="Open bag, 2 items" aria-haspopup="dialog">
@@ -299,14 +309,15 @@
     <nav class="category-row" aria-label="Categories">
       <div class="container">
         <ul>
-          <!-- loop: categories -->
+          <!-- gen: cat-row -->
+          <li><a href="category.html?c=newborn">Newborn</a></li>
           <li><a href="category.html?c=bodysuits">Bodysuits</a></li>
-          <li><a href="category.html?c=sleepsuits">Sleepsuits</a></li>
+          <li><a href="category.html?c=sleepwear">Sleepwear</a></li>
           <li><a href="category.html?c=sets">Sets</a></li>
-          <li><a href="category.html?c=dresses-rompers">Dresses &amp; Rompers</a></li>
-          <li><a href="category.html?c=hats-mitts">Hats &amp; Mitts</a></li>
-          <li><a href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets</a></li>
-          <!-- /loop -->
+          <li><a href="category.html?c=outerwear">Outerwear</a></li>
+          <li><a href="category.html?c=napkins">Napkins</a></li>
+          <li><a href="category.html?c=accessories">Accessories</a></li>
+          <!-- /gen: cat-row -->
         </ul>
       </div>
     </nav>
@@ -323,7 +334,7 @@
       </nav>
       <header class="content__head">
         <h1>Size guide</h1>
-        <p class="content__lede">Match your baby’s weight and height to a size. Every baby is different, so use this as a guide.</p>
+        <p class="content__lede">We size by age band. Height and weight are the better guide, so use the chart below if you are between sizes.</p>
         <!-- TODO: "Last updated" comes from the page's updated_at (or a static date); confirm with the client -->
         <p class="content__updated">Last updated <span class="placeholder">[date]</span></p>
       </header>
@@ -332,22 +343,25 @@
           <div class="prose">
             <h2 id="chart">Size chart <a class="anchor" href="#chart" aria-label="Link to this section: Size chart"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
             <!-- The product page size table must mirror this one (same sizes and ranges, one source in Blade). -->
-            <!-- TODO: placeholder ranges, confirm with the client -->
+            <!-- The brand sizes by age band; height and weight are the better guide. TODO: placeholder ranges, confirm with the client -->
             <div class="table-wrap">
               <table class="size-table">
-                <caption class="visually-hidden">Size guide by age, weight and height</caption>
+                <caption class="visually-hidden">Size guide by age, height and weight</caption>
                 <thead>
-                  <tr><th scope="col">Size</th><th scope="col">Age</th><th scope="col">Weight</th><th scope="col">Height</th></tr>
+                  <tr><th scope="col">Size</th><th scope="col">Age</th><th scope="col">Height</th><th scope="col">Weight</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: sizes -->
-                  <tr><th scope="row">NB</th><td data-label="Age">Newborn</td><td data-label="Weight">Up to 3.5 kg</td><td data-label="Height">Up to 55 cm</td></tr>
-                  <tr><th scope="row">0-3M</th><td data-label="Age">0–3 months</td><td data-label="Weight">3.5–6 kg</td><td data-label="Height">55–62 cm</td></tr>
-                  <tr><th scope="row">3-6M</th><td data-label="Age">3–6 months</td><td data-label="Weight">6–7.5 kg</td><td data-label="Height">62–68 cm</td></tr>
-                  <tr><th scope="row">6-9M</th><td data-label="Age">6–9 months</td><td data-label="Weight">7.5–9 kg</td><td data-label="Height">68–74 cm</td></tr>
-                  <tr><th scope="row">9-12M</th><td data-label="Age">9–12 months</td><td data-label="Weight">9–10 kg</td><td data-label="Height">74–80 cm</td></tr>
-                  <tr><th scope="row">12-18M</th><td data-label="Age">12–18 months</td><td data-label="Weight">10–11.5 kg</td><td data-label="Height">80–86 cm</td></tr>
-                  <!-- /loop -->
+                  <!-- gen: size-rows -->
+                  <tr><th scope="row">Newborn</th><td data-label="Age">Newborn</td><td data-label="Height">Up to 55 cm</td><td data-label="Weight">Up to 3.5 kg</td></tr>
+                  <tr><th scope="row">0–3m</th><td data-label="Age">0–3 months</td><td data-label="Height">55–62 cm</td><td data-label="Weight">3.5–6 kg</td></tr>
+                  <tr><th scope="row">3–6m</th><td data-label="Age">3–6 months</td><td data-label="Height">62–68 cm</td><td data-label="Weight">6–7.5 kg</td></tr>
+                  <tr><th scope="row">6–9m</th><td data-label="Age">6–9 months</td><td data-label="Height">68–74 cm</td><td data-label="Weight">7.5–9 kg</td></tr>
+                  <tr><th scope="row">9–12m</th><td data-label="Age">9–12 months</td><td data-label="Height">74–80 cm</td><td data-label="Weight">9–10 kg</td></tr>
+                  <tr><th scope="row">12–18m</th><td data-label="Age">12–18 months</td><td data-label="Height">80–86 cm</td><td data-label="Weight">10–11.5 kg</td></tr>
+                  <tr><th scope="row">18–24m</th><td data-label="Age">18–24 months</td><td data-label="Height">86–92 cm</td><td data-label="Weight">11.5–13 kg</td></tr>
+                  <tr><th scope="row">2Y</th><td data-label="Age">2 years</td><td data-label="Height">92–98 cm</td><td data-label="Weight">13–14.5 kg</td></tr>
+                  <tr><th scope="row">3Y</th><td data-label="Age">3 years</td><td data-label="Height">98–104 cm</td><td data-label="Weight">14.5–16.5 kg</td></tr>
+                  <!-- /gen: size-rows -->
                 </tbody>
               </table>
             </div>
@@ -355,22 +369,28 @@
 
             <h2 id="measure">How to measure <a class="anchor" href="#measure" aria-label="Link to this section: How to measure"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
             <ol class="how-steps" role="list">
-              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-scale"></use></svg></span><h3>Weigh your baby</h3><p>Use a recent weight in kilograms.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-scale"></use></svg></span><h3>Weigh your baby</h3><p>Use a recent weight in kilograms. It helps when you are between age bands.</p></li>
               <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-ruler"></use></svg></span><h3>Measure length</h3><p>Lay your baby flat and measure from head to heel in centimetres.</p></li>
-              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-list-checks"></use></svg></span><h3>Compare with the chart</h3><p>Find the row that matches both numbers and pick that size.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-list-checks"></use></svg></span><h3>Compare with the chart</h3><p>Start with your baby’s age band, then check height and weight against that row.</p></li>
             </ol>
 
             <h2 id="between">Between sizes? <a class="anchor" href="#between" aria-label="Link to this section: Between sizes?"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
             <!-- TODO: confirm the between-sizes advice with the client -->
             <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div><p class="notice__title">Between two sizes</p><p><span class="placeholder">[Advice for babies between two sizes]</span></p></div></div>
 
-            <h2 id="age">Shop by age <a class="anchor" href="#age" aria-label="Link to this section: Shop by age"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <h2 id="sizes">Shop by size <a class="anchor" href="#sizes" aria-label="Link to this section: Shop by size"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
             <ul class="chip-list" role="list">
-              <li><a class="chip" href="shop.html?age=newborn">Newborn</a></li>
-              <li><a class="chip" href="shop.html?age=0-3-months">0–3 months</a></li>
-              <li><a class="chip" href="shop.html?age=3-6-months">3–6 months</a></li>
-              <li><a class="chip" href="shop.html?age=6-12-months">6–12 months</a></li>
-              <li><a class="chip" href="shop.html?age=1-2-years">1–2 years</a></li>
+              <!-- gen: size-chips-mega -->
+              <li><a class="chip" href="shop.html?size=newborn">Newborn</a></li>
+              <li><a class="chip" href="shop.html?size=0-3m">0–3m</a></li>
+              <li><a class="chip" href="shop.html?size=3-6m">3–6m</a></li>
+              <li><a class="chip" href="shop.html?size=6-9m">6–9m</a></li>
+              <li><a class="chip" href="shop.html?size=9-12m">9–12m</a></li>
+              <li><a class="chip" href="shop.html?size=12-18m">12–18m</a></li>
+              <li><a class="chip" href="shop.html?size=18-24m">18–24m</a></li>
+              <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
+              <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
+              <!-- /gen: size-chips-mega -->
             </ul>
 
             <h2 id="questions">Size questions <a class="anchor" href="#questions" aria-label="Link to this section: Size questions"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
@@ -378,7 +398,7 @@
             <div class="accordion">
             <details class="accordion__item">
               <summary class="accordion__summary">How do I choose the right size? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder: match your baby’s weight and height to the chart above.</p></div>
+              <div class="accordion__body"><p>Placeholder: start with your baby’s age band in the chart above. Height and weight are the better guide.</p></div>
             </details>
             <details class="accordion__item">
               <summary class="accordion__summary">What if my baby is between sizes? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
@@ -398,7 +418,7 @@
           <div>
             <h2 id="help-title">Still need help?</h2>
             <!-- TODO: confirm the WhatsApp number and reply times with the client -->
-            <p>Message us on WhatsApp <span class="placeholder">[WhatsApp number]</span> or send us a note from the contact page.</p>
+            <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
           </div>
           <div class="help-card__actions">
             <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
@@ -416,26 +436,34 @@
       <div class="footer__grid">
         <div class="footer__brand">
           <a class="wordmark" href="index.html" aria-label="Kayaa home">kayaa</a>
-          <p class="footer__blurb">Soft everyday clothing for babies, delivered across Sri Lanka.</p>
+          <p class="footer__blurb">Soft, honest clothing made for Sri Lankan weather.</p>
+          <p class="footer__place">Colombo, Sri Lanka</p> <!-- TODO: confirm with client -->
           <ul class="footer__contact" role="list">
             <li><a href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a></li> <!-- TODO: add WhatsApp number -->
             <li><a href="mailto:hello@example.com">hello@example.com</a></li> <!-- TODO: confirm email with client -->
           </ul>
         </div>
         <nav aria-labelledby="footer-age">
-          <h2 class="footer__title" id="footer-age">Shop by age</h2>
-          <ul class="footer__list" role="list">
-            <li><a href="shop.html?age=newborn">Newborn</a></li>
-            <li><a href="shop.html?age=0-3-months">0–3 months</a></li>
-            <li><a href="shop.html?age=3-6-months">3–6 months</a></li>
-            <li><a href="shop.html?age=6-12-months">6–12 months</a></li>
-            <li><a href="shop.html?age=1-2-years">1–2 years</a></li>
+          <h2 class="footer__title" id="footer-age">Shop by size</h2>
+          <ul class="footer__list footer__list--cols" role="list">
+            <!-- gen: size-links-footer -->
+            <li><a href="shop.html?size=newborn">Newborn</a></li>
+            <li><a href="shop.html?size=0-3m">0–3m</a></li>
+            <li><a href="shop.html?size=3-6m">3–6m</a></li>
+            <li><a href="shop.html?size=6-9m">6–9m</a></li>
+            <li><a href="shop.html?size=9-12m">9–12m</a></li>
+            <li><a href="shop.html?size=12-18m">12–18m</a></li>
+            <li><a href="shop.html?size=18-24m">18–24m</a></li>
+            <li><a href="shop.html?size=2y">2Y</a></li>
+            <li><a href="shop.html?size=3y">3Y</a></li>
+            <!-- /gen: size-links-footer -->
           </ul>
         </nav>
         <nav aria-labelledby="footer-help">
           <h2 class="footer__title" id="footer-help">Help</h2>
           <ul class="footer__list" role="list">
             <li><a href="track.html">Track order</a></li>
+            <li><a href="wishlist.html">Wishlist</a></li>
             <li><a href="size-guide.html">Size guide</a></li>
             <li><a href="delivery.html">Delivery</a></li>
             <li><a href="returns.html">Returns</a></li>
@@ -445,6 +473,7 @@
         <nav aria-labelledby="footer-company">
           <h2 class="footer__title" id="footer-company">Company</h2>
           <ul class="footer__list" role="list">
+            <li><a href="categories.html">All categories</a></li>
             <li><a href="about.html">Our story</a></li>
             <li><a href="privacy.html">Privacy policy</a></li>
             <li><a href="terms.html">Terms &amp; conditions</a></li>
@@ -455,7 +484,7 @@
         <ul class="footer__facts" role="list">
           <!-- TODO: add official card marks and the Onepay badge from their brand kit -->
           <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg> Secure card payments</li>
-          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg> Delivery across Sri Lanka</li>
+          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg> Island-wide delivery</li>
         </ul>
         <ul class="footer__social" role="list">
           <!-- TODO: add real social URLs -->
@@ -497,30 +526,41 @@
         <div class="menu-group">
           <ul role="list">
             <li><a href="shop.html" data-nav="shop category product search">Shop</a></li>
+            <li><a href="categories.html" data-nav="categories">Categories</a></li>
             <li><a href="shop.html?sort=new">New in</a></li>
             <li><a href="shop.html?sale=1">Sale</a></li>
+            <li><a href="wishlist.html" data-nav="wishlist">Wishlist</a></li>
             <li><a href="about.html" data-nav="about">Our story</a></li>
           </ul>
         </div>
         <div class="menu-group">
-          <p class="menu-group__title">Shop by age</p>
-          <ul role="list">
-            <li><a href="shop.html?age=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=0-3-months">0–3 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=3-6-months">3–6 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=6-12-months">6–12 months <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="shop.html?age=1-2-years">1–2 years <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+          <p class="menu-group__title">Shop by size</p>
+          <ul class="chip-list menu-group__chips" role="list">
+            <!-- gen: size-chips-drawer -->
+            <li><a class="chip" href="shop.html?size=newborn">Newborn</a></li>
+            <li><a class="chip" href="shop.html?size=0-3m">0–3m</a></li>
+            <li><a class="chip" href="shop.html?size=3-6m">3–6m</a></li>
+            <li><a class="chip" href="shop.html?size=6-9m">6–9m</a></li>
+            <li><a class="chip" href="shop.html?size=9-12m">9–12m</a></li>
+            <li><a class="chip" href="shop.html?size=12-18m">12–18m</a></li>
+            <li><a class="chip" href="shop.html?size=18-24m">18–24m</a></li>
+            <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
+            <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
+            <!-- /gen: size-chips-drawer -->
           </ul>
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Shop by category</p>
           <ul role="list">
+            <!-- gen: cat-drawer -->
+            <li><a href="category.html?c=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
             <li><a href="category.html?c=bodysuits">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=sleepsuits">Sleepsuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=sleepwear">Sleepwear <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
             <li><a href="category.html?c=sets">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=dresses-rompers">Dresses &amp; Rompers <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=hats-mitts">Hats &amp; Mitts <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
-            <li><a href="category.html?c=swaddles-blankets">Swaddles &amp; Blankets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=outerwear">Outerwear <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=napkins">Napkins <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <li><a href="category.html?c=accessories">Accessories <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
+            <!-- /gen: cat-drawer -->
           </ul>
         </div>
         <div class="menu-group">
@@ -535,10 +575,9 @@
         </div>
         <div class="menu-group">
           <p class="menu-group__title">Account</p>
-          <!-- blade: @auth My account @else Log in / Register -->
+          <!-- blade: @auth My account @else Sign in / register -->
           <ul role="list">
-            <li><a href="account/login.html" data-nav="login" data-account-link><span data-account-label>Log in</span></a></li>
-            <li data-guest-only><a href="account/register.html" data-nav="register">Register</a></li>
+            <li><a href="account/login.html" data-nav="login" data-account-link><span data-account-label>Sign in / register</span></a></li>
           </ul>
         </div>
       </nav>
@@ -562,7 +601,7 @@
       <div class="cart-panel__filled">
         <div class="drawer__body">
           <div class="cart-progress">
-            <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
+            <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs. 1,200 away from free delivery</p>
             <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
           </div>
           <ul class="cart-items" role="list" data-cart-items>
@@ -578,7 +617,7 @@
                     <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
-                  <p class="price" data-line-total>Rs 3,450</p>
+                  <p class="price" data-line-total>Rs. 3,450</p>
                 </div>
               </div>
               <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove Ruffle Sleeve Dress"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
@@ -594,7 +633,7 @@
                     <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
                     <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
                   </div>
-                  <p class="price" data-line-total>Rs 2,850</p>
+                  <p class="price" data-line-total>Rs. 2,850</p>
                 </div>
               </div>
               <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove Cotton Sleepsuit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
@@ -603,7 +642,7 @@
           </ul>
         </div>
         <div class="drawer__foot">
-          <p class="cart-summary"><span>Subtotal</span> <span class="cart-summary__value" data-cart-subtotal>Rs 6,300</span></p>
+          <p class="cart-summary"><span>Subtotal</span> <span class="cart-summary__value" data-cart-subtotal>Rs. 6,300</span></p>
           <p class="cart-note">Delivery calculated at checkout · Pay securely by card</p>
           <div class="cart-actions">
             <a class="btn btn--primary btn--lg btn--block" href="checkout.html">Checkout</a>
@@ -634,7 +673,7 @@
             <input class="qty__input" type="text" inputmode="numeric" pattern="[0-9]*" value="1" data-qty-input aria-label="Quantity">
             <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
           </div>
-          <p class="price" data-line-total>Rs 0</p>
+          <p class="price" data-line-total>Rs. 0</p>
         </div>
       </div>
       <button type="button" class="icon-btn icon-btn--plain cart-item__remove" data-cart-remove aria-label="Remove "><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash-2"></use></svg></button>
@@ -652,27 +691,22 @@
         <div class="media media--tile quick-add__thumb" data-placeholder data-qa-thumb style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
         <div class="quick-add__title">
           <h2 id="qa-title" data-qa-name>Product name</h2>
-          <p class="price"><span class="price__now" data-qa-price>Rs 0</span> <s class="price__was" data-qa-was hidden></s></p>
+          <p class="price"><span class="price__now" data-qa-price>Rs. 0</span> <s class="price__was" data-qa-was hidden></s></p>
         </div>
         <button type="button" class="icon-btn icon-btn--plain quick-add__close" data-close-layer aria-label="Close quick add"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
       </div>
       <form data-quick-add-form action="cart.html" method="post">
         <fieldset class="quick-add__group">
           <legend>Size</legend>
-          <!-- TODO: sizes and stock come from the product variants -->
-          <div class="quick-add__options">
-            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="0-3M"><span>0-3M</span></label>
-            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="3-6M" checked><span>3-6M</span></label>
-            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="6-9M"><span>6-9M</span></label>
-            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="9-12M" disabled><span>9-12M<span class="visually-hidden"> (out of stock)</span></span></label>
+          <!-- TODO: sizes and stock come from the product variants; app.js fills this list from the card (data-sizes) -->
+          <div class="quick-add__options" data-qa-sizes>
+            <label class="size-box"><input class="visually-hidden" type="radio" name="size" value="3-6m" data-label="3–6m" checked><span>3–6m</span></label>
           </div>
         </fieldset>
         <fieldset class="quick-add__group">
           <legend>Colour</legend>
-          <div class="quick-add__options quick-add__options--colours">
+          <div class="quick-add__options quick-add__options--colours" data-qa-colours>
             <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="lilac" data-label="Lilac" checked><span class="dot dot--lilac" aria-hidden="true"></span><span class="visually-hidden">Lilac</span></label>
-            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="cream" data-label="Cream"><span class="dot dot--cream" aria-hidden="true"></span><span class="visually-hidden">Cream</span></label>
-            <label class="swatch"><input class="visually-hidden" type="radio" name="colour" value="sky" data-label="Sky"><span class="dot dot--sky" aria-hidden="true"></span><span class="visually-hidden">Sky</span></label>
           </div>
         </fieldset>
         <button type="submit" class="btn btn--primary btn--lg btn--block">Add to cart</button>
@@ -682,9 +716,10 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=2d353f92" defer></script>
+  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->
   <script src="assets/js/content.js?v=bdf3d4f5" defer></script>
 </body>

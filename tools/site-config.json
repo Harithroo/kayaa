@@ -1,8 +1,17 @@
 {
   "shipping_fee": 450,
   "free_shipping_over": 7500,
-  "pay_button_label": "Continue to payment",
+  "pay_button_label": "Pay now",
   "order_emails_enabled": false,
   "remember_days": 30,
-  "low_stock_threshold": 5
+  "low_stock_threshold": 5,
+  "delivery_colombo_days": "1–2",
+  "delivery_island_days": "2–4",
+  "dispatch_cutoff": "2pm",
+  "return_window_days": 14,
+  "refund_days": 7,
+  "faulty_report_days": 7,
+  "support_hours": "Mon–Sat 9am–6pm",
+  "whatsapp_display": "077 000 0000",
+  "currency_prefix": "Rs."
 }

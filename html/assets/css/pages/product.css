@@ -335,3 +335,15 @@
 
 /* Over a real photo the outline badge needs a solid background to stay readable */
 .gallery__badge.badge--outline { background: var(--surface); }
+
+/* Save (wishlist), dispatch line, care list, review sign-in note */
+.buy__save { flex: 1 1 100%; }
+@media (min-width: 600px) { .buy__save { flex: 0 0 auto; } }
+.buy__save .icon { transition: none; }
+.buy__save[aria-pressed="true"] { background: var(--tone-3); border-color: var(--primary-deep); color: var(--primary-deep); }
+.buy__save[aria-pressed="true"] .icon { fill: currentColor; }
+.buy__dispatch { margin-top: var(--space-3); font-size: var(--fs-dense); color: var(--ink-soft); }
+.care-list { margin-top: var(--space-2); padding-left: var(--space-5); list-style: disc; }
+.care-list li + li { margin-top: var(--space-1); }
+.review-form__signin { font-size: var(--fs-ui); color: var(--ink-soft); }
+.review-form__signin a { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 700; }

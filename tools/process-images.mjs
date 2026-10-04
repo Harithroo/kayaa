@@ -56,16 +56,17 @@ const SLOTS = [
   { id: 'hero', label: 'Hero', dir: 'hero', ratio: R45, widths: [480, 800, 1200, 1600], budget: [1200, 130] },
   { id: 'banner-newborn', label: 'Promo banner: newborn', dir: 'banner', ratio: R11 },
   { id: 'banner-sale', label: 'Promo banner: sale', dir: 'banner', ratio: R11 },
+  { id: 'cat-newborn', label: 'Category: newborn', dir: 'category', ratio: R45 },
   { id: 'cat-bodysuits', label: 'Category: bodysuits', dir: 'category', ratio: R45 },
-  { id: 'cat-sleepsuits', label: 'Category: sleepsuits', dir: 'category', ratio: R45 },
+  { id: 'cat-sleepwear', label: 'Category: sleepwear', dir: 'category', ratio: R45 },
   { id: 'cat-sets', label: 'Category: sets', dir: 'category', ratio: R45 },
-  { id: 'cat-dresses-rompers', label: 'Category: dresses & rompers', dir: 'category', ratio: R45 },
-  { id: 'cat-hats-mitts', label: 'Category: hats & mitts', dir: 'category', ratio: R45 },
-  { id: 'cat-swaddles', label: 'Category: swaddles & blankets', dir: 'category', ratio: R45 },
+  { id: 'cat-outerwear', label: 'Category: outerwear', dir: 'category', ratio: R45 },
+  { id: 'cat-napkins', label: 'Category: napkins', dir: 'category', ratio: R45 },
+  { id: 'cat-accessories', label: 'Category: accessories', dir: 'category', ratio: R45 },
   ...GALLERY.map((g) => ({ id: g.id, label: galleryLabel(g), dir: 'product', ratio: R45 })),
 ].map((s) => ({ widths: [480, 800, 1200], budget: [800, 70], ...s }));   // budget: [checkpoint width, max KB]
 
-const CAT_TONES = { 'cat-bodysuits': 2, 'cat-sleepsuits': 1, 'cat-sets': 4, 'cat-dresses-rompers': 3, 'cat-hats-mitts': 1, 'cat-swaddles': 2 };
+const CAT_TONES = { 'cat-newborn': 1, 'cat-bodysuits': 2, 'cat-sleepwear': 3, 'cat-sets': 4, 'cat-outerwear': 1, 'cat-napkins': 2, 'cat-accessories': 3 };
 const PRODUCT_ALT = 'Product photo placeholder (TODO)';
 
 // Wiring: one region per marker pair in a page. photo() builds the <img> variant, placeholder() the fallback.

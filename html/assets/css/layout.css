@@ -156,6 +156,7 @@
   margin-right: -2px;
 }
 .site-header__account,
+.site-header__wishlist,
 .primary-nav,
 .header-search,
 .category-row { display: none; }
@@ -255,6 +256,7 @@
 }
 .mega__main .eyebrow { margin-bottom: var(--space-3); }
 .mega__eyebrow { margin-top: var(--space-5); }
+.mega__sizes { max-width: 640px; }
 .mega__ages {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -419,7 +421,8 @@
   }
   .site-header__menu { display: none; }
   .site-header__actions { margin-left: auto; margin-right: 0; }
-  .site-header__account { display: inline-flex; }
+  .site-header__account,
+  .site-header__wishlist { display: inline-flex; }
   .primary-nav { display: block; }
   .header-search { display: block; }
   .category-row { display: block; }
@@ -566,6 +569,9 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
   .menu-group a:hover { color: var(--primary-deep); }
 }
 .menu-group a .icon { color: var(--ink-soft); }
+/* sizes in the drawer are a wrapping pill grid, not a list of rows */
+.menu-group .menu-group__chips { flex-direction: row; flex-wrap: wrap; }
+.menu-group .menu-group__chips a { display: inline-flex; justify-content: center; font-size: var(--fs-ui); font-weight: 700; }
 
 /* Cart panel shell. Line-item and empty-state styles are in components.css. */
 .cart-panel {
@@ -725,6 +731,7 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
   .footer__contact a:hover,
   .footer__list a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
+.footer__list--cols a { min-width: var(--tap); }   /* the short size links ("2Y", "3Y") keep a 44px-wide tap target */
 .footer__title {
   display: flex;
   align-items: center;
@@ -743,6 +750,9 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
   gap: var(--space-2);   /* 8px between tap targets */
   list-style: none;
 }
+.footer__place { margin-top: var(--space-2); font-size: var(--fs-dense); color: var(--ink-soft); }
+/* nine sizes: two columns so the column is not three times taller than its neighbours */
+.footer__list--cols { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); column-gap: var(--space-5); }
 .footer__base {
   display: flex;
   flex-direction: column;
@@ -784,7 +794,7 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
 
 @media (min-width: 900px) {
   .footer__grid {
-    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1.2fr 1fr 1fr;
     gap: var(--space-7);
   }
   .footer__brand { grid-column: auto; }
