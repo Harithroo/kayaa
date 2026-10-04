@@ -3,19 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Our story | Kayaa</title>
-  <meta name="description" content="The story behind Kayaa, soft everyday clothing for babies.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- partial: seo -->
+  <title>About Kayaa | Baby Clothing in Sri Lanka</title>
+  <meta name="description" content="Kayaa makes soft, honest baby clothing for Sri Lankan weather, sized by age with a clear size guide and simple, secure shopping.">
+  <link rel="canonical" href="https://example.com/about"> <!-- blade: url() -->
+  <meta name="robots" content="noindex,nofollow"> <!-- staging: noindex,nofollow everywhere ("staging": true in tools/seo.json). Live: index,follow -->
+  <meta property="og:title" content="About Kayaa | Baby Clothing in Sri Lanka">
+  <meta property="og:description" content="Kayaa makes soft, honest baby clothing for Sri Lankan weather, sized by age with a clear size guide and simple, secure shopping.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://example.com/about">
+  <meta property="og:site_name" content="Kayaa">
+  <meta property="og:locale" content="en_LK">
+  <!-- TODO: og:image and twitter:image once a logo exists -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="About Kayaa | Baby Clothing in Sri Lanka">
+  <meta name="twitter:description" content="Kayaa makes soft, honest baby clothing for Sri Lankan weather, sized by age with a clear size guide and simple, secure shopping.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://example.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Our story",
+        "item": "https://example.com/about"
+      }
+    ]
+  }
+  </script>
+  <!-- /partial: seo -->
   <!-- partial: styles -->
-  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <script>
+    /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
+       Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
+    if (location.protocol !== 'file:') ['public-sans', 'urbanist'].forEach(function (n) {
+      var l = document.createElement('link'); l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = '';
+      l.href = 'assets/fonts/' + n + '-latin-wght-normal.woff2'; document.head.appendChild(l);
+    });
+  </script>
+  <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/content.css?v=fd75bbea">
+  <link rel="stylesheet" href="assets/css/pages/content.css?v=152fc5c1">
 </head>
 <body data-page="about">
   <!-- partial: sprite -->
@@ -325,6 +364,7 @@
   <!-- /partial: header -->
 
   <main id="main">
+    <!-- gen: content about -->
     <div class="container content">
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
@@ -333,47 +373,48 @@
         </ol>
       </nav>
       <header class="content__head">
-        <h1>Our story</h1>
-        <p class="content__lede">Soft everyday clothing for babies, delivered across Sri Lanka.</p>
+        <h1>Our Story</h1>
+        <p class="content__lede">Kayaa is a Sri Lankan baby clothing brand. Soft, honest clothing made for Sri Lankan weather, for babies from newborn up to three years.</p>
+        <p class="content__updated">Last updated <mark class="todo"><span class="marker-label">To confirm</span> publication date</mark></p>
       </header>
       <div class="content__layout">
         <div class="content__main">
           <div class="prose">
-            <!-- TODO: placeholder story, replace with the client's copy (no names or claims until supplied) -->
-            <h2 id="story">Why Kayaa <a class="anchor" href="#story" aria-label="Link to this section: Why Kayaa"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <p>Placeholder: the Kayaa story will go here. This text is neutral filler until the client supplies the real one.</p>
-            <p>Placeholder: a second short paragraph about what Kayaa makes and who it is for.</p>
-          </div>
-          <div class="about-media">
-            <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-            <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-          </div>
-          <div class="prose">
+            <p><mark class="todo"><span class="marker-label">To confirm</span> optional brand story. Who started Kayaa and why, in two or three sentences, in the founder's own words. Delete this line if you prefer the values-only version.</mark></p>
             <h2 id="values">What we care about <a class="anchor" href="#values" aria-label="Link to this section: What we care about"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p><strong>Made for our weather.</strong> Breathable cotton and bamboo pieces that stay comfortable in the heat. <mark class="todo"><span class="marker-label">To confirm</span> confirm the fabric claims, including any OEKO-TEX certification, before this goes live</mark></p>
+            <p><strong>Sized by age, guided by height and weight.</strong> Our sizes follow age bands, and our <a href="size-guide.html">size guide</a> helps you check them against your baby's height and weight, so you can order once and it fits.</p>
+            <p><strong>Simple to shop.</strong> Clear prices, secure card payment, island-wide delivery and an order you can track with your order number and mobile number. If the size is wrong, <a href="returns.html">swapping it is free</a>.</p>
+            <h2 id="sizes">Shop by size <a class="anchor" href="#sizes" aria-label="Link to this section: Shop by size"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p class="chip-list__label">Find pieces for each stage:</p>
+            <ul class="chip-list" role="list">
+              <li><a class="chip" href="shop.html?size=newborn">Newborn</a></li>
+              <li><a class="chip" href="shop.html?size=0-3m">0–3m</a></li>
+              <li><a class="chip" href="shop.html?size=3-6m">3–6m</a></li>
+              <li><a class="chip" href="shop.html?size=6-9m">6–9m</a></li>
+              <li><a class="chip" href="shop.html?size=9-12m">9–12m</a></li>
+              <li><a class="chip" href="shop.html?size=12-18m">12–18m</a></li>
+              <li><a class="chip" href="shop.html?size=18-24m">18–24m</a></li>
+              <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
+              <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
+            </ul>
+            <h2 id="say-hello">Say hello <a class="anchor" href="#say-hello" aria-label="Link to this section: Say hello"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Questions, ideas or feedback? WhatsApp us at <mark class="todo"><span class="marker-label">To confirm</span> WhatsApp number</mark> (<span data-cfg="support_hours">Mon–Sat 9am–6pm</span>) or visit the <a href="contact.html">contact page</a>.</p>
           </div>
-          <!-- TODO: placeholder values, confirm headings and copy with the client -->
-          <!-- loop: values -->
-          <ul class="values" role="list">
-            <li><span class="values__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shield-check"></use></svg></span><h3><span class="placeholder">[Value one]</span></h3><p>Placeholder: one short sentence.</p></li>
-            <li><span class="values__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-package"></use></svg></span><h3><span class="placeholder">[Value two]</span></h3><p>Placeholder: one short sentence.</p></li>
-            <li><span class="values__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg></span><h3><span class="placeholder">[Value three]</span></h3><p>Placeholder: one short sentence.</p></li>
-          </ul>
-          <!-- /loop -->
-          <p class="content__cta"><a class="btn btn--primary btn--lg" href="shop.html?sort=new">Shop new arrivals</a></p>
-        <section class="help-card" aria-labelledby="help-title">
-          <div>
-            <h2 id="help-title">Still need help?</h2>
-            <!-- TODO: confirm the WhatsApp number and reply times with the client -->
-            <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
-          </div>
-          <div class="help-card__actions">
-            <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
-            <a class="btn btn--secondary" href="contact.html">Contact us</a>
-          </div>
-        </section>
+          <section class="help-card" aria-labelledby="help-title">
+            <div>
+              <h2 id="help-title">Still need help?</h2>
+              <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
+            </div>
+            <div class="help-card__actions">
+              <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
+              <a class="btn btn--secondary" href="contact.html">Contact us</a>
+            </div>
+          </section>
         </div>
       </div>
     </div>
+    <!-- /gen: content -->
   </main>
 
   <!-- partial: footer -->
@@ -662,8 +703,8 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->

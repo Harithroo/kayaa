@@ -3,19 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Contact | Kayaa</title>
-  <meta name="description" content="Contact Kayaa on WhatsApp, by email or with the message form.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- partial: seo -->
+  <title>Contact Kayaa | WhatsApp, Email &amp; Messages</title>
+  <meta name="description" content="Questions about sizing, delivery or an order? Message Kayaa on WhatsApp, email us or use the contact form. We reply Monday to Saturday.">
+  <link rel="canonical" href="https://example.com/contact"> <!-- blade: url() -->
+  <meta name="robots" content="noindex,nofollow"> <!-- staging: noindex,nofollow everywhere ("staging": true in tools/seo.json). Live: index,follow -->
+  <meta property="og:title" content="Contact Kayaa | WhatsApp, Email &amp; Messages">
+  <meta property="og:description" content="Questions about sizing, delivery or an order? Message Kayaa on WhatsApp, email us or use the contact form. We reply Monday to Saturday.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://example.com/contact">
+  <meta property="og:site_name" content="Kayaa">
+  <meta property="og:locale" content="en_LK">
+  <!-- TODO: og:image and twitter:image once a logo exists -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Contact Kayaa | WhatsApp, Email &amp; Messages">
+  <meta name="twitter:description" content="Questions about sizing, delivery or an order? Message Kayaa on WhatsApp, email us or use the contact form. We reply Monday to Saturday.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://example.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Contact",
+        "item": "https://example.com/contact"
+      }
+    ]
+  }
+  </script>
+  <!-- /partial: seo -->
   <!-- partial: styles -->
-  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <script>
+    /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
+       Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
+    if (location.protocol !== 'file:') ['public-sans', 'urbanist'].forEach(function (n) {
+      var l = document.createElement('link'); l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = '';
+      l.href = 'assets/fonts/' + n + '-latin-wght-normal.woff2'; document.head.appendChild(l);
+    });
+  </script>
+  <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/content.css?v=fd75bbea">
+  <link rel="stylesheet" href="assets/css/pages/content.css?v=152fc5c1">
 </head>
 <body data-page="contact">
   <!-- partial: sprite -->
@@ -415,26 +454,34 @@
 
           <section class="contact-faq" aria-labelledby="contact-faq-title">
             <h2 id="contact-faq-title">Quick answers</h2>
-            <!-- TODO: FAQs with placement "contact" come from the backend; placeholder answers -->
+            <!-- FAQs with placement "contact" come from the backend (docs/content/faqs.md here) -->
             <div class="accordion">
-              <!-- loop: faqs (placement: contact) -->
-            <details class="accordion__item">
-              <summary class="accordion__summary">How quickly will you reply? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder: we usually reply within <span class="placeholder">[reply time]</span>. WhatsApp is fastest.</p></div>
-            </details>
-            <details class="accordion__item">
-              <summary class="accordion__summary">Where is my order? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Use your order number to see its status.</p><p><a class="link-arrow" href="track.html">Track your order <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p></div>
-            </details>
-            <details class="accordion__item">
-              <summary class="accordion__summary">How do I return an item? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder: please see our returns page.</p><p><a class="link-arrow" href="returns.html">Returns information <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p></div>
-            </details>
-            <details class="accordion__item">
-              <summary class="accordion__summary">Can I change my order after paying? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder: contact us with your order number as soon as you can.</p></div>
-            </details>
-              <!-- /loop -->
+              <!-- gen: faqs contact -->
+              <details class="accordion__item">
+                <summary class="accordion__summary">How quickly will you reply? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+                <div class="accordion__body">
+                  <p>WhatsApp is fastest: <span data-cfg="support_hours">Mon–Sat 9am–6pm</span> at <mark class="todo"><span class="marker-label">To confirm</span> WhatsApp number</mark>. <mark class="proposed"><span class="marker-label">Proposed</span> We reply to messages within 1 working day.</mark></p>
+                </div>
+              </details>
+              <details class="accordion__item">
+                <summary class="accordion__summary">Can I change my delivery address after ordering? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+                <div class="accordion__body">
+                  <p><mark class="proposed"><span class="marker-label">Proposed</span> Contact us as soon as possible with your order number and mobile number. We can change the address only if the order has not been dispatched.</mark></p>
+                </div>
+              </details>
+              <details class="accordion__item">
+                <summary class="accordion__summary">How do I track my order? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+                <div class="accordion__body">
+                  <p>Open <a href="track.html">Track order</a> and enter your order number (it looks like KY-261003-A3F9) and the mobile number you used at checkout.</p>
+                </div>
+              </details>
+              <details class="accordion__item">
+                <summary class="accordion__summary">I paid but my order shows &quot;pending&quot;. What should I do? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+                <div class="accordion__body">
+                  <p>Card payments can take a few minutes to be confirmed. Please do not pay again. Check your order on the <a href="track.html">Track order</a> page. If it has not updated after <mark class="proposed"><span class="marker-label">Proposed</span> 30 minutes</mark>, contact us with your order number.</p>
+                </div>
+              </details>
+              <!-- /gen: faqs -->
             </div>
           </section>
         </div>
@@ -728,8 +775,8 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->

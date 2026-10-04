@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Example sitemap: indexable pages only (see docs/content/seo-guide.md section 4). The backend generates the real one: every active product and category,
+     the nine size pages, and the content pages. No cart, checkout, account, track, search, wishlist or order URLs. Replace example.com with the live host. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://example.com/</loc></url>
+  <url><loc>https://example.com/shop</loc></url>
+  <url><loc>https://example.com/categories</loc></url>
+  <url><loc>https://example.com/baby/newborn</loc></url>
+  <url><loc>https://example.com/baby/bodysuits</loc></url>
+  <url><loc>https://example.com/baby/sleepwear</loc></url>
+  <url><loc>https://example.com/baby/sets</loc></url>
+  <url><loc>https://example.com/baby/outerwear</loc></url>
+  <url><loc>https://example.com/baby/napkins</loc></url>
+  <url><loc>https://example.com/baby/accessories</loc></url>
+  <url><loc>https://example.com/shop?size=newborn</loc></url>
+  <url><loc>https://example.com/shop?size=0-3m</loc></url>
+  <url><loc>https://example.com/shop?size=3-6m</loc></url>
+  <url><loc>https://example.com/shop?size=6-9m</loc></url>
+  <url><loc>https://example.com/shop?size=9-12m</loc></url>
+  <url><loc>https://example.com/shop?size=12-18m</loc></url>
+  <url><loc>https://example.com/shop?size=18-24m</loc></url>
+  <url><loc>https://example.com/shop?size=2y</loc></url>
+  <url><loc>https://example.com/shop?size=3y</loc></url>
+  <url><loc>https://example.com/products/ribbed-cotton-bodysuit</loc></url>
+  <url><loc>https://example.com/size-guide</loc></url>
+  <url><loc>https://example.com/delivery</loc></url>
+  <url><loc>https://example.com/returns</loc></url>
+  <url><loc>https://example.com/about</loc></url>
+  <url><loc>https://example.com/contact</loc></url>
+  <url><loc>https://example.com/privacy</loc></url>
+  <url><loc>https://example.com/terms</loc></url>
+</urlset>

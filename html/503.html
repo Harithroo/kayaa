@@ -3,16 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>We’ll be right back | Kayaa</title>
-  <meta name="description" content="We’ll be right back.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- partial: seo -->
+  <title>We'll Be Right Back | Kayaa</title>
+  <meta name="description" content="Kayaa is making a quick update. Please check back soon, or email us if you need help with an order while the site is unavailable.">
+  <meta name="robots" content="noindex,nofollow"> <!-- staging: noindex,nofollow everywhere ("staging": true in tools/seo.json). Live: noindex -->
+  <meta property="og:title" content="We'll Be Right Back | Kayaa">
+  <meta property="og:description" content="Kayaa is making a quick update. Please check back soon, or email us if you need help with an order while the site is unavailable.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Kayaa">
+  <meta property="og:locale" content="en_LK">
+  <!-- TODO: og:image and twitter:image once a logo exists -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="We'll Be Right Back | Kayaa">
+  <meta name="twitter:description" content="Kayaa is making a quick update. Please check back soon, or email us if you need help with an order while the site is unavailable.">
+  <!-- /partial: seo -->
   <!-- partial: styles -->
-  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <script>
+    /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
+       Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
+    if (location.protocol !== 'file:') ['public-sans', 'urbanist'].forEach(function (n) {
+      var l = document.createElement('link'); l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = '';
+      l.href = 'assets/fonts/' + n + '-latin-wght-normal.woff2'; document.head.appendChild(l);
+    });
+  </script>
+  <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/errors.css?v=18fee8d9">
@@ -255,8 +272,8 @@
   <!-- /partial: footer-minimal -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->

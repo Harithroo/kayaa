@@ -433,9 +433,39 @@ The button carries `data-name`, `data-price`, optional `data-was`, `data-tone` (
 
 ---
 
+## 4a. SEO needs from the backend
+The prototype's head is built from `tools/seo.json`; the Blade views build the same tags per record. The rules come from `docs/content/seo-guide.md` (sections 3, 4, 5, 9 and 10), which supersedes earlier notes.
+1. **Meta fields.** Nullable `meta_title` and `meta_description` on products and categories (and the size pages if they are stored). The templates are the fallback: product title `{Product name} | Baby {Category} | Kayaa`, product description the first 150 characters of the description (fallback "{Product name} from Kayaa. Choose your colour and size, pay securely by card and get delivery across Sri Lanka."); category and size titles and descriptions from `docs/content/category-and-age-intros.md`. Titles 60 characters or fewer, descriptions 120 to 160, all unique. The staging site uses one identical description on every page; the per-page ones replace it.
+2. **Category description field.** A text field per category for the intro paragraph shown in the listing header band (the prototype: `<!-- blade: category description -->`, from the content pack). The size intros stay static in Blade (nine fixed pages).
+3. **301 redirects** whenever a product or category slug changes; unknown URLs return a real 404.
+4. **Canonical helper and robots by environment and route.** `canonical` = the clean URL of the page; `robots` is `noindex,nofollow` everywhere while `APP_NOINDEX` is true (staging) and the matrix below otherwise:
+   | Page | Robots | Canonical |
+   | --- | --- | --- |
+   | Home, Shop, /categories, /baby/{slug} | index,follow | itself |
+   | /shop?size={slug} | index,follow | itself |
+   | /baby/{slug}?size={slug} | noindex,follow | the category page |
+   | Product pages | index,follow | the product URL without `?colour=` |
+   | Size guide, Delivery, Returns, About, Contact, Privacy, Terms | index,follow | itself |
+   | Any `sort` or `sale` parameter, and combinations of filters | noindex,follow | the clean listing (the same listing without sort, sale and page) |
+   | Listing page 2 and beyond (`?page=2`) | index,follow | itself |
+   | Search results | noindex,follow | itself |
+   | Wishlist, cart, checkout, order confirmation, track, all account and auth pages | noindex,nofollow | itself |
+   | Error pages | noindex | none |
+   The prototype shows the same rules through `proto-listing.js` (canonical, robots, title, description and breadcrumb per state; staging keeps noindex,nofollow and records the live value in `data-live-robots`) and keeps the canonical on the product URL when `?colour=` is chosen (`product.js`).
+5. **JSON-LD builders:** `Organization` on the home page (name, URL, logo, social profiles, contact point: placeholders in the prototype), `BreadcrumbList` on category, product and content pages matching the visible breadcrumb (Home > Baby > Category), and `Product` on product pages (name, images, description, brand, `offers` in LKR with price, availability and URL; `aggregateRating` and `review` only from the approved reviews of that product). **No FAQPage markup and no WebSite SearchAction.** No markup for reviews of the store itself.
+6. **Sitemap** (`/sitemap.xml`) generated for indexable routes only (see `docs/seo/sitemap.example.xml`); no cart, checkout, account, track, search, wishlist or order URLs.
+7. **robots.txt by environment** (`docs/seo/robots.production.txt`: allow all; disallow /cart, /checkout, /account, /track, /search, /wishlist, /orders; the Sitemap line). Staging serves "Disallow: /".
+8. **Launch:** remove the unconditional `X-Robots-Tag: noindex` block from `public/.htaccess` (Apache cannot read `.env`), set `APP_NOINDEX=false`, and follow `docs/seo/launch-checklist.md`.
+9. **Fonts:** self-hosted (`assets/fonts`); nothing loads from Google Fonts, so no third-party request blocks rendering.
+
+### Content pages from the content pack
+Size guide, Delivery, Returns, About, Privacy and Terms are static Blade views whose text comes from `docs/content/*.md` (the prototype renders the same files). The pack's `{{cfg:key}}` values are the site config keys (section 3.17); `[[TODO]]` and `[[PROPOSED]]` markers must all be replaced with approved text before launch (`node tools/list-todos.mjs --fail-on-open`). The size chart is data shared by the size guide and the product page. FAQs come in three placements (product, contact, size guide): the prototype reads `docs/content/faqs.md`. **Question for the client:** do they want an admin editor (Filament rich-text pages) for these pages, or Blade views a developer edits?
+
+---
+
 ## 5. Prototype-only behaviour (delete at conversion)
 
-- `assets/js/proto-listing.js`: filters, sorts, searches and paginates the 26 sample cards from the query string (`size`, `sort`, `sale`, `c`, `q`, `page`); normalises the old encoded `?size=0%E2%80%933m`; sets H1, intro, breadcrumb (Home / Baby / Category), counts and pagination. `assets/js/catalogue-data.js` (generated from `tools/catalogue.json`) holds the categories, sizes, colours and products for the scripts (the quick-add sheet, the listing, the wishlist); the product cards and menus are generated from the same file by `node tools/sync-shell.mjs` (`<!-- gen: NAME -->` regions). `assets/js/proto-wishlist.js` is the sessionStorage wishlist.
+- `assets/js/proto-listing.js` (also the indexing demo, see section 4a): filters, sorts, searches and paginates the 26 sample cards from the query string (`size`, `sort`, `sale`, `c`, `q`, `page`); normalises the old encoded `?size=0%E2%80%933m`; sets H1, intro, breadcrumb (Home / Baby / Category), counts and pagination. `assets/js/catalogue-data.js` (generated from `tools/catalogue.json`) holds the categories, sizes, colours and products for the scripts (the quick-add sheet, the listing, the wishlist); the product cards and menus are generated from the same file by `node tools/sync-shell.mjs` (`<!-- gen: NAME -->` regions). `assets/js/proto-wishlist.js` is the sessionStorage wishlist.
 - `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `regular` (no sale), `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
 - `assets/js/proto-cart.js`: the demo cart (sessionStorage) behind the header counts, the drawer, the cart page and the checkout summary, plus the simulated order. Line shape: `{id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}`.
 - `assets/js/proto-content.js` (the contact form demo outcomes). `assets/js/proto-orders.js` (thirteen sample orders, the stepper renderer), `proto-account.js` (track, orders, order detail, reviews, profile, log out) and `proto-auth.js` (auth demo outcomes and the demo session). Demo session: `window.KayaaCart.session` (sessionStorage); when set, the Account links in the header, tab bar and menu drawer go to the dashboard. In Laravel the server renders `@auth` and `@guest`.
@@ -466,4 +496,4 @@ Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, 
 14. **"Napkins":** what are they (the category has no obvious size range)?
 15. **Listing page size:** how many products per page (the prototype uses 12)?
 16. **"Kayaa Essentials":** where does the eyebrow come from (a product field, a collection)?
-17. **Cash on delivery and PayHere copy:** the staging site still shows both. When will they be removed? (The prototype has no cash on delivery and names no gateway except Onepay at checkout.)
+17. **Payment copy that is no longer true:** the staging site still shows an extra payment option and PayHere copy. When will they be removed? (The prototype names no gateway except Onepay at checkout.)

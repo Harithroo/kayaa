@@ -235,3 +235,9 @@
   body[data-print] .accordion__body a[href]:not([href^="#"])::after { content: " (" attr(href) ")"; font-size: 10pt; font-weight: 400; word-break: break-all; }
 }
 .about-media + .prose { margin-top: var(--space-6); }
+
+.chip-list__label { margin-top: var(--space-4); font-weight: 700; }
+.chip-list__label + .chip-list, .chip-list + .chip-list__label { margin-top: var(--space-2); }
+.prose .chip-list { margin-top: var(--space-2); }
+.size-table td > span { min-width: 0; text-align: right; }
+@media (min-width: 420px) { .size-table td > span { text-align: left; } }

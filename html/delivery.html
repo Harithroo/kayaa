@@ -3,19 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Delivery | Kayaa</title>
-  <meta name="description" content="Delivery fee, how delivery works and estimated delivery times by district for Kayaa orders.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- partial: seo -->
+  <title>Baby Clothes Delivery Across Sri Lanka | Kayaa</title>
+  <meta name="description" content="Island-wide courier delivery from Kayaa: 1 to 2 working days in Colombo, 2 to 4 elsewhere, free over Rs. 7,500. See fees, estimates and how to track.">
+  <link rel="canonical" href="https://example.com/delivery"> <!-- blade: url() -->
+  <meta name="robots" content="noindex,nofollow"> <!-- staging: noindex,nofollow everywhere ("staging": true in tools/seo.json). Live: index,follow -->
+  <meta property="og:title" content="Baby Clothes Delivery Across Sri Lanka | Kayaa">
+  <meta property="og:description" content="Island-wide courier delivery from Kayaa: 1 to 2 working days in Colombo, 2 to 4 elsewhere, free over Rs. 7,500. See fees, estimates and how to track.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://example.com/delivery">
+  <meta property="og:site_name" content="Kayaa">
+  <meta property="og:locale" content="en_LK">
+  <!-- TODO: og:image and twitter:image once a logo exists -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Baby Clothes Delivery Across Sri Lanka | Kayaa">
+  <meta name="twitter:description" content="Island-wide courier delivery from Kayaa: 1 to 2 working days in Colombo, 2 to 4 elsewhere, free over Rs. 7,500. See fees, estimates and how to track.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://example.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Delivery",
+        "item": "https://example.com/delivery"
+      }
+    ]
+  }
+  </script>
+  <!-- /partial: seo -->
   <!-- partial: styles -->
-  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <script>
+    /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
+       Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
+    if (location.protocol !== 'file:') ['public-sans', 'urbanist'].forEach(function (n) {
+      var l = document.createElement('link'); l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = '';
+      l.href = 'assets/fonts/' + n + '-latin-wght-normal.woff2'; document.head.appendChild(l);
+    });
+  </script>
+  <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/content.css?v=fd75bbea">
+  <link rel="stylesheet" href="assets/css/pages/content.css?v=152fc5c1">
 </head>
 <body data-page="delivery" data-print>
   <!-- partial: sprite -->
@@ -325,6 +364,7 @@
   <!-- /partial: header -->
 
   <main id="main">
+    <!-- gen: content delivery -->
     <div class="container content">
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
@@ -333,148 +373,61 @@
         </ol>
       </nav>
       <header class="content__head">
-        <h1>Delivery</h1>
-        <p class="content__lede">What delivery costs, how it works and how long it takes to reach your district.</p>
-        <!-- TODO: "Last updated" comes from the page's updated_at (or a static date); confirm with the client -->
-        <p class="content__updated">Last updated <span class="placeholder">[date]</span></p>
+        <h1>Delivery Across Sri Lanka</h1>
+        <p class="content__lede">We deliver baby clothing island-wide by courier. <mark class="todo"><span class="marker-label">To confirm</span> confirm the times below with Kayaa. They are taken from the current test site.</mark></p>
+        <p class="content__updated">Last updated <mark class="todo"><span class="marker-label">To confirm</span> publication date</mark></p>
       </header>
       <div class="content__layout content__layout--toc">
         <details class="toc" data-toc open>
           <summary class="toc__summary">On this page <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
           <ol class="toc__list" role="list">
-            <li><a href="#fee">Delivery fee</a></li>
+            <li><a href="#estimates">Where and how fast</a></li>
+            <li><a href="#fee">What it costs</a></li>
+            <li><a href="#payment">Payment</a></li>
             <li><a href="#how">How delivery works</a></li>
-            <li><a href="#estimates">Delivery estimates</a></li>
-            <li><a href="#not-home">Not at home?</a></li>
-            <li><a href="#questions">Delivery questions</a></li>
+            <li><a href="#tracking-your-order">Tracking your order</a></li>
+            <li><a href="#tips-for-a-smooth-delivery">Tips for a smooth delivery</a></li>
+            <li><a href="#not-home">Missed or delayed deliveries</a></li>
+            <li><a href="#damaged-or-faulty-parcels">Damaged or faulty parcels</a></li>
+            <li><a href="#questions">Questions?</a></li>
           </ol>
         </details>
         <div class="content__main">
           <div class="prose">
-            <h2 id="fee">Delivery fee <a class="anchor" href="#fee" aria-label="Link to this section: Delivery fee"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm the fee is a flat rule and not district-based (site config: shipping_fee, free_shipping_over) -->
-            <p>Delivery costs <strong><span data-cfg="shipping_fee">Rs. 450</span></strong>. Orders of <strong><span data-cfg="free_shipping_over">Rs. 7,500</span></strong> or more are delivered free.</p>
-            <p>Island-wide by courier: Colombo and suburbs <span data-cfg="delivery_colombo_days">1–2</span> working days, the rest of the island <span data-cfg="delivery_island_days">2–4</span>.</p>
-
-            <h2 id="how">How delivery works <a class="anchor" href="#how" aria-label="Link to this section: How delivery works"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm each step and its timing with the client -->
-            <ol class="how-steps how-steps--row" role="list">
-              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg></span><h3>Order placed</h3><p>Your payment goes through and your order is received.</p></li>
-              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-package"></use></svg></span><h3>Packed</h3><p>We prepare your order. <span class="placeholder">[packing time]</span></p></li>
-              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span><h3>On its way</h3><p>Your order is sent to your address. <a class="link-arrow" href="track.html">Track your order <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p></li>
-              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg></span><h3>Delivered</h3><p>Your order reaches your address.</p></li>
-            </ol>
-
-            <h2 id="estimates">Delivery estimates <a class="anchor" href="#estimates" aria-label="Link to this section: Delivery estimates"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- The estimates below must come from the same data as the checkout ETA (config/kayaa.php district list, one source in Blade). -->
-            <!-- TODO: placeholder estimates, confirm with the client -->
-            <p>Estimated delivery time for each district. These are placeholder estimates.</p>
-            <!-- TODO: two zones for now (Colombo and suburbs, the rest of the island) until per-district data arrives. The estimates come from the same data as the checkout ETA: min and max days per district (two integers each) from one source in Blade. The text is made by Kayaa.formatEta (app.js); the brackets mark placeholder values (TODO: remove data-eta-placeholder when the real data arrives). -->
-            <script type="application/json" id="district-eta" data-eta-placeholder>
+            <h2 id="estimates">Where and how fast <a class="anchor" href="#estimates" aria-label="Link to this section: Where and how fast"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Colombo and suburbs usually arrive in <span data-cfg="delivery_colombo_days">1–2</span> working days. The rest of the island takes <span data-cfg="delivery_island_days">2–4</span> working days. Orders placed before <span data-cfg="dispatch_cutoff">2pm</span> on a working day are dispatched the same day <mark class="todo"><span class="marker-label">To confirm</span> confirm</mark>.</p>
+            <p>When you choose your district at checkout we show the estimate for your address. The table below will list every district.</p>
+            <!-- The estimates come from the same data as the checkout ETA: min and max days per district (two integers each) from one source in Blade. The text is made by Kayaa.formatEta (app.js). -->
+            <script type="application/json" id="district-eta">
               {
-                "ampara": {
-                  "min": 2,
-                  "max": 4
-                },
-                "anuradhapura": {
-                  "min": 2,
-                  "max": 4
-                },
-                "badulla": {
-                  "min": 2,
-                  "max": 4
-                },
-                "batticaloa": {
-                  "min": 2,
-                  "max": 4
-                },
-                "colombo": {
-                  "min": 1,
-                  "max": 2
-                },
-                "galle": {
-                  "min": 2,
-                  "max": 4
-                },
-                "gampaha": {
-                  "min": 2,
-                  "max": 4
-                },
-                "hambantota": {
-                  "min": 2,
-                  "max": 4
-                },
-                "jaffna": {
-                  "min": 2,
-                  "max": 4
-                },
-                "kalutara": {
-                  "min": 2,
-                  "max": 4
-                },
-                "kandy": {
-                  "min": 2,
-                  "max": 4
-                },
-                "kegalle": {
-                  "min": 2,
-                  "max": 4
-                },
-                "kilinochchi": {
-                  "min": 2,
-                  "max": 4
-                },
-                "kurunegala": {
-                  "min": 2,
-                  "max": 4
-                },
-                "mannar": {
-                  "min": 2,
-                  "max": 4
-                },
-                "matale": {
-                  "min": 2,
-                  "max": 4
-                },
-                "matara": {
-                  "min": 2,
-                  "max": 4
-                },
-                "monaragala": {
-                  "min": 2,
-                  "max": 4
-                },
-                "mullaitivu": {
-                  "min": 2,
-                  "max": 4
-                },
-                "nuwara-eliya": {
-                  "min": 2,
-                  "max": 4
-                },
-                "polonnaruwa": {
-                  "min": 2,
-                  "max": 4
-                },
-                "puttalam": {
-                  "min": 2,
-                  "max": 4
-                },
-                "ratnapura": {
-                  "min": 2,
-                  "max": 4
-                },
-                "trincomalee": {
-                  "min": 2,
-                  "max": 4
-                },
-                "vavuniya": {
-                  "min": 2,
-                  "max": 4
-                }
+                "ampara": { "min": 2, "max": 4 },
+                "anuradhapura": { "min": 2, "max": 4 },
+                "badulla": { "min": 2, "max": 4 },
+                "batticaloa": { "min": 2, "max": 4 },
+                "colombo": { "min": 1, "max": 2 },
+                "galle": { "min": 2, "max": 4 },
+                "gampaha": { "min": 2, "max": 4 },
+                "hambantota": { "min": 2, "max": 4 },
+                "jaffna": { "min": 2, "max": 4 },
+                "kalutara": { "min": 2, "max": 4 },
+                "kandy": { "min": 2, "max": 4 },
+                "kegalle": { "min": 2, "max": 4 },
+                "kilinochchi": { "min": 2, "max": 4 },
+                "kurunegala": { "min": 2, "max": 4 },
+                "mannar": { "min": 2, "max": 4 },
+                "matale": { "min": 2, "max": 4 },
+                "matara": { "min": 2, "max": 4 },
+                "monaragala": { "min": 2, "max": 4 },
+                "mullaitivu": { "min": 2, "max": 4 },
+                "nuwara-eliya": { "min": 2, "max": 4 },
+                "polonnaruwa": { "min": 2, "max": 4 },
+                "puttalam": { "min": 2, "max": 4 },
+                "ratnapura": { "min": 2, "max": 4 },
+                "trincomalee": { "min": 2, "max": 4 },
+                "vavuniya": { "min": 2, "max": 4 }
               }
             </script>
-            <!-- loop: provinces -->
+            <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div><p><mark class="todo"><span class="marker-label">To confirm</span> These are the two zones from the site config (Colombo and suburbs, the rest of the island). Per-district estimates will come from the backend. Colombo district is the only district counted as "Colombo and suburbs" for now.</mark></p></div></div>
             <h3 id="western">Western Province <a class="anchor" href="#western" aria-label="Link to this section: Western Province"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h3>
             <div class="table-wrap">
               <table class="size-table size-table--two">
@@ -483,11 +436,9 @@
                   <tr><th scope="col">District</th><th scope="col">Estimated delivery</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: districts -->
-                  <tr><th scope="row">Colombo</th><td data-label="Estimated delivery" data-eta="colombo">[1–2 working days]</td></tr>
-                  <tr><th scope="row">Gampaha</th><td data-label="Estimated delivery" data-eta="gampaha">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Kalutara</th><td data-label="Estimated delivery" data-eta="kalutara">[2–4 working days]</td></tr>
-                  <!-- /loop -->
+                  <tr><th scope="row">Colombo</th><td data-label="Estimated delivery" data-eta="colombo">1–2 working days</td></tr>
+                  <tr><th scope="row">Gampaha</th><td data-label="Estimated delivery" data-eta="gampaha">2–4 working days</td></tr>
+                  <tr><th scope="row">Kalutara</th><td data-label="Estimated delivery" data-eta="kalutara">2–4 working days</td></tr>
                 </tbody>
               </table>
             </div>
@@ -499,11 +450,9 @@
                   <tr><th scope="col">District</th><th scope="col">Estimated delivery</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: districts -->
-                  <tr><th scope="row">Kandy</th><td data-label="Estimated delivery" data-eta="kandy">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Matale</th><td data-label="Estimated delivery" data-eta="matale">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Nuwara Eliya</th><td data-label="Estimated delivery" data-eta="nuwara-eliya">[2–4 working days]</td></tr>
-                  <!-- /loop -->
+                  <tr><th scope="row">Kandy</th><td data-label="Estimated delivery" data-eta="kandy">2–4 working days</td></tr>
+                  <tr><th scope="row">Matale</th><td data-label="Estimated delivery" data-eta="matale">2–4 working days</td></tr>
+                  <tr><th scope="row">Nuwara Eliya</th><td data-label="Estimated delivery" data-eta="nuwara-eliya">2–4 working days</td></tr>
                 </tbody>
               </table>
             </div>
@@ -515,11 +464,9 @@
                   <tr><th scope="col">District</th><th scope="col">Estimated delivery</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: districts -->
-                  <tr><th scope="row">Galle</th><td data-label="Estimated delivery" data-eta="galle">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Matara</th><td data-label="Estimated delivery" data-eta="matara">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Hambantota</th><td data-label="Estimated delivery" data-eta="hambantota">[2–4 working days]</td></tr>
-                  <!-- /loop -->
+                  <tr><th scope="row">Galle</th><td data-label="Estimated delivery" data-eta="galle">2–4 working days</td></tr>
+                  <tr><th scope="row">Matara</th><td data-label="Estimated delivery" data-eta="matara">2–4 working days</td></tr>
+                  <tr><th scope="row">Hambantota</th><td data-label="Estimated delivery" data-eta="hambantota">2–4 working days</td></tr>
                 </tbody>
               </table>
             </div>
@@ -531,13 +478,11 @@
                   <tr><th scope="col">District</th><th scope="col">Estimated delivery</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: districts -->
-                  <tr><th scope="row">Jaffna</th><td data-label="Estimated delivery" data-eta="jaffna">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Kilinochchi</th><td data-label="Estimated delivery" data-eta="kilinochchi">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Mannar</th><td data-label="Estimated delivery" data-eta="mannar">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Mullaitivu</th><td data-label="Estimated delivery" data-eta="mullaitivu">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Vavuniya</th><td data-label="Estimated delivery" data-eta="vavuniya">[2–4 working days]</td></tr>
-                  <!-- /loop -->
+                  <tr><th scope="row">Jaffna</th><td data-label="Estimated delivery" data-eta="jaffna">2–4 working days</td></tr>
+                  <tr><th scope="row">Kilinochchi</th><td data-label="Estimated delivery" data-eta="kilinochchi">2–4 working days</td></tr>
+                  <tr><th scope="row">Mannar</th><td data-label="Estimated delivery" data-eta="mannar">2–4 working days</td></tr>
+                  <tr><th scope="row">Mullaitivu</th><td data-label="Estimated delivery" data-eta="mullaitivu">2–4 working days</td></tr>
+                  <tr><th scope="row">Vavuniya</th><td data-label="Estimated delivery" data-eta="vavuniya">2–4 working days</td></tr>
                 </tbody>
               </table>
             </div>
@@ -549,11 +494,9 @@
                   <tr><th scope="col">District</th><th scope="col">Estimated delivery</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: districts -->
-                  <tr><th scope="row">Batticaloa</th><td data-label="Estimated delivery" data-eta="batticaloa">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Ampara</th><td data-label="Estimated delivery" data-eta="ampara">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Trincomalee</th><td data-label="Estimated delivery" data-eta="trincomalee">[2–4 working days]</td></tr>
-                  <!-- /loop -->
+                  <tr><th scope="row">Batticaloa</th><td data-label="Estimated delivery" data-eta="batticaloa">2–4 working days</td></tr>
+                  <tr><th scope="row">Ampara</th><td data-label="Estimated delivery" data-eta="ampara">2–4 working days</td></tr>
+                  <tr><th scope="row">Trincomalee</th><td data-label="Estimated delivery" data-eta="trincomalee">2–4 working days</td></tr>
                 </tbody>
               </table>
             </div>
@@ -565,10 +508,8 @@
                   <tr><th scope="col">District</th><th scope="col">Estimated delivery</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: districts -->
-                  <tr><th scope="row">Kurunegala</th><td data-label="Estimated delivery" data-eta="kurunegala">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Puttalam</th><td data-label="Estimated delivery" data-eta="puttalam">[2–4 working days]</td></tr>
-                  <!-- /loop -->
+                  <tr><th scope="row">Kurunegala</th><td data-label="Estimated delivery" data-eta="kurunegala">2–4 working days</td></tr>
+                  <tr><th scope="row">Puttalam</th><td data-label="Estimated delivery" data-eta="puttalam">2–4 working days</td></tr>
                 </tbody>
               </table>
             </div>
@@ -580,10 +521,8 @@
                   <tr><th scope="col">District</th><th scope="col">Estimated delivery</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: districts -->
-                  <tr><th scope="row">Anuradhapura</th><td data-label="Estimated delivery" data-eta="anuradhapura">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Polonnaruwa</th><td data-label="Estimated delivery" data-eta="polonnaruwa">[2–4 working days]</td></tr>
-                  <!-- /loop -->
+                  <tr><th scope="row">Anuradhapura</th><td data-label="Estimated delivery" data-eta="anuradhapura">2–4 working days</td></tr>
+                  <tr><th scope="row">Polonnaruwa</th><td data-label="Estimated delivery" data-eta="polonnaruwa">2–4 working days</td></tr>
                 </tbody>
               </table>
             </div>
@@ -595,10 +534,8 @@
                   <tr><th scope="col">District</th><th scope="col">Estimated delivery</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: districts -->
-                  <tr><th scope="row">Badulla</th><td data-label="Estimated delivery" data-eta="badulla">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Monaragala</th><td data-label="Estimated delivery" data-eta="monaragala">[2–4 working days]</td></tr>
-                  <!-- /loop -->
+                  <tr><th scope="row">Badulla</th><td data-label="Estimated delivery" data-eta="badulla">2–4 working days</td></tr>
+                  <tr><th scope="row">Monaragala</th><td data-label="Estimated delivery" data-eta="monaragala">2–4 working days</td></tr>
                 </tbody>
               </table>
             </div>
@@ -610,38 +547,62 @@
                   <tr><th scope="col">District</th><th scope="col">Estimated delivery</th></tr>
                 </thead>
                 <tbody>
-                  <!-- loop: districts -->
-                  <tr><th scope="row">Ratnapura</th><td data-label="Estimated delivery" data-eta="ratnapura">[2–4 working days]</td></tr>
-                  <tr><th scope="row">Kegalle</th><td data-label="Estimated delivery" data-eta="kegalle">[2–4 working days]</td></tr>
-                  <!-- /loop -->
+                  <tr><th scope="row">Ratnapura</th><td data-label="Estimated delivery" data-eta="ratnapura">2–4 working days</td></tr>
+                  <tr><th scope="row">Kegalle</th><td data-label="Estimated delivery" data-eta="kegalle">2–4 working days</td></tr>
                 </tbody>
               </table>
             </div>
-            <!-- /loop -->
-
-            <h2 id="not-home">Not at home? <a class="anchor" href="#not-home" aria-label="Link to this section: Not at home?"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm the missed-delivery process with the client -->
-            <p><span class="placeholder">[What happens if nobody is home to receive your order]</span></p>
-
-            <h2 id="questions">Delivery questions <a class="anchor" href="#questions" aria-label="Link to this section: Delivery questions"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with the client -->
-            <p><span class="placeholder">[Answers to common delivery questions]</span></p>
-            <p><a class="link-arrow" href="contact.html">Ask us about your delivery <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
+            <p>Working days are Monday to Friday, excluding public holidays and Poya days <mark class="proposed"><span class="marker-label">Proposed</span></mark>. Estimates are not guarantees: weather and courier delays can affect them.</p>
+            <h2 id="fee">What it costs <a class="anchor" href="#fee" aria-label="Link to this section: What it costs"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Delivery is <span data-cfg="shipping_fee">Rs. 450</span> per order, and free when your order is <span data-cfg="free_shipping_over">Rs. 7,500</span> or more. The fee is added at checkout and shown before you pay.</p>
+            <h2 id="payment">Payment <a class="anchor" href="#payment" aria-label="Link to this section: Payment"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div>
+            <p>You pay online by card (Visa and Mastercard) when you place your order. We do not offer cash on delivery, so you do not pay the courier anything.</p>
+              </div></div>
+            <h2 id="how">How delivery works <a class="anchor" href="#how" aria-label="Link to this section: How delivery works"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <ol class="how-steps how-steps--row" role="list">
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shopping-bag"></use></svg></span><h3>Order placed</h3><p>You pay online and receive your order number.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-package"></use></svg></span><h3>Packed</h3><p>We confirm and pack your order.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span><h3>On its way</h3><p>Your parcel goes with our courier. We will also WhatsApp you when it leaves us <mark class="todo"><span class="marker-label">To confirm</span> confirm</mark>.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg></span><h3>Delivered</h3><p>Please check the parcel when it arrives.</p></li>
+            </ol>
+            <h2 id="tracking-your-order">Tracking your order <a class="anchor" href="#tracking-your-order" aria-label="Link to this section: Tracking your order"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Open <a href="track.html">Track order</a> and enter your order number and the mobile number you used at checkout. You will see one of these statuses:</p>
+            <ul>
+              <li><strong>Pending:</strong> we have your order and are checking it.</li>
+              <li><strong>Confirmed:</strong> your order is accepted and being prepared.</li>
+              <li><strong>Shipped:</strong> your parcel is on its way.</li>
+              <li><strong>Delivered:</strong> your parcel has arrived.</li>
+              <li><strong>Cancelled:</strong> the order was cancelled.</li>
+            </ul>
+            <p>Payment has its own status: pending, paid, failed or refunded.</p>
+            <h2 id="tips-for-a-smooth-delivery">Tips for a smooth delivery <a class="anchor" href="#tips-for-a-smooth-delivery" aria-label="Link to this section: Tips for a smooth delivery"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <ul>
+              <li>Add a landmark or a short direction in the delivery notes.</li>
+              <li>Give a mobile number that someone can answer.</li>
+              <li>Choose your district carefully: it sets your delivery estimate.</li>
+            </ul>
+            <h2 id="not-home">Missed or delayed deliveries <a class="anchor" href="#not-home" aria-label="Link to this section: Missed or delayed deliveries"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p><mark class="todo"><span class="marker-label">To confirm</span> what happens if no one is home, how many attempts the courier makes, and who to contact</mark> If your parcel is later than the estimate, contact us with your order number.</p>
+            <h2 id="damaged-or-faulty-parcels">Damaged or faulty parcels <a class="anchor" href="#damaged-or-faulty-parcels" aria-label="Link to this section: Damaged or faulty parcels"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>If your parcel arrives damaged, send us a photo within <span data-cfg="faulty_report_days">7</span> days with your order number. See our <a href="returns.html">Returns policy</a>.</p>
+            <h2 id="questions">Questions? <a class="anchor" href="#questions" aria-label="Link to this section: Questions?"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>WhatsApp us at <mark class="todo"><span class="marker-label">To confirm</span> WhatsApp number</mark> (<span data-cfg="support_hours">Mon–Sat 9am–6pm</span>) or use the <a href="contact.html">contact form</a>.</p>
           </div>
-        <section class="help-card" aria-labelledby="help-title">
-          <div>
-            <h2 id="help-title">Still need help?</h2>
-            <!-- TODO: confirm the WhatsApp number and reply times with the client -->
-            <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
-          </div>
-          <div class="help-card__actions">
-            <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
-            <a class="btn btn--secondary" href="contact.html">Contact us</a>
-          </div>
-        </section>
+          <section class="help-card" aria-labelledby="help-title">
+            <div>
+              <h2 id="help-title">Still need help?</h2>
+              <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
+            </div>
+            <div class="help-card__actions">
+              <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
+              <a class="btn btn--secondary" href="contact.html">Contact us</a>
+            </div>
+          </section>
         </div>
       </div>
     </div>
+    <!-- /gen: content -->
   </main>
 
   <!-- partial: footer -->
@@ -930,8 +891,8 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->

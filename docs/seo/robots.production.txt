@@ -1,0 +1,13 @@
+# robots.txt for production (copy to the web root at launch; never publish this file from html/).
+# While the site is on staging, serve "Disallow: /" instead.
+User-agent: *
+Allow: /
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+Disallow: /track
+Disallow: /search
+Disallow: /wishlist
+Disallow: /orders
+
+Sitemap: https://example.com/sitemap.xml

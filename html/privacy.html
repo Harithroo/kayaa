@@ -3,19 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Privacy policy | Kayaa</title>
-  <meta name="description" content="Placeholder privacy policy for Kayaa. The final text will be supplied by Kayaa.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- partial: seo -->
+  <title>Privacy Policy | Kayaa</title>
+  <meta name="description" content="How Kayaa collects, uses and protects your personal information when you shop online, create an account or contact us.">
+  <link rel="canonical" href="https://example.com/privacy"> <!-- blade: url() -->
+  <meta name="robots" content="noindex,nofollow"> <!-- staging: noindex,nofollow everywhere ("staging": true in tools/seo.json). Live: index,follow -->
+  <meta property="og:title" content="Privacy Policy | Kayaa">
+  <meta property="og:description" content="How Kayaa collects, uses and protects your personal information when you shop online, create an account or contact us.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://example.com/privacy">
+  <meta property="og:site_name" content="Kayaa">
+  <meta property="og:locale" content="en_LK">
+  <!-- TODO: og:image and twitter:image once a logo exists -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Privacy Policy | Kayaa">
+  <meta name="twitter:description" content="How Kayaa collects, uses and protects your personal information when you shop online, create an account or contact us.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://example.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Privacy policy",
+        "item": "https://example.com/privacy"
+      }
+    ]
+  }
+  </script>
+  <!-- /partial: seo -->
   <!-- partial: styles -->
-  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <script>
+    /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
+       Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
+    if (location.protocol !== 'file:') ['public-sans', 'urbanist'].forEach(function (n) {
+      var l = document.createElement('link'); l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = '';
+      l.href = 'assets/fonts/' + n + '-latin-wght-normal.woff2'; document.head.appendChild(l);
+    });
+  </script>
+  <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/content.css?v=fd75bbea">
+  <link rel="stylesheet" href="assets/css/pages/content.css?v=152fc5c1">
 </head>
 <body data-page="privacy" data-print>
   <!-- partial: sprite -->
@@ -325,6 +364,7 @@
   <!-- /partial: header -->
 
   <main id="main">
+    <!-- gen: content privacy -->
     <div class="container content">
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
@@ -333,75 +373,127 @@
         </ol>
       </nav>
       <header class="content__head">
-        <h1>Privacy policy</h1>
-        <p class="content__lede">How Kayaa handles your information.</p>
-        <!-- TODO: "Last updated" comes from the page's updated_at (or a static date); confirm with the client -->
-        <p class="content__updated">Last updated <span class="placeholder">[date]</span></p>
+        <h1>Privacy Policy</h1>
+        <p class="content__lede">This policy explains what personal information Kayaa collects when you shop with us, why we need it, who we share it with and what choices you have. We have kept it as plain as we can. If anything is unclear, write to us at <mark class="todo"><span class="marker-label">To confirm</span> privacy email</mark> and we will explain.</p>
+        <p class="content__updated">Last updated <mark class="todo"><span class="marker-label">To confirm</span> publication date</mark></p>
       </header>
-      <!-- TODO: the final text will be supplied by Kayaa (legal review needed); this page is a skeleton only -->
-      <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div><p>Placeholder text. The final policy will be supplied by Kayaa.</p></div></div>
       <div class="content__layout content__layout--toc">
         <details class="toc" data-toc open>
           <summary class="toc__summary">On this page <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
           <ol class="toc__list" role="list">
+            <li><a href="#who-we-are">Who we are</a></li>
             <li><a href="#collect">Information we collect</a></li>
-            <li><a href="#use">How we use it</a></li>
-            <li><a href="#payments">Payments and Onepay</a></li>
-            <li><a href="#couriers">Sharing with couriers</a></li>
-            <li><a href="#cookies">Cookies</a></li>
+            <li><a href="#use">How we use your information</a></li>
+            <li><a href="#who-we-share-it-with">Who we share it with</a></li>
+            <li><a href="#cookies">Cookies and similar technologies</a></li>
             <li><a href="#retention">How long we keep it</a></li>
-            <li><a href="#choices">Your choices</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#keeping-your-information-safe">Keeping your information safe</a></li>
+            <li><a href="#where-your-information-is-processed">Where your information is processed</a></li>
+            <li><a href="#choices">Your rights</a></li>
+            <li><a href="#children">Children</a></li>
+            <li><a href="#changes-to-this-policy">Changes to this policy</a></li>
+            <li><a href="#contact">Contact us</a></li>
           </ol>
         </details>
         <div class="content__main">
           <div class="prose">
+            <h2 id="who-we-are">Who we are <a class="anchor" href="#who-we-are" aria-label="Link to this section: Who we are"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Kayaa is an online baby clothing store serving customers across Sri Lanka. In this policy &quot;we&quot;, &quot;us&quot; and &quot;Kayaa&quot; mean <mark class="todo"><span class="marker-label">To confirm</span> registered business name</mark> of <mark class="todo"><span class="marker-label">To confirm</span> registered address</mark>. We decide how and why your personal information is used, which makes us the &quot;controller&quot; of it. You can reach us at <mark class="todo"><span class="marker-label">To confirm</span> privacy email</mark>.</p>
             <h2 id="collect">Information we collect <a class="anchor" href="#collect" aria-label="Link to this section: Information we collect"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with client -->
-            <p>Placeholder: [the information collected].</p>
-
-            <h2 id="use">How we use it <a class="anchor" href="#use" aria-label="Link to this section: How we use it"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with client -->
-            <p>Placeholder: [what the information is used for].</p>
-
-            <h2 id="payments">Payments and Onepay <a class="anchor" href="#payments" aria-label="Link to this section: Payments and Onepay"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with client -->
-            <p>Placeholder: [how card payments are handled by Onepay].</p>
-
-            <h2 id="couriers">Sharing with couriers <a class="anchor" href="#couriers" aria-label="Link to this section: Sharing with couriers"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with client -->
-            <p>Placeholder: [what is shared with delivery partners].</p>
-
-            <h2 id="cookies">Cookies <a class="anchor" href="#cookies" aria-label="Link to this section: Cookies"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with client -->
-            <p>Placeholder: [which cookies are used].</p>
-
+            <p><strong>When you place an order.</strong> Your name, mobile number, delivery address, district and any delivery notes, what you ordered, and your email address if you choose to give one. Your mobile number is how the courier reaches you and how you can look up your order.</p>
+            <p><strong>When you create an account.</strong> Your name, email address, mobile number and a password. We store your password in a scrambled (hashed) form, so nobody at Kayaa can read it. We also record whether you have confirmed your email address.</p>
+            <p><strong>When you write a review.</strong> Your name, an email address (never shown publicly), your rating, an optional headline and your comments. If you are signed in, we also record whether you bought the product from us, so we can show a &quot;Verified purchase&quot; label.</p>
+            <p><strong>When you contact us.</strong> Your name, your mobile number or email, an optional order number and your message. If you message us on WhatsApp, WhatsApp's own privacy policy also applies to that conversation.</p>
+            <p><strong>When you save items.</strong> Items you add to your wishlist are stored <mark class="todo"><span class="marker-label">To confirm</span> with your account, or in your browser if you are not signed in</mark>.</p>
+            <p><strong>When you pay.</strong> You enter your card details on the secure payment page of our payment provider, Onepay. We do not see or store your full card number. We receive the payment status and a reference so we know whether your order is paid.</p>
+            <p><strong>Automatically.</strong> Like most websites we receive technical information such as your IP address, browser, device and the pages you visit, and we use the cookies described below.</p>
+            <p>We do not ask for your baby's name, date of birth or photo. The clothing size you pick is used only to process your order.</p>
+            <h2 id="use">How we use your information <a class="anchor" href="#use" aria-label="Link to this section: How we use your information"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <ul>
+              <li>to process and deliver your order and keep you informed about it</li>
+              <li>to let you look up your order with your order number and mobile number</li>
+              <li>to send you updates about your order, including a WhatsApp message when your parcel is dispatched <mark class="todo"><span class="marker-label">To confirm</span> confirm</mark></li>
+              <li>to run your account, including confirming your email address and resetting your password</li>
+              <li>to answer questions and handle returns and refunds</li>
+              <li>to publish reviews after we have checked them</li>
+              <li>to keep the site secure and prevent fraud and abuse, for example by limiting repeated attempts</li>
+              <li>to keep the records we must keep for accounting and legal reasons</li>
+              <li>to understand how the site is used and improve it <mark class="todo"><span class="marker-label">To confirm</span> keep this line only if analytics is used</mark></li>
+            </ul>
+            <p>We do not send marketing messages today. <mark class="proposed"><span class="marker-label">Proposed</span> If that changes, we will ask for your consent first and you will be able to opt out at any time.</mark></p>
+            <p><strong>Why we may use it.</strong> We use your information because it is needed to fulfil your order, because the law requires us to keep certain records, because we have a genuine interest in running a secure shop, or because you have agreed (for example when you choose &quot;Keep me signed in for 30 days&quot;).</p>
+            <h2 id="who-we-share-it-with">Who we share it with <a class="anchor" href="#who-we-share-it-with" aria-label="Link to this section: Who we share it with"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>We share only what is needed, and we do not sell your personal information.</p>
+            <ul>
+              <li><strong>Delivery partners:</strong> your name, mobile number, delivery address and parcel details, so they can deliver your order. <mark class="todo"><span class="marker-label">To confirm</span> name the couriers or keep &quot;delivery partners&quot;</mark></li>
+              <li><strong>Onepay:</strong> to take your card payment.</li>
+              <li><strong>Service providers</strong> that help us run the site, such as hosting and the service that sends account emails. <mark class="todo"><span class="marker-label">To confirm</span> name the email service</mark></li>
+              <li><strong>Professional advisers and authorities</strong> such as accountants, lawyers and public bodies, where the law requires it.</li>
+            </ul>
+            <h2 id="cookies">Cookies and similar technologies <a class="anchor" href="#cookies" aria-label="Link to this section: Cookies and similar technologies"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>We use only the cookies the site needs to work:</p>
+            <ul>
+              <li>a session cookie that keeps your bag and keeps you signed in while you browse</li>
+              <li>a security token that protects forms from misuse</li>
+              <li>a &quot;keep me signed in&quot; cookie, only if you tick that box, which lasts 30 days</li>
+            </ul>
+            <p><mark class="todo"><span class="marker-label">To confirm</span> add analytics or advertising cookies here if any are used, or confirm there are none</mark></p>
+            <p>You can block or delete cookies in your browser settings. If you block the essential ones, your bag, checkout and account will not work.</p>
             <h2 id="retention">How long we keep it <a class="anchor" href="#retention" aria-label="Link to this section: How long we keep it"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with client -->
-            <p>Placeholder: [retention periods].</p>
-
-            <h2 id="choices">Your choices <a class="anchor" href="#choices" aria-label="Link to this section: Your choices"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with client -->
-            <p>Placeholder: [how to access, correct or delete your information].</p>
-
-            <h2 id="contact">Contact <a class="anchor" href="#contact" aria-label="Link to this section: Contact"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with client -->
-            <p>Placeholder: [who to contact about privacy].</p>
+            <div class="table-wrap">
+              <table class="size-table size-table--two">
+                <caption class="visually-hidden">How long we keep it</caption>
+                <thead>
+                  <tr><th scope="col">Information</th><th scope="col">How long</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Order records</th><td data-label="How long"><span><mark class="proposed"><span class="marker-label">Proposed</span> 6 years</mark> for accounting and tax <mark class="todo"><span class="marker-label">To confirm</span> confirm with your accountant</mark></span></td></tr>
+                  <tr><th scope="row">Account details</th><td data-label="How long"><span>Until you ask us to close your account</span></td></tr>
+                  <tr><th scope="row">Reviews</th><td data-label="How long"><span>While the product is on sale, or until you ask us to remove yours</span></td></tr>
+                  <tr><th scope="row">Contact messages</th><td data-label="How long"><span><mark class="proposed"><span class="marker-label">Proposed</span> 12 months</mark></span></td></tr>
+                  <tr><th scope="row">Security logs</th><td data-label="How long"><span><mark class="proposed"><span class="marker-label">Proposed</span> 90 days</mark></span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h2 id="keeping-your-information-safe">Keeping your information safe <a class="anchor" href="#keeping-your-information-safe" aria-label="Link to this section: Keeping your information safe"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Our website uses an encrypted connection (HTTPS), passwords are stored hashed, access to personal information is limited to people who need it, and repeated sign-in or form attempts are limited. No system is completely secure. If a personal data breach affects you, we will tell you and the authorities as the law requires.</p>
+            <h2 id="where-your-information-is-processed">Where your information is processed <a class="anchor" href="#where-your-information-is-processed" aria-label="Link to this section: Where your information is processed"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Some of our service providers may store or process information outside Sri Lanka. <mark class="todo"><span class="marker-label">To confirm</span> confirm the hosting and email providers' countries</mark> Where that happens we choose providers that protect personal information to a standard consistent with Sri Lankan law.</p>
+            <h2 id="choices">Your rights <a class="anchor" href="#choices" aria-label="Link to this section: Your rights"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Under the Personal Data Protection Act, No. 9 of 2022 you can ask us to:</p>
+            <ul>
+              <li>give you a copy of the personal information we hold about you</li>
+              <li>correct information that is wrong</li>
+              <li>erase information we no longer need, subject to records we are required to keep</li>
+              <li>restrict or stop some uses of your information</li>
+              <li>stop using your information for direct marketing</li>
+              <li>accept your withdrawal of consent where we rely on consent</li>
+            </ul>
+            <p>To use any of these rights, email <mark class="todo"><span class="marker-label">To confirm</span> privacy email</mark> with your name, mobile number and order number so we can check it is you. We will reply within the time the law requires <mark class="todo"><span class="marker-label">To confirm</span> confirm</mark>. If you are not happy with our answer you can complain to the Data Protection Authority of Sri Lanka.</p>
+            <p><strong>Closing your account.</strong> We must keep order records for accounting, so when you ask us to close your account we remove or anonymise your personal details rather than deleting the order record itself.</p>
+            <h2 id="children">Children <a class="anchor" href="#children" aria-label="Link to this section: Children"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Our website is for parents, guardians and gift buyers. It is not intended for children and we do not knowingly collect information from them.</p>
+            <h2 id="changes-to-this-policy">Changes to this policy <a class="anchor" href="#changes-to-this-policy" aria-label="Link to this section: Changes to this policy"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>If we change this policy we will update the date at the top of this page. <mark class="proposed"><span class="marker-label">Proposed</span> For significant changes we will also display a notice on the site.</mark></p>
+            <h2 id="contact">Contact us <a class="anchor" href="#contact" aria-label="Link to this section: Contact us"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p><mark class="todo"><span class="marker-label">To confirm</span> registered business name</mark>, <mark class="todo"><span class="marker-label">To confirm</span> registered address</mark><br>
+            Email: <mark class="todo"><span class="marker-label">To confirm</span> privacy email</mark><br>
+            WhatsApp: <mark class="todo"><span class="marker-label">To confirm</span> WhatsApp number</mark></p>
           </div>
-        <section class="help-card" aria-labelledby="help-title">
-          <div>
-            <h2 id="help-title">Still need help?</h2>
-            <!-- TODO: confirm the WhatsApp number and reply times with the client -->
-            <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
-          </div>
-          <div class="help-card__actions">
-            <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
-            <a class="btn btn--secondary" href="contact.html">Contact us</a>
-          </div>
-        </section>
+          <section class="help-card" aria-labelledby="help-title">
+            <div>
+              <h2 id="help-title">Still need help?</h2>
+              <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
+            </div>
+            <div class="help-card__actions">
+              <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
+              <a class="btn btn--secondary" href="contact.html">Contact us</a>
+            </div>
+          </section>
         </div>
       </div>
     </div>
+    <!-- /gen: content -->
   </main>
 
   <!-- partial: footer -->
@@ -690,8 +782,8 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->

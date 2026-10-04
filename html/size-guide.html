@@ -3,19 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Size guide | Kayaa</title>
-  <meta name="description" content="Find the right Kayaa size for your baby. We size by age band; height and weight are the better guide.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- partial: seo -->
+  <title>Baby Size Guide by Age, Height &amp; Weight | Kayaa</title>
+  <meta name="description" content="Find the right Kayaa size from Newborn to 3Y. Our sizes follow age bands, with height and weight to guide you, plus how to measure at home.">
+  <link rel="canonical" href="https://example.com/size-guide"> <!-- blade: url() -->
+  <meta name="robots" content="noindex,nofollow"> <!-- staging: noindex,nofollow everywhere ("staging": true in tools/seo.json). Live: index,follow -->
+  <meta property="og:title" content="Baby Size Guide by Age, Height &amp; Weight | Kayaa">
+  <meta property="og:description" content="Find the right Kayaa size from Newborn to 3Y. Our sizes follow age bands, with height and weight to guide you, plus how to measure at home.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://example.com/size-guide">
+  <meta property="og:site_name" content="Kayaa">
+  <meta property="og:locale" content="en_LK">
+  <!-- TODO: og:image and twitter:image once a logo exists -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Baby Size Guide by Age, Height &amp; Weight | Kayaa">
+  <meta name="twitter:description" content="Find the right Kayaa size from Newborn to 3Y. Our sizes follow age bands, with height and weight to guide you, plus how to measure at home.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://example.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Size guide",
+        "item": "https://example.com/size-guide"
+      }
+    ]
+  }
+  </script>
+  <!-- /partial: seo -->
   <!-- partial: styles -->
-  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <script>
+    /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
+       Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
+    if (location.protocol !== 'file:') ['public-sans', 'urbanist'].forEach(function (n) {
+      var l = document.createElement('link'); l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = '';
+      l.href = 'assets/fonts/' + n + '-latin-wght-normal.woff2'; document.head.appendChild(l);
+    });
+  </script>
+  <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/content.css?v=fd75bbea">
+  <link rel="stylesheet" href="assets/css/pages/content.css?v=152fc5c1">
 </head>
 <body data-page="size-guide" data-print>
   <!-- partial: sprite -->
@@ -325,6 +364,7 @@
   <!-- /partial: header -->
 
   <main id="main">
+    <!-- gen: content size-guide -->
     <div class="container content">
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
@@ -333,54 +373,49 @@
         </ol>
       </nav>
       <header class="content__head">
-        <h1>Size guide</h1>
-        <p class="content__lede">We size by age band. Height and weight are the better guide, so use the chart below if you are between sizes.</p>
-        <!-- TODO: "Last updated" comes from the page's updated_at (or a static date); confirm with the client -->
-        <p class="content__updated">Last updated <span class="placeholder">[date]</span></p>
+        <h1>Baby Size Guide by Age, Height and Weight</h1>
+        <p class="content__lede">Our sizes follow age bands, but every baby is different, so height and weight are the better guide. Check both against the chart. <mark class="todo"><span class="marker-label">To confirm</span> confirm the chart below with Kayaa. It is taken from the current test site.</mark></p>
+        <p class="content__updated">Last updated <mark class="todo"><span class="marker-label">To confirm</span> publication date</mark></p>
       </header>
       <div class="content__layout">
         <div class="content__main">
           <div class="prose">
             <h2 id="chart">Size chart <a class="anchor" href="#chart" aria-label="Link to this section: Size chart"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- The product page size table must mirror this one (same sizes and ranges, one source in Blade). -->
-            <!-- The brand sizes by age band; height and weight are the better guide. TODO: placeholder ranges, confirm with the client -->
             <div class="table-wrap">
               <table class="size-table">
-                <caption class="visually-hidden">Size guide by age, height and weight</caption>
+                <caption class="visually-hidden">Size chart</caption>
                 <thead>
-                  <tr><th scope="col">Size</th><th scope="col">Age</th><th scope="col">Height</th><th scope="col">Weight</th></tr>
+                  <tr><th scope="col">Size</th><th scope="col">Height</th><th scope="col">Weight</th></tr>
                 </thead>
                 <tbody>
-                  <!-- gen: size-rows -->
-                  <tr><th scope="row">Newborn</th><td data-label="Age">Newborn</td><td data-label="Height">Up to 55 cm</td><td data-label="Weight">Up to 3.5 kg</td></tr>
-                  <tr><th scope="row">0–3m</th><td data-label="Age">0–3 months</td><td data-label="Height">55–62 cm</td><td data-label="Weight">3.5–6 kg</td></tr>
-                  <tr><th scope="row">3–6m</th><td data-label="Age">3–6 months</td><td data-label="Height">62–68 cm</td><td data-label="Weight">6–7.5 kg</td></tr>
-                  <tr><th scope="row">6–9m</th><td data-label="Age">6–9 months</td><td data-label="Height">68–74 cm</td><td data-label="Weight">7.5–9 kg</td></tr>
-                  <tr><th scope="row">9–12m</th><td data-label="Age">9–12 months</td><td data-label="Height">74–80 cm</td><td data-label="Weight">9–10 kg</td></tr>
-                  <tr><th scope="row">12–18m</th><td data-label="Age">12–18 months</td><td data-label="Height">80–86 cm</td><td data-label="Weight">10–11.5 kg</td></tr>
-                  <tr><th scope="row">18–24m</th><td data-label="Age">18–24 months</td><td data-label="Height">86–92 cm</td><td data-label="Weight">11.5–13 kg</td></tr>
-                  <tr><th scope="row">2Y</th><td data-label="Age">2 years</td><td data-label="Height">92–98 cm</td><td data-label="Weight">13–14.5 kg</td></tr>
-                  <tr><th scope="row">3Y</th><td data-label="Age">3 years</td><td data-label="Height">98–104 cm</td><td data-label="Weight">14.5–16.5 kg</td></tr>
-                  <!-- /gen: size-rows -->
+                  <tr><th scope="row">Newborn</th><td data-label="Height"><span>Up to 50 cm</span></td><td data-label="Weight"><span>Up to 3.5 kg</span></td></tr>
+                  <tr><th scope="row">0–3m</th><td data-label="Height"><span>50–58 cm</span></td><td data-label="Weight"><span>3.5–5.5 kg</span></td></tr>
+                  <tr><th scope="row">3–6m</th><td data-label="Height"><span>58–66 cm</span></td><td data-label="Weight"><span>5.5–7.5 kg</span></td></tr>
+                  <tr><th scope="row">6–9m</th><td data-label="Height"><span>66–72 cm</span></td><td data-label="Weight"><span>7.5–9 kg</span></td></tr>
+                  <tr><th scope="row">9–12m</th><td data-label="Height"><span>72–78 cm</span></td><td data-label="Weight"><span>9–10.5 kg</span></td></tr>
+                  <tr><th scope="row">12–18m</th><td data-label="Height"><span>78–86 cm</span></td><td data-label="Weight"><span>10.5–12 kg</span></td></tr>
+                  <tr><th scope="row">18–24m</th><td data-label="Height"><span>86–92 cm</span></td><td data-label="Weight"><span>12–13.5 kg</span></td></tr>
+                  <tr><th scope="row">2Y</th><td data-label="Height"><span>92–98 cm</span></td><td data-label="Weight"><span>13.5–15 kg</span></td></tr>
+                  <tr><th scope="row">3Y</th><td data-label="Height"><span>98–104 cm</span></td><td data-label="Weight"><span>15–17 kg</span></td></tr>
                 </tbody>
               </table>
             </div>
-            <p class="table-note">Placeholder ranges, confirm with the client.</p>
-
+            <h2 id="between">Between two sizes? <a class="anchor" href="#between" aria-label="Link to this section: Between two sizes?"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div>
+            <p>Go up. Babies grow quickly, and a slightly roomy fit is more comfortable in Sri Lanka's heat.</p>
+              </div></div>
             <h2 id="measure">How to measure <a class="anchor" href="#measure" aria-label="Link to this section: How to measure"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
             <ol class="how-steps" role="list">
-              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-scale"></use></svg></span><h3>Weigh your baby</h3><p>Use a recent weight in kilograms. It helps when you are between age bands.</p></li>
-              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-ruler"></use></svg></span><h3>Measure length</h3><p>Lay your baby flat and measure from head to heel in centimetres.</p></li>
-              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-list-checks"></use></svg></span><h3>Compare with the chart</h3><p>Start with your baby’s age band, then check height and weight against that row.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-ruler"></use></svg></span><h3>Height</h3><p>Lay your baby flat on a firm surface and measure from the top of the head to the heel with a soft tape. A second person helps to keep your baby still.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-scale"></use></svg></span><h3>Weight</h3><p>The weight from the last clinic visit is fine.</p></li>
+              <li><span class="how-steps__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-list-checks"></use></svg></span><h3>Compare</h3><p>Find the row that matches both. If they point to different sizes, choose the larger.</p></li>
             </ol>
-
-            <h2 id="between">Between sizes? <a class="anchor" href="#between" aria-label="Link to this section: Between sizes?"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm the between-sizes advice with the client -->
-            <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div><p class="notice__title">Between two sizes</p><p><span class="placeholder">[Advice for babies between two sizes]</span></p></div></div>
-
+            <h2 id="buying-a-gift">Buying a gift? <a class="anchor" href="#buying-a-gift" aria-label="Link to this section: Buying a gift?"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div>
+            <p>If you do not know the height or weight, choose by age and pick something with a little stretch, such as a ribbed bodysuit.</p>
+              </div></div>
             <h2 id="sizes">Shop by size <a class="anchor" href="#sizes" aria-label="Link to this section: Shop by size"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
             <ul class="chip-list" role="list">
-              <!-- gen: size-chips-mega -->
               <li><a class="chip" href="shop.html?size=newborn">Newborn</a></li>
               <li><a class="chip" href="shop.html?size=0-3m">0–3m</a></li>
               <li><a class="chip" href="shop.html?size=3-6m">3–6m</a></li>
@@ -390,44 +425,59 @@
               <li><a class="chip" href="shop.html?size=18-24m">18–24m</a></li>
               <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
               <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
-              <!-- /gen: size-chips-mega -->
             </ul>
-
+            <p class="chip-list__label">. Or browse by type:</p>
+            <ul class="chip-list" role="list">
+              <li><a class="chip" href="category.html?c=newborn">newborn</a></li>
+              <li><a class="chip" href="category.html?c=bodysuits">bodysuits</a></li>
+              <li><a class="chip" href="category.html?c=sleepwear">sleepwear</a></li>
+              <li><a class="chip" href="category.html?c=sets">sets</a></li>
+              <li><a class="chip" href="category.html?c=outerwear">outerwear</a></li>
+              <li><a class="chip" href="category.html?c=napkins">napkins</a></li>
+              <li><a class="chip" href="category.html?c=accessories">accessories</a></li>
+            </ul>
             <h2 id="questions">Size questions <a class="anchor" href="#questions" aria-label="Link to this section: Size questions"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: placeholder answers, confirm with the client -->
             <div class="accordion">
             <details class="accordion__item">
-              <summary class="accordion__summary">How do I choose the right size? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder: start with your baby’s age band in the chart above. Height and weight are the better guide.</p></div>
-            </details>
-            <details class="accordion__item">
               <summary class="accordion__summary">What if my baby is between sizes? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder: advice for babies between two sizes.</p></div>
+              <div class="accordion__body">
+                <p>Go up. Babies grow quickly and a slightly roomy fit is more comfortable in the heat.</p>
+              </div>
             </details>
             <details class="accordion__item">
-              <summary class="accordion__summary">Do sizes differ between products? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder: note any products that fit differently.</p></div>
+              <summary class="accordion__summary">Do you size by age or by height and weight? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <div class="accordion__body">
+                <p>Our sizes follow age bands, but every baby is different, so height and weight are the better guide.</p>
+              </div>
             </details>
             <details class="accordion__item">
-              <summary class="accordion__summary">Can I exchange a size? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body"><p>Placeholder: please see our returns page for exchanges.</p><p><a class="link-arrow" href="returns.html">Returns information <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p></div>
+              <summary class="accordion__summary">Will the clothes shrink? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <div class="accordion__body">
+                <p><mark class="todo"><span class="marker-label">To confirm</span> confirm for each fabric, then answer. Until then, advise following the care label.</mark></p>
+              </div>
+            </details>
+            <details class="accordion__item">
+              <summary class="accordion__summary">Can I exchange for a different size? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <div class="accordion__body">
+                <p>Yes, within <span data-cfg="return_window_days">14</span> days of delivery, and we cover the return courier cost on size swaps. See <a href="returns.html">Returns &amp; exchanges</a>.</p>
+              </div>
             </details>
             </div>
           </div>
-        <section class="help-card" aria-labelledby="help-title">
-          <div>
-            <h2 id="help-title">Still need help?</h2>
-            <!-- TODO: confirm the WhatsApp number and reply times with the client -->
-            <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
-          </div>
-          <div class="help-card__actions">
-            <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
-            <a class="btn btn--secondary" href="contact.html">Contact us</a>
-          </div>
-        </section>
+          <section class="help-card" aria-labelledby="help-title">
+            <div>
+              <h2 id="help-title">Still need help?</h2>
+              <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
+            </div>
+            <div class="help-card__actions">
+              <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
+              <a class="btn btn--secondary" href="contact.html">Contact us</a>
+            </div>
+          </section>
         </div>
       </div>
     </div>
+    <!-- /gen: content -->
   </main>
 
   <!-- partial: footer -->
@@ -716,8 +766,8 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->

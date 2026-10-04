@@ -3,19 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Returns | Kayaa</title>
-  <meta name="description" content="How returns, exchanges and refunds work at Kayaa.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- partial: seo -->
+  <title>Returns &amp; Exchanges | Kayaa</title>
+  <meta name="description" content="Wrong size? Swap it free. How to exchange or return baby clothing from Kayaa within 14 days, how refunds work and what we cannot take back.">
+  <link rel="canonical" href="https://example.com/returns"> <!-- blade: url() -->
+  <meta name="robots" content="noindex,nofollow"> <!-- staging: noindex,nofollow everywhere ("staging": true in tools/seo.json). Live: index,follow -->
+  <meta property="og:title" content="Returns &amp; Exchanges | Kayaa">
+  <meta property="og:description" content="Wrong size? Swap it free. How to exchange or return baby clothing from Kayaa within 14 days, how refunds work and what we cannot take back.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://example.com/returns">
+  <meta property="og:site_name" content="Kayaa">
+  <meta property="og:locale" content="en_LK">
+  <!-- TODO: og:image and twitter:image once a logo exists -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Returns &amp; Exchanges | Kayaa">
+  <meta name="twitter:description" content="Wrong size? Swap it free. How to exchange or return baby clothing from Kayaa within 14 days, how refunds work and what we cannot take back.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://example.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Returns",
+        "item": "https://example.com/returns"
+      }
+    ]
+  }
+  </script>
+  <!-- /partial: seo -->
   <!-- partial: styles -->
-  <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
+  <script>
+    /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
+       Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
+    if (location.protocol !== 'file:') ['public-sans', 'urbanist'].forEach(function (n) {
+      var l = document.createElement('link'); l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = '';
+      l.href = 'assets/fonts/' + n + '-latin-wght-normal.woff2'; document.head.appendChild(l);
+    });
+  </script>
+  <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
+  <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=f8b6ed18">
+  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/content.css?v=fd75bbea">
+  <link rel="stylesheet" href="assets/css/pages/content.css?v=152fc5c1">
 </head>
 <body data-page="returns" data-print>
   <!-- partial: sprite -->
@@ -325,6 +364,7 @@
   <!-- /partial: header -->
 
   <main id="main">
+    <!-- gen: content returns -->
     <div class="container content">
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
@@ -333,71 +373,64 @@
         </ol>
       </nav>
       <header class="content__head">
-        <h1>Returns</h1>
-        <p class="content__lede">How to return or exchange an item and how refunds work.</p>
-        <!-- TODO: "Last updated" comes from the page's updated_at (or a static date); confirm with the client -->
-        <p class="content__updated">Last updated <span class="placeholder">[date]</span></p>
+        <h1>Returns &amp; Exchanges</h1>
+        <p class="content__lede">Babies grow quickly and sizes can be hard to judge. If something does not fit or is not right, we want to make it easy to put it right. <mark class="todo"><span class="marker-label">To confirm</span> confirm the policy below with Kayaa. It is taken from the current test site.</mark></p>
+        <p class="content__updated">Last updated <mark class="todo"><span class="marker-label">To confirm</span> publication date</mark></p>
       </header>
       <div class="content__layout content__layout--toc">
         <details class="toc" data-toc open>
           <summary class="toc__summary">On this page <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
           <ol class="toc__list" role="list">
-            <li><a href="#window">Return window</a></li>
-            <li><a href="#condition">Condition of items</a></li>
-            <li><a href="#start">How to start a return</a></li>
-            <li><a href="#exchanges">Exchanges for size</a></li>
+            <li><a href="#the-short-version">The short version</a></li>
+            <li><a href="#exchanges">Wrong size? Swap it free</a></li>
             <li><a href="#refunds">Refunds</a></li>
-            <li><a href="#not-returnable">Items that can’t be returned</a></li>
-            <li><a href="#damaged">Damaged or wrong items</a></li>
+            <li><a href="#damaged">Faulty or wrong items</a></li>
+            <li><a href="#not-returnable">What we cannot take back</a></li>
+            <li><a href="#cancelling-before-dispatch">Cancelling before dispatch</a></li>
+            <li><a href="#your-legal-rights">Your legal rights</a></li>
+            <li><a href="#need-help">Need help?</a></li>
           </ol>
         </details>
         <div class="content__main">
           <div class="prose">
-            <!-- TODO: every fact on this page is a placeholder; confirm the whole policy with the client -->
-            <h2 id="window">Return window <a class="anchor" href="#window" aria-label="Link to this section: Return window"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with the client (site config: return_window_days) -->
-            <p>You can exchange any unworn item within <span data-cfg="return_window_days">14</span> days, with tags on. We cover return delivery on size swaps.</p>
-
-            <h2 id="condition">Condition of items <a class="anchor" href="#condition" aria-label="Link to this section: Condition of items"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <p><span class="placeholder">[Condition items must be in to be returned]</span></p>
-
-            <h2 id="start">How to start a return <a class="anchor" href="#start" aria-label="Link to this section: How to start a return"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <ol>
-              <li>Have your order number ready, for example KY-261003-A3F9.</li>
-              <li>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or use the contact form, and include your order number.</li>
-              <li><span class="placeholder">[Next steps and how items are sent back]</span></li>
-            </ol>
-            <p><a class="link-arrow" href="contact.html">Open the contact form <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
-
-            <h2 id="exchanges">Exchanges for size <a class="anchor" href="#exchanges" aria-label="Link to this section: Exchanges for size"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <p><span class="placeholder">[Whether and how items can be exchanged for another size]</span></p>
-
+            <h2 id="the-short-version">The short version <a class="anchor" href="#the-short-version" aria-label="Link to this section: The short version"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <div class="notice"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><div>
+            <ul>
+              <li>Exchange any unworn, unwashed item with its tags on within <span data-cfg="return_window_days">14</span> days of delivery.</li>
+              <li>Wrong size? We cover the return courier cost on size swaps.</li>
+              <li>Prefer a refund? We refund the item price within <span data-cfg="refund_days">7</span> days of receiving it back.</li>
+              <li>Faulty or wrong item? Send us a photo within <span data-cfg="faulty_report_days">7</span> days.</li>
+            </ul>
+              </div></div>
+            <h2 id="exchanges">Wrong size? Swap it free <a class="anchor" href="#exchanges" aria-label="Link to this section: Wrong size? Swap it free"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>Message us on WhatsApp at <mark class="todo"><span class="marker-label">To confirm</span> WhatsApp number</mark> with your order number and the size you would like. We arrange the pick-up and cover the courier cost for size swaps. The new size is sent once we have received the original, subject to stock. If the size you need is sold out, we refund the item instead. Not sure which size to choose? See our <a href="size-guide.html">size guide</a>.</p>
             <h2 id="refunds">Refunds <a class="anchor" href="#refunds" aria-label="Link to this section: Refunds"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm the refund timeline with the client and the backend dev -->
-            <p>Refunds go back to the card you paid with, through Onepay. They take <span data-cfg="refund_days">7</span> working days. <!-- TODO: confirm with the client (site config: refund_days) --></p>
-
-            <h2 id="not-returnable">Items that can’t be returned <a class="anchor" href="#not-returnable" aria-label="Link to this section: Items that can’t be returned"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm the list with the client -->
-            <p><span class="placeholder">[List of items that can’t be returned]</span></p>
-
-            <h2 id="damaged">Damaged or wrong items <a class="anchor" href="#damaged" aria-label="Link to this section: Damaged or wrong items"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm with the client (site config: faulty_report_days) -->
-            <p>Tell us within <span data-cfg="faulty_report_days">7</span> days if an item arrives damaged or is not what you ordered. <span class="placeholder">[What we do next]</span></p>
+            <p>If you would rather have a refund than a swap, we refund the price of the item within <span data-cfg="refund_days">7</span> days of receiving it back. <mark class="proposed"><span class="marker-label">Proposed</span> The refund goes back to the card you paid with.</mark> Delivery fees are not refunded unless the item was faulty or we sent the wrong thing.</p>
+            <h2 id="damaged">Faulty or wrong items <a class="anchor" href="#damaged" aria-label="Link to this section: Faulty or wrong items"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>If an item arrives faulty, damaged or not what you ordered, send us a photo within <span data-cfg="faulty_report_days">7</span> days of delivery with your order number. We will replace it or refund it, including delivery.</p>
+            <h2 id="not-returnable">What we cannot take back <a class="anchor" href="#not-returnable" aria-label="Link to this section: What we cannot take back"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>For hygiene, we cannot accept returns on items that have been worn or washed, or on sale items marked final. <mark class="todo"><span class="marker-label">To confirm</span> confirm whether sale items are final, and whether any other items, such as napkins, are excluded</mark></p>
+            <h2 id="cancelling-before-dispatch">Cancelling before dispatch <a class="anchor" href="#cancelling-before-dispatch" aria-label="Link to this section: Cancelling before dispatch"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>If your order has not been dispatched you may be able to cancel it instead. With an account you can cancel from your order page while it shows &quot;pending&quot;. Otherwise contact us as soon as possible.</p>
+            <h2 id="your-legal-rights">Your legal rights <a class="anchor" href="#your-legal-rights" aria-label="Link to this section: Your legal rights"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>This policy does not affect your rights under Sri Lankan consumer law.</p>
+            <h2 id="need-help">Need help? <a class="anchor" href="#need-help" aria-label="Link to this section: Need help?"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
+            <p>WhatsApp us at <mark class="todo"><span class="marker-label">To confirm</span> WhatsApp number</mark> (<span data-cfg="support_hours">Mon–Sat 9am–6pm</span>) or use the <a href="contact.html">contact form</a>. Please have your order number ready.</p>
           </div>
-        <section class="help-card" aria-labelledby="help-title">
-          <div>
-            <h2 id="help-title">Still need help?</h2>
-            <!-- TODO: confirm the WhatsApp number and reply times with the client -->
-            <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
-          </div>
-          <div class="help-card__actions">
-            <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
-            <a class="btn btn--secondary" href="contact.html">Contact us</a>
-          </div>
-        </section>
+          <section class="help-card" aria-labelledby="help-title">
+            <div>
+              <h2 id="help-title">Still need help?</h2>
+              <p>Message us on WhatsApp <span data-cfg="whatsapp_display">077 000 0000</span> or send us a note from the contact page.</p>
+            </div>
+            <div class="help-card__actions">
+              <a class="btn btn--primary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
+              <a class="btn btn--secondary" href="contact.html">Contact us</a>
+            </div>
+          </section>
         </div>
       </div>
     </div>
+    <!-- /gen: content -->
   </main>
 
   <!-- partial: footer -->
@@ -686,8 +719,8 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=713b6331" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
-  <script src="assets/js/catalogue-data.js?v=fb648b09" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
+  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->

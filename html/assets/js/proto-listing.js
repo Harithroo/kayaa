@@ -14,6 +14,8 @@
   var CATS = {};
   DATA.categories.forEach(function (c) { CATS[c.slug] = [c.label, c.blurb]; });
   var SIZES = DATA.sizes.map(function (s) { return [s.slug, s.label]; });
+  var INTROS = DATA.intros || { categories: {}, sizes: {} };   // h1, meta title, meta description and intro from docs/content/category-and-age-intros.md
+  var SEO = window.KAYAA_SEO || { staging: true, siteUrl: '', pages: {} };
 
   // ?size=0%E2%80%933m (en dash, any case) -> 0-3m
   function normaliseSize(v) {
@@ -115,12 +117,21 @@
     title = 'All baby clothing';
     intro = 'Soft everyday essentials, sized by age.';
   }
-  if (sale && page !== 'search' && (size || (page === 'category' && cat))) intro += ' Showing sale items only.';
+
+  // the h1 and the intro paragraph of a category or a size come from the content pack (<!-- blade: category description / size intro -->)
+  var escText = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+  var introHtml = escText(intro);
+  var metaTitle = title + ' | Kayaa';
+  var metaDesc = (SEO.pages.shop && SEO.pages.shop.description) || '';
+  var fromPack = page === 'category' && catKnown ? INTROS.categories[cat] : (page !== 'category' && page !== 'search' && size ? INTROS.sizes[size] : null);
+  if (fromPack) { title = fromPack.h1; introHtml = fromPack.intro; metaTitle = fromPack.metaTitle; metaDesc = fromPack.metaDescription; }
+  else if (page === 'search' && SEO.pages.search) { metaTitle = q ? title + ' | Kayaa' : SEO.pages.search.title; metaDesc = SEO.pages.search.description; }
+  else if (page === 'shop' && !sale && sort === 'featured' && SEO.pages.shop) { metaTitle = SEO.pages.shop.title; }
+  if (sale && page !== 'search' && (size || (page === 'category' && cat))) introHtml += ' Showing sale items only.';
 
   $('[data-listing-title]').textContent = title;
-  $('[data-listing-intro]').textContent = intro;
+  $('[data-listing-intro]').innerHTML = introHtml;
   $('[data-listing-count]').textContent = total + (total === 1 ? ' product' : ' products');
-  document.title = title + ' | Kayaa';
 
   var crumbs = $('[data-breadcrumb]');
   var li = function (text, href) {
@@ -143,6 +154,47 @@
   } else {
     crumbs.appendChild(li('Shop'));
   }
+
+  /* ---------- Head: the indexing rules (docs/content/seo-guide.md section 4) ----------
+     Staging forces noindex,nofollow everywhere; the rule that applies once it is live is kept on the robots tag as data-live-robots.
+       /baby/{slug}                    index,follow, canonical itself          /shop?size={slug}   index,follow, canonical itself
+       /baby/{slug}?size={slug}        noindex,follow, canonical the category  sort or sale        noindex,follow, canonical the clean listing
+       ?page=2 and beyond              index,follow, canonical itself          search              noindex,follow, canonical itself */
+  (function () {
+    var enc = encodeURIComponent;
+    var hasSort = qs.has('sort') && sort !== 'featured';
+    var hasSale = qs.get('sale') === '1';
+    var route = page === 'category' ? '/baby/' + (cat || 'all') : (page === 'search' ? '/search' : '/shop');
+    var keep = [];                                   // the params a canonical may keep
+    if (page === 'shop' && size) keep.push('size=' + size);
+    if (page === 'search' && q) keep.push('q=' + enc(q));
+    var clean = route + (keep.length ? '?' + keep.join('&') : '');
+    var robots = 'index,follow';
+    var canonical = clean;
+    if (pageNo > 1) canonical = clean + (keep.length ? '&' : '?') + 'page=' + pageNo;
+    if (page === 'search') robots = 'noindex,follow';
+    else if (hasSort || hasSale) { robots = 'noindex,follow'; canonical = clean; }
+    else if (page === 'category' && size) { robots = 'noindex,follow'; canonical = route; }
+    else if (page === 'category' && !catKnown) robots = 'noindex,follow';
+    var set = function (sel, attr, value) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, value); };
+    var url = (SEO.siteUrl || '') + canonical;
+    document.title = metaTitle;
+    set('meta[name="description"]', 'content', metaDesc);
+    set('meta[property="og:title"]', 'content', metaTitle);
+    set('meta[property="og:description"]', 'content', metaDesc);
+    set('meta[name="twitter:title"]', 'content', metaTitle);
+    set('meta[name="twitter:description"]', 'content', metaDesc);
+    set('link[rel="canonical"]', 'href', url);
+    set('meta[property="og:url"]', 'content', url);
+    set('meta[name="robots"]', 'content', SEO.staging === false ? robots : 'noindex,nofollow');
+    set('meta[name="robots"]', 'data-live-robots', robots);
+    // BreadcrumbList for the state: Home / Baby / Category on a category page, Home / Shop on the shop
+    var ld = $$('script[type="application/ld+json"]', document).filter(function (s) { return /BreadcrumbList/.test(s.textContent); })[0];
+    if (ld && page !== 'search') {
+      var trail = page === 'category' && catKnown ? [['Home', '/'], ['Baby', '/categories'], [CATS[cat][0], '/baby/' + cat]] : [['Home', '/'], ['Shop', '/shop']];
+      ld.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: trail.map(function (c, i) { return { '@type': 'ListItem', position: i + 1, name: c[0], item: (SEO.siteUrl || '') + c[1] }; }) }, null, 2);
+    }
+  })();
 
   /* ---------- Search box, chips, toolbar ---------- */
   var qInput = $('#listing-q');

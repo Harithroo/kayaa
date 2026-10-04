@@ -294,3 +294,22 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 - The sample catalogue (26 products) uses the names, categories, prices and size ranges the brief took from the staging site; all other product facts are placeholders.
 - Colours are labelled Butter, Lilac, Sky, Blush and Dove (slug `cream` is shown as "Butter"); there are no colour dots on cards because the backend supplies no colour values yet.
 - District ETA is seeded with two zones as `{min, max}` (Colombo 1–2, the rest of the island 2–4), TODO until per-district data arrives.
+
+## Content pack, SEO head and self-hosted fonts
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| Content markers (`mark.todo`, `mark.proposed`, `.marker-label`) | components.css | Open text from the content pack: a lilac highlight with a dashed outline and a small label ("To confirm" / "Proposed"); AA readable, never green or yellow. |
+| `tools/markdown.mjs`, `tools/content.mjs`, `tools/content.json` | tools | Render docs/content/*.md into the pages: `<!-- gen: content NAME -->` (breadcrumb, h1, intro, table of contents, prose, callouts, icon steps, tables, help card), `faqs`, `home-intro`, `listing-intro`, `district-eta`, `todo-counts`. |
+| Home intro (`.home-intro`) | pages/home.css | 40 to 60 words under the hero, from docs/content/home.md. |
+| Listing header | category.html, proto-listing.js | The h1 and intro paragraph of a category or size come from category-and-age-intros.md (`window.KAYAA_CATALOGUE.intros`); the page also sets its title, description, canonical, robots and breadcrumb per state. |
+| `<!-- partial: seo -->`, `tools/seo.json`, `tools/seo.mjs` | every <head> | One source for title, description, canonical, robots, Open Graph, Twitter card and JSON-LD; `"staging": true` forces noindex,nofollow. |
+| `tools/check-seo.mjs`, `tools/list-todos.mjs` | tools | Page-level SEO errors and warnings; open content markers by page (`--fail-on-open` before launch). |
+| Self-hosted fonts (`assets/fonts`, `assets/css/fonts.css`) | assets | Urbanist and Public Sans, latin variable woff2, font-display: swap, size-adjusted Arial fallbacks; no Google Fonts requests. |
+| Content to approve card | review.html | Counts of open markers and a link to docs/content/01-open-decisions.md. |
+| docs/seo | docs | robots.production.txt, sitemap.example.xml, launch-checklist.md (not published). |
+
+### Assumptions
+- The size chart in docs/content/size-guide.md replaces the earlier placeholder ranges, on the size guide and on the product page.
+- The delivery estimates table shows the two zones from the site config; only the Colombo district counts as "Colombo and suburbs" until the backend supplies per-district data.
+- Canonical URLs use https://example.com until the live domain is known.

@@ -276,3 +276,7 @@
   .promo:has(.promo__photo) .promo__title { max-width: min(16ch, 62%); }
   .promo:has(.promo__photo) .promo__text { max-width: min(36ch, 62%); }
 }
+
+/* Short intro under the hero (docs/content/home.md) */
+.home-intro { padding-block: var(--space-6) 0; }
+.home-intro__text { max-width: 72ch; font-size: 17px; line-height: 1.6; color: var(--ink-soft); }

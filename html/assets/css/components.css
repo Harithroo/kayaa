@@ -1645,3 +1645,38 @@ html:has(dialog[open]) { overflow: hidden; scrollbar-gutter: stable; }
 .product-card__info > .price { margin-top: var(--space-1); }
 .review-card__headline { margin-top: var(--space-3); font-weight: 800; }
 .review-card__headline + .review-card__text { margin-top: var(--space-1); }
+
+/* ---------- Content markers (docs/content: [[TODO: ...]] and [[PROPOSED: ...]]) ----------
+   A lilac highlight with a dashed outline and a small label, so open text is easy to spot and to read (never green or yellow). */
+mark.todo,
+mark.proposed {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--tone-2);
+  color: var(--ink);
+  outline: 1.5px dashed var(--primary-deep);
+  outline-offset: 1px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+mark.proposed { background: var(--tone-1); }
+.marker-label {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--primary-deep);
+  color: #fff;
+  font-size: var(--fs-caption);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+mark > .marker-label:only-child { margin-right: 0; }
+
+/* Links inside running text: the padding grows the tap area to about 44px without moving the lines; the margin keeps neighbours 8px apart */
+.prose p a:not(.btn):not(.chip):not(.link-arrow):not(.anchor),
+.prose li a:not(.btn):not(.chip):not(.link-arrow):not(.anchor),
+.content__lede a,
+.accordion__body p a:not(.link-arrow) { padding-block: 13px; margin-inline: 3px; }

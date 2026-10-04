@@ -35,8 +35,8 @@
   --swatch-dove: #D5CFDD;
 
   /* Font families */
-  --font-display: 'Urbanist', system-ui, sans-serif;
-  --font-body: 'Public Sans', system-ui, sans-serif;
+  --font-display: 'Urbanist', 'Urbanist Fallback', system-ui, sans-serif;
+  --font-body: 'Public Sans', 'Public Sans Fallback', system-ui, sans-serif;
 
   /* Type scale: mobile (375px) is ~75% of the desktop size (1200px), fluid in between.
      clamp(min, intercept + slope*vw, max); slope = (max-min)/825, intercept = min - 375*slope */

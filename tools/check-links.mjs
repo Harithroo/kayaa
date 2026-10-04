@@ -15,7 +15,8 @@ for (const file of walk(htmlDir)) {
   const label = path.relative(htmlDir, file).split(path.sep).join('/');
   const raw = fs.readFileSync(file, 'utf8');
   const syncRoot = (raw.match(/<!-- sync-root: (\S+) -->/) || [])[1];
-  const text = raw.replace(/<!--[\s\S]*?-->/g, '');
+  // comments and inline script bodies (JSON-LD, the font preload) are not links; <script src> tags are kept
+  const text = raw.replace(/<!--[\s\S]*?-->/g, '').replace(/<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/g, '');
   for (const m of text.matchAll(/\b(?:href|src|action)="([^"]+)"/g)) {
     const u = m[1];
     if (/^(https?:|mailto:|tel:|#|data:|javascript:)/.test(u)) continue;

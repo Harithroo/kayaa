@@ -1,0 +1,47 @@
+{
+  "_note": "How each docs/content/*.md page is built into its html page (tools/content.mjs, run by sync-shell). The text lives in docs/content: edit the markdown, never the html. 'ids' keeps the heading ids that existed before the content pack (anchors and the table of contents stay stable); any other heading gets an id made from its text. 'callouts' are sections shown in a lilac notice, 'steps' are numbered lists shown as icon steps, 'faqs' appends the matching group from faqs.md.",
+  "pages": {
+    "size-guide": {
+      "file": "size-guide.md", "label": "Size guide", "toc": false,
+      "ids": { "Size chart": "chart", "Between two sizes?": "between", "How to measure": "measure", "Shop by size": "sizes" },
+      "callouts": ["Between two sizes?", "Buying a gift?"],
+      "steps": { "How to measure": ["ruler", "scale", "list-checks"] },
+      "faqs": { "placement": "size guide", "heading": "Size questions", "id": "questions" }
+    },
+    "delivery": {
+      "file": "delivery.md", "label": "Delivery", "toc": true,
+      "ids": { "Where and how fast": "estimates", "What it costs": "fee", "How delivery works": "how", "Missed or delayed deliveries": "not-home", "Questions?": "questions" },
+      "callouts": ["Payment"],
+      "steps": { "How delivery works": ["shopping-bag", "package", "truck", "check"] }
+    },
+    "returns": {
+      "file": "returns.md", "label": "Returns", "toc": true,
+      "ids": { "Wrong size? Swap it free": "exchanges", "Refunds": "refunds", "Faulty or wrong items": "damaged", "What we cannot take back": "not-returnable" },
+      "callouts": ["The short version"]
+    },
+    "about": {
+      "file": "about.md", "label": "Our story", "toc": false,
+      "ids": { "What we care about": "values", "Shop by size": "sizes" }
+    },
+    "privacy": {
+      "file": "privacy-policy.md", "label": "Privacy policy", "toc": true,
+      "ids": { "Information we collect": "collect", "How we use your information": "use", "Cookies and similar technologies": "cookies", "How long we keep it": "retention", "Your rights": "choices", "Contact us": "contact" }
+    },
+    "terms": {
+      "file": "terms.md", "label": "Terms and conditions", "toc": true,
+      "ids": { "2. Using the website": "using", "3. Your account": "accounts", "6. Placing an order": "orders", "7. Payment": "payment", "8. Delivery": "delivery", "9. Returns and refunds": "returns", "11. Reviews": "reviews", "15. Changes to these terms": "changes", "17. Contact": "contact" }
+    }
+  },
+  "provinces": [
+    ["Western", ["colombo", "gampaha", "kalutara"]],
+    ["Central", ["kandy", "matale", "nuwara-eliya"]],
+    ["Southern", ["galle", "matara", "hambantota"]],
+    ["Northern", ["jaffna", "kilinochchi", "mannar", "mullaitivu", "vavuniya"]],
+    ["Eastern", ["batticaloa", "ampara", "trincomalee"]],
+    ["North Western", ["kurunegala", "puttalam"]],
+    ["North Central", ["anuradhapura", "polonnaruwa"]],
+    ["Uva", ["badulla", "monaragala"]],
+    ["Sabaragamuwa", ["ratnapura", "kegalle"]]
+  ],
+  "colomboZone": ["colombo"]
+}

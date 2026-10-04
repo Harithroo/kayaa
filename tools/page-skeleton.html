@@ -2,18 +2,14 @@
 <!-- Copy to html/<page>.html (or html/account/<page>.html). Then:
      1. Replace every {{root}} below with "" (html/) or "../" (html/account/).
      2. Set <body data-page> (home, shop, search, cart, account, ... space-separated tokens allowed).
-     3. Fill in title, description and <main>, add the page CSS link.
+     3. Add the page to tools/seo.json (title, description, path, robots, breadcrumb) and fill in <main>, add the page CSS link.
      4. Run: node tools/sync-shell.mjs   (fills the partial markers; never edit between them). -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Page title | Kayaa</title>
-  <meta name="description" content="Page description.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- partial: seo -->   <!-- title, description, canonical, robots, Open Graph, Twitter and JSON-LD come from tools/seo.json: add an entry for the new page -->
+  <!-- /partial: seo -->
   <!-- partial: styles -->
   <!-- /partial: styles -->
   <!-- <link rel="stylesheet" href="{{root}}assets/css/pages/NAME.css"> -->

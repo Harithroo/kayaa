@@ -1,0 +1,118 @@
+{
+  "_note": "Single source for every page's head: title, meta description, canonical, robots, Open Graph, Twitter card and BreadcrumbList JSON-LD (tools/seo.mjs, run by sync-shell). 'staging': true forces noindex,nofollow everywhere; set it to false at launch and the per-page 'robots' values (the matrix in docs/content/seo-guide.md section 4) take effect. 'content' reads the title and description from the docs/content front matter; 'intro' from docs/content/category-and-age-intros.md. 'path' is the Laravel route (the canonical is site.url + path), not the prototype file name. category.html and product.html are one sample each: proto-listing.js and product.js apply the same rules per state, and the Blade views build them per record (docs/backend-contract.md, 'SEO needs from the backend'). Pages without a 'crumbs' trail get no BreadcrumbList.",
+  "staging": true,
+  "site": { "name": "Kayaa", "url": "https://example.com", "locale": "en_LK" },
+  "pages": {
+    "index.html": { "content": "home", "path": "/", "robots": "index,follow", "og": "website" },
+    "shop.html": {
+      "title": "Baby Clothes Online in Sri Lanka | Kayaa",
+      "description": "Shop soft baby clothing from Newborn to 3Y. Clear size guide, secure card payment and island-wide delivery across Sri Lanka.",
+      "path": "/shop", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Shop", "/shop"]]
+    },
+    "categories.html": {
+      "title": "Shop Baby Clothes by Category | Kayaa",
+      "description": "Browse Kayaa baby clothing by type: newborn, bodysuits, sleepwear, sets, outerwear, napkins and accessories, with island-wide delivery.",
+      "path": "/categories", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Baby", "/categories"]]
+    },
+    "category.html": { "intro": "categories/bodysuits", "path": "/baby/bodysuits", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Baby", "/categories"], ["Bodysuits", "/baby/bodysuits"]] },
+    "product.html": {
+      "title": "Ribbed Cotton Bodysuit | Baby Bodysuits | Kayaa",
+      "description": "A soft everyday bodysuit with a ribbed finish and easy snap closures at the shoulder and bottom, made to be worn on its own or layered.",
+      "path": "/products/ribbed-cotton-bodysuit", "robots": "index,follow", "og": "product",
+      "crumbs": [["Home", "/"], ["Baby", "/categories"], ["Bodysuits", "/baby/bodysuits"], ["Ribbed Cotton Bodysuit", "/products/ribbed-cotton-bodysuit"]]
+    },
+    "search.html": {
+      "title": "Search Kayaa | Baby Clothes",
+      "description": "Search Kayaa baby clothing by name or type. Find bodysuits, sleepwear, sets, outerwear and accessories with island-wide delivery in Sri Lanka.",
+      "path": "/search", "robots": "noindex,follow", "og": "website"
+    },
+    "cart.html": {
+      "title": "Your Bag | Kayaa",
+      "description": "Review the items in your Kayaa bag, see your delivery fee and free-delivery progress, then continue to secure checkout with card payment.",
+      "path": "/cart", "robots": "noindex,nofollow", "og": "website"
+    },
+    "checkout.html": {
+      "title": "Secure Checkout | Kayaa",
+      "description": "Enter your delivery details and pay securely by card to place your Kayaa order. We show your delivery estimate before you pay.",
+      "path": "/checkout", "robots": "noindex,nofollow", "og": "website"
+    },
+    "thank-you.html": {
+      "title": "Order Confirmed | Kayaa",
+      "description": "Your Kayaa order confirmation, with your order number, items, delivery details and payment status. Keep your order number to track it.",
+      "path": "/orders/confirmation", "robots": "noindex,nofollow", "og": "website"
+    },
+    "track.html": {
+      "title": "Track Your Order | Kayaa",
+      "description": "Find your Kayaa order with your order number and the mobile number you used at checkout to see its status, payment status and delivery estimate.",
+      "path": "/track", "robots": "noindex,nofollow", "og": "website"
+    },
+    "wishlist.html": {
+      "title": "Your Wishlist | Kayaa",
+      "description": "The Kayaa baby clothes you saved for later. Remove a product, or choose a size and add it to your bag when you are ready to order.",
+      "path": "/wishlist", "robots": "noindex,nofollow", "og": "website"
+    },
+    "contact.html": {
+      "title": "Contact Kayaa | WhatsApp, Email & Messages",
+      "description": "Questions about sizing, delivery or an order? Message Kayaa on WhatsApp, email us or use the contact form. We reply Monday to Saturday.",
+      "path": "/contact", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Contact", "/contact"]]
+    },
+    "size-guide.html": { "content": "size-guide", "path": "/size-guide", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Size guide", "/size-guide"]] },
+    "delivery.html": { "content": "delivery", "path": "/delivery", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Delivery", "/delivery"]] },
+    "returns.html": { "content": "returns", "path": "/returns", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Returns", "/returns"]] },
+    "about.html": { "content": "about", "path": "/about", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Our story", "/about"]] },
+    "privacy.html": { "content": "privacy", "path": "/privacy", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Privacy policy", "/privacy"]] },
+    "terms.html": { "content": "terms", "path": "/terms", "robots": "index,follow", "og": "website", "crumbs": [["Home", "/"], ["Terms and conditions", "/terms"]] },
+
+    "account/login.html": {
+      "title": "Sign In | Kayaa",
+      "description": "Sign in to your Kayaa account to see your orders and reviews. You can also order and track as a guest, with no account needed.",
+      "path": "/account/login", "robots": "noindex,nofollow", "og": "website"
+    },
+    "account/register.html": {
+      "title": "Create an Account | Kayaa",
+      "description": "Create a Kayaa account to keep your orders and reviews in one place. An account is optional: guest checkout and order tracking always work.",
+      "path": "/account/register", "robots": "noindex,nofollow", "og": "website"
+    },
+    "account/forgot-password.html": {
+      "title": "Forgot Your Password? | Kayaa",
+      "description": "Enter your email and we will send you a link to choose a new Kayaa password, if that email is registered with an account.",
+      "path": "/account/forgot-password", "robots": "noindex,nofollow", "og": "website"
+    },
+    "account/reset-password.html": {
+      "title": "Reset Your Password | Kayaa",
+      "description": "Choose a new password for your Kayaa account. Use at least 8 characters, then sign in with your new password to see your orders.",
+      "path": "/account/reset-password", "robots": "noindex,nofollow", "og": "website"
+    },
+    "account/verify-email.html": {
+      "title": "Verify Your Email | Kayaa",
+      "description": "Verify your email address to see the orders you placed as a guest with that email in your Kayaa account. Resend the link if needed.",
+      "path": "/account/verify-email", "robots": "noindex,nofollow", "og": "website"
+    },
+    "account/index.html": {
+      "title": "My Orders | Kayaa",
+      "description": "Your Kayaa orders in one place, with their status and payment status. Open an order to track it, resume payment or write a review.",
+      "path": "/account", "robots": "noindex,nofollow", "og": "website"
+    },
+    "account/order.html": {
+      "title": "Order Details | Kayaa",
+      "description": "The items, totals, delivery details and status of one Kayaa order, with links to track it, resume payment or cancel while it is pending.",
+      "path": "/account/orders", "robots": "noindex,nofollow", "og": "website"
+    },
+    "account/reviews.html": {
+      "title": "My Reviews | Kayaa",
+      "description": "The reviews you wrote for Kayaa products, with their status. Reviews are checked by us before they appear on the product page.",
+      "path": "/account/reviews", "robots": "noindex,nofollow", "og": "website"
+    },
+    "account/profile.html": {
+      "title": "Your Profile | Kayaa",
+      "description": "Update your name, email and mobile number, or change your password. Your details are used for your orders and your Kayaa account.",
+      "path": "/account/profile", "robots": "noindex,nofollow", "og": "website"
+    },
+
+    "404.html": { "title": "Page Not Found | Kayaa", "description": "We could not find that page. Search Kayaa, browse the categories or head back to the shop to find soft baby clothing for newborns.", "robots": "noindex", "canonical": false },
+    "419.html": { "title": "Page Expired | Kayaa", "description": "For your security the page timed out. Go back and try again, or return to the Kayaa home page to keep shopping for baby clothes.", "robots": "noindex", "canonical": false },
+    "429.html": { "title": "Too Many Attempts | Kayaa", "description": "There were too many attempts in a short time. Please wait a minute and try again, or contact Kayaa if you need a hand with an order.", "robots": "noindex", "canonical": false },
+    "500.html": { "title": "Something Went Wrong | Kayaa", "description": "Something went wrong on our side. Please try again in a moment, or message Kayaa on WhatsApp if you need help with an order.", "robots": "noindex", "canonical": false },
+    "503.html": { "title": "We'll Be Right Back | Kayaa", "description": "Kayaa is making a quick update. Please check back soon, or email us if you need help with an order while the site is unavailable.", "robots": "noindex", "canonical": false }
+  }
+}

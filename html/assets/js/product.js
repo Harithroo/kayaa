@@ -11,6 +11,9 @@
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
   var params = new URLSearchParams(location.search);
+  // ?colour= is a view of the same product: the canonical always stays the product URL without it (docs/backend-contract.md, SEO)
+  var canon = document.querySelector('link[rel="canonical"]');
+  if (canon && /[?&]colour=/.test(canon.getAttribute('href'))) canon.setAttribute('href', canon.getAttribute('href').replace(/[?&]colour=[^&#]*/, ''));
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var smooth = reduce ? 'auto' : 'smooth';
 

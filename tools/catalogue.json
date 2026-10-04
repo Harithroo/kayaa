@@ -1,5 +1,5 @@
 {
-  "_note": "Single source for the prototype catalogue: department Baby (route /baby/{slug}), the seven categories, the nine size slugs and the sample products. node tools/sync-shell.mjs fills every <!-- gen: NAME --> region from this file. Blade renders the same data from the database. Names and categories match the staging site; everything else is placeholder (TODO: confirm with client). Size table values (age, height, weight) are placeholders.",
+  "_note": "Single source for the prototype catalogue: department Baby (route /baby/{slug}), the seven categories, the nine size slugs and the sample products. node tools/sync-shell.mjs fills every <!-- gen: NAME --> region from this file. Blade renders the same data from the database. Names and categories match the staging site; everything else is placeholder (TODO: confirm with client). The size chart (height and weight) comes from docs/content/size-guide.md.",
   "categories": [
     { "slug": "newborn", "label": "Newborn", "tone": 1, "blurb": "Soft first pieces for the newborn weeks." },
     { "slug": "bodysuits", "label": "Bodysuits", "tone": 2, "blurb": "Everyday bodysuits in soft cotton." },
@@ -10,15 +10,15 @@
     { "slug": "accessories", "label": "Accessories", "tone": 3, "blurb": "Mittens, booties, bibs and hats." }
   ],
   "sizes": [
-    { "slug": "newborn", "label": "Newborn", "lo": "NB", "hi": "3m", "age": "Newborn", "height": "Up to 55 cm", "weight": "Up to 3.5 kg" },
-    { "slug": "0-3m", "label": "0–3m", "lo": "0m", "hi": "3m", "age": "0–3 months", "height": "55–62 cm", "weight": "3.5–6 kg" },
-    { "slug": "3-6m", "label": "3–6m", "lo": "3m", "hi": "6m", "age": "3–6 months", "height": "62–68 cm", "weight": "6–7.5 kg" },
-    { "slug": "6-9m", "label": "6–9m", "lo": "6m", "hi": "9m", "age": "6–9 months", "height": "68–74 cm", "weight": "7.5–9 kg" },
-    { "slug": "9-12m", "label": "9–12m", "lo": "9m", "hi": "12m", "age": "9–12 months", "height": "74–80 cm", "weight": "9–10 kg" },
-    { "slug": "12-18m", "label": "12–18m", "lo": "12m", "hi": "18m", "age": "12–18 months", "height": "80–86 cm", "weight": "10–11.5 kg" },
-    { "slug": "18-24m", "label": "18–24m", "lo": "18m", "hi": "24m", "age": "18–24 months", "height": "86–92 cm", "weight": "11.5–13 kg" },
-    { "slug": "2y", "label": "2Y", "lo": "2Y", "hi": "2Y", "age": "2 years", "height": "92–98 cm", "weight": "13–14.5 kg" },
-    { "slug": "3y", "label": "3Y", "lo": "3Y", "hi": "3Y", "age": "3 years", "height": "98–104 cm", "weight": "14.5–16.5 kg" }
+    { "slug": "newborn", "label": "Newborn", "lo": "NB", "hi": "3m" },
+    { "slug": "0-3m", "label": "0–3m", "lo": "0m", "hi": "3m" },
+    { "slug": "3-6m", "label": "3–6m", "lo": "3m", "hi": "6m" },
+    { "slug": "6-9m", "label": "6–9m", "lo": "6m", "hi": "9m" },
+    { "slug": "9-12m", "label": "9–12m", "lo": "9m", "hi": "12m" },
+    { "slug": "12-18m", "label": "12–18m", "lo": "12m", "hi": "18m" },
+    { "slug": "18-24m", "label": "18–24m", "lo": "18m", "hi": "24m" },
+    { "slug": "2y", "label": "2Y", "lo": "2Y", "hi": "2Y" },
+    { "slug": "3y", "label": "3Y", "lo": "3Y", "hi": "3Y" }
   ],
   "colours": {
     "cream": "Butter",
