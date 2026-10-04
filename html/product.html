@@ -13,7 +13,7 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
+  <link rel="stylesheet" href="assets/css/components.css?v=6e87c2c7">
   <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/product.css?v=b6eec762">
@@ -238,7 +238,7 @@
   <!-- partial: announcement -->
   <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
   <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
-    <p class="topbar__text"><span>Free delivery over Rs 7,500</span><span class="topbar__extra"> · Secure online payment</span></p>
+    <p class="topbar__text"><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span><span class="topbar__extra"> · Secure online payment</span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
   </div>
   <!-- /partial: announcement -->
@@ -458,7 +458,7 @@
 
           <!-- TODO: confirm field names with the backend dev: colour, size, quantity (or a single variant id). Add @csrf and the product id. -->
           <!-- blade: data-low-stock-threshold comes from the admin setting; data-unit-price is the current (sale) price. Remove data-demo-cart (prototype cart drawer) at conversion. -->
-          <form class="buy" method="post" action="cart.html" data-buy-form data-product-name="Ribbed Cotton Bodysuit" data-product-slug="ribbed-cotton-bodysuit" data-unit-price="1490" data-low-stock-threshold="5" data-demo-cart novalidate>
+          <form class="buy" method="post" action="cart.html" data-buy-form data-product-name="Ribbed Cotton Bodysuit" data-product-slug="ribbed-cotton-bodysuit" data-unit-price="1490" data-low-stock-threshold="5" data-demo-cart novalidate data-cfg-attr="data-low-stock-threshold:low_stock_threshold">
             <fieldset class="buy__group">
               <legend class="buy__legend">Colour: <span data-colour-label>Lilac</span></legend>
               <div class="buy__options buy__options--colours">
@@ -523,7 +523,7 @@
           <ul class="assure" role="list">
             <!-- TODO: confirm the returns window with the client -->
             <!-- TODO: add official card marks and the Onepay badge from their brand kit -->
-            <li><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span><span>Free delivery over Rs 7,500</span></li>
+            <li><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span></li>
             <li><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg></span><span>Secure card payment · Visa &amp; Mastercard</span></li>
             <li><a class="assure__link" href="returns.html"><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-rotate-ccw"></use></svg></span><span>Easy returns · see our returns page</span></a></li>
           </ul>
@@ -543,7 +543,7 @@ Sample text. The real description comes from the product record in the backend.<
             <details class="accordion__item">
               <summary class="accordion__summary">Delivery &amp; returns <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
               <div class="accordion__body">
-                <p>Free delivery over Rs 7,500; standard delivery is Rs 450.</p>
+                <p>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span>; standard delivery is <span data-cfg="shipping_fee">Rs 450</span>.</p>
                 <p><a class="link-arrow" href="delivery.html">Delivery information <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
                 <p><a class="link-arrow" href="returns.html">Returns information <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
               </div>
@@ -1066,7 +1066,7 @@ Sample text. The real description comes from the product record in the backend.<
   <!-- partial: cart-drawer -->
   <!-- The inner .cart-panel is what the backend's /cart/panel returns; JS swaps it into [data-cart-drawer]. -->
   <div class="drawer drawer--right" id="cart-drawer" data-layer="cart" data-cart-drawer role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
-    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500">
+    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500" data-cfg-attr="data-free-threshold:free_shipping_over">
       <div class="drawer__head">
         <h2 class="drawer__title" id="cart-title">Your bag (<span data-cart-count-label>2</span>)</h2>
         <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close bag"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
@@ -1077,7 +1077,7 @@ Sample text. The real description comes from the product record in the backend.<
         <div class="drawer__body">
           <div class="cart-progress">
             <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
-            <progress class="progress" value="6300" max="7500" data-cart-progress>84%</progress>
+            <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
           </div>
           <ul class="cart-items" role="list" data-cart-items>
             <!-- loop: cart_items -->
@@ -1220,11 +1220,12 @@ Sample text. The real description comes from the product record in the backend.<
   </script>
 
   <!-- partial: scripts -->
-  <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=65261b3f" defer></script>
+  <script src="assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=2d353f92" defer></script>
   <!-- /partial: scripts -->
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
   <script src="assets/js/proto-product.js?v=fcd1f4ce" defer></script>
-  <script src="assets/js/product.js?v=6f549f01" defer></script>
+  <script src="assets/js/product.js?v=0ee55083" defer></script>
 </body>
 </html>

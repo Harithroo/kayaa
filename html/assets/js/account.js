@@ -1,4 +1,4 @@
-/* Auth, account and contact forms (production code: stays after the Blade conversion; the server repeats every rule).
+/* Auth, account and contact forms, confirmation dialogs and the verification banner (production code: stays after the Blade conversion; the server repeats every rule).
    For every <form data-auth-form data-summary="ID"> it provides:
    - client validation on submit: required, data-validate (email, phone), data-minlength, data-match="otherFieldId"
    - an error summary (role="alert", focus moves to it, links to each invalid field) plus inline messages with
@@ -130,7 +130,58 @@
     input.type = show ? 'text' : 'password';
   });
 
+  /* ---------- Confirmation dialogs (native <dialog>: modal focus trap, ESC closes, backdrop click closes) ----------
+     [data-dialog-open="ID"] opens the dialog with that id; [data-dialog-close] inside it closes it; focus returns to the opener
+     (or the page heading when the opener was hidden in the meantime, for example after the order was cancelled). */
+  document.addEventListener('click', function (e) {
+    var opener = e.target.closest('[data-dialog-open]');
+    if (opener) {
+      var dlg = document.getElementById(opener.getAttribute('data-dialog-open'));
+      if (dlg && dlg.showModal && !dlg.open) { dlg._opener = opener; dlg.showModal(); }
+      return;
+    }
+    var closer = e.target.closest('[data-dialog-close]');
+    if (closer) { var d = closer.closest('dialog'); if (d) d.close(); return; }
+    if (e.target.tagName === 'DIALOG' && e.target.open) e.target.close();   // a click on the backdrop
+  });
+  // keep Tab and Shift+Tab inside an open dialog (the page behind it is inert, but focus could otherwise leave through the browser UI)
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+    var dlg = document.querySelector('dialog[open]');
+    if (!dlg) return;
+    var items = $$('a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])', dlg).filter(function (n) { return n.getClientRects().length; });
+    if (!items.length) return;
+    var first = items[0], last = items[items.length - 1];
+    if (!dlg.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  $$('dialog').forEach(function (dlg) {
+    dlg.addEventListener('close', function () {
+      var back = dlg._opener;
+      if (back && back.getClientRects().length) { back.focus(); return; }
+      var h1 = $('main h1');
+      if (h1) { h1.setAttribute('tabindex', '-1'); h1.focus(); }
+    });
+  });
+
+  /* ---------- "Verify your email" banner: dismissal is remembered for the session only (sessionStorage) ---------- */
+  var BANNER_KEY = 'kayaa.verifyBannerDismissed';
+  function bannerDismissed() { try { return sessionStorage.getItem(BANNER_KEY) === '1'; } catch (e) { return false; } }
+  $$('[data-verify-banner]').forEach(function (banner) {
+    if (bannerDismissed()) banner.setAttribute('data-dismissed', '');
+    var btn = $('[data-verify-dismiss]', banner);
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      try { sessionStorage.setItem(BANNER_KEY, '1'); } catch (e) { /* the banner just comes back on the next page */ }
+      banner.setAttribute('data-dismissed', '');
+      var h1 = $('main h1');   // the button is about to disappear: keep focus somewhere sensible
+      if (h1) { h1.setAttribute('tabindex', '-1'); h1.focus(); }
+    });
+  });
+
   window.KayaaForms = {
+    bannerDismissed: bannerDismissed,
     addError: function (form, fieldId, text) { if (form && form._addError) form._addError(fieldId, text); }
   };
 })();

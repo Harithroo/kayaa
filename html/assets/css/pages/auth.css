@@ -39,3 +39,11 @@
 .auth-card .btn { margin-top: var(--space-1); }
 .auth-card .terms { font-size: var(--fs-ui); color: var(--ink-soft); line-height: 44px; }
 .auth-card .terms a { margin-inline: -4px; padding: 14px 4px; font-weight: 700; }
+
+/* Verify email: icon disc, stacked actions, a link-styled button */
+.auth-card__icon { display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: var(--space-4); border-radius: 50%; background: var(--tone-3); color: var(--primary-deep); }
+.auth-card__icon--error { background: var(--error-tint); color: var(--error); }
+.verify-actions { display: grid; gap: var(--space-3); margin-top: var(--space-5); }
+.verify-actions .btn { margin-top: 0; }
+button.auth-link--button { border: 0; background: none; font-family: inherit; cursor: pointer; color: var(--primary-deep); text-decoration: underline; text-underline-offset: 3px; touch-action: manipulation; }
+form.auth-switch { display: flex; justify-content: center; }

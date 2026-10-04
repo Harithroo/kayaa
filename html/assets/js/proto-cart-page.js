@@ -13,7 +13,7 @@
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
   var money = store.money;
-  var LOW = parseInt(page.getAttribute('data-low-stock-threshold'), 10) || 5;
+  var LOW = (window.KAYAA_CONFIG && window.KAYAA_CONFIG.low_stock_threshold) || parseInt(page.getAttribute('data-low-stock-threshold'), 10);
   var demo = new URLSearchParams(location.search).get('demo') || '';
 
   var list = $('[data-cart-lines]', page);

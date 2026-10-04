@@ -1,12 +1,15 @@
 /* PROTOTYPE ONLY - delete at Blade conversion: the server renders tracking, orders, reviews and the profile.
    Uses the sample orders in proto-orders.js. One file for track.html and the account pages, selected by data hooks.
    ?demo= and params:
-     track.html          ?ref=KYA-10234 (any reference; other values = not found), ?demo=throttle
+     track.html          ?ref=KY-261001-K8D3 prefills the reference ONLY (the lookup never runs on load); ?demo=throttle.
+                         The lookup needs the reference AND the mobile number (every sample order uses 071 234 5678).
      account/index.html  ?demo=empty, ?page=2
-     account/order.html  ?ref=KYA-10234 (shipped), 10201 delivered, 10198 cancelled, 10240 pending payment,
-                         10250 payment failed, 10180 refunded; unknown = not found
+     account/order.html  ?ref=KY-261001-K8D3 (shipped), KY-260914-T5R7 delivered, KY-260910-B2W6 cancelled, KY-261003-A3F9 pending payment,
+                         KY-261003-P7X2 payment failed, KY-260828-H4N8 refunded, KY-261002-W5N7 paid and waiting to be confirmed
+                         (refund line in the cancel dialog), KY-260720-E8Z5 delivered with missing history dates; unknown = not found
      account/reviews.html ?demo=empty
-     account/profile.html ?demo=saved | errors */
+     account/profile.html ?demo=saved | errors
+     any account page    ?demo=unverified | verified switches the demo account's email verification (remembered for the session) */
 (function () {
   'use strict';
 
@@ -20,8 +23,15 @@
   var demo = params.get('demo') || '';
   var money = orders.money;
   var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+
+  // demo account: ?demo=unverified | verified sets the verification flag for the session (and signs the demo user in)
   var session = store.session.get();
-  var user = session || { name: 'Amaya', email: 'amaya@example.com' };
+  if (demo === 'unverified' || demo === 'verified') {
+    session = { name: (session && session.name) || 'Amaya', email: (session && session.email) || 'amaya@example.com', verified: demo === 'verified' };
+    store.session.set(session);
+  }
+  var user = session || { name: 'Amaya', email: 'amaya@example.com', verified: true };
+  var verified = user.verified !== false;
 
   /* ---------- Log out (a POST form in Laravel) ---------- */
   $$('[data-logout-form]').forEach(function (f) {
@@ -32,34 +42,39 @@
     });
   });
 
+  /* ---------- "Verify your email" banner (shown by the server only while unverified; account.js remembers the dismissal) ---------- */
+  $$('[data-verify-banner]').forEach(function (banner) {
+    $$('[data-verify-email]', banner).forEach(function (n) { n.textContent = user.email; });
+    banner.hidden = verified;
+    var status = $('[data-verify-status]', banner);
+    var text = $('.verify-banner__text', banner);
+    var form = $('[data-resend-form]', banner);
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // announced politely, and the visible text confirms it
+      text.innerHTML = 'We’ve sent another link to <strong></strong>.';
+      $('strong', text).textContent = user.email;
+      if (status) status.textContent = 'We’ve sent another verification link.';
+    });
+  });
+
   /* ---------- Track ---------- */
   var track = $('[data-track-page]');
   if (track) {
     var form = $('[data-track-form]', track);
     var input = $('#ref', track);
-    var fieldError = $('#ref-error', track);
+    var phoneInput = $('#phone', track);
     var notFound = $('[data-track-alert="notfound"]', track);
     var throttle = $('[data-track-alert="throttle"]', track);
     var result = $('[data-track-result]', track);
 
-    var setInvalid = function (msg) {
-      input.setAttribute('aria-invalid', 'true');
-      input.setAttribute('aria-describedby', 'ref-error');
-      fieldError.textContent = msg;
-      fieldError.hidden = false;
-    };
-    var clearInvalid = function () { input.removeAttribute('aria-invalid'); input.removeAttribute('aria-describedby'); fieldError.hidden = true; };
-
-    var showResult = function (ref) {
-      notFound.hidden = true; result.hidden = true; clearInvalid();
-      if (!ref.trim()) { setInvalid('Enter your order reference.'); return; }
-      var o = orders.find(ref);
-      if (!o) { notFound.hidden = false; setInvalid('No order found for that reference.'); return; }
+    var showResult = function (o) {
+      notFound.hidden = true;
       $('[data-t-ref]', result).textContent = o.ref;
       $('[data-t-date]', result).textContent = 'Placed ' + orders.date(o.date);
       $('[data-t-updated]', result).textContent = 'Last updated ' + orders.date(o.updated);
       $('[data-t-badges]', result).innerHTML = orders.badge('Order status', o.status) + orders.badge('Payment status', o.paymentStatus);
-      orders.renderStepper($('[data-stepper-root]', result), o);
+      orders.renderStepper($('[data-stepper-root]', result), o);   // also shows "Resume payment" when it applies
       $('[data-t-lines]', result).innerHTML = orders.linesHtml(o);
       $('[data-t-subtotal]', result).textContent = money(o.subtotal);
       $('[data-t-delivery]', result).textContent = o.delivery === 0 ? 'Free' : money(o.delivery);
@@ -67,24 +82,32 @@
       // never name, address, phone or email here; the estimate is shown only while the order can still arrive
       var open = o.status !== 'delivered' && o.status !== 'cancelled' && o.paymentStatus !== 'refunded';
       $('[data-t-eta]', result).hidden = !open;
-      $('[data-t-eta-text]', result).textContent = 'Delivery estimate: ' + o.eta;
+      $('[data-t-eta-text]', result).textContent = 'Delivery estimate: ' + orders.etaText(o.eta);
       $$('[data-help-ref]', result).forEach(function (n) { n.textContent = o.ref; });
       result.hidden = false;
     };
 
+    // ?ref= prefills the reference only: the shopper still adds the mobile number and presses Track order
     var initial = params.get('ref');
+    if (initial) input.value = initial.trim().toUpperCase().slice(0, 20);
     if (demo === 'throttle') throttle.hidden = false;
-    else if (initial) { input.value = initial.toUpperCase(); showResult(initial); }
 
     form.addEventListener('submit', function (e) {
+      if (e.defaultPrevented) return;   // account.js found errors and moved focus to the summary
       e.preventDefault();
       throttle.hidden = true;
-      var ref = input.value;
+      var ref = input.value.trim().toUpperCase();
+      input.value = ref;
       var u = new URL(location.href);
-      u.searchParams.set('ref', ref.trim().toUpperCase());
+      u.searchParams.set('ref', ref);   // the reference only; the mobile number is never put in the URL
       u.searchParams.delete('demo');
       if (history.replaceState) history.replaceState(null, '', u.search);
-      showResult(ref);
+      var o = orders.find(ref, phoneInput.value);
+      if (!o) {
+        result.hidden = true; notFound.hidden = false; notFound.focus();
+        return;
+      }
+      showResult(o);
     });
   }
 
@@ -96,6 +119,10 @@
     var empty = demo === 'empty';
     $('[data-orders-filled]').hidden = empty;
     $('[data-orders-empty]').hidden = !empty;
+    // guest orders only join the list once the email is verified
+    $('[data-orders-note]').textContent = verified
+      ? 'Orders placed as a guest with this email also appear here.'
+      : 'Orders you placed as a guest will appear here after you verify your email.';
 
     var cardHtml = function (o) {
       var units = o.items.reduce(function (s, i) { return s + i.qty; }, 0);
@@ -134,15 +161,22 @@
   /* ---------- Order detail ---------- */
   var detail = $('[data-order-page]');
   if (detail) {
-    var o = orders.find(params.get('ref') || 'KYA-10234');
+    var o = orders.find(params.get('ref') || 'KY-261001-K8D3');
     $('[data-order-found]', detail).hidden = !o;
     $('[data-order-notfound]', detail).hidden = !!o;
     if (o) {
-      document.title = 'Order ' + o.ref + ' | Kayaa';
-      $('[data-o-ref]', detail).textContent = o.ref;
-      $('[data-o-date]', detail).textContent = 'Placed ' + orders.date(o.date);
-      $('[data-o-badges]', detail).innerHTML = orders.badge('Order status', o.status) + orders.badge('Payment status', o.paymentStatus);
-      orders.renderStepper($('[data-stepper-root]', detail), o);
+      var cancelBtn = $('[data-o-cancel]', detail);
+      var paint = function (cancelledNow) {
+        document.title = 'Order ' + o.ref + ' | Kayaa';
+        $('[data-o-ref]', detail).textContent = o.ref;
+        $('[data-o-date]', detail).textContent = 'Placed ' + orders.date(o.date);
+        $('[data-o-badges]', detail).innerHTML = orders.badge('Order status', o.status) + orders.badge('Payment status', o.paymentStatus);
+        orders.renderStepper($('[data-stepper-root]', detail), o);
+        $('[data-o-eta-wrap]', detail).hidden = o.status === 'cancelled' || o.status === 'delivered' || o.paymentStatus === 'refunded';
+        $('[data-o-retry]', detail).hidden = !orders.canResume(o);   // "Resume payment"
+        cancelBtn.hidden = !orders.canCancel(o);                     // "Cancel order" only while the status is pending
+        if (cancelledNow) $('[data-o-cancelled]', detail).hidden = false;
+      };
       var canReview = o.status === 'shipped' || o.status === 'delivered';
       $('[data-o-lines]', detail).innerHTML = o.items.map(function (it) {
         return '<li class="order-line"><div class="media media--tile order-line__media" data-placeholder style="--tone: ' + store.toneCss(it) + '">' +
@@ -158,10 +192,23 @@
       $('[data-o-pay-status]', detail).innerHTML = orders.badge('Payment status', o.paymentStatus);
       var a = o.address;
       $('[data-o-address]', detail).innerHTML = [a.name, a.line1, a.line2, a.city + (a.districtLabel ? ', ' + a.districtLabel : ''), a.phone].filter(Boolean).map(esc).join('<br>');
-      $('[data-o-eta]', detail).textContent = 'Estimated delivery to ' + a.districtLabel + ': ' + o.eta;
-      $('[data-o-eta-wrap]', detail).hidden = o.status === 'cancelled' || o.status === 'delivered' || o.paymentStatus === 'refunded';
+      $('[data-o-eta]', detail).textContent = 'Estimated delivery to ' + a.districtLabel + ': ' + orders.etaText(o.eta);
+      // the Track link carries the reference only (the shopper adds the mobile number there)
       $('[data-o-track]', detail).setAttribute('href', '../track.html?ref=' + encodeURIComponent(o.ref));
-      $('[data-o-retry]', detail).hidden = !(o.paymentStatus === 'pending' || o.paymentStatus === 'failed') || o.status === 'cancelled';
+      paint(false);
+
+      // cancel dialog: the refund line only when the payment was taken; confirming cancels the order (remembered for this session)
+      $('[data-refund-note]', detail).hidden = o.paymentStatus !== 'paid';
+      var dlg = $('#cancel-dialog', detail);
+      $('[data-cancel-form]', dlg).addEventListener('submit', function (e) {
+        e.preventDefault();
+        orders.cancel(o.ref);
+        o = orders.find(o.ref);
+        paint(true);
+        // focus goes to the confirmation alert once the dialog has finished closing (account.js has already returned focus by then)
+        dlg.addEventListener('close', function () { $('[data-o-cancelled]', detail).focus(); }, { once: true });
+        dlg.close();
+      });
     }
   }
 

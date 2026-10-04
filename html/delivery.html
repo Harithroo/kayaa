@@ -12,7 +12,7 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
+  <link rel="stylesheet" href="assets/css/components.css?v=6e87c2c7">
   <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/content.css?v=7a025b72">
@@ -214,7 +214,7 @@
   <!-- partial: announcement -->
   <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
   <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
-    <p class="topbar__text"><span>Free delivery over Rs 7,500</span><span class="topbar__extra"> · Secure online payment</span></p>
+    <p class="topbar__text"><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span><span class="topbar__extra"> · Secure online payment</span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
   </div>
   <!-- /partial: announcement -->
@@ -341,8 +341,8 @@
         <div class="content__main">
           <div class="prose">
             <h2 id="fee">Delivery fee <a class="anchor" href="#fee" aria-label="Link to this section: Delivery fee"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
-            <!-- TODO: confirm the fee is a flat rule and not district-based (config: Rs 450, free from Rs 7,500) -->
-            <p>Delivery costs <strong>Rs 450</strong>. Orders of <strong>Rs 7,500</strong> or more are delivered free.</p>
+            <!-- TODO: confirm the fee is a flat rule and not district-based (site config: shipping_fee, free_shipping_over) -->
+            <p>Delivery costs <strong><span data-cfg="shipping_fee">Rs 450</span></strong>. Orders of <strong><span data-cfg="free_shipping_over">Rs 7,500</span></strong> or more are delivered free.</p>
 
             <h2 id="how">How delivery works <a class="anchor" href="#how" aria-label="Link to this section: How delivery works"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h2>
             <!-- TODO: confirm each step and its timing with the client -->
@@ -357,6 +357,111 @@
             <!-- The estimates below must come from the same data as the checkout ETA (config/kayaa.php district list, one source in Blade). -->
             <!-- TODO: placeholder estimates, confirm with the client -->
             <p>Estimated delivery time for each district. These are placeholder estimates.</p>
+            <!-- The estimates come from the same data as the checkout ETA: min and max days per district (two integers each) from one source in Blade. The text is made by Kayaa.formatEta (app.js); the brackets mark placeholder values (TODO: remove data-eta-placeholder when the real data arrives). -->
+            <script type="application/json" id="district-eta" data-eta-placeholder>
+              {
+                "ampara": {
+                  "min": 4,
+                  "max": 6
+                },
+                "anuradhapura": {
+                  "min": 4,
+                  "max": 6
+                },
+                "badulla": {
+                  "min": 4,
+                  "max": 6
+                },
+                "batticaloa": {
+                  "min": 4,
+                  "max": 6
+                },
+                "colombo": {
+                  "min": 2,
+                  "max": 3
+                },
+                "galle": {
+                  "min": 3,
+                  "max": 4
+                },
+                "gampaha": {
+                  "min": 2,
+                  "max": 3
+                },
+                "hambantota": {
+                  "min": 3,
+                  "max": 4
+                },
+                "jaffna": {
+                  "min": 4,
+                  "max": 6
+                },
+                "kalutara": {
+                  "min": 2,
+                  "max": 3
+                },
+                "kandy": {
+                  "min": 3,
+                  "max": 4
+                },
+                "kegalle": {
+                  "min": 3,
+                  "max": 4
+                },
+                "kilinochchi": {
+                  "min": 4,
+                  "max": 6
+                },
+                "kurunegala": {
+                  "min": 3,
+                  "max": 4
+                },
+                "mannar": {
+                  "min": 4,
+                  "max": 6
+                },
+                "matale": {
+                  "min": 3,
+                  "max": 4
+                },
+                "matara": {
+                  "min": 3,
+                  "max": 4
+                },
+                "monaragala": {
+                  "min": 4,
+                  "max": 6
+                },
+                "mullaitivu": {
+                  "min": 4,
+                  "max": 6
+                },
+                "nuwara-eliya": {
+                  "min": 3,
+                  "max": 4
+                },
+                "polonnaruwa": {
+                  "min": 4,
+                  "max": 6
+                },
+                "puttalam": {
+                  "min": 3,
+                  "max": 4
+                },
+                "ratnapura": {
+                  "min": 3,
+                  "max": 4
+                },
+                "trincomalee": {
+                  "min": 4,
+                  "max": 6
+                },
+                "vavuniya": {
+                  "min": 4,
+                  "max": 6
+                }
+              }
+            </script>
             <!-- loop: provinces -->
             <h3 id="western">Western Province <a class="anchor" href="#western" aria-label="Link to this section: Western Province"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg></a></h3>
             <div class="table-wrap">
@@ -367,9 +472,9 @@
                 </thead>
                 <tbody>
                   <!-- loop: districts -->
-                  <tr><th scope="row">Colombo</th><td data-label="Estimated delivery">[2–3 working days]</td></tr>
-                  <tr><th scope="row">Gampaha</th><td data-label="Estimated delivery">[2–3 working days]</td></tr>
-                  <tr><th scope="row">Kalutara</th><td data-label="Estimated delivery">[2–3 working days]</td></tr>
+                  <tr><th scope="row">Colombo</th><td data-label="Estimated delivery" data-eta="colombo">[2–3 working days]</td></tr>
+                  <tr><th scope="row">Gampaha</th><td data-label="Estimated delivery" data-eta="gampaha">[2–3 working days]</td></tr>
+                  <tr><th scope="row">Kalutara</th><td data-label="Estimated delivery" data-eta="kalutara">[2–3 working days]</td></tr>
                   <!-- /loop -->
                 </tbody>
               </table>
@@ -383,9 +488,9 @@
                 </thead>
                 <tbody>
                   <!-- loop: districts -->
-                  <tr><th scope="row">Kandy</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
-                  <tr><th scope="row">Matale</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
-                  <tr><th scope="row">Nuwara Eliya</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Kandy</th><td data-label="Estimated delivery" data-eta="kandy">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Matale</th><td data-label="Estimated delivery" data-eta="matale">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Nuwara Eliya</th><td data-label="Estimated delivery" data-eta="nuwara-eliya">[3–4 working days]</td></tr>
                   <!-- /loop -->
                 </tbody>
               </table>
@@ -399,9 +504,9 @@
                 </thead>
                 <tbody>
                   <!-- loop: districts -->
-                  <tr><th scope="row">Galle</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
-                  <tr><th scope="row">Matara</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
-                  <tr><th scope="row">Hambantota</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Galle</th><td data-label="Estimated delivery" data-eta="galle">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Matara</th><td data-label="Estimated delivery" data-eta="matara">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Hambantota</th><td data-label="Estimated delivery" data-eta="hambantota">[3–4 working days]</td></tr>
                   <!-- /loop -->
                 </tbody>
               </table>
@@ -415,11 +520,11 @@
                 </thead>
                 <tbody>
                   <!-- loop: districts -->
-                  <tr><th scope="row">Jaffna</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
-                  <tr><th scope="row">Kilinochchi</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
-                  <tr><th scope="row">Mannar</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
-                  <tr><th scope="row">Mullaitivu</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
-                  <tr><th scope="row">Vavuniya</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Jaffna</th><td data-label="Estimated delivery" data-eta="jaffna">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Kilinochchi</th><td data-label="Estimated delivery" data-eta="kilinochchi">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Mannar</th><td data-label="Estimated delivery" data-eta="mannar">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Mullaitivu</th><td data-label="Estimated delivery" data-eta="mullaitivu">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Vavuniya</th><td data-label="Estimated delivery" data-eta="vavuniya">[4–6 working days]</td></tr>
                   <!-- /loop -->
                 </tbody>
               </table>
@@ -433,9 +538,9 @@
                 </thead>
                 <tbody>
                   <!-- loop: districts -->
-                  <tr><th scope="row">Batticaloa</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
-                  <tr><th scope="row">Ampara</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
-                  <tr><th scope="row">Trincomalee</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Batticaloa</th><td data-label="Estimated delivery" data-eta="batticaloa">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Ampara</th><td data-label="Estimated delivery" data-eta="ampara">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Trincomalee</th><td data-label="Estimated delivery" data-eta="trincomalee">[4–6 working days]</td></tr>
                   <!-- /loop -->
                 </tbody>
               </table>
@@ -449,8 +554,8 @@
                 </thead>
                 <tbody>
                   <!-- loop: districts -->
-                  <tr><th scope="row">Kurunegala</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
-                  <tr><th scope="row">Puttalam</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Kurunegala</th><td data-label="Estimated delivery" data-eta="kurunegala">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Puttalam</th><td data-label="Estimated delivery" data-eta="puttalam">[3–4 working days]</td></tr>
                   <!-- /loop -->
                 </tbody>
               </table>
@@ -464,8 +569,8 @@
                 </thead>
                 <tbody>
                   <!-- loop: districts -->
-                  <tr><th scope="row">Anuradhapura</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
-                  <tr><th scope="row">Polonnaruwa</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Anuradhapura</th><td data-label="Estimated delivery" data-eta="anuradhapura">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Polonnaruwa</th><td data-label="Estimated delivery" data-eta="polonnaruwa">[4–6 working days]</td></tr>
                   <!-- /loop -->
                 </tbody>
               </table>
@@ -479,8 +584,8 @@
                 </thead>
                 <tbody>
                   <!-- loop: districts -->
-                  <tr><th scope="row">Badulla</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
-                  <tr><th scope="row">Monaragala</th><td data-label="Estimated delivery">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Badulla</th><td data-label="Estimated delivery" data-eta="badulla">[4–6 working days]</td></tr>
+                  <tr><th scope="row">Monaragala</th><td data-label="Estimated delivery" data-eta="monaragala">[4–6 working days]</td></tr>
                   <!-- /loop -->
                 </tbody>
               </table>
@@ -494,8 +599,8 @@
                 </thead>
                 <tbody>
                   <!-- loop: districts -->
-                  <tr><th scope="row">Ratnapura</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
-                  <tr><th scope="row">Kegalle</th><td data-label="Estimated delivery">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Ratnapura</th><td data-label="Estimated delivery" data-eta="ratnapura">[3–4 working days]</td></tr>
+                  <tr><th scope="row">Kegalle</th><td data-label="Estimated delivery" data-eta="kegalle">[3–4 working days]</td></tr>
                   <!-- /loop -->
                 </tbody>
               </table>
@@ -669,7 +774,7 @@
   <!-- partial: cart-drawer -->
   <!-- The inner .cart-panel is what the backend's /cart/panel returns; JS swaps it into [data-cart-drawer]. -->
   <div class="drawer drawer--right" id="cart-drawer" data-layer="cart" data-cart-drawer role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
-    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500">
+    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500" data-cfg-attr="data-free-threshold:free_shipping_over">
       <div class="drawer__head">
         <h2 class="drawer__title" id="cart-title">Your bag (<span data-cart-count-label>2</span>)</h2>
         <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close bag"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
@@ -680,7 +785,7 @@
         <div class="drawer__body">
           <div class="cart-progress">
             <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
-            <progress class="progress" value="6300" max="7500" data-cart-progress>84%</progress>
+            <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
           </div>
           <ul class="cart-items" role="list" data-cart-items>
             <!-- loop: cart_items -->
@@ -799,9 +904,10 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=65261b3f" defer></script>
+  <script src="assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=2d353f92" defer></script>
   <!-- /partial: scripts -->
-  <script src="assets/js/content.js?v=a2894b72" defer></script>
+  <script src="assets/js/content.js?v=bdf3d4f5" defer></script>
 </body>
 </html>

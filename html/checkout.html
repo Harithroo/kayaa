@@ -12,7 +12,7 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
+  <link rel="stylesheet" href="assets/css/components.css?v=6e87c2c7">
   <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/checkout.css?v=badd490b">
@@ -265,7 +265,7 @@
           </ul>
           <dl class="totals">
             <div class="totals__row"><dt>Subtotal</dt><dd data-summary-subtotal>Rs 6,300</dd></div>
-            <div class="totals__row"><dt>Delivery</dt><dd data-summary-delivery>Rs 450</dd></div>
+            <div class="totals__row"><dt>Delivery</dt><dd data-summary-delivery><span data-cfg="shipping_fee">Rs 450</span></dd></div>
             <div class="totals__row totals__row--total"><dt>Total</dt><dd data-summary-total>Rs 6,750</dd></div>
           </dl>
           <p class="eta-line" data-eta-summary hidden></p>
@@ -282,15 +282,16 @@
               <p class="checkout-card__aside" data-account-aside>Have an account? <a href="account/login.html">Log in</a></p>
               <div class="checkout-fields">
           <div class="field" data-field>
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" required inputmode="email" autocomplete="email" data-validate="email" data-required-message="Enter your email address" data-invalid-message="Enter a valid email address, for example name@example.com">
-            
+            <label for="email">Email (optional)</label>
+            <!-- Email is optional for guests (nullable on the order); the mobile number is the required identifier and what /track matches on. -->
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" data-validate="email" aria-describedby="email-hint" data-invalid-message="Enter a valid email address, for example name@example.com">
+            <p class="field__hint" id="email-hint">If you create an account later with this email, you'll find this order there.</p>
             <p class="field__error" id="email-error" hidden></p>
           </div>
           <div class="field" data-field>
             <label for="phone">Mobile number</label>
-            <input id="phone" name="phone" type="tel" required inputmode="tel" autocomplete="tel" data-validate="phone" aria-describedby="phone-hint" data-required-message="Enter your mobile number" data-invalid-message="Enter a valid Sri Lankan mobile number, for example 071 234 5678">
-            <p class="field__hint" id="phone-hint">For example 071 234 5678</p>
+            <input id="phone" name="phone" type="tel" required inputmode="tel" autocomplete="tel" data-validate="phone" aria-describedby="phone-hint" placeholder="071 234 5678" data-required-message="Enter your mobile number" data-invalid-message="Enter a valid Sri Lankan mobile number, for example 071 234 5678">
+            <p class="field__hint" id="phone-hint">We use your mobile number to deliver your order and to track it.</p>
             <p class="field__error" id="phone-error" hidden></p>
           </div>
               </div>
@@ -369,7 +370,7 @@
                 <div>
                   <!-- TODO: delivery estimate data per district (placeholder table below); delivery fee is the flat rule from config -->
                   <p class="eta-card__title" data-eta-text aria-live="polite">Choose your district to see the delivery estimate</p>
-                  <p class="eta-card__fee" data-fee-text>Delivery: Rs 450 (free from Rs 7,500)</p>
+                  <p class="eta-card__fee" data-fee-text>Delivery: <span data-cfg="shipping_fee">Rs 450</span> (free from <span data-cfg="free_shipping_over">Rs 7,500</span>)</p>
                 </div>
               </div>
             </section>
@@ -389,7 +390,7 @@
               <p class="checkout-terms">By paying you agree to our <a href="terms.html">Terms</a> and <a href="returns.html">Returns policy</a>.</p>
               <button type="submit" class="btn btn--primary btn--lg btn--block pay-btn" data-pay-btn>
                 <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-lock"></use></svg>
-                <span data-pay-label>Pay Rs 6,750</span>
+                <!-- The label comes from config (pay_button_label); it never contains the amount, the total is in the summary. --><span data-cfg="pay_button_label" data-pay-label>Continue to payment</span>
                 <span class="spinner" aria-hidden="true" hidden></span>
               </button>
               <p class="pay-helper"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-lock"></use></svg> Secure payment via Onepay</p>
@@ -408,7 +409,7 @@
           </ul>
           <dl class="totals">
             <div class="totals__row"><dt>Subtotal</dt><dd data-summary-subtotal>Rs 6,300</dd></div>
-            <div class="totals__row"><dt>Delivery</dt><dd data-summary-delivery>Rs 450</dd></div>
+            <div class="totals__row"><dt>Delivery</dt><dd data-summary-delivery><span data-cfg="shipping_fee">Rs 450</span></dd></div>
             <div class="totals__row totals__row--total"><dt>Total</dt><dd data-summary-total>Rs 6,750</dd></div>
           </dl>
           <p class="eta-line" data-eta-summary hidden></p>
@@ -417,34 +418,34 @@
         </aside>
       </div>
 
-      <!-- TODO: placeholder estimates, replace with real data per district -->
+      <!-- TODO: placeholder estimates. The backend supplies two integers per district (min_days, max_days); the wording ("2–4 working days") is made by Kayaa.formatEta in app.js. Blade prints this block from the same data as the delivery page. -->
       <script type="application/json" id="district-eta">
   {
-    "ampara": "4–6 working days",
-    "anuradhapura": "4–6 working days",
-    "badulla": "4–6 working days",
-    "batticaloa": "4–6 working days",
-    "colombo": "2–3 working days",
-    "galle": "3–4 working days",
-    "gampaha": "2–3 working days",
-    "hambantota": "3–4 working days",
-    "jaffna": "4–6 working days",
-    "kalutara": "2–3 working days",
-    "kandy": "3–4 working days",
-    "kegalle": "3–4 working days",
-    "kilinochchi": "4–6 working days",
-    "kurunegala": "3–4 working days",
-    "mannar": "4–6 working days",
-    "matale": "3–4 working days",
-    "matara": "3–4 working days",
-    "monaragala": "4–6 working days",
-    "mullaitivu": "4–6 working days",
-    "nuwara-eliya": "3–4 working days",
-    "polonnaruwa": "4–6 working days",
-    "puttalam": "3–4 working days",
-    "ratnapura": "3–4 working days",
-    "trincomalee": "4–6 working days",
-    "vavuniya": "4–6 working days"
+    "ampara": { "min": 4, "max": 6 },
+    "anuradhapura": { "min": 4, "max": 6 },
+    "badulla": { "min": 4, "max": 6 },
+    "batticaloa": { "min": 4, "max": 6 },
+    "colombo": { "min": 2, "max": 3 },
+    "galle": { "min": 3, "max": 4 },
+    "gampaha": { "min": 2, "max": 3 },
+    "hambantota": { "min": 3, "max": 4 },
+    "jaffna": { "min": 4, "max": 6 },
+    "kalutara": { "min": 2, "max": 3 },
+    "kandy": { "min": 3, "max": 4 },
+    "kegalle": { "min": 3, "max": 4 },
+    "kilinochchi": { "min": 4, "max": 6 },
+    "kurunegala": { "min": 3, "max": 4 },
+    "mannar": { "min": 4, "max": 6 },
+    "matale": { "min": 3, "max": 4 },
+    "matara": { "min": 3, "max": 4 },
+    "monaragala": { "min": 4, "max": 6 },
+    "mullaitivu": { "min": 4, "max": 6 },
+    "nuwara-eliya": { "min": 3, "max": 4 },
+    "polonnaruwa": { "min": 4, "max": 6 },
+    "puttalam": { "min": 3, "max": 4 },
+    "ratnapura": { "min": 3, "max": 4 },
+    "trincomalee": { "min": 4, "max": 6 },
+    "vavuniya": { "min": 4, "max": 6 }
   }
       </script>
     </div>
@@ -466,11 +467,12 @@
   <!-- /partial: footer-minimal -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=65261b3f" defer></script>
+  <script src="assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=2d353f92" defer></script>
   <!-- /partial: scripts -->
-  <script src="assets/js/checkout.js?v=9848aa00" defer></script>
+  <script src="assets/js/checkout.js?v=e9ee805d" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="assets/js/proto-checkout.js?v=b61f08eb" defer></script>
+  <script src="assets/js/proto-checkout.js?v=eae1805b" defer></script>
 </body>
 </html>

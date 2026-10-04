@@ -5,7 +5,8 @@
    Line item: { id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone }
    window.KayaaCart: get() totals() add(item, opts) update(id, qty) remove(id) clear() money(n) toneCss(item)
                      order.save/get/clear/nextRef (the simulated checkout order)
-                     session.get/set/clear (the demo signed-in flag: { name, email })
+                     clear(silent) empties the bag; the checkout calls it when the order is created
+                     session.get/set/clear (the demo signed-in flag: { name, email, verified })
    Events on document: "kayaa:cart" after any change; "kayaa:open-cart" when add() is called with { open: true, trigger }.
    ?demo= on cart.html and checkout.html (oos-line, checkout-oos, low-stock, price-changed, free-delivery, empty) is applied
    as a view over the stored items and never saved, except empty, which clears the bag. */
@@ -14,10 +15,10 @@
 
   var KEY = 'kayaa.proto.cart.v1';
   var ORDER_KEY = 'kayaa.proto.order.v1';
-  var SEQ_KEY = 'kayaa.proto.orderseq.v1';
   var MAX = 10;                // quantity cap per line
-  var FREE_AT = 7500;          // free delivery from this subtotal (config)
-  var FEE = 450;               // flat delivery fee (config; TODO confirm it is not district-based)
+  var CFG = window.KAYAA_CONFIG || {};   // tools/site-config.json via assets/js/site-config.js (Blade: view variables)
+  var FREE_AT = CFG.free_shipping_over;  // free delivery from this subtotal
+  var FEE = CFG.shipping_fee;            // flat delivery fee (TODO confirm it is not district-based)
   var COLOUR_TONE = { lilac: 'var(--tone-4)', cream: 'var(--swatch-cream)', sky: 'var(--sky-tint)' };
 
   var memory = {};
@@ -129,17 +130,21 @@
     save(load().filter(function (it) { return it.id !== id; }));
     notify();
   }
-  function clear() { save([]); notify(); }
+  // silent = true empties the bag without firing the change event (the checkout empties it as the order is created, while its page is still showing)
+  function clear(silent) { save([]); if (!silent) notify(); }
 
   var order = {
     save: function (o) { write(ORDER_KEY, JSON.stringify(o)); },
     get: function () { try { return JSON.parse(read(ORDER_KEY)); } catch (e) { return null; } },
     clear: function () { drop(ORDER_KEY); },
-    // TODO: real reference format (the prototype counts up from KYA-10234)
+    // Reference format KY-YYMMDD-XXXX (uppercase, max 20 characters; the backend never assumes digits only or a fixed length)
     nextRef: function () {
-      var n = (parseInt(read(SEQ_KEY), 10) || 10260) + 1;   // clear of the sample orders (KYA-10135 to KYA-10250)
-      write(SEQ_KEY, String(n));
-      return 'KYA-' + n;
+      var d = new Date();
+      var two = function (n) { return (n < 10 ? '0' : '') + n; };
+      var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      var tail = '';
+      for (var i = 0; i < 4; i++) tail += chars.charAt(Math.floor(Math.random() * chars.length));
+      return 'KY-' + two(d.getFullYear() % 100) + two(d.getMonth() + 1) + two(d.getDate()) + '-' + tail;
     }
   };
 
@@ -150,8 +155,11 @@
     clear: function () { drop(SESSION_KEY); }
   };
 
+  // small session-scoped key/value store for the other prototype scripts (cancelled orders, dismissed banners)
+  var kv = { get: read, set: write, drop: drop };
+
   window.KayaaCart = {
-    session: session,
+    session: session, kv: kv,
     get: get, totals: totals, add: add, update: update, remove: remove, clear: clear, order: order,
     money: money, slugify: slugify, MAX: MAX, FREE_AT: FREE_AT, FEE: FEE,
     toneCss: function (item) {

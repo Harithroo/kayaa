@@ -13,7 +13,7 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
+  <link rel="stylesheet" href="assets/css/components.css?v=6e87c2c7">
   <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/review.css?v=5a9d40b6">
@@ -215,7 +215,7 @@
   <!-- partial: announcement -->
   <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
   <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
-    <p class="topbar__text"><span>Free delivery over Rs 7,500</span><span class="topbar__extra"> · Secure online payment</span></p>
+    <p class="topbar__text"><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span><span class="topbar__extra"> · Secure online payment</span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
   </div>
   <!-- /partial: announcement -->
@@ -362,11 +362,11 @@
           <h2 id="review-g2">Buy</h2>
           <ul class="review__list" role="list">
             <li class="review__item">
-              <div class="review__text"><a class="review__name" href="account/register.html">Walk the account flow</a><p class="review__note">Register, then My orders, an order, track it, My reviews, Profile, and log out.</p></div>
+              <div class="review__text"><a class="review__name" href="account/register.html">Walk the account flow</a><p class="review__note">Register, then verify your email, My orders, an order (try Cancel order on a pending one), track it with reference and mobile, My reviews, Profile, and log out. Add ?demo=verified to the verify-email page to see the verified landing.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
             </li>
             <li class="review__item">
-              <div class="review__text"><a class="review__name" href="product.html">Walk the full flow</a><p class="review__note">Add to bag, then cart, checkout, simulated payment, thank-you. Start on the product page; the demo bag lives in this browser tab.</p></div>
+              <div class="review__text"><a class="review__name" href="product.html">Walk the full flow</a><p class="review__note">Add to bag, then cart, checkout (no email needed), simulated payment with each outcome, thank-you, and track the order with its reference and mobile. The bag is emptied when the order is created. The demo bag lives in this browser tab.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
             </li>
             <li class="review__item">
@@ -375,19 +375,23 @@
               <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="cart.html">Filled</a></li><li><a href="cart.html?demo=empty">Empty</a></li><li><a href="cart.html?demo=oos-line">Unavailable line</a></li><li><a href="cart.html?demo=low-stock">Low stock</a></li><li><a href="cart.html?demo=price-changed">Price changed</a></li><li><a href="cart.html?demo=free-delivery">Free delivery</a></li><li><a href="cart.html?demo=checkout-oos">Redirected from checkout</a></li></ul></div>
             </li>
             <li class="review__item">
-              <div class="review__text"><a class="review__name" href="checkout.html">Checkout</a><p class="review__note">Minimal shell, contact, delivery address with district ETA, card payment hand-off, validation and the loading state.</p></div>
+              <div class="review__text"><a class="review__name" href="checkout.html">Checkout</a><p class="review__note">Minimal shell. Email is optional, the mobile number is required; delivery address (no postal code) with the district ETA, the config-driven pay button, validation and the loading state. The bag is emptied when the order is created.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
               <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="checkout.html">Clean</a></li><li><a href="checkout.html?demo=errors">With errors</a></li><li><a href="checkout.html?demo=signed-in">Signed in (ETA shown)</a></li><li><a href="checkout.html?demo=throttle">Rate limited</a></li><li><a href="checkout.html?demo=gateway-error">Gateway error</a></li><li><a href="checkout.html?demo=empty">Empty bag</a></li></ul></div>
             </li>
             <li class="review__item">
-              <div class="review__text"><a class="review__name" href="thank-you.html">Thank you</a><p class="review__note">The four payment outcomes with the order reference, items, delivery and payment status.</p></div>
+              <div class="review__text"><a class="review__name" href="thank-you.html">Thank you</a><p class="review__note">The five outcomes (paid, pending, failed, cancelled, expired) with the order reference, items, delivery and payment status. In production this page is reached only through a signed, expiring link.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="thank-you.html?state=paid">Paid</a></li><li><a href="thank-you.html?state=pending">Pending</a></li><li><a href="thank-you.html?state=failed">Failed</a></li><li><a href="thank-you.html?state=cancelled">Cancelled</a></li></ul></div>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="thank-you.html?state=paid">Paid</a>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="thank-you.html?state=paid">Paid</a></li><li><a href="thank-you.html?state=paid&demo=emails-on">Paid, confirmation email on</a></li><li><a href="thank-you.html?state=pending">Pending</a></li><li><a href="thank-you.html?state=failed">Failed</a></li><li><a href="thank-you.html?state=cancelled">Cancelled</a></li><li><a href="thank-you.html?state=expired">Link expired</a></li></ul></div>
+            </li><li><a href="thank-you.html?state=pending">Pending</a></li><li><a href="thank-you.html?state=failed">Failed</a></li><li><a href="thank-you.html?state=cancelled">Cancelled</a></li></ul></div>
             </li>
             <li class="review__item">
-              <div class="review__text"><a class="review__name" href="track.html">Track order</a><p class="review__note">Look up an order by reference: the stepper, items and totals, with no personal data.</p></div>
+              <div class="review__text"><a class="review__name" href="track.html">Track order</a><p class="review__note">Look up an order with its reference AND the mobile number (every sample order uses 071 234 5678). The links prefill the reference only; type the number and press Track order. No personal data in the result.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="track.html?ref=KYA-10234">Shipped</a></li><li><a href="track.html?ref=KYA-10201">Delivered</a></li><li><a href="track.html?ref=KYA-10198">Cancelled</a></li><li><a href="track.html?ref=KYA-10240">Pending payment</a></li><li><a href="track.html?ref=KYA-10250">Payment failed</a></li><li><a href="track.html?ref=KYA-10180">Refunded</a></li><li><a href="track.html?ref=KYA-99999">Not found</a></li><li><a href="track.html?demo=throttle">Rate limited</a></li></ul></div>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="track.html?ref=KY-261001-K8D3">Shipped</a>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="track.html?ref=KY-261001-K8D3">Shipped</a></li><li><a href="track.html?ref=KY-260914-T5R7">Delivered</a></li><li><a href="track.html?ref=KY-260910-B2W6">Cancelled</a></li><li><a href="track.html?ref=KY-261003-A3F9">Pending payment</a></li><li><a href="track.html?ref=KY-261003-P7X2">Payment failed (Resume payment)</a></li><li><a href="track.html?ref=KY-260828-H4N8">Refunded</a></li><li><a href="track.html?ref=KY-260720-E8Z5">Missing step dates</a></li><li><a href="track.html?ref=KY-000000-NONE">Not found (unknown reference)</a></li><li><a href="track.html?demo=throttle">Rate limited</a></li></ul></div>
+            </li><li><a href="track.html?ref=KY-260914-T5R7">Delivered</a></li><li><a href="track.html?ref=KY-260910-B2W6">Cancelled</a></li><li><a href="track.html?ref=KY-261003-A3F9">Pending payment</a></li><li><a href="track.html?ref=KY-261003-P7X2">Payment failed</a></li><li><a href="track.html?ref=KY-260828-H4N8">Refunded</a></li><li><a href="track.html?ref=KY-000000-NONE">Not found</a></li><li><a href="track.html?demo=throttle">Rate limited</a></li></ul></div>
             </li>
           </ul>
         </section>
@@ -396,7 +400,7 @@
           <h2 id="review-g3">Account</h2>
           <ul class="review__list" role="list">
             <li class="review__item">
-              <div class="review__text"><a class="review__name" href="account/register.html">Register</a><p class="review__note">Create an account (optional). Try email taken@example.com.</p></div>
+              <div class="review__text"><a class="review__name" href="account/register.html">Register</a><p class="review__note">Create an account (optional). It goes on to the verify-email page. Try email taken@example.com.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
               <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/register.html?demo=errors">Errors</a></li><li><a href="account/register.html?demo=throttle">Rate limited</a></li></ul></div>
             </li>
@@ -413,17 +417,26 @@
             <li class="review__item">
               <div class="review__text"><a class="review__name" href="account/reset-password.html">Reset password</a><p class="review__note">Choose a new password.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/reset-password.html?demo=errors">Errors</a></li><li><a href="account/reset-password.html?demo=invalid-link">Invalid or expired link</a></li></ul></div>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/reset-password.html?demo=errors">Errors</a></li>
+            <li class="review__item">
+              <div class="review__text"><a class="review__name" href="account/verify-email.html">Verify email</a><p class="review__note">The Check your email page after register, with Resend email, Change email and Continue to your account, plus the landing states of the emailed link.</p></div>
+              <span class="badge badge--lilac">Ready to review</span>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/verify-email.html">Check your email</a></li><li><a href="account/verify-email.html?demo=sent">Link resent</a></li><li><a href="account/verify-email.html?demo=throttle">Rate limited</a></li><li><a href="account/verify-email.html?demo=verified">Email verified (landing)</a></li><li><a href="account/verify-email.html?demo=invalid">Invalid or expired link</a></li></ul></div>
+            </li><li><a href="account/reset-password.html?demo=invalid-link">Invalid or expired link</a></li></ul></div>
             </li>
             <li class="review__item">
-              <div class="review__text"><a class="review__name" href="account/index.html">My orders</a><p class="review__note">Order cards with status badges, pagination and the guest-orders note.</p></div>
+              <div class="review__text"><a class="review__name" href="account/index.html">My orders</a><p class="review__note">Order cards with status badges, pagination (13 samples, 3 pages) and the guest-orders note, which depends on email verification.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/index.html?page=2">Page 2</a></li><li><a href="account/index.html?demo=empty">Empty</a></li></ul></div>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/index.html?page=2">Page 2</a>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/index.html?page=2">Page 2</a></li><li><a href="account/index.html?page=3">Page 3</a></li><li><a href="account/index.html?demo=empty">Empty</a></li><li><a href="account/index.html?demo=unverified">Unverified (banner and note)</a></li><li><a href="account/index.html?demo=verified">Verified</a></li></ul></div>
+            </li><li><a href="account/index.html?demo=empty">Empty</a></li></ul></div>
             </li>
             <li class="review__item">
-              <div class="review__text"><a class="review__name" href="account/order.html">Order details</a><p class="review__note">One order with the stepper, items, totals, delivery and actions.</p></div>
+              <div class="review__text"><a class="review__name" href="account/order.html">Order details</a><p class="review__note">One order with the stepper (a date per step when known), items, totals, delivery and actions: Track, Resume payment and Cancel order (pending orders only).</p></div>
               <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/order.html?ref=KYA-10234">Shipped</a></li><li><a href="account/order.html?ref=KYA-10201">Delivered</a></li><li><a href="account/order.html?ref=KYA-10198">Cancelled</a></li><li><a href="account/order.html?ref=KYA-10240">Pending payment</a></li><li><a href="account/order.html?ref=KYA-10250">Payment failed</a></li><li><a href="account/order.html?ref=KYA-10180">Refunded</a></li><li><a href="account/order.html?ref=KYA-00000">Not found</a></li></ul></div>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/order.html?ref=KY-261001-K8D3">Shipped</a>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/order.html?ref=KY-261001-K8D3">Shipped</a></li><li><a href="account/order.html?ref=KY-260914-T5R7">Delivered</a></li><li><a href="account/order.html?ref=KY-260910-B2W6">Cancelled (with date)</a></li><li><a href="account/order.html?ref=KY-261003-A3F9">Pending payment (cancel, resume)</a></li><li><a href="account/order.html?ref=KY-261003-P7X2">Payment failed (cancel, resume)</a></li><li><a href="account/order.html?ref=KY-261002-W5N7">Paid, waiting (cancel with refund line)</a></li><li><a href="account/order.html?ref=KY-260828-H4N8">Refunded</a></li><li><a href="account/order.html?ref=KY-260720-E8Z5">Missing step dates</a></li><li><a href="account/order.html?ref=KY-000000-NONE">Not found</a></li></ul></div>
+            </li><li><a href="account/order.html?ref=KY-260914-T5R7">Delivered</a></li><li><a href="account/order.html?ref=KY-260910-B2W6">Cancelled</a></li><li><a href="account/order.html?ref=KY-261003-A3F9">Pending payment</a></li><li><a href="account/order.html?ref=KY-261003-P7X2">Payment failed</a></li><li><a href="account/order.html?ref=KY-260828-H4N8">Refunded</a></li><li><a href="account/order.html?ref=KY-000000-NONE">Not found</a></li></ul></div>
             </li>
             <li class="review__item">
               <div class="review__text"><a class="review__name" href="account/reviews.html">My reviews</a><p class="review__note">The customer\u2019s reviews with Published and Awaiting approval badges and an admin reply.</p></div>
@@ -433,7 +446,9 @@
             <li class="review__item">
               <div class="review__text"><a class="review__name" href="account/profile.html">Profile</a><p class="review__note">Your details and change password, with show/hide on each password field.</p></div>
               <span class="badge badge--lilac">Ready to review</span>
-              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/profile.html?demo=saved">Details saved</a></li><li><a href="account/profile.html?demo=errors">Errors</a></li></ul></div>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/profile.html?demo=saved">Details saved</a>
+              <div class="review__states"><p class="review__states-label">Try these states</p><ul role="list"><li><a href="account/profile.html?demo=saved">Details saved</a></li><li><a href="account/profile.html?demo=errors">Errors</a></li><li><a href="account/profile.html?demo=unverified">Unverified banner</a></li></ul></div>
+            </li><li><a href="account/profile.html?demo=errors">Errors</a></li></ul></div>
             </li>
           </ul>
         </section>
@@ -653,7 +668,7 @@
   <!-- partial: cart-drawer -->
   <!-- The inner .cart-panel is what the backend's /cart/panel returns; JS swaps it into [data-cart-drawer]. -->
   <div class="drawer drawer--right" id="cart-drawer" data-layer="cart" data-cart-drawer role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
-    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500">
+    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500" data-cfg-attr="data-free-threshold:free_shipping_over">
       <div class="drawer__head">
         <h2 class="drawer__title" id="cart-title">Your bag (<span data-cart-count-label>2</span>)</h2>
         <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close bag"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
@@ -664,7 +679,7 @@
         <div class="drawer__body">
           <div class="cart-progress">
             <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
-            <progress class="progress" value="6300" max="7500" data-cart-progress>84%</progress>
+            <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
           </div>
           <ul class="cart-items" role="list" data-cart-items>
             <!-- loop: cart_items -->
@@ -783,8 +798,9 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=65261b3f" defer></script>
+  <script src="assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=2d353f92" defer></script>
   <!-- /partial: scripts -->
 </body>
 </html>

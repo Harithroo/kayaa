@@ -1,7 +1,8 @@
 /* Checkout behaviour (production code: stays after the Blade conversion; the server repeats every rule).
    - validates the form on submit: error summary (role="alert", focus moves to it, links to each field) plus inline
      messages with aria-invalid and aria-describedby
-   - shows the delivery estimate once a district is chosen (table in <script type="application/json" id="district-eta">)
+   - shows the delivery estimate once a district is chosen (district -> { min, max } days in <script type="application/json" id="district-eta">,
+     worded by Kayaa.formatEta in app.js)
    - loading state on a valid submit: disabled, aria-busy, spinner, "Redirecting to secure payment..."; no double submit
    The prototype hook data-demo-pay on the form hands the valid submit to proto-checkout.js instead of posting. */
 (function () {
@@ -101,19 +102,20 @@
   form.addEventListener('change', revalidate);
 
   /* ---------- Delivery estimate (placeholder table; TODO real data) ---------- */
-  var eta = {};
+  var eta = {};   // district slug -> { min, max } working days (the backend sends two integers per district)
   try { eta = JSON.parse($('#district-eta').textContent); } catch (e) { eta = {}; }
+  var etaOf = function (slug) { var d = slug && eta[slug]; return d && window.Kayaa ? window.Kayaa.formatEta(d.min, d.max) : ''; };
   var district = $('#district');
   var etaText = $('[data-eta-text]');
 
   function updateEta() {
     var slug = district.value;
     var label = slug ? district.options[district.selectedIndex].text : '';
-    var known = slug && eta[slug];
-    etaText.textContent = known ? 'Estimated delivery to ' + label + ': ' + eta[slug] : 'Choose your district to see the delivery estimate';
+    var known = etaOf(slug);
+    etaText.textContent = known ? 'Estimated delivery to ' + label + ': ' + known : 'Choose your district to see the delivery estimate';
     $$('[data-eta-summary]').forEach(function (n) {
       n.hidden = !known;
-      n.textContent = known ? 'Delivering to ' + label + ': ' + eta[slug] : '';
+      n.textContent = known ? 'Delivering to ' + label + ': ' + known : '';
     });
   }
   if (district && etaText) { district.addEventListener('change', updateEta); updateEta(); }

@@ -108,7 +108,7 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | Footer and menu link lists | layout.css | 8px gap between rows so tap targets never touch. |
 
 ### Payment copy
-- Online payment only (Onepay, Visa/Mastercard); no cash on delivery anywhere in html/, tools/, docs/ or CLAUDE.md.
+- Online payment only (Onepay, Visa/Mastercard).
 - No card or Onepay logos: text and the credit-card icon, with TODO comments to add the official marks and badge.
 
 ### Assumptions
@@ -231,7 +231,7 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 
 ### Assumptions
 - The track page, order detail and thank-you page share one status vocabulary (`.status` and the stepper); the delivered, cancelled and refunded orders hide the delivery estimate.
-- The stored checkout order replaces any sample order with the same reference; new references start at KYA-10261 so they never collide with the samples.
+- The stored checkout order replaces any sample order with the same reference; new references are KY-<today YYMMDD>-<4 random A-Z0-9>.
 
 ## Content template and error pages
 
@@ -259,3 +259,16 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 - All six content pages ship placeholder facts in brackets; Privacy and Terms are skeletons only.
 - The delivery page repeats the checkout's placeholder estimates in brackets so the two stay consistent until the real data exists.
 - app.js builds the cart drawer's product links from the wordmark link, so they resolve from account/ and from 404.html at any path (this also fixes the drawer's links on the account pages).
+
+## Config hooks, cancel dialog, verification banner and verify-email page
+
+| Item | Where | Notes |
+| --- | --- | --- |
+| `tools/site-config.json`, `[data-cfg]`, `[data-cfg-attr]`, `site-config.js` | tools/sync-shell.mjs | Single source for the fee, free-delivery threshold, pay button label, order-email flag, remember days and low-stock threshold. sync-shell refreshes the text and attributes (idempotent, `--check` flags stale text) and writes `assets/js/site-config.js` (`window.KAYAA_CONFIG`). Blade replaces both with view variables. |
+| `Kayaa.formatEta(min, max)` | js/app.js | The one place delivery estimates are worded ("3 working days", "1 working day", "2–4 working days"). Used by checkout.js, content.js (delivery page) and the prototype order pages. |
+| Dialog (`.dialog`) | components.css, js/account.js | Native `<dialog>` confirmation: opened by `[data-dialog-open="ID"]`, closed by `[data-dialog-close]`, ESC or the backdrop; Tab is kept inside; focus returns to the opener. Used by "Cancel this order?" (Keep order primary, Yes, cancel order danger). |
+| Stepper date (`.stepper__date`) | components.css | One date under a step label when the order has it; nothing when it does not. |
+| Verification banner (`.verify-banner`) | pages/account.css, js/account.js | `role="region"` banner with Resend email and a Dismiss button, on every signed-in account page while unverified. Dismissal is remembered in sessionStorage. |
+| Verify-email page (`account/verify-email.html`, `.auth-card__icon`, `.verify-actions`) | pages/auth.css | Auth-card template with three states: waiting (Check your email), verified and invalid link. |
+| Track form fields (`.track-form__fields`) | pages/track.css | Reference and mobile number side by side from 600px, with the checkout-style error summary above. |
+| Thank-you "expired" state and email line (`.thanks__email`) | pages/thank-you.css | Expired signed link (no order details) and the optional confirmation-email line. |

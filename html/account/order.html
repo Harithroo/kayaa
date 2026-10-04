@@ -12,10 +12,10 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="../assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="../assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="../assets/css/components.css?v=bc1114ec">
+  <link rel="stylesheet" href="../assets/css/components.css?v=6e87c2c7">
   <link rel="stylesheet" href="../assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="../assets/css/pages/account.css?v=58410501">
+  <link rel="stylesheet" href="../assets/css/pages/account.css?v=bbd69f18">
 </head>
 <body data-page="account">
   <!-- partial: sprite -->
@@ -214,7 +214,7 @@
   <!-- partial: announcement -->
   <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
   <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
-    <p class="topbar__text"><span>Free delivery over Rs 7,500</span><span class="topbar__extra"> · Secure online payment</span></p>
+    <p class="topbar__text"><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span><span class="topbar__extra"> · Secure online payment</span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
   </div>
   <!-- /partial: announcement -->
@@ -314,6 +314,19 @@
   <!-- /partial: header -->
 
   <main id="main">
+    <!-- blade: @auth @unless email_verified. Dismissal is remembered for the session only (sessionStorage, account.js). -->
+    <div class="container verify-wrap">
+      <div class="verify-banner" role="region" aria-label="Verify your email" data-verify-banner hidden>
+        <svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>
+        <p class="verify-banner__text">Verify your email to see orders you placed as a guest. We sent a link to <strong data-verify-email>amaya@example.com</strong>.</p>
+        <!-- TODO: action (assumption: POST /email/verification-notification, throttled); @csrf -->
+        <form method="post" action="verify-email.html" data-resend-form>
+          <button type="submit" class="btn btn--secondary btn--sm">Resend email</button>
+        </form>
+        <button type="button" class="verify-banner__close" data-verify-dismiss aria-label="Dismiss"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
+        <p class="visually-hidden" role="status" aria-live="polite" data-verify-status></p>
+      </div>
+    </div>
     <div class="container account">
       <div class="account__layout">
         <nav class="account-nav" aria-label="Account">
@@ -330,10 +343,15 @@
         <div class="account__content">
           <div data-order-page>
             <div class="order-detail" data-order-found>
+              <!-- blade: flash after the order is cancelled -->
+              <div class="alert alert--success" role="status" tabindex="-1" data-o-cancelled hidden>
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+                <div><p>Your order has been cancelled.</p></div>
+              </div>
               <a class="back-link" href="index.html"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg> My orders</a>
               <header class="order-head">
                 <div>
-                  <h1 class="order-head__ref">Order <span data-o-ref>KYA-10234</span></h1>
+                  <h1 class="order-head__ref">Order <span data-o-ref>KY-261001-K8D3</span></h1>
                   <p class="order-head__meta" data-o-date>Placed 1 Oct 2026</p>
                 </div>
                 <div class="order-head__badges" data-o-badges><span class="status status--shipped">Shipped</span><span class="status status--paid">Paid</span></div>
@@ -341,7 +359,7 @@
 
               <section class="summary-card" aria-labelledby="od-status">
                 <h2 id="od-status">Order status</h2>
-                <!-- blade: stepper from the order status; cancelled and refunded orders show a banner instead. No per-step dates (TODO). -->
+                <!-- blade: stepper from the order status; cancelled and refunded orders show a banner instead. One date per step when known (placed, paid or confirmed, shipped, delivered), nothing when a step has no date; the cancelled banner shows its date. -->
                 <div data-stepper-root>
                   <ol class="stepper" data-stepper>
                 <li class="stepper__step is-done"><span class="stepper__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg></span><span class="stepper__label">Order placed<span class="visually-hidden"> (completed)</span></span></li>
@@ -368,7 +386,7 @@
                     <h2 id="od-totals">Payment</h2>
                     <dl class="totals">
                       <div class="totals__row"><dt>Subtotal</dt><dd data-o-subtotal>Rs 6,300</dd></div>
-                      <div class="totals__row"><dt>Delivery</dt><dd data-o-delivery>Rs 450</dd></div>
+                      <div class="totals__row"><dt>Delivery</dt><dd data-o-delivery><span data-cfg="shipping_fee">Rs 450</span></dd></div>
                       <div class="totals__row totals__row--total"><dt>Total</dt><dd data-o-total>Rs 6,750</dd></div>
                       <div class="totals__row"><dt>Payment method</dt><dd data-o-method>Card - Onepay</dd></div>
                       <div class="totals__row"><dt>Payment status</dt><dd data-o-pay-status><span class="status status--paid">Paid</span></dd></div>
@@ -383,13 +401,30 @@
               </div>
 
               <div class="order-detail__actions">
-                <a class="btn btn--primary" href="../track.html?ref=KYA-10234" data-o-track>Track this order</a>
+                <a class="btn btn--primary" href="../track.html?ref=KY-261001-K8D3" data-o-track>Track this order</a>
                 <!-- TODO: add the WhatsApp number -->
                 <a class="btn btn--secondary" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a>
-                <!-- blade: @if payment_status is pending or failed. TODO: retry action (assumption: a route that restarts payment for the same order) -->
-                <a class="btn btn--primary" href="../proto-onepay.html" data-o-retry hidden>Try payment again</a>
+                <!-- blade: @if payment_status is pending or failed, the method is the online gateway and the order is not cancelled. "Resume payment" resumes payment for this order (it is not a redo of checkout). TODO: confirm the route -->
+                <a class="btn btn--primary" href="../proto-onepay.html" data-o-retry hidden>Resume payment</a>
+                <!-- blade: @if status is pending (account order page only). Opens the confirmation dialog below. -->
+                <button type="button" class="btn btn--secondary" data-dialog-open="cancel-dialog" data-o-cancel hidden>Cancel order</button>
               </div>
             </div>
+
+            <!-- Cancel dialog (native <dialog>: focus trap, ESC closes, focus returns to the Cancel order button). -->
+            <dialog class="dialog" id="cancel-dialog" aria-labelledby="cancel-title" aria-describedby="cancel-desc">
+              <!-- TODO: action (assumption: POST /account/orders/{ref}/cancel); @csrf -->
+              <form method="post" action="order.html" data-cancel-form>
+                <h2 class="dialog__title" id="cancel-title">Cancel this order?</h2>
+                <p id="cancel-desc">This can't be undone.</p>
+                <!-- blade: @if payment_status is paid. TODO: confirm refund timing with the backend dev -->
+                <p class="dialog__note" data-refund-note hidden>Your payment will be refunded to your card.</p>
+                <div class="dialog__actions">
+                  <button type="button" class="btn btn--primary" data-dialog-close autofocus>Keep order</button>
+                  <button type="submit" class="btn btn--danger">Yes, cancel order</button>
+                </div>
+              </form>
+            </dialog>
 
             <div class="summary-card" data-order-notfound hidden>
               <h1 class="order-head__ref">We couldn't find that order</h1>
@@ -544,7 +579,7 @@
   <!-- partial: cart-drawer -->
   <!-- The inner .cart-panel is what the backend's /cart/panel returns; JS swaps it into [data-cart-drawer]. -->
   <div class="drawer drawer--right" id="cart-drawer" data-layer="cart" data-cart-drawer role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
-    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500">
+    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500" data-cfg-attr="data-free-threshold:free_shipping_over">
       <div class="drawer__head">
         <h2 class="drawer__title" id="cart-title">Your bag (<span data-cart-count-label>2</span>)</h2>
         <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close bag"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
@@ -555,7 +590,7 @@
         <div class="drawer__body">
           <div class="cart-progress">
             <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
-            <progress class="progress" value="6300" max="7500" data-cart-progress>84%</progress>
+            <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
           </div>
           <ul class="cart-items" role="list" data-cart-items>
             <!-- loop: cart_items -->
@@ -674,11 +709,13 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="../assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="../assets/js/app.js?v=65261b3f" defer></script>
+  <script src="../assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="../assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="../assets/js/app.js?v=2d353f92" defer></script>
   <!-- /partial: scripts -->
-  <script src="../assets/js/proto-orders.js?v=565d0575" defer></script>
+  <script src="../assets/js/account.js?v=b1e8e06d" defer></script>
+  <script src="../assets/js/proto-orders.js?v=c4495e2f" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="../assets/js/proto-account.js?v=9c223bd0" defer></script>
+  <script src="../assets/js/proto-account.js?v=7fef697c" defer></script>
 </body>
 </html>

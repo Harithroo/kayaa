@@ -1,7 +1,7 @@
 /* Product page behaviour (production code: stays after the Blade conversion).
    Reads the variants from <script type="application/json" id="product-variants">
    ([{"colour":"lilac","size":"3-6M","stock":4}, ...]) and the low-stock threshold from
-   data-low-stock-threshold on the buy form. Blade generates both. */
+   data-low-stock-threshold on the buy form (the same value as window.KAYAA_CONFIG.low_stock_threshold). Blade generates both. */
 (function () {
   'use strict';
 
@@ -17,7 +17,7 @@
   /* ---------- Data ---------- */
   var form = $('[data-buy-form]');
   var NAME = form.getAttribute('data-product-name') || document.title;
-  var LOW = parseInt(form.getAttribute('data-low-stock-threshold'), 10) || 5;   // admin setting
+  var LOW = (window.KAYAA_CONFIG && window.KAYAA_CONFIG.low_stock_threshold) || parseInt(form.getAttribute('data-low-stock-threshold'), 10);   // admin setting (site config)
   var variants = [];
   try { variants = JSON.parse($('#product-variants').textContent); } catch (e) { variants = []; }
   var stockMap = {};

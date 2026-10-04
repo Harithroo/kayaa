@@ -3,7 +3,7 @@
 Written from what the prototype in `html/` actually contains, so you do not need to open any HTML. Anything the prototype does not show is marked **(assumption)** or **TBD**. The prototype is static: its JS fakes server behaviour (see "Prototype-only behaviour" at the end). Keep this file in sync with the pages (see CLAUDE.md).
 
 Conventions used by every page
-- Money is whole rupees, shown as `Rs 1,490` (thousands separator). Free delivery over Rs 7,500; standard delivery Rs 450.
+- Money is whole rupees, shown as `Rs 1,490` (thousands separator). The delivery fee and the free-delivery threshold come from the site config (section 3.17), never typed into pages.
 - One shared shell (header, footer, drawers, tab bar) wrapped in `<!-- partial: NAME -->` comments. `<!-- loop: ... -->` marks repeated data, `<!-- blade: ... -->` marks conditionals and generated values.
 - Order statuses: `pending`, `confirmed`, `shipped`, `delivered`, `cancelled`. Payment statuses: `pending`, `paid`, `failed`, `refunded`.
 - Product images are 4:5. Placeholders (`.media[data-placeholder]`) are replaced by `<img>` markup when photos exist.
@@ -19,8 +19,8 @@ Conventions used by every page
 4. **Variants JSON.** Per product page, an inline block `<script type="application/json" id="product-variants">[{"colour":"lilac","size":"3-6M","stock":4}, ...]</script>`: one row per colour+size variant, `colour` = colour slug, `size` = size label (same string as the size radio value). Sizes are rendered in size-scale order.
 5. **Review "show more".** The product page shows 5 reviews and a "See more reviews" control that reveals 5 more in place. Prototype: all reviews are in the HTML and JS reveals them. Production options (pick one): (a) render all approved reviews and let JS reveal them, or (b) an endpoint that returns the next page of review-card HTML, like `/cart/panel` (assumption: `GET /products/{slug}/reviews?page=2` returning `<li class="review-card">...</li>` items plus the new "Showing N of M" count). Either way the no-JS fallback is a plain link to the same product page with `?reviews=all#reviews`, which must render every approved review. There is no separate reviews page.
 6. **Rating average with decimals** (one decimal, e.g. `4.8`) plus review count and a 5-to-1 breakdown (counts). Stars: whole part = full stars; any fraction .1 to .9 adds one half star (4.0 = 4 stars, 4.1 to 4.9 = 4.5 stars). Individual review ratings are whole numbers 1 to 5.
-7. **Onepay payment flow (design pending).** Payment is online only (Visa/Mastercard through the Onepay gateway). There is no cash on delivery. Assumption: checkout redirects to Onepay's hosted payment page. Orders start with `payment_status = pending` until the gateway confirms. The frontend still has to design paid, pending and failed/retry states, so the callback/return URLs and the retry route are needed (TBD).
-8. **Delivery ETA only at checkout.** The product page shows no delivery estimate. Checkout shows it after the delivery district is chosen: district list, ETA text and delivery fee per district are needed (TBD; the free-delivery threshold and the Rs 450 standard fee are known).
+7. **Onepay payment flow.** Payment is online only, through the Onepay gateway (Visa/Mastercard). Assumption: checkout redirects to Onepay's hosted payment page. Orders start with `payment_status = pending` until the gateway confirms. The frontend has designed the paid, pending, failed, cancelled and expired states and "Resume payment"; the return URL, callback and resume route are needed (TBD). Section 3.6.
+8. **Delivery ETA** is shown at checkout (after the district is chosen), in the order summary, on the thank-you page, on the track result and the order page while the order can still arrive, and on the delivery page. The backend supplies **two integers per district (`min_days`, `max_days`)**; the wording is made by the frontend helper `Kayaa.formatEta` (section 3.5). The product page and the cart show no estimate.
 9. **Category data:** name, slug, one-line description (shown in the listing header band) and a photo (home page tile).
 10. **Admin-managed shell content:** announcement bar (`topbar`: text, style `lilac|cream|sky`, enabled), home promo banners (`home_promo`: style `lilac|sky`, eyebrow, headline, text, button label and URL, optional photo), WhatsApp number/link, contact email, social URLs.
 11. **Age groups** are fixed in the prototype (5 slugs, see Listing). Product-to-age mapping is needed (a product can fit several ages).
@@ -33,25 +33,30 @@ Conventions used by every page
 18. **SEO:** `<title>` `"<Name> | Kayaa"`, meta description, canonical URL, and a JSON-LD `Product` block (name, image, description, category, offers with `priceCurrency: "LKR"`, `price`, `availability`, `aggregateRating`). The prototype has placeholder values and a `<!-- blade: generate from the product -->` comment.
 
 19. **Cart line data** with per-variant stock, the sale/regular price, the "price changed" flag and the colour's thumbnail (section 3.4).
-20. **Flat delivery fee rule from config** (Rs 450, free from Rs 7,500). TODO confirm it is not district-based.
-21. **Checkout** fields, validation, the 25-district list from `config/kayaa.php` and the delivery-ETA data per district (sections 3.5).
-22. **Payment hand-off:** order creation, stock decrement at order time, redirect to Onepay, return URL and callback, the retry action, the stock-hold expiry (30 minutes shown), the four outcomes, and how a shopper cancel is stored (sections 3.6 and 3.7).
-23. **Order reference format** (the prototype uses `KYA-10234`, TODO real format) and a **signed URL or unguessable token** for the thank-you page (section 3.7).
+20. **Flat delivery fee rule from config** (`shipping_fee`, `free_shipping_over`; section 3.17). TODO confirm it is not district-based.
+21. **Checkout** fields, validation (email optional, mobile required, no postal code), the 25-district list from `config/kayaa.php` and the delivery-ETA data per district as `min_days`/`max_days` (section 3.5).
+22. **Payment hand-off:** order creation, **permanent stock decrement at placement (nothing is held)**, **cart emptied server-side when the order is created**, redirect to Onepay, signed return link, callback, "Resume payment", the outcomes paid, pending, failed, cancelled and expired (sections 3.6 and 3.7).
+23. **Order reference format `KY-YYMMDD-XXXX`**: uppercase, max 20 characters, never digits only or a fixed length (example `KY-261003-A3F9`). **The thank-you page is reached only through a signed, expiring link supplied by the backend** and is never built from the reference (section 3.7).
 24. **Status component mapping** for order and payment statuses (section 3.8).
-25. **Order confirmation emails do not exist yet.** The pages never claim one was sent.
+25. **Order confirmation emails are off by default** (`order_emails_enabled: false`). The thank-you page shows "A confirmation has been sent to {email}" only when the flag is true and the order has an email (section 3.6).
 
-26. **Optional accounts.** Guest checkout and /track always work. Customers and admins share the `users` table; register collects name, email, mobile (`users.phone`) and password (section 3.10).
-27. **`User::allOrders`**: orders with the customer's `user_id` plus earlier guest orders placed with the same email (section 3.11).
-28. **Track lookup by order reference** that exposes only status, payment status, items, totals, last-updated date and the delivery estimate, limited to 20 requests a minute (section 3.9).
+26. **Optional accounts.** Guest checkout and /track always work. Customers and admins share the `users` table; register collects name, email, mobile (`users.phone`) and password (at least 8 characters, no complexity rules, no maximum). **Email is optional for guests (nullable on the order); the mobile number is the required identifier** (section 3.10).
+27. **`User::allOrders`**: orders with the customer's `user_id` plus earlier guest orders placed with the same email, **attached only after the account email is verified** (the account itself works unverified; section 3.11).
+28. **Track lookup by order reference AND mobile number, both required and matched together**; it exposes only status, payment status, items, totals, last-updated date and the delivery estimate, limited to 20 requests a minute. `?ref=` prefills the reference only and never runs the lookup (section 3.9).
 29. **Auth rate limits and safe responses:** login, register, forgot and reset are rate-limited; login errors never say which field was wrong; forgot-password never reveals whether an email exists; reset emails go through the configured mailer (section 3.10).
 30. **Review statuses for the customer:** one `approved` flag, so "Awaiting approval" covers pending and hidden; admins can reply; one review per customer per product (section 3.11).
-31. **Order status history timestamps** are not shown (the backend may not store them). TODO decide whether the stepper should get dates.
+31. **Stepper dates:** one date per step when known (placed; paid or confirmed; shipped; delivered) and none when a step has no date; the cancelled banner shows its date. **The backend adds `delivered_at` and `cancelled_at`**; `confirmed_at` is an open question (sections 3.9 and 3.11).
 
 32. **Contact form endpoint**, limited to 5 messages a minute, with an open question about where messages go and spam protection (section 3.14).
 33. **Delivery page estimates** from the same data as the checkout ETA (25 districts grouped by 9 provinces): one source (section 3.13).
 34. **FAQs with placement `contact`** (the contact page shows four).
 35. **Error views** `resources/views/errors/{404,419,429,500,503}.blade.php`; 500 and 503 must not touch the database or session (section 3.15).
 36. **Static or editable content:** the client decides whether About, Delivery, Returns, Privacy and Terms get an admin editor.
+
+37. **Site config** (`tools/site-config.json`): `shipping_fee`, `free_shipping_over`, `pay_button_label`, `order_emails_enabled`, `remember_days`, `low_stock_threshold`. Blade prints these as view variables instead of the `data-cfg` hooks and `window.KAYAA_CONFIG` (section 3.17).
+38. **Email verification** (`/account/verify-email`, a signed verification link, a resend route) and a verification banner on every signed-in account page while unverified (section 3.10).
+39. **Cancel order** from the account order page while the status is `pending` (`POST /account/orders/{ref}/cancel`, TODO route), with the refund line when the payment is `paid` (section 3.11).
+40. **Resume payment** for an existing order (pending or failed payment, online gateway, not cancelled): account order page, track result and the thank-you failed state (section 3.6).
 
 ---
 
@@ -209,8 +214,8 @@ Layout: desktop 7/5 columns (form | sticky order summary). Mobile: a native `<de
 Form: `POST` (action TODO; assumption `POST /checkout` creates the order, then the server redirects to Onepay), `@csrf`, `novalidate`. The server must repeat every validation rule below. Throttle: 10 attempts per minute (TODO confirm).
 | Field (`name`) | Type | Required | Validation | Example |
 | --- | --- | --- | --- | --- |
-| `email` | `email` (`autocomplete="email"`) | yes (TODO: is email required for guests?) | valid email | `amaya@example.com` |
-| `phone` | `tel` (`autocomplete="tel"`) | yes | Sri Lankan mobile: `07X XXXXXXX` (10 digits, X in 0-8) or `+94 7X XXXXXXX`, spaces/dashes allowed; normalise on the server | `071 234 5678` |
+| `email` | `email` (`autocomplete="email"`) | **no** (label "Email (optional)"; nullable on the order) | valid email when given. Helper: "If you create an account later with this email, you'll find this order there." | `amaya@example.com` |
+| `phone` | `tel` (`autocomplete="tel"`) | yes: **the required identifier, and what `/track` matches on** | Sri Lankan mobile: `07X XXXXXXX` (10 digits, X in 0-8) or `+94 7X XXXXXXX`, spaces/dashes allowed; **normalise on the server** (`071 234 5678`, `0712345678` and `+94 71 234 5678` are the same number). Helper: "We use your mobile number to deliver your order and to track it." | `071 234 5678` |
 | `name` | text (`autocomplete="name"`) | yes | non-empty | `Amaya Ranasinghe` |
 | `address_line1` | text (`address-line1`) | yes | non-empty | `42 Temple Road` |
 | `address_line2` | text (`address-line2`) | no | | `Apartment 3` |
@@ -218,42 +223,44 @@ Form: `POST` (action TODO; assumption `POST /checkout` creates the order, then t
 | `district` | select | yes | one of the 25 districts from `config/kayaa.php`; the option value is the slug | `colombo` |
 | `notes` | textarea | no | free text ("delivery notes") | `Call on arrival` |
 
-No postal code, promo code, gift option or order note beyond `notes` (TODO confirm whether a postal code is needed). Districts (slug): `ampara`, `anuradhapura`, `badulla`, `batticaloa`, `colombo`, `galle`, `gampaha`, `hambantota`, `jaffna`, `kalutara`, `kandy`, `kegalle`, `kilinochchi`, `kurunegala`, `mannar`, `matale`, `matara`, `monaragala`, `mullaitivu`, `nuwara-eliya`, `polonnaruwa`, `puttalam`, `ratnapura`, `trincomalee`, `vavuniya`.
+**There is no postal code** (decided), promo code or gift option. Districts (slug): `ampara`, `anuradhapura`, `badulla`, `batticaloa`, `colombo`, `galle`, `gampaha`, `hambantota`, `jaffna`, `kalutara`, `kandy`, `kegalle`, `kilinochchi`, `kurunegala`, `mannar`, `matale`, `matara`, `monaragala`, `mullaitivu`, `nuwara-eliya`, `polonnaruwa`, `puttalam`, `ratnapura`, `trincomalee`, `vavuniya`.
 
-Delivery estimate: shown only here (and in the order summary and on the thank-you page), after the district is chosen: "Estimated delivery to Colombo: 2-3 working days". The prototype reads a placeholder table (`<script type="application/json" id="district-eta">` mapping district slug to text). TODO: the real ETA data per district (where it lives: config, admin or database) and whether more than the text is needed (min and max days). Never shown on the product page or the cart.
+**Delivery estimate:** shown only here (and in the order summary, on the thank-you page, on the track result and the order page while the order can still arrive), after the district is chosen: "Estimated delivery to Colombo: 2–3 working days". The backend supplies **two integers per district (`min_days`, `max_days`)**; the prototype reads `<script type="application/json" id="district-eta">` mapping the district slug to `{ "min": 2, "max": 3 }` (placeholder numbers). **The wording belongs to the frontend** and lives in one helper, `Kayaa.formatEta(min, max)` in `app.js`: equal values `3 working days`, `1` and `1` `1 working day`, otherwise `2–4 working days` (en dash). Blade can reproduce those rules in one view helper. The delivery page (`/delivery`) shows the same data (section 3.13). Never shown on the product page or the cart.
 
 Contact states: guests see "Have an account? Log in" (`/account/login`); signed-in users see their fields prefilled and "Signed in as {email} - Not you?".
 
 Payment card (no radio cards, online only): credit-card icon, "Pay by card - Visa or Mastercard", "You'll be taken to Onepay's secure page to enter your card details. We never see or store your card number." (TODO confirm hosted redirect), plain-text Visa and Mastercard badges (TODO official marks and Onepay badge), and "By paying you agree to our Terms and Returns policy" (`/terms`, `/returns`).
 
-Pay button: `Pay Rs 6,750` with a lock icon and the helper "Secure payment via Onepay". On a valid submit the button is disabled with `aria-busy="true"`, shows a spinner and "Redirecting to secure payment..." and cannot be submitted twice. TODO: should the label say "Place order" instead?
+**Pay button:** the label comes from config (`pay_button_label`, default "Continue to payment"; `<span data-cfg="pay_button_label">`). **It never contains an amount** (the total is in the summary). Lock icon and the helper "Secure payment via Onepay" stay. On a valid submit the button is disabled with `aria-busy="true"`, shows a spinner and "Redirecting to secure payment..." and cannot be submitted twice.
 
 States: field errors (message under each field, `aria-invalid`, `aria-describedby`), an error summary at the top (`role="alert"`, focus moves to it, links to each invalid field), throttle alert ("Too many attempts. Please wait a minute and try again."), gateway error alert ("We couldn't start the payment. Please try again."), stock-ran-out redirect to `/cart`.
 
-### 3.6 Payment hand-off (Onepay) - assumptions, all TODO to confirm with the backend dev
-1. `POST /checkout` validates, creates the order with `payment_status = pending` and `status = pending`, **decrements stock** (abandoned payments therefore hold stock), generates the order reference, and responds with a redirect to Onepay's hosted payment page. We never handle card numbers.
-2. Onepay redirects the shopper back to `/orders/{ref}/thank-you` (return URL) and also calls the server (callback/webhook) to confirm the result; the server sets `payment_status` to `paid`, `failed` (or leaves `pending`). The thank-you page must show the state the server knows, not a state taken from the URL.
-3. Outcomes the frontend has designed: **paid**, **pending** (gateway still confirming), **failed**, **cancelled by the shopper**. `cancelled` is not in the payment status list (`pending`, `paid`, `failed`, `refunded`): TBD whether the server maps a shopper cancel to `failed` plus a reason, or to the order status `cancelled`.
-4. Retry: "Try payment again" needs an action that restarts payment for the same order (TBD route, for example `POST /orders/{ref}/pay`). The failed/cancelled page also says "We'll hold your items for 30 minutes" (TODO decide the real stock-hold expiry and the job that releases stock).
-5. The bag is cleared when the order is paid or pending, and kept on failed and cancelled.
-6. No order confirmation email exists yet, so the pages never claim one was sent (TODO show an "email sent" line once order emails exist).
-7. Prototype stand-in: `html/proto-onepay.html` (no shell, no brand marks) with four buttons that go to `thank-you.html?state=paid|pending|failed|cancelled`. The order is kept in sessionStorage with a reference like `KYA-10234` (TODO real format).
+### 3.6 Payment hand-off (Onepay) - assumptions, TODO to confirm with the backend dev
+Payment is online only, through the Onepay gateway (Visa/Mastercard).
+1. `POST /checkout` validates, creates the order with `payment_status = pending` and `status = pending`, **decrements stock permanently at placement (it holds nothing and releases nothing)**, generates the order reference, **empties the cart server-side**, and responds with a redirect to Onepay's hosted payment page. We never handle card numbers.
+2. Onepay redirects the shopper back to the thank-you page through **a signed, expiring link supplied by the backend** (return URL) and also calls the server (callback/webhook) to confirm the result; the server sets `payment_status` to `paid`, `failed` (or leaves `pending`). The thank-you page must show the state the server knows, not a state taken from the URL.
+3. Outcomes the frontend has designed: **paid**, **pending** (gateway still confirming), **failed**, **cancelled** (order status `cancelled`) and **expired** (the signed link has expired). A payment cancelled at the gateway is stored as order status `cancelled` for now (see Questions).
+4. **Resume payment** (not a redo of checkout): "Resume payment" resumes payment for an existing order. It is shown **only** on the account order page and on the track result, and only when the payment status is `pending` or `failed`, the method is the online gateway and the order is not cancelled; plus once as the primary button on the thank-you failed state (TODO: confirm the signed link supports resuming). Route TBD (for example `POST /orders/{ref}/pay`). A guest has no order page, so see Questions.
+5. **The bag is emptied when the order is created**, whatever the payment outcome. After a failed or cancelled payment the bag is empty, so no state links back to the bag; the thank-you states offer "Continue shopping" instead, and the minimal header's back link on the thank-you page says "Continue shopping" (`/shop`).
+6. **Order emails are off by default** (`order_emails_enabled: false`). The thank-you page shows "A confirmation has been sent to {email}" only when the flag is true **and** the order has an email; it never claims an email otherwise. `?demo=emails-on` shows it in the prototype.
+7. Prototype stand-in: `html/proto-onepay.html` (no shell, no brand marks) with four buttons that go to `thank-you.html?state=paid|pending|failed|cancelled`. The simulated order is kept in sessionStorage with a generated reference `KY-<today YYMMDD>-<4 random A-Z0-9>`.
 
-### 3.7 Thank-you (`/orders/{ref}/thank-you`)
-Minimal shell as for checkout. Prototype-only `?state=paid|pending|failed|cancelled` (paid by default); in Laravel the state comes from the order's payment status.
+### 3.7 Thank-you
+Minimal shell as for checkout. **This page is reached only through the signed, expiring link the backend supplies; it is never built from the order reference** (no `/orders/{ref}/thank-you` URL is constructed anywhere in the frontend). A request with an invalid or expired signature shows the **expired** state. Prototype-only `?state=paid|pending|failed|cancelled|expired` (paid by default) and `?demo=emails-on`; in Laravel the state comes from the order's statuses.
 
-Data needed for every state: order reference, items (name, size, colour, quantity, price), subtotal, delivery fee, total, delivery address (name, lines, city, district, phone), the district's estimated delivery text, payment line "Card - Onepay" with the payment status.
+Data needed for every state except expired: order reference, items (name, size, colour, quantity, price), subtotal, delivery fee, total, delivery address (name, lines, city, district, phone), the district's estimated delivery text, payment line "Card - Onepay" with the payment status.
 
 | State | Icon | Heading | Buttons | Status badge |
 | --- | --- | --- | --- | --- |
-| paid | check, Primary Deep on lilac tint | "Thank you, {first name} - your order is confirmed" + next steps | Track your order (`/track`), Continue shopping; guests also get "Create an account with the same email to see this order later" (`/account/register`) | `status--paid` |
+| paid | check, Primary Deep on lilac tint | "Thank you, {first name} - your order is confirmed" + next steps; the confirmation-email line when enabled | Track your order (`/track?ref={reference}`), Continue shopping; guests also get "Create an account with the same email to see this order later" (`/account/register`) | `status--paid` |
 | pending | clock | "We're confirming your payment" - "This can take a few minutes. Please don't pay again." | Refresh status (reloads the page), Contact us (`/contact`) | `status--pending` |
-| failed | alert circle, error colour | "Your payment didn't go through" - "If you were charged, contact us with your order reference." + the 30-minute hold line | Try payment again (retry action), Return to bag (`/cart`) | `status--failed` |
-| cancelled | alert circle, error colour | "You cancelled the payment" - same copy as failed | Try payment again, Return to bag | `status--cancelled` |
+| failed | alert circle, error colour | "Your payment didn't go through" - "If you were charged, contact us with your order reference." (no promise about held items) | **Resume payment** (primary; TODO confirm the signed link supports it), Continue shopping | `status--failed` |
+| cancelled | alert circle, error colour | "This order was cancelled." - "If you were charged, contact us with your order reference." | Continue shopping, Contact us. No resume. | `status--cancelled` |
+| expired | hourglass | "This confirmation link has expired" - "Use your order reference and mobile number to check your order." No order details are shown. | Track order (`/track`), Chat on WhatsApp | none |
 
-The order reference is shown large with a Copy button (clipboard; announces "Order reference copied").
+The "Track your order" link carries **`?ref=` only** (`/track?ref=KY-261003-A3F9`): the track page prefills the reference and never runs the lookup. The order reference is shown large with a Copy button (clipboard; announces "Order reference copied").
 
-**Security flag:** `/orders/{ref}/thank-you` exposes a name, address and phone. With a sequential reference (KYA-10234) anyone can enumerate orders. Recommendation: use an unguessable token or a signed URL (for example `/orders/{ref}/thank-you?signature=...` or a random token in the path) and check the session where possible. Decision needed from the backend dev.
+**Security note:** the page exposes a name, address and phone, which is why it is only reachable through a signed, expiring link and never by reference. `/track` shows no personal data and needs the mobile number as well as the reference (section 3.9).
 
 ### 3.8 Status component (order and payment statuses)
 `<span class="status status--paid">Paid</span>`: icon plus text, never colour alone. The mapping is defined once in `components.css` and is reused for order tracking and the account pages:
@@ -266,73 +273,85 @@ The order reference is shown large with a Copy button (clipboard; announces "Ord
 | `refunded` | blue tint + rotate-ccw icon |
 
 ### 3.9 Track order (`/track`)
-Full shell. Prototype-only: `?ref=` prefills and runs the lookup, `?demo=throttle`. Guests and signed-in customers use the same page; it always works without an account.
+Full shell. Guests and signed-in customers use the same page; it always works without an account. Prototype-only: `?ref=` prefills the reference, `?demo=throttle`.
 
-Form: `POST` (action TODO; assumption `POST /track`), `@csrf`, **limited to 20 requests a minute**.
+Form: `POST` (action TODO; assumption `POST /track`), `@csrf`, `novalidate`, **limited to 20 requests a minute**. **Both fields are required and are matched together** (an order is found only when the reference and the mobile number both belong to it).
 | Field | Type | Required | Validation | Example |
 | --- | --- | --- | --- | --- |
-| `ref` | text (`autocapitalize="characters"`, `autocomplete="off"`) | yes | order reference, matched case-insensitively and trimmed | `KYA-10234` |
+| `ref` | text, `maxlength="20"`, `autocapitalize="characters"`, `autocomplete="off"`, no digit-only pattern | yes | order reference `KY-YYMMDD-XXXX` (uppercase, max 20 characters; **never assume digits only or a fixed length**); trim and uppercase before matching | `KY-261003-A3F9` |
+| `phone` | tel, `autocomplete="tel"`, `inputmode="tel"` | yes | the checkout's Sri Lankan mobile rule, normalised on the server; helper "The number you gave at checkout" | `071 234 5678` |
 
-The thank-you page's "Track your order" link carries `?ref=` (`/track?ref={reference}`) so the field is prefilled and the lookup runs (TODO decide whether a link should run the lookup or only prefill it).
+The thank-you page's "Track your order" link carries **`?ref=` only**; the page prefills the reference and **never runs the lookup** (the shopper adds the mobile number and presses "Track order"). The mobile number is never put in a URL.
 
 **Privacy rule:** the result shows only the status, the payment status, the items, the totals, the last-updated date and the delivery estimate. Never the name, address, phone or email. The estimate is shown while the order can still arrive (not for delivered, cancelled or refunded orders) and does not name the district.
-**Question for the backend dev:** should a second factor (the email or mobile used at checkout) be required to stop reference guessing? Sequential references can be enumerated.
 
-Result data: reference, order date, last-updated date, order status, payment status, items (name, size, colour, quantity, unit price, thumbnail), subtotal, delivery fee, total, delivery estimate text.
+Result data: reference, order date, last-updated date, order status, payment status, items (name, size, colour, quantity, unit price, thumbnail), subtotal, delivery fee, total, delivery estimate (`min_days`, `max_days`), the per-step dates (below).
 
 States
 - Found: order head (reference, "Placed {date}", "Last updated {date}", status badge, payment badge), the status stepper, items and totals, and a help card "Questions about your order? Chat on WhatsApp" that quotes the reference.
-- Stepper (an `<ol>`: Order placed, Confirmed, Shipped, Delivered; horizontal from 900px, vertical below; completed steps show a check, the current step has `aria-current="step"` and a ring, future steps are muted; icon plus text always; **no per-step dates** because the backend may not store history, TODO):
+- Stepper (an `<ol>`: Order placed, Confirmed, Shipped, Delivered; horizontal from 900px, vertical below; completed steps show a check, the current step has `aria-current="step"` and a ring, future steps are muted; icon plus text always):
+  - **One date per step when it is known** (placed; paid or confirmed; shipped; delivered) and **nothing when a step has no date** (older orders). The prototype shows one old order with missing dates (`KY-260720-E8Z5`). **The backend adds `delivered_at` and `cancelled_at`** (see Questions for `confirmed_at`: "paid or confirmed" uses `paid_at` until then).
   - pending order + pending payment: step 1 current with the note "Waiting for payment confirmation".
-  - pending order + failed payment: step 1 shows the error status, a note, and a "Try payment again" button (retry action TBD).
+  - pending order + paid payment (waiting to be confirmed): step 2 current with the note "Payment received. We are confirming your order."
+  - pending order + failed payment: step 1 shows the error status, the note "Payment failed. If you were charged, contact us with your order reference." and a **"Resume payment"** button (rules in 3.6, point 4).
   - confirmed: step 2 current. shipped: step 3 current. delivered: all steps done, step 4 `aria-current`.
-  - cancelled: the stepper is replaced by the banner "This order was cancelled".
+  - cancelled: the stepper is replaced by the banner "This order was cancelled" with "Cancelled on {date}" when `cancelled_at` is known.
   - refunded (payment status): the banner "This order was refunded" with the payment badge (takes precedence over cancelled).
-- Not found: alert "We couldn't find an order with that reference. Check it and try again." (`role="alert"`), the field marked invalid, the form kept.
+- Not found: alert (`role="alert"`, focus moves to it) "We couldn't find an order with that reference and mobile number." The fields are not marked invalid (it is a combined miss) and the form is kept.
+- Validation errors (missing or invalid reference or mobile): the checkout-style error summary plus inline messages.
 - Throttled: alert "Too many attempts. Please wait a minute and try again."
 
-### 3.10 Auth pages (`/account/register`, `/account/login`, `/account/forgot-password`, `/account/reset-password`)
-Accounts are optional: guest checkout and `/track` always work, and every auth page says so ("No account needed to order. You can check out as a guest and track an order any time." with links to the shop and to track). Customers and admins share the `users` table. The pages use the calm minimal shell (`header-auth`: wordmark and "Continue shopping"; `footer-minimal`). All four endpoints are **rate-limited** (login, register, forgot, reset; the prototype shows "Too many attempts. Please try again in 45 seconds."). Prototype `?demo=`: login `errors|throttle|success`; register `errors|throttle`; forgot-password `errors|throttle|sent`; reset-password `errors|invalid-link`.
+### 3.10 Auth pages (`/account/register`, `/account/login`, `/account/forgot-password`, `/account/reset-password`, `/account/verify-email`)
+Accounts are optional: guest checkout and `/track` always work, and every auth page says so ("No account needed to order. You can check out as a guest and track an order any time." with links to the shop and to track). Customers and admins share the `users` table. The pages use the calm minimal shell (`header-auth`: wordmark and "Continue shopping"; `footer-minimal`). The login, register, forgot, reset and resend-verification endpoints are **rate-limited** (the prototype shows "Too many attempts. Please try again in 45 seconds."). Prototype `?demo=`: login `errors|throttle|success`; register `errors|throttle`; forgot-password `errors|throttle|sent`; reset-password `errors|invalid-link`; verify-email `verified|invalid|sent|throttle`.
 
-All forms: `POST`, `@csrf`, `novalidate`; the server repeats every rule. Error summary (`role="alert"`, focus moves to it, links to each field) plus inline messages with `aria-invalid` and `aria-describedby`. Password fields have a show/hide button (name "Show password", `aria-pressed`).
+All forms: `POST`, `@csrf`, `novalidate`; the server repeats every rule. Error summary (`role="alert"`, focus moves to it, links to each field) plus inline messages with `aria-invalid` and `aria-describedby`. Password fields have a show/hide button (name "Show password", `aria-pressed`). **Password rule everywhere: at least 8 characters, no complexity rules, no maximum** (helper "At least 8 characters"; no `maxlength`).
 
 **Login** - `POST /login` (TODO action):
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
 | `email` | email, `autocomplete="username"` | yes | valid email |
 | `password` | password, `autocomplete="current-password"` | yes | |
-| `remember` | checkbox, value `1` | no | "Remember me" (TODO confirm) |
+| `remember` | checkbox, `name="remember"`, value `1` | no | label "Keep me signed in for 30 days" (the number is `remember_days` from the site config: `<span data-cfg="remember_days">`) |
 Safe responses: a wrong email or password returns ONE alert, "These details don't match our records.", and never says which field was wrong. After a password reset the page shows the success alert "Your password has been updated. Log in with your new password." (a status flash).
 
-**Register** - `POST /register` (TODO action):
+**Register** - `POST /register` (TODO action). Fields: `name`, `email`, `phone`, `password`, `password_confirmation`.
 | Field | Type | Required | Validation | Example |
 | --- | --- | --- | --- | --- |
 | `name` | text, `autocomplete="name"` | yes | non-empty | `Amaya Ranasinghe` |
 | `email` | email, `autocomplete="email"` | yes | valid, unique in `users` ("This email is already registered. Log in or use a different email.") | `amaya@example.com` |
-| `phone` | tel, `autocomplete="tel"` | yes (stored as `users.phone`) | Sri Lankan mobile `07X XXXXXXX` or `+94 7X XXXXXXX`, spaces and dashes allowed | `071 234 5678` |
-| `password` | password, `autocomplete="new-password"` | yes | at least 8 characters (TODO confirm the rule) | |
+| `phone` | tel, `autocomplete="tel"` | yes (stored as `users.phone`) | Sri Lankan mobile, normalised | `071 234 5678` |
+| `password` | password, `autocomplete="new-password"` | yes | at least 8 characters | |
 | `password_confirmation` | password, `autocomplete="new-password"` | yes | must match | |
-Terms line links to `/terms` and `/privacy`. TODO: is email verification needed? On success the user is signed in and sent to `/account`.
+Terms line links to `/terms` and `/privacy`. **On success the user is signed in (the account works unverified) and sent to `/account/verify-email`.**
 
-**Forgot password** - `POST /forgot-password` (TODO action): field `email` (email, required). The answer is ALWAYS "If that email is registered, we've sent a reset link." whether or not the email exists (never reveals which emails are registered, and never claims delivery beyond that sentence). The reset email goes through the configured mailer.
+**Forgot password** - `POST /forgot-password` (TODO action): field `email` (email, required). The answer is ALWAYS "If that email is registered, we've sent a reset link." whether or not the email exists (never reveals which emails are registered). The reset email goes through the configured mailer (needs real mail configuration before launch).
 
 **Reset password** - `POST /reset-password` (TODO action): hidden `token`; `email` (read-only); `password` and `password_confirmation` (new-password, at least 8, must match). Invalid or expired token: a page "This reset link is no longer valid." with a button to request a new link. Success redirects to `/account/login` with the success flash.
 
+**Email verification (required before any guest order is attached to an account; the account itself works unverified)**
+| Route | Page | Notes |
+| --- | --- | --- |
+| `GET /account/verify-email` | "Check your email" interstitial (after register) | The address, "We've sent a link to {email}", buttons **Resend email** (`POST /email/verification-notification`, TODO route, throttled; states: sent alert "We've sent another link to {email}.", throttle alert), **Change email** (-> `/account/profile`), **Continue to your account** (-> `/account`), and a Log out link (a `POST /logout` form). |
+| `GET /email/verify/{id}/{hash}` (signed link in the email; TODO route) | landing | **verified:** "Email verified. Orders you placed as a guest with this email are now in your account." + Continue to your account. **invalid or expired:** "This verification link is no longer valid." with Resend email. Both render on `/account/verify-email` in the prototype (`?demo=verified`, `?demo=invalid`). |
+A **banner** shows on every signed-in account page (orders, order, reviews, profile) while the email is unverified: "Verify your email to see orders you placed as a guest. We sent a link to {email}." with **Resend email** and a close button (`aria-label="Dismiss"`); it is a `role="region"` landmark labelled "Verify your email", not an alert. Dismissal is remembered for the session only (sessionStorage in `account.js`). Needs real mail configuration before launch (see Questions). The prototype stores `verified` in the demo session; `?demo=unverified` and `?demo=verified` on any account page switch it.
+
 ### 3.11 Account area (`/account`, `/account/orders/{ref}`, `/account/reviews`, `/account/profile`)
-Full shell; `<body data-page="account">`. Desktop: a left sidebar (My orders, My reviews, Profile, Log out) and the content on the right; mobile: a scrollable chip nav (`aria-label="Account"`, `aria-current` on the active item) and the Log out button at the bottom of the profile page. Log out is `POST /logout` (TODO action). Pages are reachable by URL in the prototype; in Laravel they are guarded by auth.
+Full shell; `<body data-page="account">`. Desktop: a left sidebar (My orders, My reviews, Profile, Log out) and the content on the right; mobile: a scrollable chip nav (`aria-label="Account"`, `aria-current` on the active item) and the Log out button at the bottom of the profile page. Log out is `POST /logout` (TODO action). Pages are reachable by URL in the prototype; in Laravel they are guarded by auth. Every page carries the verification banner (above) while the email is unverified.
 
-**My orders (`/account`)**: heading "Hi, {first name}". Orders = `User::allOrders`: the orders with the customer's `user_id` **plus earlier guest orders placed with the same email**; a quiet note says so ("Orders you placed as a guest with this email also appear here."). TODO: do guest orders attach automatically, and for how long? 6 per page (`?page=`), newest first. Each card: reference (link), order date, status badge, payment badge, item count with up to 3 thumbnails, total, "View order" link. Pagination reuses the shared component. Empty state: "No orders yet" with "Start shopping".
+**My orders (`/account`)**: heading "Hi, {first name}". Orders = `User::allOrders`: the orders with the customer's `user_id` **plus earlier guest orders placed with the same email, but only once the account's email is verified**. The note under the list says so: unverified "Orders you placed as a guest will appear here after you verify your email."; verified "Orders placed as a guest with this email also appear here." 6 per page (`?page=`), newest first. Each card: reference (link), order date, status badge, payment badge, item count with up to 3 thumbnails, total, "View order" link. Pagination reuses the shared component. Empty state: "No orders yet" with "Start shopping". The prototype has 13 sample orders (3 pages).
 
-**Order detail (`/account/orders/{ref}`, prototype `order.html?ref=`)**: reference, date, status and payment badges, the status stepper (same variants as 3.9), items (with a "Write a review" link per item to `/products/{slug}#write-review` for shipped or delivered orders), totals card (subtotal, delivery, total, payment method "Card - Onepay", payment status), delivery address (name, lines, city, district, phone) and delivery estimate (hidden for delivered, cancelled and refunded), actions: "Track this order" (`/track?ref=`), "Chat on WhatsApp", and "Try payment again" when the payment is pending or failed (retry action TBD, section 1.22). An order that is not this customer's, or does not exist, shows a not-found card with a link back to the list. Sample references in the prototype: KYA-10234 shipped, KYA-10201 delivered, KYA-10198 cancelled, KYA-10240 pending payment, KYA-10250 payment failed, KYA-10180 refunded.
+**Order detail (`/account/orders/{ref}`, prototype `order.html?ref=`)**: reference, date, status and payment badges, the status stepper with per-step dates (same variants as 3.9), items (with a "Write a review" link per item to `/products/{slug}#write-review` for shipped or delivered orders), totals card (subtotal, delivery, total, payment method "Card - Onepay", payment status), delivery address (name, lines, city, district, phone) and delivery estimate (hidden for delivered, cancelled and refunded). Actions: "Track this order" (`/track?ref=` , the reference only), "Chat on WhatsApp", **"Resume payment"** (only when payment is pending or failed, the method is the online gateway and the order is not cancelled; route TBD) and **"Cancel order"**.
+- **Cancel order:** account order page only, visible **only while the order status is `pending`**. Secondary button "Cancel order" opens an accessible native `<dialog>` (focus trap, ESC closes, focus returns to the button): heading "Cancel this order?", "This can't be undone.", and **when the payment status is `paid`** "Your payment will be refunded to your card." (TODO: confirm refund timing). Buttons: "Keep order" (primary, initial focus) and "Yes, cancel order" (danger). Form: `POST /account/orders/{ref}/cancel` (TODO route), `@csrf`. On success the order status becomes `cancelled` (the backend adds `cancelled_at`), the page shows the alert "Your order has been cancelled." (`role="status"`, focus moves to it) and hides the button; stock restoration is a backend question (see Questions).
+- An order that is not this customer's, or does not exist, shows a not-found card with a link back to the list. Sample references in the prototype: KY-261001-K8D3 shipped, KY-260914-T5R7 delivered, KY-260910-B2W6 cancelled, KY-261003-A3F9 pending payment, KY-261003-P7X2 payment failed, KY-260828-H4N8 refunded, KY-261002-W5N7 paid and waiting to be confirmed (shows the refund line), KY-260720-E8Z5 delivered with missing step dates.
 
-**My reviews (`/account/reviews`)**: the customer's reviews: product thumbnail and name (link), stars, comment, date, "Verified purchase" badge where applicable, a status badge and, when present, the admin reply ("Reply from Kayaa"). One review per signed-in customer per product. Reviews start unapproved and only approved ones show on the product page. The backend has ONE flag (approved), so a pending review and a hidden one look the same to the customer: **"Awaiting approval"** (neutral outline + clock) versus **"Published"** (lilac + check). Empty state: "You haven't written any reviews yet" with a link to My orders. Editing a review is not in the backend, so it is not designed.
+**My reviews (`/account/reviews`)**: the customer's reviews: product thumbnail and name (link), stars, comment, date, "Verified purchase" badge where applicable, a status badge and, when present, the admin reply ("Reply from Kayaa"). One review per signed-in customer per product. Reviews start unapproved and only approved ones show on the product page. The backend has ONE flag (approved), so a pending review and a hidden one look the same to the customer: **"Awaiting approval"** (neutral outline + clock) versus **"Published"** (lilac + check). Empty state: "You haven't written any reviews yet" with a link to My orders. **Reviews are read-only after submission**: editing a review is not designed.
 
 **Profile (`/account/profile`)**:
 | Form | Method / action | Fields |
 | --- | --- | --- |
-| Your details | `POST` + `_method=PATCH` -> `/account/profile` (TODO action) | `name` (required), `email` (required, valid, unique), `phone` (required, Sri Lankan mobile). Success alert "Your details have been saved." |
-| Change password | `POST` + `_method=PUT` -> `/account/password` (TODO action) | `current_password` (required, `current-password`), `password` (new-password, at least 8), `password_confirmation` (must match). Success alert "Your password has been changed." |
-Cancelling an order and deleting an account are not in the backend and are not designed (see Questions).
+| Your details | `POST` + `_method=PATCH` -> `/account/profile` (TODO action) | `name` (required), `email` (required, valid, unique), `phone` (required, Sri Lankan mobile). Success alert "Your details have been saved." (TODO: does changing the email reset verification?) |
+| Change password | `POST` + `_method=PUT` -> `/account/password` (TODO action) | `current_password` (required, `current-password`), `password` (new-password, at least 8 characters, no maximum), `password_confirmation` (must match). Success alert "Your password has been changed." |
+Deleting an account is not in the backend and is not designed.
 
 ### 3.12 Status component additions
 The `.status` mapping (3.8) is also used for the review statuses: "Published" = `status--confirmed` (lilac + check), "Awaiting approval" = `status--pending` (neutral outline + clock).
@@ -345,7 +364,7 @@ Full shell, no forms. One template (`content.css`): breadcrumb, h1, one-line int
 | Page | Route | Data the page needs |
 | --- | --- | --- |
 | Size guide | `/size-guide` | The size table: size, age, weight (kg), height (cm) for NB, 0-3M, 3-6M, 6-9M, 9-12M, 12-18M. **The product page table must mirror this one: one source** (global table; per-product tables are not designed). Placeholder ranges. Also: the "between sizes" advice, 4 size FAQs (static placeholders for now), age chips -> `/shop?age=<slug>`. |
-| Delivery | `/delivery` | The fee rule (Rs 450, free from Rs 7,500; TODO confirm it is flat) from config. **The district estimate table (25 districts grouped into 9 provinces) must come from the same data as the checkout ETA** (the `district-eta` JSON block on `/checkout`: district slug -> text such as `2-3 working days`); one source in Blade, keyed by district with its province for the grouping. The prototype shows the placeholder estimates in brackets. Static text: how delivery works (4 steps), "Not at home?", "Delivery questions". |
+| Delivery | `/delivery` | The fee rule (Rs 450, free from Rs 7,500; TODO confirm it is flat) from config. **The district estimate table (25 districts grouped into 9 provinces) must come from the same data as the checkout ETA** (the `district-eta` JSON block on `/checkout`: district slug -> `{ "min": 2, "max": 3 }`, the two integers `min_days` and `max_days`; the cells are worded by `Kayaa.formatEta`); one source in Blade, keyed by district with its province for the grouping. The prototype fills the cells from that JSON in `content.js` and keeps the placeholder brackets (`data-eta-placeholder`) until the real data arrives. Static text: how delivery works (4 steps), "Not at home?", "Delivery questions". |
 | Returns | `/returns` | Static placeholder sections: return window, condition of items, how to start a return (order reference through WhatsApp or the contact form), exchanges for size, refunds (to the original card through Onepay, timeline TODO), items that can't be returned, damaged or wrong items. |
 | About ("Our story") | `/about` | Story text, three values (heading + sentence), two images. Placeholder copy. |
 | Privacy | `/privacy` | Skeleton, 8 headings: information we collect, how we use it, payments and Onepay, sharing with couriers, cookies, how long we keep it, your choices, contact. |
@@ -382,6 +401,18 @@ One template (`errors.css`): a lilac icon disc, a code label, h1, one sentence, 
 
 ### 3.16 Shell partials added
 `header-error` (wordmark only; 500 and 503). `header-auth` (wordmark and "Continue shopping"; the account auth pages). `header-minimal` stays for checkout and thank-you only.
+
+
+### 3.17 Site config (`tools/site-config.json`)
+The prototype keeps its single-source values in `tools/site-config.json`. `node tools/sync-shell.mjs` refreshes every `<span data-cfg="KEY">` (money keys print as `Rs 7,500`), sets attributes named in `data-cfg-attr="attribute:KEY"` (for example `max:free_shipping_over` on the free-delivery progress), and writes `assets/js/site-config.js` (`window.KAYAA_CONFIG`) for the scripts. **In Blade these become view variables**: print the values where the `data-cfg` spans are, and print `window.KAYAA_CONFIG` from the same config in the layout.
+| Key | Value | Used for |
+| --- | --- | --- |
+| `shipping_fee` | 450 | delivery fee (cart, checkout, order totals, announcement bar, product page, delivery page) |
+| `free_shipping_over` | 7500 | free-delivery threshold and the progress bar maximum |
+| `pay_button_label` | "Continue to payment" | the checkout pay button (never contains an amount) |
+| `order_emails_enabled` | false | the confirmation-email line on the thank-you page |
+| `remember_days` | 30 | the login "Keep me signed in for 30 days" label |
+| `low_stock_threshold` | 5 | "Only N left" on the product page, cart lines and the buy form |
 
 ---
 
@@ -423,8 +454,20 @@ The button carries `data-name`, `data-price`, optional `data-was`, `data-tone` (
 - `assets/js/proto-listing.js`: filters, sorts, searches and paginates the 24 sample cards from the query string; sets H1, intro, breadcrumb, counts, pagination and the empty states. The server does all of this.
 - `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `sale`, `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
 - `assets/js/proto-cart.js`: the demo cart (sessionStorage) behind the header counts, the drawer, the cart page and the checkout summary, plus the simulated order. Line shape: `{id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}`.
-- `assets/js/proto-content.js` (the contact form demo outcomes). `assets/js/proto-orders.js` (twelve sample orders, the stepper renderer), `proto-account.js` (track, orders, order detail, reviews, profile, log out) and `proto-auth.js` (auth demo outcomes and the demo session). Demo session: `window.KayaaCart.session` (sessionStorage); when set, the Account links in the header, tab bar and menu drawer go to the dashboard. In Laravel the server renders `@auth` and `@guest`.
+- `assets/js/proto-content.js` (the contact form demo outcomes). `assets/js/proto-orders.js` (thirteen sample orders, the stepper renderer), `proto-account.js` (track, orders, order detail, reviews, profile, log out) and `proto-auth.js` (auth demo outcomes and the demo session). Demo session: `window.KayaaCart.session` (sessionStorage); when set, the Account links in the header, tab bar and menu drawer go to the dashboard. In Laravel the server renders `@auth` and `@guest`.
 - `assets/js/proto-cart-page.js`, `proto-checkout.js`, `proto-thankyou.js`, `proto-onepay.js` and `html/proto-onepay.html`: render the pages from the demo cart/order and fake the payment hand-off. Demo params: cart `empty`, `oos-line`, `low-stock`, `price-changed`, `free-delivery`, `checkout-oos`; checkout `errors`, `throttle`, `gateway-error`, `signed-in`, `empty`; thank-you `state=paid|pending|failed|cancelled`.
 - `html/review.html` is a review index for the client; remove it.
 
 Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, search toggle, steppers, active-nav marking), `product.js` (variants, gallery filtering, stock note, quantity cap, size validation, sticky bar, show-more reviews), `cart.js` (sticky checkout bar), `checkout.js` (validation, error summary, delivery estimate, loading state) and `thank-you.js` (copy reference, refresh) `account.js` (auth, profile and contact form validation, error summary, show/hide password) and `content.js` (table of contents behaviour and print). `app.js` also carries the `data-history-back` / `data-reload` hooks of the error pages. The drawer in `app.js` currently renders from the demo cart: in Laravel it swaps in the server panel. Remove the `data-demo-cart` attribute from the buy form when the real cart exists.
+
+
+---
+
+## 5. Still open (questions for the backend dev)
+1. **A payment option other than Onepay.** Your answers still mention one. Payment is online only through Onepay (Visa/Mastercard); please confirm the backend has no other payment path.
+2. **Stock and failed or abandoned payments:** with online payment, stock is decremented permanently at placement, so failed or abandoned payments consume stock for good unless it is restored on failure, cancellation or timeout. What restores it?
+3. **Guests resuming a failed payment:** a guest has no order page. How does a guest resume payment (the signed thank-you link? the track result with the mobile number)?
+4. **Gateway cancel:** can a payment cancelled at the gateway leave the order resumable (status stays `pending`, payment `failed`) instead of making the order `cancelled`?
+5. **Refunds on cancel:** what happens, and how long does it take, when a paid order is cancelled? (The dialog says "Your payment will be refunded to your card" with a TODO for the timing.)
+6. **`confirmed_at`:** can the backend add a `confirmed_at` column? Until then the "paid or confirmed" step date uses `paid_at`.
+7. **Mail configuration:** verification and password-reset emails need real mail configuration before launch.

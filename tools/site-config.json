@@ -1,0 +1,8 @@
+{
+  "shipping_fee": 450,
+  "free_shipping_over": 7500,
+  "pay_button_label": "Continue to payment",
+  "order_emails_enabled": false,
+  "remember_days": 30,
+  "low_stock_threshold": 5
+}

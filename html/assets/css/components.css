@@ -1510,11 +1510,11 @@ body.has-sticky-atc .tabbar { display: none; }
 
 /* Mobile: Prev / "Page 1 of 2" / Next */
 @media (max-width: 599px) {
-  .pagination__num { display: none; }
+  .pagination__list > .pagination__num { display: none; }   /* (.pagination__list > li sets display:flex, so the selector must be as specific) */
   .pagination__list { justify-content: space-between; }
 }
 @media (min-width: 600px) {
-  .pagination__status { display: none; }
+  .pagination__list > .pagination__status { display: none; }
   .pagination__list { gap: var(--space-2); }
   .pagination__edge { padding-inline: var(--space-4); }
 }
@@ -1540,3 +1540,29 @@ body.has-sticky-atc .tabbar { display: none; }
 .address-block { font-style: normal; line-height: 1.6; }
 .eta-line { display: flex; align-items: flex-start; gap: var(--space-2); margin-top: var(--space-3); font-weight: 700; font-size: var(--fs-dense); }
 .eta-line .icon { flex: none; margin-top: 2px; color: var(--primary-deep); }
+
+/* ---------- Stepper dates (one date per step when known; nothing when a step has no date) ---------- */
+.stepper__date { display: block; margin-top: 2px; font-size: var(--fs-ui); font-weight: 500; color: var(--ink-soft); }
+
+/* ---------- Dialog (native <dialog>: focus trap, ESC closes) ---------- */
+.dialog {
+  width: min(440px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: var(--space-5);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 24px 60px -24px rgba(61, 53, 71, 0.45);
+}
+.dialog::backdrop { background: rgba(61, 53, 71, 0.45); }
+.dialog:focus { outline: none; }
+.dialog__title { font-size: var(--fs-h3); }
+.dialog p { margin-top: var(--space-2); }
+.dialog__note { padding: var(--space-3); border-radius: var(--radius-tile); background: var(--tone-2); font-size: var(--fs-dense); }
+.dialog__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
+html:has(dialog[open]) { overflow: hidden; scrollbar-gutter: stable; }

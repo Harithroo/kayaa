@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow"> <!-- staging; remove at Blade conversion -->
-  <title>Choose a new password | Kayaa</title>
-  <meta name="description" content="Choose a new password for your Kayaa account.">
+  <title>Verify your email | Kayaa</title>
+  <meta name="description" content="Verify your email address to see orders you placed as a guest.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
   <!-- /partial: styles -->
   <link rel="stylesheet" href="../assets/css/pages/auth.css?v=a018f38a">
 </head>
-<body data-page="account reset-password">
+<body data-page="account verify-email">
   <!-- partial: sprite -->
   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="display:none">
     <!-- Lucide icons (ISC licence), 24x24, outline. Stroke/fill/caps are set by .icon in base.css. -->
@@ -221,62 +221,68 @@
   <!-- /partial: header-auth -->
 
   <main id="main">
-    <div class="container auth" data-auth-page="reset">
+    <div class="container auth" data-auth-page="verify">
       <div class="auth-card">
-        <!-- blade: @if the reset token is valid -->
-        <div data-reset-form-card>
-          <h1>Choose a new password</h1>
-          <p class="auth-card__lede">Enter a new password for your account.</p>
-          <div class="alert alert--error" role="alert" tabindex="-1" id="reset-summary" data-error-summary hidden>
-          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
-          <div><p class="alert__title">Please check your details</p><ul class="alert__list" data-error-list></ul></div>
-        </div>
+        <!-- Email verification is REQUIRED before any guest order is attached to an account (the account itself works unverified).
+             States: waiting (default, right after register), verified and invalid (landing from the emailed link).
+             ?demo=verified | invalid | sent | throttle is prototype only. -->
+        <section data-verify-state="waiting">
+          <span class="auth-card__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg></span>
+          <h1>Check your email</h1>
+          <p class="auth-card__lede">We've sent a link to <strong data-verify-email>amaya@example.com</strong>. Open it to verify your email address.</p>
+          <!-- blade: flash after "Resend email" -->
+          <div class="alert alert--success" role="status" tabindex="-1" data-verify-alert="sent" hidden>
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+            <div><p>We've sent another link to <strong data-verify-email>amaya@example.com</strong>.</p></div>
+          </div>
           <!-- blade: @if throttled -->
-          <div class="alert alert--error" role="alert" tabindex="-1" data-auth-alert="throttle" hidden>
-          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
-          <div><p>Too many attempts. Please try again in 45 seconds.</p></div>
-        </div>
-          <!-- TODO: form action (assumption: POST /reset-password with the token in a hidden field, throttled); @csrf -->
-          <form class="auth-form" method="post" action="reset-password.html" novalidate data-auth-form data-summary="reset-summary">
-            <input type="hidden" name="token" value="TODO-reset-token">
-        <div class="field" data-field>
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" required autocomplete="username" readonly value="amaya@example.com">
-          
-          <p class="field__error" id="email-error" hidden></p>
-        </div>
-        <div class="field password-field" data-field>
-          <label for="password">New password</label>
-          <div class="password-field__wrap">
-            <input id="password" name="password" type="password" required autocomplete="new-password" aria-describedby="password-hint" data-minlength="8" data-minlength-message="Use at least 8 characters" data-required-message="Choose a new password">
-            <button type="button" class="password-field__toggle" data-password-toggle aria-pressed="false" aria-controls="password" aria-label="Show password"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye"></use></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye-off"></use></svg></button>
+          <div class="alert alert--error" role="alert" tabindex="-1" data-verify-alert="throttle" hidden>
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
+            <div><p>Too many attempts. Please try again in 45 seconds.</p></div>
           </div>
-          <p class="field__hint" id="password-hint">At least 8 characters</p>
-          <p class="field__error" id="password-error" hidden></p>
-        </div>
-        <div class="field password-field" data-field>
-          <label for="password_confirmation">Confirm new password</label>
-          <div class="password-field__wrap">
-            <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password" data-match="password" data-match-message="The passwords do not match" data-required-message="Confirm your new password">
-            <button type="button" class="password-field__toggle" data-password-toggle aria-pressed="false" aria-controls="password_confirmation" aria-label="Show password"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye"></use></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye-off"></use></svg></button>
+          <div class="verify-actions">
+            <!-- TODO: action (assumption: POST /email/verification-notification, throttled); @csrf. Needs real mail configuration before launch. -->
+            <form method="post" action="verify-email.html" data-resend-form>
+              <button type="submit" class="btn btn--primary btn--lg btn--block">Resend email</button>
+            </form>
+            <a class="btn btn--secondary btn--lg btn--block" href="profile.html">Change email</a>
+            <a class="btn btn--secondary btn--lg btn--block" href="index.html">Continue to your account</a>
           </div>
-          
-          <p class="field__error" id="password_confirmation-error" hidden></p>
-        </div>
-            <button type="submit" class="btn btn--primary btn--lg btn--block">Update password</button>
+          <!-- TODO: action (assumption: POST /logout); @csrf -->
+          <form class="auth-switch" method="post" action="../index.html" data-logout-form>
+            <button type="submit" class="auth-link auth-link--button">Log out</button>
           </form>
-        </div>
-        <!-- blade: @else invalid or expired link -->
-        <div data-reset-invalid hidden>
-          <h1>This reset link is no longer valid.</h1>
-          <p class="auth-card__lede">Links expire after a while. Request a new one to choose a new password.</p>
-          <a class="btn btn--primary btn--lg btn--block auth-form" href="forgot-password.html">Request a new link</a>
-        </div>
-        <p class="auth-switch"><a class="auth-link" href="login.html">Back to log in</a></p>
-      <div class="auth-guest">
-        <p>No account needed to order. You can check out as a guest and track an order any time.</p>
-        <p class="auth-guest__links"><a class="auth-link" href="../shop.html">Shop as a guest</a><a class="auth-link" href="../track.html">Track an order</a></p>
-      </div>
+        </section>
+
+        <section data-verify-state="verified" hidden>
+          <span class="auth-card__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg></span>
+          <h1>Email verified</h1>
+          <p class="auth-card__lede">Email verified. Orders you placed as a guest with this email are now in your account.</p>
+          <div class="verify-actions">
+            <a class="btn btn--primary btn--lg btn--block" href="index.html">Continue to your account</a>
+          </div>
+        </section>
+
+        <section data-verify-state="invalid" hidden>
+          <span class="auth-card__icon auth-card__icon--error"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg></span>
+          <h1>This verification link is no longer valid.</h1>
+          <p class="auth-card__lede">Request a new link and we'll send it to <strong data-verify-email>amaya@example.com</strong>.</p>
+          <div class="alert alert--success" role="status" tabindex="-1" data-verify-alert="sent" hidden>
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+            <div><p>We've sent another link to <strong data-verify-email>amaya@example.com</strong>.</p></div>
+          </div>
+          <!-- blade: @if throttled -->
+          <div class="alert alert--error" role="alert" tabindex="-1" data-verify-alert="throttle" hidden>
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
+            <div><p>Too many attempts. Please try again in 45 seconds.</p></div>
+          </div>
+          <div class="verify-actions">
+            <form method="post" action="verify-email.html" data-resend-form>
+              <button type="submit" class="btn btn--primary btn--lg btn--block">Resend email</button>
+            </form>
+            <a class="btn btn--secondary btn--lg btn--block" href="index.html">Continue to your account</a>
+          </div>
+        </section>
       </div>
     </div>
   </main>

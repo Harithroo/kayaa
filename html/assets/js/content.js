@@ -24,6 +24,23 @@
     sync();
   });
 
+  /* Delivery page: fill the estimate cells from the same { min, max } data as the checkout ETA, worded by Kayaa.formatEta.
+     data-eta-placeholder on the JSON block keeps the placeholder brackets until the real data arrives. */
+  (function () {
+    var cells = $$('[data-eta]');
+    var src = document.getElementById('district-eta');
+    if (!cells.length || !src || !window.Kayaa) return;
+    var data = {};
+    try { data = JSON.parse(src.textContent); } catch (e) { return; }
+    var bracket = src.hasAttribute('data-eta-placeholder');
+    cells.forEach(function (cell) {
+      var d = data[cell.getAttribute('data-eta')];
+      if (!d) return;
+      var text = window.Kayaa.formatEta(d.min, d.max);
+      cell.textContent = bracket ? '[' + text + ']' : text;
+    });
+  })();
+
   var reopen = [];
   window.addEventListener('beforeprint', function () {
     reopen = $$('main details:not([open])');

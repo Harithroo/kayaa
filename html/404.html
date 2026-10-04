@@ -14,7 +14,7 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="/kayaa/assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="/kayaa/assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="/kayaa/assets/css/components.css?v=bc1114ec">
+  <link rel="stylesheet" href="/kayaa/assets/css/components.css?v=6e87c2c7">
   <link rel="stylesheet" href="/kayaa/assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="/kayaa/assets/css/pages/errors.css?v=18fee8d9">
@@ -216,7 +216,7 @@
   <!-- partial: announcement -->
   <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
   <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
-    <p class="topbar__text"><span>Free delivery over Rs 7,500</span><span class="topbar__extra"> · Secure online payment</span></p>
+    <p class="topbar__text"><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span><span class="topbar__extra"> · Secure online payment</span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
   </div>
   <!-- /partial: announcement -->
@@ -491,7 +491,7 @@
   <!-- partial: cart-drawer -->
   <!-- The inner .cart-panel is what the backend's /cart/panel returns; JS swaps it into [data-cart-drawer]. -->
   <div class="drawer drawer--right" id="cart-drawer" data-layer="cart" data-cart-drawer role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
-    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500">
+    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500" data-cfg-attr="data-free-threshold:free_shipping_over">
       <div class="drawer__head">
         <h2 class="drawer__title" id="cart-title">Your bag (<span data-cart-count-label>2</span>)</h2>
         <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close bag"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
@@ -502,7 +502,7 @@
         <div class="drawer__body">
           <div class="cart-progress">
             <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
-            <progress class="progress" value="6300" max="7500" data-cart-progress>84%</progress>
+            <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
           </div>
           <ul class="cart-items" role="list" data-cart-items>
             <!-- loop: cart_items -->
@@ -621,8 +621,9 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="/kayaa/assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="/kayaa/assets/js/app.js?v=65261b3f" defer></script>
+  <script src="/kayaa/assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="/kayaa/assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="/kayaa/assets/js/app.js?v=2d353f92" defer></script>
   <!-- /partial: scripts -->
 </body>
 </html>

@@ -10,6 +10,20 @@
     return 'Rs ' + Math.round(n).toLocaleString('en-US');
   }
 
+  /* Delivery estimate wording, the one helper used by checkout, the delivery page and anything else that shows an ETA.
+     The backend sends two integers per district (min_days, max_days); the wording belongs to the frontend:
+     equal values "3 working days", 1 and 1 "1 working day", otherwise "2–4 working days" (en dash). */
+  window.Kayaa = window.Kayaa || {};
+  window.Kayaa.formatEta = function (min, max) {
+    min = parseInt(min, 10); max = parseInt(max, 10);
+    if (isNaN(min) && isNaN(max)) return '';
+    if (isNaN(min)) min = max;
+    if (isNaN(max)) max = min;
+    if (max < min) { var swap = min; min = max; max = swap; }
+    if (min === max) return min + (min === 1 ? ' working day' : ' working days');
+    return min + '–' + max + ' working days';
+  };
+
   /* ---------- Announcement bar: dismiss hides it for this page view only (nothing is stored,
      so it is back after a refresh and on every new page). Height collapses over 200ms;
      reduced motion hides it instantly. ---------- */

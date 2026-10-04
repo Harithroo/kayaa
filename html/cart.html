@@ -12,7 +12,7 @@
   <!-- partial: styles -->
   <link rel="stylesheet" href="assets/css/tokens.css?v=3d3d6341">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=bc1114ec">
+  <link rel="stylesheet" href="assets/css/components.css?v=6e87c2c7">
   <link rel="stylesheet" href="assets/css/layout.css?v=88051d6f">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/cart.css?v=ccf04b05">
@@ -214,7 +214,7 @@
   <!-- partial: announcement -->
   <!-- blade: @if topbar banner is active (style: lilac | cream | sky) -->
   <div class="topbar topbar--lilac" data-topbar role="region" aria-label="Announcement">
-    <p class="topbar__text"><span>Free delivery over Rs 7,500</span><span class="topbar__extra"> · Secure online payment</span></p>
+    <p class="topbar__text"><span>Free delivery over <span data-cfg="free_shipping_over">Rs 7,500</span></span><span class="topbar__extra"> · Secure online payment</span></p>
     <button type="button" class="topbar__close" data-topbar-dismiss aria-label="Dismiss announcement"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
   </div>
   <!-- /partial: announcement -->
@@ -314,7 +314,7 @@
   <!-- /partial: header -->
 
   <main id="main">
-    <div class="container cart-page" data-cart-page data-low-stock-threshold="5">
+    <div class="container cart-page" data-cart-page data-low-stock-threshold="5" data-cfg-attr="data-low-stock-threshold:low_stock_threshold">
       <h1 class="cart-page__title" data-cart-title>Your bag (2 items)</h1>
 
       <!-- blade: @if session flash "cart_stock_notice" (set when checkout finds items that ran out of stock) -->
@@ -403,13 +403,13 @@
             <h2 id="summary-title">Order summary</h2>
             <dl class="totals">
               <div class="totals__row"><dt>Subtotal</dt><dd data-cart-subtotal>Rs 6,300</dd></div>
-              <!-- TODO: confirm the delivery fee is flat (Rs 450, free from Rs 7,500) and not district-based -->
-              <div class="totals__row"><dt>Delivery</dt><dd data-cart-delivery>Rs 450</dd></div>
+              <!-- TODO: confirm the delivery fee is flat (site config: shipping_fee, free_shipping_over) and not district-based -->
+              <div class="totals__row"><dt>Delivery</dt><dd data-cart-delivery><span data-cfg="shipping_fee">Rs 450</span></dd></div>
               <div class="totals__row totals__row--total"><dt>Total</dt><dd data-cart-total>Rs 6,750</dd></div>
             </dl>
             <div class="cart-progress">
               <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
-              <progress class="progress" value="6300" max="7500" data-cart-progress>84%</progress>
+              <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
             </div>
             <p class="summary-card__hint" id="checkout-hint" data-checkout-hint hidden>Remove the unavailable item to continue to checkout.</p>
             <a class="btn btn--primary btn--lg btn--block" href="checkout.html" data-checkout-btn data-checkout-link aria-describedby="checkout-hint">Checkout</a>
@@ -632,7 +632,7 @@
   <!-- partial: cart-drawer -->
   <!-- The inner .cart-panel is what the backend's /cart/panel returns; JS swaps it into [data-cart-drawer]. -->
   <div class="drawer drawer--right" id="cart-drawer" data-layer="cart" data-cart-drawer role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
-    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500">
+    <div class="cart-panel" data-cart-panel data-state="items" data-free-threshold="7500" data-cfg-attr="data-free-threshold:free_shipping_over">
       <div class="drawer__head">
         <h2 class="drawer__title" id="cart-title">Your bag (<span data-cart-count-label>2</span>)</h2>
         <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close bag"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
@@ -643,7 +643,7 @@
         <div class="drawer__body">
           <div class="cart-progress">
             <p class="cart-progress__text" data-cart-progress-text aria-live="polite">Rs 1,200 away from free delivery</p>
-            <progress class="progress" value="6300" max="7500" data-cart-progress>84%</progress>
+            <progress class="progress" value="6300" max="7500" data-cart-progress data-cfg-attr="max:free_shipping_over">84%</progress>
           </div>
           <ul class="cart-items" role="list" data-cart-items>
             <!-- loop: cart_items -->
@@ -762,11 +762,12 @@
   <!-- /partial: quick-add -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/proto-cart.js?v=eede4438" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
-  <script src="assets/js/app.js?v=65261b3f" defer></script>
+  <script src="assets/js/site-config.js?v=d88b8cfe" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/proto-cart.js?v=027688bb" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
+  <script src="assets/js/app.js?v=2d353f92" defer></script>
   <!-- /partial: scripts -->
   <script src="assets/js/cart.js?v=3a11e55d" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="assets/js/proto-cart-page.js?v=5112fc48" defer></script>
+  <script src="assets/js/proto-cart-page.js?v=9ff1aa7c" defer></script>
 </body>
 </html>

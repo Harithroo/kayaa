@@ -1,7 +1,7 @@
 /* PROTOTYPE ONLY - delete at Blade conversion.
    Renders the order summary from the demo cart, applies the ?demo= states and simulates the hand-off to the
-   payment gateway: a valid submit stores the order in sessionStorage (reference like KYA-10234), waits about 1.2s on the
-   loading state, then goes to proto-onepay.html.
+   payment gateway: a valid submit stores the order in sessionStorage (reference KY-YYMMDD-XXXX), empties the bag (the server empties
+   the cart when it creates the order), waits about 1.2s on the loading state, then goes to proto-onepay.html.
    ?demo=: errors, throttle, gateway-error, signed-in, empty. */
 (function () {
   'use strict';
@@ -39,7 +39,6 @@
     $$('[data-fee-text]', page).forEach(function (n) {
       n.textContent = t.delivery === 0 ? 'Delivery: free (orders from ' + money(t.freeAt) + ')' : 'Delivery: ' + money(t.fee) + ' (free from ' + money(t.freeAt) + ')';
     });
-    $('[data-pay-label]', page).textContent = 'Pay ' + money(t.total);
   }
   document.addEventListener('kayaa:cart', render);
   render();
@@ -73,8 +72,8 @@
     start: function (f) {
       var t = store.totals();
       var districtEl = f.elements.district;
-      var etaText = '';
-      try { etaText = JSON.parse(document.getElementById('district-eta').textContent)[districtEl.value] || ''; } catch (e) { /* none */ }
+      var eta = null;   // { min, max } working days for the chosen district
+      try { eta = JSON.parse(document.getElementById('district-eta').textContent)[districtEl.value] || null; } catch (e) { /* none */ }
       store.order.save({
         ref: store.order.nextRef(),
         createdAt: new Date().toISOString(),
@@ -91,9 +90,11 @@
           districtLabel: districtEl.options[districtEl.selectedIndex].text,
           notes: f.elements.notes.value.trim()
         },
-        eta: etaText,
+        eta: eta,
         payment: { method: 'Card - Onepay', status: 'pending' }
       });
+      // the order exists now, so the bag is empty whatever the payment outcome is (silent: this page is still showing)
+      store.clear(true);
       setTimeout(function () { location.href = 'proto-onepay.html'; }, 1200);
     }
   };
