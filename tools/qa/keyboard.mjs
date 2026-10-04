@@ -45,6 +45,7 @@ for (const [vpName, vp] of Object.entries(VIEWPORTS)) {
   for (const f of FLOWS) {
     await seedBag(page);
     await page.goto(BASE + f, { waitUntil: 'networkidle' });
+    await page.addStyleTag({ content: 'html{scroll-behavior:auto!important}' });   // a smooth scroll still running would make the stop positions lag
     await page.evaluate(() => { document.activeElement && document.activeElement.blur(); window.scrollTo(0, 0); });
     const stops = [];
     const seen = new Set();

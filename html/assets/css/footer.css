@@ -1,0 +1,161 @@
+/* Kayaa footer (full shell). The minimal footer (checkout, 500, 503) keeps its own rules in layout.css.
+   Light only, never a dark footer: a vertical lilac gradient (tokens --footer-g1..g4) that starts from the colour of the section above
+   (<body data-footer-from="white|secondary">, set per page in tools/shell-map.json) so there is no seam. All text is Ink: the lower stops are
+   too dark for Ink Soft or Primary Deep (see docs/qa/design-audit.md, footer contrast table). */
+.site-footer:not(.site-footer--minimal) {
+  --footer-from: var(--footer-g1);
+  position: relative;
+  margin-top: 0;
+  padding-top: var(--space-7);
+  padding-bottom: 0;
+  color: var(--ink);
+  background: linear-gradient(180deg, var(--footer-from, var(--bg)) 0%, var(--footer-g2) 28%, var(--footer-g3) 62%, var(--footer-g4) 100%);
+}
+body[data-footer-from="white"] .site-footer:not(.site-footer--minimal) { --footer-from: var(--surface); }
+body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --footer-from: var(--secondary); }
+
+.footer__grid {
+  display: grid;
+  align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(max(12ch, 42%), 1fr));   /* always two columns below 900px at normal text size, one when the text size is increased (ch follows the font size) */
+  gap: var(--space-6) var(--space-4);
+}
+.footer__brand { grid-column: 1 / -1; }
+.footer__blurb { max-width: 36ch; margin-top: var(--space-2); font-size: var(--fs-dense); }
+
+.footer__title {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);   /* same row height as the wordmark so every column starts on one line */
+  margin-bottom: var(--space-1);
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.footer__list,
+.footer__contact,
+.footer__social { list-style: none; }
+.footer__list { display: flex; flex-direction: column; gap: var(--space-2); }   /* 8px between tap targets */
+/* nine sizes: two columns so the column is not three times taller than its neighbours */
+.footer__list--cols { display: grid; grid-template-columns: repeat(2, minmax(min-content, max-content)); column-gap: var(--space-5); }
+.footer__contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.footer__contact a,
+.footer__list a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap);
+  font-size: var(--fs-dense);
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+}
+.footer__list--cols a { min-width: var(--tap); }   /* the short size links ("2Y", "3Y") keep a 44px-wide tap target */
+.footer__contact a { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .footer__list a:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
+
+/* Social icon buttons: round 44px, translucent white, Ink glyph */
+.footer__social { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
+.footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap);
+  height: var(--tap);
+  border: 1px solid #D9CBEA;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.footer__social-link .icon { width: 20px; height: 20px; }
+@media (hover: hover) and (pointer: fine) {
+  .footer__social-link:hover { transform: translateY(-3px); background: #fff; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer__social-link { transition: none; }
+  .footer__social-link:hover { transform: none; }
+}
+.site-footer:not(.site-footer--minimal) :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }   /* Primary Deep is too faint on the lilac stops */
+
+.footer__legal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1) var(--space-5);
+  margin-top: var(--space-6);
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--line-strong);
+  font-size: var(--fs-ui);
+}
+
+/* Art zone: decorative, aria-hidden. The waves reach the bottom edge of the footer, so the zone carries the footer's bottom padding. */
+.footer__art {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-bottom: calc(var(--bottom-bar-h) + var(--space-4) + env(safe-area-inset-bottom, 0px));
+  pointer-events: none;
+  content-visibility: auto;   /* off screen it costs no layout or paint; the estimate below is close to its real height */
+  contain-intrinsic-block-size: auto calc(clamp(150px, 16vw, 230px) + (min(100vw - 40px, 1200px) + 2vw) * 0.364 + 56px);   /* an estimate of its height until it has been drawn once */
+}
+.footer__waves {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: -1;
+  width: 100%;
+  height: 62%;
+}
+.footer__line { height: clamp(150px, 16vw, 230px); }
+.footer__line-svg { display: block; width: 100%; height: 100%; }
+.footer__wordmark {
+  display: block;
+  width: calc(100% + 2vw);
+  max-width: none;
+  height: auto;
+  margin: -24px -1vw 0;
+}
+@media (min-width: 900px) {
+  .footer__grid { grid-template-columns: 1.5fr 1.2fr 1fr 1fr; gap: var(--space-7); }
+  .footer__brand { grid-column: auto; }
+  .footer__legal { flex-direction: row; flex-wrap: wrap; justify-content: space-between; }
+  .footer__art { padding-bottom: 0; }
+  .footer__wordmark { margin-top: -40px; }
+}
+/* Footer links: compact (about 8px between links) with a mouse on desktop; 44px tap rows everywhere else */
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+  .footer__list a,
+  .footer__contact a { min-height: 0; padding-block: 2px; }
+  .footer__title { margin-bottom: var(--space-2); }
+}
+/* The footer carries the room for the tab bar (inside .footer__art), so the page needs none of its own */
+@media (max-width: 899px) { body:has(.site-footer:not(.site-footer--minimal)) { padding-bottom: 0; } }
+
+/* Sway only for people who have not asked for less motion; paused while the art is off screen (app.js toggles .is-live) */
+@media (prefers-reduced-motion: no-preference) {
+  .footer__line .sway { animation: footer-sway var(--d, 5s) ease-in-out var(--delay, 0s) infinite alternate; }
+  .footer__art:not(.is-live) .sway { animation-play-state: paused; }
+}
+@keyframes footer-sway {
+  from { transform: rotate(calc(var(--r, 2deg) * -1)); }
+  to { transform: rotate(var(--r, 2deg)); }
+}
+
+@media print {
+  .site-footer:not(.site-footer--minimal) { background: #fff; }
+  .footer__art { display: none; }
+}
+@media (forced-colors: active) {
+  .footer__art { display: none; }
+  .site-footer:not(.site-footer--minimal) { background: Canvas; }
+}

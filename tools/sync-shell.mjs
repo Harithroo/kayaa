@@ -32,6 +32,9 @@ const htmlDir = path.join(repo, 'html');
 const partialsDir = path.join(repo, 'tools', 'partials');
 const spritePath = path.join(htmlDir, 'assets', 'icons', 'sprite.svg');
 const check = process.argv.includes('--check');
+// <body data-footer-from="white|secondary"> per page, recorded in tools/shell-map.json ("footerFrom"): the colour the footer's gradient starts from,
+// so it joins a last section that sits on a different full-bleed colour. Written here; tools/check-footer-seam.mjs measures the seam.
+const shellMap = JSON.parse(fs.readFileSync(new URL('./shell-map.json', import.meta.url), 'utf8'));
 
 // ---- site config ----
 const config = JSON.parse(fs.readFileSync(path.join(repo, 'tools', 'site-config.json'), 'utf8'));
@@ -160,6 +163,15 @@ for (const file of walk(htmlDir).sort()) {
     }
     return tag;
   });
+
+  // footer seam: data-footer-from on <body>
+  {
+    const from = (shellMap.footerFrom || {})[label];
+    text = text.replace(/<body\b([^>]*)>/, (m, attrs) => {
+      const rest = attrs.replace(/\s+data-footer-from="[^"]*"/, '');
+      return `<body${rest}${from ? ` data-footer-from="${from}"` : ''}>`;
+    });
+  }
 
   // Cache busting: every local .css/.js reference gets ?v=<first 8 hex of the file's sha1>.
   text = text.replace(/\b(href|src)="((?!https?:|\/\/|#|mailto:|tel:|data:)[^"?#]+\.(?:css|js))(?:\?v=[0-9a-f]*)?"/g, (m, attr, url) => {

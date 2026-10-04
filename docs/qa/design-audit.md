@@ -99,3 +99,17 @@ All radii now come from tokens: pill 100px, card 20px, tile 14px, input 12px, ro
 - Colours inside images (there are no real photos yet). `tools/process-images.mjs` warns when a photo is mostly green, yellow or orange.
 - Colours the browser draws itself: the native date picker, the select list, scrollbars, autofill highlight, text selection.
 - Print styles.
+
+## Footer: contrast and seam (prompt 19)
+
+The full footer is a vertical lilac gradient (`--footer-g1..g4`: #FAF7FB, #F3ECF8, #E4D8F1, #CDB9E3), so the contrast of its text depends on where each line sits. `node tools/qa/footer-contrast.mjs` hides the footer's text, screenshots the footer, and for every text element takes the **lowest** ratio against the real pixels behind it (every 3rd pixel across, every 2nd down). All footer text, headings and links are Ink (#3D3547); Ink Soft (#635C71) and Primary Deep (#6E5A8C) would fall below 4.5:1 on the lower stops, so they are not used there.
+
+| Page | 320 | 375 | 768 | 1024 | 1280 | 1920 |
+|---|---|---|---|---|---|---|
+| Lowest ratio, Home | 5.51 | 5.51 | 5.51 | 5.47 | 5.47 | 5.47 |
+| Lowest ratio, Product | 5.51 | 5.51 | 5.51 | 5.47 | 5.48 | 5.48 |
+| Lowest ratio, Size guide | 5.51 | 5.55 | 5.51 | 5.47 | 5.47 | 5.47 |
+
+The lowest line at every width is the small "kayaa" wordmark link at the top of the brand column (Primary Deep, 5.5:1); the Ink text is higher. The target is 4.5:1: met everywhere, no gradient stop had to change. Focus rings inside the footer are Ink 3px (Primary Deep is too faint on the lilac).
+
+`node tools/check-footer-seam.mjs` compares the 6 pixel rows above the footer's top edge with the 6 below it, at both side gutters, on every full-shell page at 375 and 1280 (62 readings). Result: the largest difference on any channel is 0.3 of 255 (limit 6), so **no page needs `data-footer-from`** today; `footerFrom` in tools/shell-map.json is empty and is there for the day a page ends on a full-bleed white or Secondary band.

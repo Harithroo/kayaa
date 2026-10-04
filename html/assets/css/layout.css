@@ -646,125 +646,10 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
   }
 }
 
-/* ---------- Footer (light, never dark) ---------- */
-.site-footer {
-  margin-top: var(--space-7);
-  padding-block: var(--space-7) var(--space-5);
-  background: var(--secondary);
-  color: var(--ink);
-}
-.footer__grid {
-  display: grid;
-  align-items: start;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12ch), 1fr));   /* two columns at normal text size, one when the text size is increased (ch follows the font size) */
-  gap: var(--space-6) var(--space-4);
-}
-.footer__brand { grid-column: 1 / -1; }
-.footer__blurb { max-width: 36ch; margin-top: var(--space-2); font-size: var(--fs-dense); }
-.footer__contact {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
-  list-style: none;
-}
-.footer__contact a,
-.footer__list a {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: var(--tap);
-  font-size: var(--fs-dense);
-  font-weight: 500;
-  color: var(--ink);
-  text-decoration: none;
-}
-.footer__contact a { font-weight: 700; color: var(--primary-deep); }
-@media (hover: hover) and (pointer: fine) {
-  .footer__contact a:hover,
-  .footer__list a:hover { text-decoration: underline; text-underline-offset: 3px; }
-}
-.footer__list--cols a { min-width: var(--tap); }   /* the short size links ("2Y", "3Y") keep a 44px-wide tap target */
-.footer__title {
-  display: flex;
-  align-items: center;
-  min-height: var(--tap);   /* same row height as the wordmark so every column starts on one line */
-  margin-bottom: var(--space-1);
-  font-family: var(--font-body);
-  font-size: var(--fs-caption);
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--primary-deep);
-}
-.footer__list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);   /* 8px between tap targets */
-  list-style: none;
-}
-.footer__place { margin-top: var(--space-2); font-size: var(--fs-dense); color: var(--ink-soft); }
-/* nine sizes: two columns so the column is not three times taller than its neighbours */
-.footer__list--cols { display: grid; grid-template-columns: repeat(2, minmax(min-content, max-content)); column-gap: var(--space-5); }
-.footer__base {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  margin-top: var(--space-6);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--line-strong);
-  font-size: var(--fs-ui);
-}
-.footer__facts,
-.footer__social {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-5);
-  list-style: none;
-}
-.footer__facts li {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-weight: 600;
-}
-.footer__social a {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap);
-  font-weight: 600;
-  color: var(--ink);
-}
-
-@media (min-width: 600px) {
-  .footer__base {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-  }
-}
-
-@media (min-width: 900px) {
-  .footer__grid {
-    grid-template-columns: 1.5fr 1.2fr 1fr 1fr;
-    gap: var(--space-7);
-  }
-  .footer__brand { grid-column: auto; }
-}
+/* The full footer lives in footer.css */
 /* Landscape phones: keep the fixed chrome (header + tab bar) to about a third of the height */
 @media (max-width: 899px) and (max-height: 500px) and (orientation: landscape) {
   :root { --bottom-bar-h: 52px; }
-}
-
-/* Footer links: 44px tap rows on touch and below 900px; compact (about 8px between links) with a mouse on desktop */
-@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
-  .footer__list,
-  .footer__contact { gap: var(--space-2); }
-  .footer__list a,
-  .footer__contact a { min-height: 0; padding-block: 2px; }
-  .footer__title { margin-bottom: var(--space-2); }
 }
 
 /* ---------- Minimal shell (checkout, thank-you): wordmark, "Secure checkout", back link; one-row footer ---------- */
@@ -798,7 +683,7 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
   }
 }
 
-.site-footer--minimal { margin-top: var(--space-7); padding-block: var(--space-5); }
+.site-footer--minimal { margin-top: var(--space-7); padding-block: var(--space-5); background: var(--secondary); color: var(--ink); }
 .footer-min {
   display: flex;
   flex-direction: column;

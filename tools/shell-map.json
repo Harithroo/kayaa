@@ -6,6 +6,8 @@
     "error": ["seo", "styles", "sprite", "header-error", "footer-minimal", "scripts"],
     "none": ["styles"]
   },
+  "footerFrom": {},
+  "_footerFrom": "Optional, full-shell pages only: \"white\" or \"secondary\" = the full-bleed colour of the last section, which the footer gradient then starts from (sync-shell writes <body data-footer-from>). No entry = the page background. tools/check-footer-seam.mjs lists every seam.",
   "pages": {
     "404.html": "full", "419.html": "full", "429.html": "full", "500.html": "error", "503.html": "error",
     "about.html": "full",

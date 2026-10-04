@@ -159,12 +159,21 @@ node tools/check-seo.mjs             # exit 0, 0 warnings
 node tools/check-copy.mjs            # exit 0 (the cash payment wording rule)
 node tools/check-shell.mjs           # exit 0 (every page has the shell its variant allows; sync --check runs it too)
 node tools/check-budget.mjs          # exit 0 (CSS 70 KB, JS 60 KB, fonts 120 KB, gzip)
+node tools/check-footer-seam.mjs      # browser (see tools/qa/README.md): exit 0, every footer seam within 6 per channel
 node tools/list-todos.mjs            # report the counts; markers stay open until the client approves the text
 ```
 
-**Before every client review** also run the browser audits in `tools/qa/` (setup in `tools/qa/README.md`; the tools live in a temp folder, never in the repo): `axe.mjs` (zero violations), `static-checks.mjs`, `keyboard.mjs`, `modes.mjs`, `engines.mjs` (Chromium, Firefox and WebKit), `validate.mjs`, `hygiene.mjs`, `design-audit.mjs`, and `lighthouse.mjs` (mobile targets: Performance 90+, Accessibility 100, Best Practices 95+, SEO 100 except "page is blocked from indexing" while staging is noindex; LCP under 2.5 s, CLS 0, TBT under 200 ms). Then do `docs/qa/real-device-checklist.md` on a real iPhone and a real Android phone, and read `docs/qa/known-issues.md` to see that nothing new has slipped in. Record the run in `docs/qa/qa-report.md`.
+**Before every client review** also run the browser audits in `tools/qa/` (setup in `tools/qa/README.md`; the tools live in a temp folder, never in the repo): `axe.mjs` (zero violations), `static-checks.mjs`, `keyboard.mjs`, `modes.mjs`, `engines.mjs` (Chromium, Firefox and WebKit), `validate.mjs`, `hygiene.mjs`, `design-audit.mjs`, `footer-contrast.mjs` (every footer text at least 4.5:1), and `lighthouse.mjs` (mobile targets: Performance 90+, Accessibility 100, Best Practices 95+, SEO 100 except "page is blocked from indexing" while staging is noindex; LCP under 2.5 s, CLS 0, TBT under 200 ms). Then do `docs/qa/real-device-checklist.md` on a real iPhone and a real Android phone, and read `docs/qa/known-issues.md` to see that nothing new has slipped in. Record the run in `docs/qa/qa-report.md`.
 
 **Before launch** additionally: `node tools/list-todos.mjs --fail-on-open` must exit 0, and `docs/seo/launch-checklist.md` is done.
+
+## Footer
+
+- Two footers. The FULL footer (`tools/partials/footer.html`, `assets/css/footer.css`) is on every full-shell page; the MINIMAL footer (`footer-minimal`) stays on checkout, 500 and 503 and is flat on --secondary. Never mix them: `check-shell` enforces it.
+- The full footer is never dark. It is a light lilac gradient (tokens `--footer-g1..g4`) and ALL its text is Ink (Ink Soft and Primary Deep fail 4.5:1 on the lower stops). Change a stop and re-run `node tools/qa/footer-contrast.mjs`.
+- `<body data-footer-from="white|secondary">` comes from `footerFrom` in tools/shell-map.json (sync-shell writes it); set it for a page whose last section is a full-bleed white or Secondary band, then run `node tools/check-footer-seam.mjs` (every pair of rows around the footer's top edge within 6 per channel).
+- The giant wordmark is a generated SVG path: regenerate with `node tools/make-wordmark.mjs` (temp install in tools/README.md), never edit it by hand. The art zone is decorative (`aria-hidden`); the supplied SVGs are not to be redrawn.
+- Social links are icon buttons in `<nav aria-label="Social media">`; no text-only social links. Real URLs come from the client (then add `target="_blank" rel="noopener noreferrer"`).
 
 ## Tags and search suggestions
 

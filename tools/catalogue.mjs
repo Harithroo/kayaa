@@ -11,6 +11,7 @@
 //   size-rows                                 <tr> rows of the size table on the product page (the rows come from docs/content/size-guide.md)
 //   product-tags SLUG                         the "Tags" chip row of the product page (links to shop.html?tag=)
 //   size-guide-slider [panel]                 the three-step "How to find your size" slider (tools/content.mjs; used in the product page panel)
+//   footer-clothesline                        the footer's clothesline art (html/assets/img/footer/footer-clothesline.svg, inlined)
 //   decisions                                 the open-decisions table for html/review-decisions.html (tools/build-decisions.mjs)
 //   content NAME | faqs PLACEMENT | district-eta | todo-counts | listing-intro KIND/SLUG   built from docs/content (see tools/content.mjs)
 //   product-grid SCOPE                        <li> cards: all | new | featured | related:SLUG
@@ -127,6 +128,12 @@ export function generate(name, args, ctx) {
     case 'size-links-footer':
       return S.map((s) => `<li><a href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
     case 'decisions': return renderDecisions(ctx.repo);
+    case 'footer-clothesline': {
+      // the supplied footer-clothesline.svg, inlined so the page CSS can sway the garments; metadata and comments are dropped
+      const svg = fs.readFileSync(path.join(ctx.repo, 'html', 'assets', 'img', 'footer', 'footer-clothesline.svg'), 'utf8')
+        .replace(/<metadata>[\s\S]*?<\/metadata>/g, '').replace(/<!--[\s\S]*?-->/g, '').replace(/\n{2,}/g, '\n').trim();
+      return svg.replace('<svg ', '<svg class="footer__line-svg" ');
+    }
     case 'size-guide-slider': return renderSizeGuideSlider(ctx, (args || 'page').trim());
     case 'size-tiles-home': {
       // growth steps: --step (0 to 8) drives the tint and, from 1100px, the height; height and weight come from the size chart in docs/content/size-guide.md

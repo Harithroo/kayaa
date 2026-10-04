@@ -47,7 +47,7 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | `.site-header`, `.primary-nav`, `.header-search`, `.category-row` | layout.css | See the refinement round below for the Shop mega menu and search. |
 | `.drawer`, `.overlay`, `.sheet` | layout.css | Shared layer system in app.js: focus trap, ESC, focus return, scroll lock. |
 | `.tabbar` | layout.css | Below 900px only. Active tab = Primary Deep + 3px top indicator. Labels are Ink (Ink Soft is not allowed at 12.5px). |
-| `.site-footer` | layout.css | Light, on --secondary. |
+| `.site-footer` | footer.css | Light lilac gradient, see "Footer redesign" below. (`.site-footer--minimal` stays flat on --secondary in layout.css.) |
 | `.scroller` | layout.css | Scroll-snap row below 900px, grid at 900+. |
 | `.product-card` | components.css | Hover effects only under (hover: hover) and (pointer: fine). Touch gets a persistent 44px round + button. Card is white with a 1px line border (as in the design system). |
 | `.cart-item`, `.cart-summary`, `.empty-state` | components.css | Cart drawer content. |
@@ -105,11 +105,28 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | `.icon-btn__count` | components.css | Now 12.5px in a 20px badge (was 11px). |
 | Scroll lock | layout.css / app.js | `html.is-locked` also locks body and pads by the measured scrollbar width (`--scrollbar-w`) so nothing jumps. |
 | `scroll-padding` | base.css / listing.css | Top = `--header-h` + 8px (+76px under the sticky toolbar on mobile); bottom = tab bar + safe area. |
-| Footer and menu link lists | layout.css | 8px gap between rows so tap targets never touch. |
+| Footer and menu link lists | footer.css (footer), layout.css (menu) | 8px gap between rows so tap targets never touch. |
 
 ### Payment copy
 - Online payment only (Onepay, Visa/Mastercard).
 - No card or Onepay logos: text and the credit-card icon, with TODO comments to add the official marks and badge.
+
+## Footer redesign (prompt 19)
+
+| Component | Where | Notes |
+| --- | --- | --- |
+| Footer gradient, `--footer-g1`..`--footer-g4` | tokens.css, footer.css | `linear-gradient(180deg, var(--footer-from, var(--bg)) 0%, #F3ECF8 28%, #E4D8F1 62%, #CDB9E3 100%)`. No flat background, no top border. Light only, never dark; no dark mode. |
+| `<body data-footer-from="white|secondary">` | tools/shell-map.json (`footerFrom`), written by sync-shell | The colour the gradient starts from when the last section of a page is a full-bleed white or Secondary band. No entry = the page background. `tools/check-footer-seam.mjs` measures the seam (today every page is within 1 per channel with no entry). |
+| Footer text | footer.css | All text, headings, links and the focus ring are Ink: Ink Soft and Primary Deep fail 4.5:1 on the lower stops. Contact links are bold and underlined. `tools/qa/footer-contrast.mjs` proves it. |
+| Layout | footer.css | 1200px container. Desktop: brand column plus Shop by size, Help, Company. Below 900px: two columns, the brand block spans both. 44px tap rows for touch, compact rows for a mouse from 900px. Legal row (© and "Secure card payments · Island-wide delivery"). Contact lines kept. |
+| Social buttons (`.footer__social`, `.footer__social-link`) | tools/partials/footer.html, footer.css, sprite.svg | Instagram, Facebook, TikTok, WhatsApp: a `<ul>` in `<nav aria-label="Social media">`, 44x44 round, translucent white with a 1px #D9CBEA border, Ink glyph, `aria-label`. Mouse only: 3px lift and a white fill. Instagram, Facebook and TikTok are `href="#"` with a TODO comment (add `target="_blank" rel="noopener noreferrer"` with the real URL); WhatsApp is `https://wa.me/` pending the number. There are no text-only social links any more. |
+| Filled brand glyphs `i-instagram`, `i-facebook`, `i-tiktok`, `i-whatsapp` | sprite.svg | Paths from simple-icons 16.34.0 (CC0), fetched to a temp folder outside the repo; `fill="currentColor"`, no stroke (the rest of the sprite is stroke icons). Brand marks are trademarks of their owners; use them only to link to Kayaa's own accounts. |
+| Art zone (`.footer__art`, aria-hidden) | footer.html, footer.css | The supplied art, not redrawn. The clothesline (`footer-clothesline.svg`) is inlined by `gen: footer-clothesline` so its garments can sway: 100% wide, `slice`, 150-230px high; `@keyframes footer-sway` runs only under `prefers-reduced-motion: no-preference` and only while the zone is on screen (app.js adds `.is-live` with an IntersectionObserver). `footer-waves.svg` is a lazy `<img>` over the bottom 62% and reaches the footer's bottom edge. The two supplied SVGs carried a ~7.8 KB Content Credentials (c2pa) metadata block each; it was stripped (originals kept in git-ignored tools/image-source/footer/). |
+| Giant "kayaa" wordmark | html/assets/img/footer/wordmark.svg | An SVG PATH (no font at runtime, no layout shift) of Urbanist 800 made by `tools/make-wordmark.mjs`; tight viewBox with 14 units below the descender so the tail of the y is whole; white 98% to 55% vertical gradient; container width + 2vw, margin-top -40px desktop / -24px phone; aria-hidden, at the very bottom. Regenerate with the script, never edit the path by hand. |
+| Bottom room | footer.css | Below 900px the art zone's bottom padding is the tab bar height + 16px + `env(safe-area-inset-bottom)`, and `body:has(full footer)` drops its own padding, so the waves reach the screen bottom behind the bar. |
+| Print and forced colours | footer.css | Print: white background, art hidden. Forced colours: art hidden, Canvas background. |
+
+The art zone uses `content-visibility: auto` with an estimated intrinsic height, so the art costs nothing until it is scrolled near (Lighthouse mobile home went from 93 to 98 with it; nothing below the footer can shift, CLS 0). Weight: the three art files total about 10 KB (clothesline 6.5 KB after stripping, waves 0.5 KB, wordmark path 2.4 KB), under the 12 KB / 15 KB limits; no raster images. Inlining the clothesline adds about 1.2 KB gzip per page (under the 3 KB limit that would have switched it to an `<img>`).
 
 ### Assumptions
 - Between 900 and 1099px the mega menu shows the age tiles and category chips without the feature card.
@@ -178,7 +195,7 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | `styles` partial | tools/partials/styles.html | Direct `<link>` tags for tokens, base, components and layout in every page head. `app.css` and its `@import` chain are gone. |
 | `?v=<sha1>` cache busting | tools/sync-shell.mjs | Every local .css/.js reference gets the first 8 hex chars of the file's sha1; `--check` flags stale versions. |
 | `tools/check-css.mjs` | tools | Report-only: brace balance, unterminated comments, missing link/url/srcset targets, and a warning list of classes used in HTML but defined in no CSS. Current warnings are unstyled structural hooks (`hero__copy`, `mega__feature-body`, `pagination__edge-label`, `rating-row__label`, `switch__label`). |
-| Footer link rhythm | layout.css | 44px tap rows on touch and below 900px; with a mouse from 900px the links are compact (about 8px apart). Column headings share the wordmark's 44px row so all columns start on one line. |
+| Footer link rhythm | footer.css | 44px tap rows on touch and below 900px; with a mouse from 900px the links are compact (about 8px apart). Column headings share the wordmark's 44px row so all columns start on one line. |
 | `docs/backend-contract.md` | docs | Contract for the backend dev; update it whenever a page, form or param changes. |
 
 ### Assumptions

@@ -58,6 +58,16 @@ export function checkShell(repo = repoDefault) {
     }
   };
 
+  // footerFrom: which colour the full footer's gradient starts from (white | secondary; absent = the page background). Only full-shell pages have one.
+  for (const [f, v] of Object.entries(map.footerFrom || {})) {
+    if (map.pages[f] !== 'full') problems.push(`${f}: footerFrom is for full-shell pages only`);
+    else if (!['white', 'secondary'].includes(v)) problems.push(`${f}: footerFrom must be "white" or "secondary", not "${v}"`);
+    else if (files.includes(f) && !fs.readFileSync(path.join(htmlDir, f), 'utf8').includes(`<body`) ) problems.push(`${f}: no <body>`);
+    else if (files.includes(f) && !new RegExp(`<body[^>]*data-footer-from="${v}"`).test(fs.readFileSync(path.join(htmlDir, f), 'utf8'))) problems.push(`${f}: <body> lacks data-footer-from="${v}" (run node tools/sync-shell.mjs)`);
+  }
+  for (const f of files) {
+    if (map.pages[f] === 'full' && !(map.footerFrom || {})[f] && /<body[^>]*data-footer-from=/.test(fs.readFileSync(path.join(htmlDir, f), 'utf8'))) problems.push(`${f}: has data-footer-from but tools/shell-map.json does not list it (run node tools/sync-shell.mjs)`);
+  }
   for (const f of files) if (map.pages[f]) inspect(f, fs.readFileSync(path.join(htmlDir, f), 'utf8'), map.pages[f]);
   const skeleton = path.join(repo, 'tools', 'page-skeleton.html');
   if (fs.existsSync(skeleton)) inspect('tools/page-skeleton.html', fs.readFileSync(skeleton, 'utf8'), 'full');   // the skeleton defaults to the full shell

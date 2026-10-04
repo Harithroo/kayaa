@@ -4,7 +4,15 @@
         <div class="footer__brand">
           <a class="wordmark" href="{{root}}index.html" aria-label="Kayaa home">kayaa</a>
           <p class="footer__blurb">Soft, honest clothing made for Sri Lankan weather.</p>
-          <p class="footer__place">Colombo, Sri Lanka</p> <!-- TODO: confirm with client -->
+          <nav aria-label="Social media">
+            <ul class="footer__social" role="list">
+              <!-- TODO: real URL from client (then add target="_blank" rel="noopener noreferrer") -->
+              <li><a class="footer__social-link" href="#" aria-label="Instagram"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-instagram"></use></svg></a></li>
+              <li><a class="footer__social-link" href="#" aria-label="Facebook"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-facebook"></use></svg></a></li>
+              <li><a class="footer__social-link" href="#" aria-label="TikTok"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-tiktok"></use></svg></a></li>
+              <li><a class="footer__social-link" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"></use></svg></a></li> <!-- TODO: add the WhatsApp number -->
+            </ul>
+          </nav>
           <ul class="footer__contact" role="list">
             <li><a href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg> Chat on WhatsApp</a></li> <!-- TODO: add WhatsApp number -->
             <li><a href="mailto:hello@example.com">hello@example.com</a></li> <!-- TODO: confirm email with client -->
@@ -38,18 +46,22 @@
           </ul>
         </nav>
       </div>
-      <div class="footer__base">
-        <ul class="footer__facts" role="list">
-          <!-- TODO: add official card marks and the Onepay badge from their brand kit -->
-          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg> Secure card payments</li>
-          <li><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg> Island-wide delivery</li>
-        </ul>
-        <ul class="footer__social" role="list">
-          <!-- TODO: add real social URLs -->
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Facebook</a></li>
-        </ul>
-        <p>&copy; 2026 Kayaa</p>
+      <div class="footer__legal">
+        <!-- TODO: confirm the place with the client; add official card marks and the Onepay badge from their brand kit -->
+        <p>&copy; 2026 Kayaa. Colombo, Sri Lanka</p>
+        <p>Secure card payments &middot; Island-wide delivery</p>
+      </div>
+    </div>
+    <!-- Art zone: decorative only (aria-hidden). The clothesline is the supplied footer-clothesline.svg inlined (so the page CSS can sway the garments),
+         the waves and the giant wordmark are images; the wordmark is an SVG path made by tools/make-wordmark.mjs. -->
+    <div class="footer__art" aria-hidden="true" data-footer-art>
+      <img class="footer__waves" src="{{root}}assets/img/footer/footer-waves.svg" alt="" width="1440" height="260" loading="lazy" decoding="async">
+      <div class="footer__line">
+        <!-- gen: footer-clothesline -->
+        <!-- /gen: footer-clothesline -->
+      </div>
+      <div class="container">
+        <img class="footer__wordmark" src="{{root}}assets/img/footer/wordmark.svg" alt="" width="1000" height="364" loading="lazy" decoding="async">
       </div>
     </div>
   </footer>

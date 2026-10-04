@@ -29,6 +29,8 @@ node tools/qa/engines.mjs         # Chromium, Firefox, WebKit smoke test at 390x
 node tools/qa/validate.mjs        # html-validate on every page
 node tools/qa/hygiene.mjs         # console errors, failed requests, unused CSS rules, file names and sizes
 node tools/qa/design-audit.mjs    # computed colours against tokens, green/yellow/peach hues, font sizes, spacing and radii against the scales
+node tools/qa/footer-contrast.mjs # footer text against the real gradient pixels behind it at 320 to 1920 (4.5:1)
+node tools/check-footer-seam.mjs  # footer top edge against the section above (also in tools/README.md)
 node tools/qa/serve.mjs           # just the server: http://localhost:3480/kayaa/ (html/ under /kayaa/, 404.html fallback, gzip, 10 minute cache)
 ```
 

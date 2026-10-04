@@ -29,6 +29,12 @@
   --scrim-light: rgba(61, 53, 71, 0.08);    /* mega menu backdrop: well under 10% ink */
   --scrim: rgba(61, 53, 71, 0.4);           /* drawer / sheet overlay, Ink-tinted, not black */
 
+  /* Footer gradient stops (top to bottom; the top one is replaced by --footer-from, see footer.css). Ink is the only text colour that clears 4.5:1 on all of them. */
+  --footer-g1: #FAF7FB;
+  --footer-g2: #F3ECF8;
+  --footer-g3: #E4D8F1;
+  --footer-g4: #CDB9E3;
+
   /* Product colour dots (no green) */
   --swatch-lilac: var(--primary);
   --swatch-sky: var(--accent);

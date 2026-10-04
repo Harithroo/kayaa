@@ -526,4 +526,12 @@
       openLayer(cart, trigger);
     });
   }
+
+  /* Footer art: the clothesline sways only while it is on screen (the CSS pauses it otherwise, and not at all under reduced motion) */
+  var art = document.querySelector('[data-footer-art]');
+  if (art && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      art.classList.toggle('is-live', entries[entries.length - 1].isIntersecting);
+    }).observe(art);
+  }
 })();
