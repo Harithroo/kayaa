@@ -67,3 +67,11 @@ export async function open(page, st, withBag = true) {
 
 export const write = (name, text) => { fs.writeFileSync(path.join(outDir, name), text); return path.join(outDir, name); };
 export const resolveModule = (name) => req.resolve(name);
+
+// Browser for the audits. KAYAA_ROOT_FONT=125|150|175|200 starts Firefox with its default font size raised by that percentage (a real
+// browser text-size setting: it moves every em media query, which a CSS override of html{font-size} cannot). Without it: Chromium.
+export async function launchBrowser() {
+  const pct = parseInt(process.env.KAYAA_ROOT_FONT, 10) || 100;
+  if (pct === 100) return load('playwright').chromium.launch();
+  return load('playwright').firefox.launch({ firefoxUserPrefs: { 'font.size.variable.x-western': Math.round(16 * pct / 100), 'font.minimum-size.x-western': 0 } });
+}

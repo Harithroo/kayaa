@@ -1,20 +1,19 @@
 #!/usr/bin/env node
 // Footer seam check (dev-only, needs Playwright from the temp QA folder, see tools/qa/README.md):
-//   node tools/check-footer-seam.mjs [--pages a.html,b.html]
+//   node tools/check-footer-seam.mjs [--pages=a.html,b.html]      KAYAA_ROOT_FONT=150 runs it with a 150% browser text size (Firefox)
 // For every full-shell page at 375 and 1280 wide it looks at the 6 pixel rows just above the footer and the 6 rows just below its top edge
 // (read from a real screenshot, at both side gutters, away from any text) and fails when any colour channel differs by more than 6.
 // The footer's gradient starts from <body data-footer-from="white|secondary"> (tools/shell-map.json "footerFrom"); when a page fails, set
 // that for the page and run node tools/sync-shell.mjs. The final line is a table of every page; exit 1 on any failure.
 import fs from 'node:fs';
 import path from 'node:path';
-import { load, start, BASE, repo } from './qa/lib.mjs';
+import { load, start, BASE, repo, launchBrowser } from './qa/lib.mjs';
 
 const only = (process.argv.find((a) => a.startsWith('--pages=')) || '').slice(8).split(',').filter(Boolean);
 const map = JSON.parse(fs.readFileSync(path.join(repo, 'tools', 'shell-map.json'), 'utf8'));
 const pages = Object.keys(map.pages).filter((p) => map.pages[p] === 'full' && (!only.length || only.includes(p)));
-const { chromium } = load('playwright');
 const server = await start();
-const browser = await chromium.launch();
+const browser = await launchBrowser();
 const rows = [];
 // pixel access without a PNG library: draw the screenshot on a canvas in a blank page
 const reader = await (await browser.newContext()).newPage();
@@ -25,7 +24,7 @@ const pixels = (buf) => reader.evaluate(async (b64) => {
 }, buf.toString('base64'));
 let failed = 0;
 for (const width of [375, 1280]) {
-  const ctx = await browser.newContext({ viewport: { width, height: 900 }, isMobile: width < 900, hasTouch: width < 900, reducedMotion: 'reduce' });
+  const ctx = await browser.newContext({ viewport: { width, height: 900 }, ...(process.env.KAYAA_ROOT_FONT ? {} : { isMobile: width < 900, hasTouch: width < 900 }), reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   for (const p of pages) {
     await page.goto(BASE + p, { waitUntil: 'networkidle' });

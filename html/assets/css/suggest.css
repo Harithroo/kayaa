@@ -106,11 +106,12 @@
 
 /* ---------- The search page field and the 404 field ---------- */
 .listing-search, .error-search { flex-wrap: wrap; }
-@media (max-width: 899px) {
+@media (max-width: 56.1875em) {   /* 899px at the normal text size */
   /* a phone: the panel is part of the page, below the field, and the results wait until a row or Enter is chosen */
   .suggest--page { position: static; z-index: auto; flex: 0 0 100%; max-height: none; margin-top: var(--space-2); box-shadow: none; }
   .suggest--page .suggest__opt { min-height: 48px; }
-  .is-suggesting [data-listing-results], .is-suggesting [data-state], .is-suggesting .toolbar, .is-suggesting .listing-head__count { display: none; }
+  .is-suggesting [data-listing-results], .is-suggesting [data-state], .is-suggesting .toolbar, .is-suggesting .listing-head__count,
+  .is-suggesting .also-matches, .is-suggesting .size-help { display: none; }   /* nothing below the field competes with the open panel; it all returns when the panel closes */
 }
 
 /* the field moved into .suggest__box: the box takes the input's old flex role */

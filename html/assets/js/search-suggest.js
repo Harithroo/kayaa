@@ -17,7 +17,7 @@
   var NS = 'http://www.w3.org/2000/svg';
   var cfg = window.KAYAA_CONFIG || {};
   var core = window.KayaaSearch;
-  var narrow = window.matchMedia ? window.matchMedia('(max-width: 899px)') : { matches: false };
+  var narrow = window.matchMedia ? window.matchMedia('(max-width: 56.1875em)') : { matches: false };
 
   function defaultProvider(q, signal) {
     return fetch('/search/suggest?q=' + encodeURIComponent(q), { signal: signal, headers: { Accept: 'application/json' } })

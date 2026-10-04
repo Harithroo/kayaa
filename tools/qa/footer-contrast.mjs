@@ -4,19 +4,18 @@
 // At 320, 375, 768, 1024, 1280 and 1920 wide: the footer's text is made transparent, the footer is screenshotted, and for every text element the
 // real background pixels behind it are read. The ratio is text colour against the WORST (lowest-contrast) pixel behind that element.
 // Prints the lowest ratio per width and the element it belongs to; exit 1 when anything is under 4.5:1.
-import { load, start, BASE } from './lib.mjs';
+import { load, start, BASE, launchBrowser } from './lib.mjs';
 
 const pages = process.argv.slice(2).length ? process.argv.slice(2) : ['index.html', 'product.html', 'size-guide.html'];
 const WIDTHS = [320, 375, 768, 1024, 1280, 1920];
-const { chromium } = load('playwright');
 const server = await start();
-const browser = await chromium.launch();
+const browser = await launchBrowser();
 const reader = await (await browser.newContext()).newPage();
 let failed = 0;
 const rows = [];
 for (const p of pages) {
   for (const width of WIDTHS) {
-    const ctx = await browser.newContext({ viewport: { width, height: 900 }, isMobile: width < 900, hasTouch: width < 900, reducedMotion: 'reduce' });
+    const ctx = await browser.newContext({ viewport: { width, height: 900 }, ...(process.env.KAYAA_ROOT_FONT ? {} : { isMobile: width < 900, hasTouch: width < 900 }), reducedMotion: 'reduce' });
     const page = await ctx.newPage();
     await page.goto(BASE + p, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.querySelectorAll('img[loading=lazy]').forEach((i) => { i.loading = 'eager'; }));
