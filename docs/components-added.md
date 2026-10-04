@@ -306,8 +306,18 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 | `<!-- partial: seo -->`, `tools/seo.json`, `tools/seo.mjs` | every <head> | One source for title, description, canonical, robots, Open Graph, Twitter card and JSON-LD; `"staging": true` forces noindex,nofollow. |
 | `tools/check-seo.mjs`, `tools/list-todos.mjs` | tools | Page-level SEO errors and warnings; open content markers by page (`--fail-on-open` before launch). |
 | Self-hosted fonts (`assets/fonts`, `assets/css/fonts.css`) | assets | Urbanist and Public Sans, latin variable woff2, font-display: swap, size-adjusted Arial fallbacks; no Google Fonts requests. |
-| Content to approve card | review.html | Counts of open markers and a link to docs/content/01-open-decisions.md. |
+| Content to approve card | review.html | Counts of open markers and a link to review-decisions.html. |
 | docs/seo | docs | robots.production.txt, sitemap.example.xml, launch-checklist.md (not published). |
+
+## Payment choice, growth steps and the decisions page (prompt 13)
+
+| Component | Where | Notes |
+| --- | --- | --- |
+| Payment method cards (`.pay-choice`, `.pay-option`) | checkout.html, pages/checkout.css | A fieldset "Payment method" with two radio cards (`name="payment_method"`, values online and cod), shown only when the admin setting `cod_enabled` is on (prototype: `?demo=cod-on`). The checked card gets a deep-lilac border, a lilac fill and a filled ring (never colour alone); the button label, icon and helper text follow the choice. Off: the single card panel. |
+| Payment badge (`.pay-badge`) | components.css | Outline neutral pill with the banknote icon and the text "Pay on delivery"; used on the thank-you, track, order and orders-list pages for a cash order only. |
+| Growth steps (`.age-steps`, `.age-tile` with `--step`) | index.html, pages/home.css | Shop by age: nine tiles whose tint deepens with `--step` (0 to 8, from the lightest tone towards Wisteria). 1100px and up: one row, bottom-aligned, each tile 10px taller than the last (150px to 230px). 600 to 1099px: a 3 x 3 grid. Below 600px: scroll-snap row with a peek, hidden scrollbar, right-edge fade and a "See all sizes" link. Height and weight come from the size chart in docs/content/size-guide.md. |
+| `tools/check-copy.mjs` | tools | Fails when the cash payment wording appears outside the checkout payment step and the order pages. |
+| `tools/build-decisions.mjs`, `html/review-decisions.html` | tools, review | Renders docs/content/01-open-decisions.md as a table (stacked on narrow screens); review only. |
 
 ### Assumptions
 - The size chart in docs/content/size-guide.md replaces the earlier placeholder ranges, on the size guide and on the product page.

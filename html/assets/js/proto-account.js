@@ -73,7 +73,8 @@
       $('[data-t-ref]', result).textContent = o.ref;
       $('[data-t-date]', result).textContent = 'Placed ' + orders.date(o.date);
       $('[data-t-updated]', result).textContent = 'Last updated ' + orders.date(o.updated);
-      $('[data-t-badges]', result).innerHTML = orders.badge('Order status', o.status) + orders.badge('Payment status', o.paymentStatus);
+      $('[data-t-badges]', result).innerHTML = orders.badge('Order status', o.status) + orders.badge('Payment status', o.paymentStatus) + orders.methodBadge(o);
+      $('[data-t-method]', result).textContent = orders.methodLabel(o);
       orders.renderStepper($('[data-stepper-root]', result), o);   // also shows "Resume payment" when it applies
       $('[data-t-lines]', result).innerHTML = orders.linesHtml(o);
       $('[data-t-subtotal]', result).textContent = money(o.subtotal);
@@ -131,7 +132,7 @@
       }).join('');
       return '<li class="order-card"><div class="order-card__head"><p class="order-card__ref"><a href="order.html?ref=' + o.ref + '">' + o.ref + '</a></p>' +
         '<p class="order-card__date">Placed ' + orders.date(o.date) + '</p></div>' +
-        '<div class="order-card__badges">' + orders.badge('Order status', o.status) + orders.badge('Payment status', o.paymentStatus) + '</div>' +
+        '<div class="order-card__badges">' + orders.badge('Order status', o.status) + orders.badge('Payment status', o.paymentStatus) + orders.methodBadge(o) + '</div>' +
         '<div class="order-card__body"><div class="order-card__items"><span class="order-card__thumbs" aria-hidden="true">' + thumbs + '</span><span>' + units + (units === 1 ? ' item' : ' items') + '</span></div>' +
         '<p class="order-card__total">' + money(o.total) + '</p></div>' +
         '<div class="order-card__actions"><a class="link-arrow" href="order.html?ref=' + o.ref + '">View order<span class="visually-hidden"> ' + o.ref + '</span> ' +
@@ -170,7 +171,7 @@
         document.title = 'Order ' + o.ref + ' | Kayaa';
         $('[data-o-ref]', detail).textContent = o.ref;
         $('[data-o-date]', detail).textContent = 'Placed ' + orders.date(o.date);
-        $('[data-o-badges]', detail).innerHTML = orders.badge('Order status', o.status) + orders.badge('Payment status', o.paymentStatus);
+        $('[data-o-badges]', detail).innerHTML = orders.badge('Order status', o.status) + orders.badge('Payment status', o.paymentStatus) + orders.methodBadge(o);
         orders.renderStepper($('[data-stepper-root]', detail), o);
         $('[data-o-eta-wrap]', detail).hidden = o.status === 'cancelled' || o.status === 'delivered' || o.paymentStatus === 'refunded';
         $('[data-o-retry]', detail).hidden = !orders.canResume(o);   // "Resume payment"
@@ -188,7 +189,7 @@
       $('[data-o-subtotal]', detail).textContent = money(o.subtotal);
       $('[data-o-delivery]', detail).textContent = o.delivery === 0 ? 'Free' : money(o.delivery);
       $('[data-o-total]', detail).textContent = money(o.total);
-      $('[data-o-method]', detail).textContent = o.method;
+      $('[data-o-method]', detail).textContent = orders.methodLabel(o);
       $('[data-o-pay-status]', detail).innerHTML = orders.badge('Payment status', o.paymentStatus);
       var a = o.address;
       $('[data-o-address]', detail).innerHTML = [a.name, a.line1, a.line2, a.city + (a.districtLabel ? ', ' + a.districtLabel : ''), a.phone].filter(Boolean).map(esc).join('<br>');

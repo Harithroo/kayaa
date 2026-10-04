@@ -31,10 +31,10 @@
   <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
   <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
+  <link rel="stylesheet" href="assets/css/components.css?v=186fb5f1">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/checkout.css?v=badd490b">
+  <link rel="stylesheet" href="assets/css/pages/checkout.css?v=e7bd6735">
 </head>
 <body data-page="checkout">
   <!-- partial: sprite -->
@@ -399,23 +399,51 @@
 
             <section class="checkout-card" aria-labelledby="co-payment">
               <h2 class="checkout-card__title" id="co-payment"><span class="checkout-card__num" aria-hidden="true">3</span> Payment</h2>
-              <div class="pay-card">
-                <svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg>
-                <div>
-                  <p class="pay-card__title">Pay by card · Visa or Mastercard</p>
-                  <!-- TODO: confirm with the backend dev that Onepay is a hosted redirect -->
-                  <p class="pay-card__text">You'll be taken to Onepay's secure page to enter your card details. We never see or store your card number.</p>
-                  <!-- TODO: add official card marks and the Onepay badge from their brand kit -->
-                  <p class="pay-card__brands"><span class="badge badge--outline">Visa</span><span class="badge badge--outline">Mastercard</span></p>
+              <!-- blade: @if (config('cod_enabled')) render the fieldset [data-pay-choice] (enabled) and omit the single panel; @else render the single panel and the hidden payment_method=online input. The server decides; the prototype switches with ?demo=cod-on. -->
+              <div data-pay-single>
+                <input type="hidden" name="payment_method" value="online" data-pay-default>
+                <div class="pay-card">
+                  <svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg>
+                  <div>
+                    <p class="pay-card__title">Pay by card · Visa or Mastercard</p>
+                    <!-- TODO: confirm with the backend dev that Onepay is a hosted redirect -->
+                    <p class="pay-card__text">You'll be taken to Onepay's secure page to enter your card details. We never see or store your card number.</p>
+                    <!-- TODO: add official card marks and the Onepay badge from their brand kit -->
+                    <p class="pay-card__brands"><span class="badge badge--outline">Visa</span><span class="badge badge--outline">Mastercard</span></p>
+                  </div>
                 </div>
               </div>
+              <fieldset class="pay-choice" data-pay-choice hidden disabled>
+                <legend class="pay-choice__legend">Payment method</legend>
+                <label class="pay-option">
+                  <input class="pay-option__input visually-hidden" type="radio" name="payment_method" value="online" checked>
+                  <span class="pay-option__box">
+                    <svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg>
+                    <span class="pay-option__body">
+                      <span class="pay-option__title">Pay by card · Visa or Mastercard</span>
+                      <span class="pay-option__text">You'll be taken to Onepay's secure page to enter your card details. We never see or store your card number.</span>
+                      <span class="pay-card__brands"><span class="badge badge--outline">Visa</span><span class="badge badge--outline">Mastercard</span></span>
+                    </span>
+                  </span>
+                </label>
+                <label class="pay-option">
+                  <input class="pay-option__input visually-hidden" type="radio" name="payment_method" value="cod">
+                  <span class="pay-option__box">
+                    <svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg>
+                    <span class="pay-option__body">
+                      <span class="pay-option__title">Cash on delivery</span>
+                      <span class="pay-option__text">Pay the courier when your parcel arrives. Please have the exact amount ready, the courier may not carry change.</span>
+                    </span>
+                  </span>
+                </label>
+              </fieldset>
               <p class="checkout-terms">By paying you agree to our <a href="terms.html">Terms</a> and <a href="returns.html">Returns policy</a>.</p>
               <button type="submit" class="btn btn--primary btn--lg btn--block pay-btn" data-pay-btn>
-                <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-lock"></use></svg>
-                <!-- The label comes from config (pay_button_label); it never contains the amount, the total is in the summary. --><span data-cfg="pay_button_label" data-pay-label>Pay now</span>
+                <svg class="icon icon--16" aria-hidden="true" focusable="false" data-pay-icon><use href="#i-lock"></use></svg>
+                <!-- The label comes from config (pay_button_label); it never contains the amount, the total is in the summary. --><span data-cfg="pay_button_label" data-pay-label data-cfg-attr="data-label-card:pay_button_label data-label-cod:cod_button_label" data-label-card="Pay now" data-label-cod="Place order">Pay now</span>
                 <span class="spinner" aria-hidden="true" hidden></span>
               </button>
-              <p class="pay-helper"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-lock"></use></svg> Secure payment via Onepay</p>
+              <p class="pay-helper" data-pay-helper data-helper-card="Secure payment via Onepay" data-helper-cod="No payment is taken online. You pay the courier on delivery."><svg class="icon icon--16" aria-hidden="true" focusable="false" data-helper-icon><use href="#i-lock"></use></svg> <span data-helper-text>Secure payment via Onepay</span></p>
             </section>
           </form>
         </div>
@@ -491,13 +519,13 @@
   <!-- /partial: footer-minimal -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
   <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->
-  <script src="assets/js/checkout.js?v=e9ee805d" defer></script>
+  <script src="assets/js/checkout.js?v=decc592e" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="assets/js/proto-checkout.js?v=eae1805b" defer></script>
+  <script src="assets/js/proto-checkout.js?v=64a72d7e" defer></script>
 </body>
 </html>

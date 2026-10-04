@@ -295,7 +295,7 @@ export function renderTodoCounts(ctx) {
   <h2 id="review-todos">Content to approve</h2>
   <ul class="review__list" role="list">
     <li class="review__item">
-      <div class="review__text"><a class="review__name" href="../docs/content/01-open-decisions.md">Open decisions for the client</a><p class="review__note"><strong>${c.todo}</strong> facts only Kayaa knows to confirm and <strong>${c.proposed}</strong> proposed defaults to approve, in docs/content. Nothing ships while markers remain; run <code>node tools/list-todos.mjs</code> for the list per page.</p></div>
+      <div class="review__text"><a class="review__name" href="review-decisions.html">Open decisions for the client</a><p class="review__note"><strong>${c.todo}</strong> facts only Kayaa knows to confirm and <strong>${c.proposed}</strong> proposed defaults to approve, in docs/content. Nothing ships while markers remain; run <code>node tools/list-todos.mjs</code> for the list per page.</p></div>
       <span class="badge badge--outline">${c.todo + c.proposed} open</span>
     </li>
   </ul>

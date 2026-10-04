@@ -25,7 +25,7 @@ Delivery is {{cfg:shipping_fee}} per order, and free when your order is {{cfg:fr
 
 ## Payment
 
-You pay online by card (Visa and Mastercard) when you place your order. We do not offer cash on delivery, so you do not pay the courier anything.
+You choose how to pay at checkout. Card payments (Visa and Mastercard) are taken securely through our payment partner, and we never see your full card number.
 
 ## How delivery works
 

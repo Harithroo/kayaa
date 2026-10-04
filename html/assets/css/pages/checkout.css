@@ -131,3 +131,41 @@
 }
 
 .checkout-empty .empty-state { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); }
+
+/* ---------- Payment method choice (shown only when the admin setting cod_enabled is on) ----------
+   Two selectable cards over real radios (name="payment_method"); the checked card gets a primary border plus a
+   filled ring, never colour alone. */
+.pay-choice { margin: var(--space-4) 0 0; padding: 0; border: 0; min-width: 0; display: grid; gap: var(--space-3); }
+.pay-choice__legend { padding: 0; margin-bottom: var(--space-1); font-weight: 700; font-size: var(--fs-dense); }
+.pay-option { display: block; position: relative; cursor: pointer; }
+.pay-option__box {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tile);
+  transition: border-color var(--dur-fast, 150ms) ease, background-color var(--dur-fast, 150ms) ease;
+}
+.pay-option__box::after {   /* the radio mark */
+  content: "";
+  order: 3;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0 auto;
+  border: 2px solid var(--ink-soft);
+  border-radius: 50%;
+  background: var(--surface);
+}
+.pay-option__box > .icon { flex: none; margin-top: 2px; color: var(--primary-deep); }
+.pay-option__body { display: block; flex: 1; min-width: 0; }
+.pay-option__title { display: block; font-family: var(--font-display); font-size: var(--fs-h4); font-weight: 600; }
+.pay-option__text { display: block; margin-top: 2px; font-size: var(--fs-dense); color: var(--ink-soft); }
+.pay-option__input:checked + .pay-option__box { border-color: var(--primary-deep); background: var(--tone-2); }
+.pay-option__input:checked + .pay-option__box::after { border-color: var(--primary-deep); background: radial-gradient(circle, var(--primary-deep) 0 5px, var(--surface) 6px); }
+.pay-option__input:focus-visible + .pay-option__box { outline: var(--focus-ring); outline-offset: 2px; }
+@media (hover: hover) { .pay-option:hover .pay-option__box { border-color: var(--primary-deep); } }
+@media (prefers-reduced-motion: reduce) { .pay-option__box { transition: none; } }

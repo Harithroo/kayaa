@@ -53,10 +53,10 @@
   <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
   <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
+  <link rel="stylesheet" href="assets/css/components.css?v=186fb5f1">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/home.css?v=ba11ed0c">
+  <link rel="stylesheet" href="assets/css/pages/home.css?v=ca62c45e">
 </head>
 <body data-page="home">
   <!-- partial: sprite -->
@@ -437,19 +437,24 @@
             <p class="section__intro">Choose your baby's age band. Height and weight are the better guide, so check the size guide if you are between sizes.</p>
           </div>
         </div>
+        <div class="age-steps">
+        <div class="age-steps__row">
         <ul class="scroller scroller--age" role="list">
           <!-- gen: size-tiles-home -->
-          <li><a class="age-tile" href="shop.html?size=newborn" style="--tone: var(--tone-1)"><span class="age-tile__label">Newborn</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?size=0-3m" style="--tone: var(--tone-2)"><span class="age-tile__label">0–3m</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?size=3-6m" style="--tone: var(--tone-3)"><span class="age-tile__label">3–6m</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?size=6-9m" style="--tone: var(--tone-4)"><span class="age-tile__label">6–9m</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?size=9-12m" style="--tone: var(--tone-1)"><span class="age-tile__label">9–12m</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?size=12-18m" style="--tone: var(--tone-2)"><span class="age-tile__label">12–18m</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?size=18-24m" style="--tone: var(--tone-3)"><span class="age-tile__label">18–24m</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?size=2y" style="--tone: var(--tone-4)"><span class="age-tile__label">2Y</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li><a class="age-tile" href="shop.html?size=3y" style="--tone: var(--tone-1)"><span class="age-tile__label">3Y</span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 0"><a class="age-tile" href="shop.html?size=newborn" aria-label="Shop size Newborn"><span class="age-tile__label">Newborn</span><span class="age-tile__meta"><span>Up to 50 cm</span><span>Up to 3.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 1"><a class="age-tile" href="shop.html?size=0-3m" aria-label="Shop size 0–3m"><span class="age-tile__label">0–3m</span><span class="age-tile__meta"><span>50–58 cm</span><span>3.5–5.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 2"><a class="age-tile" href="shop.html?size=3-6m" aria-label="Shop size 3–6m"><span class="age-tile__label">3–6m</span><span class="age-tile__meta"><span>58–66 cm</span><span>5.5–7.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 3"><a class="age-tile" href="shop.html?size=6-9m" aria-label="Shop size 6–9m"><span class="age-tile__label">6–9m</span><span class="age-tile__meta"><span>66–72 cm</span><span>7.5–9 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 4"><a class="age-tile" href="shop.html?size=9-12m" aria-label="Shop size 9–12m"><span class="age-tile__label">9–12m</span><span class="age-tile__meta"><span>72–78 cm</span><span>9–10.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 5"><a class="age-tile" href="shop.html?size=12-18m" aria-label="Shop size 12–18m"><span class="age-tile__label">12–18m</span><span class="age-tile__meta"><span>78–86 cm</span><span>10.5–12 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 6"><a class="age-tile" href="shop.html?size=18-24m" aria-label="Shop size 18–24m"><span class="age-tile__label">18–24m</span><span class="age-tile__meta"><span>86–92 cm</span><span>12–13.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 7"><a class="age-tile" href="shop.html?size=2y" aria-label="Shop size 2Y"><span class="age-tile__label">2Y</span><span class="age-tile__meta"><span>92–98 cm</span><span>13.5–15 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
+          <li style="--step: 8"><a class="age-tile" href="shop.html?size=3y" aria-label="Shop size 3Y"><span class="age-tile__label">3Y</span><span class="age-tile__meta"><span>98–104 cm</span><span>15–17 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
           <!-- /gen: size-tiles-home -->
         </ul>
+        </div>
+        <p class="age-steps__more"><a class="link-arrow" href="shop.html">See all sizes <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
+        </div>
       </div>
     </section>
 
@@ -1075,7 +1080,7 @@
 
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
   <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>

@@ -4,6 +4,8 @@ window.KAYAA_CONFIG = {
   "shipping_fee": 450,
   "free_shipping_over": 7500,
   "pay_button_label": "Pay now",
+  "cod_enabled": false,
+  "cod_button_label": "Place order",
   "order_emails_enabled": false,
   "remember_days": 30,
   "low_stock_threshold": 5,

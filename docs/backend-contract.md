@@ -20,7 +20,7 @@ Conventions used by every page
 4. **Variants JSON.** Per product page, an inline block `<script type="application/json" id="product-variants">[{"colour":"lilac","size":"3-6m","stock":4}, ...]</script>`: one row per colour+size variant, `colour` = colour slug, `size` = **size slug** (the size radio value, for example `3-6m`; the box shows the full label "3–6m"). Sizes are rendered in size-scale order.
 5. **Review "show more".** The product page shows 5 reviews and a "See more reviews" control that reveals 5 more in place. Prototype: all reviews are in the HTML and JS reveals them. Production options (pick one): (a) render all approved reviews and let JS reveal them, or (b) an endpoint that returns the next page of review-card HTML, like `/cart/panel` (assumption: `GET /products/{slug}/reviews?page=2` returning `<li class="review-card">...</li>` items plus the new "Showing N of M" count). Either way the no-JS fallback is a plain link to the same product page with `?reviews=all#reviews`, which must render every approved review. There is no separate reviews page.
 6. **Rating average with decimals** (one decimal, e.g. `4.8`) plus review count and a 5-to-1 breakdown (counts). Stars: whole part = full stars; any fraction .1 to .9 adds one half star (4.0 = 4 stars, 4.1 to 4.9 = 4.5 stars). Individual review ratings are whole numbers 1 to 5.
-7. **Onepay payment flow.** Payment is online only, through the Onepay gateway (Visa/Mastercard). Assumption: checkout redirects to Onepay's hosted payment page. Orders start with `payment_status = pending` until the gateway confirms. The frontend has designed the paid, pending, failed, cancelled and expired states and "Resume payment"; the return URL, callback and resume route are needed (TBD). Section 3.6.
+7. **Onepay payment flow.** Card payment is primary, through the Onepay gateway (Visa/Mastercard); a cash option exists behind the admin setting `cod_enabled` (section 4b). Assumption: checkout redirects to Onepay's hosted payment page. Orders start with `payment_status = pending` until the gateway confirms. The frontend has designed the paid, pending, failed, cancelled and expired states and "Resume payment"; the return URL, callback and resume route are needed (TBD). Section 3.6.
 8. **Delivery ETA** is shown at checkout (after the district is chosen), in the order summary, on the thank-you page, on the track result and the order page while the order can still arrive, and on the delivery page. The backend supplies **two integers per district (`min_days`, `max_days`)**; the wording is made by the frontend helper `Kayaa.formatEta` (section 3.5). The product page and the cart show no estimate.
 9. **Categories (department "Baby", route `/baby/{slug}`):** `newborn` Newborn, `bodysuits` Bodysuits, `sleepwear` Sleepwear, `sets` Sets, `outerwear` Outerwear, `napkins` Napkins, `accessories` Accessories. Each has a name, slug, one-line description (shown in the listing header band; placeholder) and a photo (home tile). The prototype keeps `category.html?c={slug}` for `/baby/{slug}`. The staging site shows these seven; they replace the six categories the prototype first invented.
 10. **Admin-managed shell content:** announcement bar (`topbar`: text, style `lilac|cream|sky`, enabled), home promo banners (`home_promo`: style `lilac|sky`, eyebrow, headline, text, button label and URL, optional photo), WhatsApp number/link, contact email, social URLs.
@@ -254,14 +254,14 @@ Form: `POST` (action TODO; assumption `POST /checkout` creates the order, then t
 
 Contact states: guests see "Have an account? Sign in" (`/account/login`); signed-in users see their fields prefilled and "Signed in as {email} - Not you?".
 
-Payment card (no radio cards, online only): credit-card icon, "Pay by card - Visa or Mastercard", "You'll be taken to Onepay's secure page to enter your card details. We never see or store your card number." (TODO confirm hosted redirect), plain-text Visa and Mastercard badges (TODO official marks and Onepay badge), and "By paying you agree to our Terms and Returns policy" (`/terms`, `/returns`).
+Payment card (single panel while `cod_enabled` is off; two radio cards when it is on, section 4b): credit-card icon, "Pay by card - Visa or Mastercard", "You'll be taken to Onepay's secure page to enter your card details. We never see or store your card number." (TODO confirm hosted redirect), plain-text Visa and Mastercard badges (TODO official marks and Onepay badge), and "By paying you agree to our Terms and Returns policy" (`/terms`, `/returns`).
 
 **Pay button:** the label comes from config (`pay_button_label`, default "Pay now"; `<span data-cfg="pay_button_label">`). **It never contains an amount** (the total is in the summary). The flow is checkout "Pay now" -> payment gateway -> order confirmed. Lock icon and the helper "Secure payment via Onepay" stay. On a valid submit the button is disabled with `aria-busy="true"`, shows a spinner and "Redirecting to secure payment..." and cannot be submitted twice.
 
 States: field errors (message under each field, `aria-invalid`, `aria-describedby`), an error summary at the top (`role="alert"`, focus moves to it, links to each invalid field), throttle alert ("Too many attempts. Please wait a minute and try again."), gateway error alert ("We couldn't start the payment. Please try again."), stock-ran-out redirect to `/cart`.
 
 ### 3.6 Payment hand-off (Onepay) - assumptions, TODO to confirm with the backend dev
-Payment is online only, through the Onepay gateway (Visa/Mastercard).
+Card payment is primary, through the Onepay gateway (Visa/Mastercard); the steps below are for an order with `payment_method = online`. A cash order skips them (section 4b).
 1. `POST /checkout` validates, creates the order with `payment_status = pending` and `status = pending`, **decrements stock permanently at placement (it holds nothing and releases nothing)**, generates the order reference, **empties the cart server-side**, and responds with a redirect to Onepay's hosted payment page. We never handle card numbers.
 2. Onepay redirects the shopper back to the thank-you page through **a signed, expiring link supplied by the backend** (return URL) and also calls the server (callback/webhook) to confirm the result; the server sets `payment_status` to `paid`, `failed` (or leaves `pending`). The thank-you page must show the state the server knows, not a state taken from the URL.
 3. Outcomes the frontend has designed: **paid**, **pending** (gateway still confirming), **failed**, **cancelled** (order status `cancelled`) and **expired** (the signed link has expired). A payment cancelled at the gateway is stored as order status `cancelled` for now (see Questions).
@@ -273,7 +273,7 @@ Payment is online only, through the Onepay gateway (Visa/Mastercard).
 ### 3.7 Thank-you
 Minimal shell as for checkout. **This page is reached only through the signed, expiring link the backend supplies; it is never built from the order reference** (no `/orders/{ref}/thank-you` URL is constructed anywhere in the frontend). A request with an invalid or expired signature shows the **expired** state. Prototype-only `?state=paid|pending|failed|cancelled|expired` (paid by default) and `?demo=emails-on`; in Laravel the state comes from the order's statuses.
 
-Data needed for every state except expired: order reference, items (name, size, colour, quantity, price), subtotal, delivery fee, total, delivery address (name, lines, city, district, phone), the district's estimated delivery text, payment line "Card - Onepay" with the payment status.
+Data needed for every state except expired: order reference, items (name, size, colour, quantity, price), subtotal, delivery fee, total, delivery address (name, lines, city, district, phone), the district's estimated delivery text, payment line with the method ("Card", or the cash method label and its badge, section 4b) and the payment status.
 
 | State | Icon | Heading | Buttons | Status badge |
 | --- | --- | --- | --- | --- |
@@ -463,37 +463,55 @@ Size guide, Delivery, Returns, About, Privacy and Terms are static Blade views w
 
 ---
 
+## 4b. Decided by product, pending backend confirmation
+
+These are product decisions. The backend dev confirms each one is feasible or says what differs.
+
+- **Size slugs:** `newborn`, `0-3m`, `3-6m`, `6-9m`, `9-12m`, `12-18m`, `18-24m`, `2y`, `3y`. Old encoded URLs (`?size=0%E2%80%933m`) get a 301 to the slug.
+- **Sort values:** `featured`, `new`, `price-asc`, `price-desc`.
+- **`sale=1`** is a filter flag only (not a category or collection).
+- **Colours:** nullable `hex`. The frontend shows colour dots when a hex is present and "{N} colours" otherwise.
+- **Product fields:** `description`, `fabric`, `care` (one instruction per line) and `collection` (the "Kayaa Essentials" line, hidden when empty).
+- **Listing page size 12** with numbered pagination.
+- **Delivery estimates:** `min_days` and `max_days` per district (replaces the placeholder table).
+- **SEO text:** nullable `meta_title` and `meta_description` on products and categories (templates are the fallback), plus a category `description` used as the intro text (section 4a).
+- **Wishlist:** the frontend needs the list of product ids for the current visitor. How it is stored today (browser, session, account) is the backend's call.
+- **Content pages** (Delivery, Returns, About, Privacy, Terms, Size guide) are Blade views with numbers from config; the FAQs stay admin-managed.
+- **No analytics in v1.**
+
+### Cash payment switch (`cod_enabled`)
+- **Admin setting `cod_enabled`, default off.** The prototype mirrors it in `tools/site-config.json` (`cod_enabled`, `cod_button_label` "Place order"; `pay_button_label` stays "Pay now") and `?demo=cod-on` on the checkout.
+- **`orders.payment_method`** is `online` or `cod`. `payment_status` is `pending` until the money is collected for a `cod` order.
+- **Checkout payment step:** switch off = the single card panel, with a hidden `payment_method=online`. Switch on = a fieldset "Payment method" with two radio cards, Card (default) and the cash option, `name="payment_method"` values `online` and `cod`. The button label is `pay_button_label` for card and `cod_button_label` for cash, and the helper text under it changes with the choice.
+- **A cash order skips the gateway:** the server creates the order, empties the cart, and redirects to the signed thank-you link (state "cod"): "Order confirmed", "Thank you, {name}", "You'll pay {total} to the courier on delivery." with the payment badge "Pay on delivery" (outline, neutral, banknote icon plus text), the same summary, the track button and the guest account card.
+- **Labels by method:** the order pages show "Payment method: Card" or "Cash on delivery"; a cash order also shows the "Pay on delivery" badge on the track result, the orders list, the order page and the thank-you page.
+- **"Resume payment" is never shown for a cash order** (it needs the online method). "Cancel order" still works while the order status is `pending`.
+- **Visibility rule (exact):** the words "cash on delivery", COD, "pay the courier" and "pay on delivery" may appear ONLY (a) in the checkout payment step when `cod_enabled` is true, and (b) on order-specific pages (thank-you, track result, account order detail, orders list) when that order's payment method is cash. Never in static, marketing, policy, FAQ, meta, SEO or review-index text, and never as a negation. `node tools/check-copy.mjs` checks the prototype for this; keep the rule in Blade.
+- **Stock:** a failed cash delivery should restock the items (see the questions).
+
+### Mobile numbers
+Normalise Sri Lankan mobile numbers (`07X…`, `+947X…`, `947X…`) to one stored format when saving an order and when matching on the track page. The prototype already treats `071 234 5678`, `0712345678` and `+94 71 234 5678` as the same number.
+
 ## 5. Prototype-only behaviour (delete at conversion)
 
 - `assets/js/proto-listing.js` (also the indexing demo, see section 4a): filters, sorts, searches and paginates the 26 sample cards from the query string (`size`, `sort`, `sale`, `c`, `q`, `page`); normalises the old encoded `?size=0%E2%80%933m`; sets H1, intro, breadcrumb (Home / Baby / Category), counts and pagination. `assets/js/catalogue-data.js` (generated from `tools/catalogue.json`) holds the categories, sizes, colours and products for the scripts (the quick-add sheet, the listing, the wishlist); the product cards and menus are generated from the same file by `node tools/sync-shell.mjs` (`<!-- gen: NAME -->` regions). `assets/js/proto-wishlist.js` is the sessionStorage wishlist.
 - `assets/js/proto-product.js`: applies `?demo=` states and fakes the review form submit. `demo` values: `regular` (no sale), `new`, `low-stock`, `oos`, `no-reviews`, `reviewed`, `review-success`, `review-error`, `review-throttle`. Every product card opens the same sample product.
 - `assets/js/proto-cart.js`: the demo cart (sessionStorage) behind the header counts, the drawer, the cart page and the checkout summary, plus the simulated order. Line shape: `{id, productSlug, name, colourSlug, colourLabel, sizeSlug, sizeLabel, unitPrice, wasPrice, qty, stock, tone}`.
-- `assets/js/proto-content.js` (the contact form demo outcomes). `assets/js/proto-orders.js` (thirteen sample orders, the stepper renderer), `proto-account.js` (track, orders, order detail, reviews, profile, log out) and `proto-auth.js` (auth demo outcomes and the demo session). Demo session: `window.KayaaCart.session` (sessionStorage); when set, the Account links in the header, tab bar and menu drawer go to the dashboard. In Laravel the server renders `@auth` and `@guest`.
+- `assets/js/proto-content.js` (the contact form demo outcomes). `assets/js/proto-orders.js` (fourteen sample orders including one cash order, the stepper renderer), `proto-account.js` (track, orders, order detail, reviews, profile, log out) and `proto-auth.js` (auth demo outcomes and the demo session). Demo session: `window.KayaaCart.session` (sessionStorage); when set, the Account links in the header, tab bar and menu drawer go to the dashboard. In Laravel the server renders `@auth` and `@guest`.
 - `assets/js/proto-cart-page.js`, `proto-checkout.js`, `proto-thankyou.js`, `proto-onepay.js` and `html/proto-onepay.html`: render the pages from the demo cart/order and fake the payment hand-off. Demo params: cart `empty`, `oos-line`, `low-stock`, `price-changed`, `free-delivery`, `checkout-oos`; checkout `errors`, `throttle`, `gateway-error`, `signed-in`, `empty`; thank-you `state=paid|pending|failed|cancelled`.
-- `html/review.html` is a review index for the client; remove it.
+- `html/review.html` is a review index for the client and `html/review-decisions.html` renders docs/content/01-open-decisions.md (`tools/build-decisions.mjs`); remove both.
 
 Production JS that stays: `assets/js/app.js` (shell: menus, drawers, mega menu, search toggle, steppers, active-nav marking), `product.js` (variants, gallery filtering, stock note, quantity cap, size validation, sticky bar, show-more reviews), `cart.js` (sticky checkout bar), `checkout.js` (validation, error summary, delivery estimate, loading state) and `thank-you.js` (copy reference, refresh) `account.js` (auth, profile and contact form validation, error summary, show/hide password) and `content.js` (table of contents behaviour and print). `app.js` also carries the `data-history-back` / `data-reload` hooks of the error pages. The drawer in `app.js` currently renders from the demo cart: in Laravel it swaps in the server panel. Remove the `data-demo-cart` attribute from the buy form when the real cart exists.
 
 
 ---
 
-## 5. Still open (questions for the backend dev)
-1. **A payment option other than Onepay.** Your answers still mention one. Payment is online only through Onepay (Visa/Mastercard); please confirm the backend has no other payment path.
-2. **Stock and failed or abandoned payments:** with online payment, stock is decremented permanently at placement, so failed or abandoned payments consume stock for good unless it is restored on failure, cancellation or timeout. What restores it?
-3. **Guests resuming a failed payment:** a guest has no order page. How does a guest resume payment (the signed thank-you link? the track result with the mobile number)?
-4. **Gateway cancel:** can a payment cancelled at the gateway leave the order resumable (status stays `pending`, payment `failed`) instead of making the order `cancelled`?
-5. **Refunds on cancel:** what happens, and how long does it take, when a paid order is cancelled? (The dialog says "Your payment will be refunded to your card" with a TODO for the timing.)
-6. **`confirmed_at`:** can the backend add a `confirmed_at` column? Until then the "paid or confirmed" step date uses `paid_at`.
-7. **Mail configuration:** verification and password-reset emails need real mail configuration before launch.
-
-### Catalogue alignment (staging comparison)
-8. **Size URLs:** can they use slugs (`0-3m`) instead of the encoded en dash (`0%E2%80%933m`)? The prototype accepts both.
-9. **Sort parameter values:** what are the backend's sort values (the prototype uses `featured`, `new`, `price-asc`, `price-desc`)?
-10. **Sale:** is Sale a filter (`sale=1`) only, or also a category or collection?
-11. **Colours:** do colours have hex values? Until then product cards show "{N} colours" and no dots.
-12. **Product text fields:** are there separate fabric & care (composition, care list) and full description fields?
-13. **Wishlist for guests:** kept in the browser, in the session, or only for signed-in accounts?
-14. **"Napkins":** what are they (the category has no obvious size range)?
-15. **Listing page size:** how many products per page (the prototype uses 12)?
-16. **"Kayaa Essentials":** where does the eyebrow come from (a product field, a collection)?
-17. **Payment copy that is no longer true:** the staging site still shows an extra payment option and PayHere copy. When will they be removed? (The prototype names no gateway except Onepay at checkout.)
+## 6. Still open (questions for the backend dev)
+1. **Stock and failed or abandoned payments:** with online payment, stock is decremented permanently at placement, so failed or abandoned payments consume stock for good unless it is restored on failure, cancellation or timeout. What restores it?
+2. **Guests resuming a failed payment:** a guest has no order page. How does a guest resume payment (the signed thank-you link? the track result with the mobile number)?
+3. **Gateway cancel:** can a payment cancelled at the gateway leave the order resumable (status stays `pending`, payment `failed`) instead of making the order `cancelled`?
+4. **Refunds on cancel:** what happens, and how long does it take, when a paid order is cancelled? (The dialog says "Your payment will be refunded to your card" with a TODO for the timing.)
+5. **`confirmed_at`:** can the backend add a `confirmed_at` column? Until then the "paid or confirmed" step date uses `paid_at`.
+6. **Mail configuration:** verification and password-reset emails need real mail configuration before launch.
+7. **Per-district numbers:** where do `min_days` and `max_days` for the 25 districts come from (section 4b), and who maintains them?
+8. **Failed cash delivery:** when a cash order is not accepted or not paid at the door, does the stock go back, and who marks the order cancelled?

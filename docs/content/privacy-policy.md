@@ -2,7 +2,7 @@
 route: /privacy
 h1: Privacy Policy
 meta_title: Privacy Policy | Kayaa
-meta_description: How Kayaa collects, uses and protects your personal information when you shop online, create an account or contact us.
+meta_description: How Kayaa collects, uses and protects your personal information when you shop online, create an account, track an order or contact us.
 robots: index,follow
 updated: [[TODO: publication date]]
 ---

@@ -1,12 +1,13 @@
 /* PROTOTYPE ONLY - delete at Blade conversion: orders come from the database.
-   Thirteen sample orders with stable references (format KY-YYMMDD-XXXX), plus the order stored by the simulated checkout (shown first).
-   window.KayaaOrders: all() find(ref, phone) page(n, per) money(n) date(iso) badge(kind, value) linesHtml(order)
+   Fourteen sample orders with stable references (format KY-YYMMDD-XXXX), plus the order stored by the simulated checkout (shown first).
+   window.KayaaOrders: all() find(ref, phone) page(n, per) money(n) date(iso) badge(kind, value) methodBadge(order) methodLabel(order) linesHtml(order)
                        renderStepper(root, order) canResume(order) canCancel(order) cancel(ref) STATUS_LABEL
    find(ref) matches the reference only (the account pages); find(ref, phone) needs the reference AND the mobile number (track).
    Any other reference is not found. Every sample order was placed with the mobile number 071 234 5678.
    Sample references: KY-261001-K8D3 shipped, KY-260914-T5R7 delivered, KY-260910-B2W6 cancelled, KY-261003-A3F9 pending payment,
    KY-261003-P7X2 payment failed, KY-260828-H4N8 refunded, KY-261002-W5N7 paid and waiting to be confirmed (shows the refund line in
    the cancel dialog), KY-260720-E8Z5 delivered with missing history dates (the stepper shows no date for those steps),
+   KY-261001-C0D1 placed with the cash-on-delivery option (method cod, payment pending until the courier collects it, no "Resume payment"),
    plus five more delivered orders for pagination.
    Cancelling an order on the order page is remembered for the session (key kayaa.proto.cancelled.v1). */
 (function () {
@@ -15,7 +16,9 @@
   var cart = window.KayaaCart;
   var money = cart ? cart.money : function (n) { return String(n); };
   var CFG = window.KAYAA_CONFIG || {};
-  var ONLINE = 'Card - Onepay';
+  // order.method is 'online' (card through the gateway) or 'cod'; the label and badge below are the only places that word it
+  var ONLINE = 'online';
+  var METHOD_LABEL = { online: 'Card', cod: 'Cash on delivery' };
   var CANCELLED_KEY = 'kayaa.proto.cancelled.v1';
 
   var P = {
@@ -35,12 +38,12 @@
   var ADDRESS = { name: 'Amaya Ranasinghe', line1: '42 Temple Road', line2: '', city: 'Nugegoda', district: 'colombo', districtLabel: 'Colombo', phone: '071 234 5678' };
 
   // dates: one per step when known (placed, paid or confirmed, shipped, delivered) plus cancelled; a missing key means "not known"
-  function make(ref, date, updated, items, status, paymentStatus, dates) {
+  function make(ref, date, updated, items, status, paymentStatus, dates, method) {
     var subtotal = items.reduce(function (s, i) { return s + i.qty * i.unitPrice; }, 0);
     var delivery = subtotal >= CFG.free_shipping_over ? 0 : CFG.shipping_fee;
     return {
       ref: ref, date: date, updated: updated, items: items, subtotal: subtotal, delivery: delivery, total: subtotal + delivery,
-      method: ONLINE, status: status, paymentStatus: paymentStatus, address: ADDRESS, eta: { min: 2, max: 3 }, dates: dates || { placed: date }
+      method: method || ONLINE, status: status, paymentStatus: paymentStatus, address: ADDRESS, eta: { min: 2, max: 3 }, dates: dates || { placed: date }
     };
   }
   function full(placed, shipped, delivered) { return { placed: placed, confirmed: placed, shipped: shipped, delivered: delivered }; }
@@ -48,6 +51,7 @@
   var SAMPLES = [
     make('KY-261003-P7X2', '2026-10-03', '2026-10-03', [item('sleepsuit', '0–3m')], 'pending', 'failed'),
     make('KY-261003-A3F9', '2026-10-03', '2026-10-03', [item('bonnet', '0–3m'), item('cardigan', '3–6m')], 'pending', 'pending'),
+    make('KY-261001-C0D1', '2026-10-01', '2026-10-01', [item('bodysuit', '0–3m'), item('swaddle', 'Newborn')], 'pending', 'pending', { placed: '2026-10-01' }, 'cod'),
     make('KY-261002-W5N7', '2026-10-02', '2026-10-02', [item('romper', '3–6m', 2)], 'pending', 'paid'),
     make('KY-261001-K8D3', '2026-10-01', '2026-10-03', [item('dress', '3–6m'), item('sleepsuit', '0–3m')], 'shipped', 'paid', { placed: '2026-10-01', confirmed: '2026-10-01', shipped: '2026-10-03' }),
     make('KY-260914-T5R7', '2026-09-14', '2026-09-19', [item('bodysuit', '3–6m', 2), item('swaddle', 'Newborn')], 'delivered', 'paid', full('2026-09-14', '2026-09-16', '2026-09-19')),
@@ -67,7 +71,7 @@
     var o = cart && cart.order.get();
     if (!o) return null;
     var pay = (o.payment && o.payment.status) || 'pending';
-    var map = { paid: ['confirmed', 'paid'], pending: ['pending', 'pending'], failed: ['pending', 'failed'], cancelled: ['cancelled', 'failed'] }[pay] || ['pending', 'pending'];
+    var map = { paid: ['confirmed', 'paid'], cod: ['pending', 'pending'], pending: ['pending', 'pending'], failed: ['pending', 'failed'], cancelled: ['cancelled', 'failed'] }[pay] || ['pending', 'pending'];
     var d = (o.createdAt || new Date().toISOString()).slice(0, 10);
     var a = o.address || {};
     var dates = { placed: d };
@@ -75,7 +79,7 @@
     if (map[0] === 'cancelled') dates.cancelled = d;
     return {
       ref: o.ref, date: d, updated: d, items: o.items || [], subtotal: o.totals.subtotal, delivery: o.totals.delivery, total: o.totals.total,
-      method: ONLINE, status: map[0], paymentStatus: map[1],
+      method: (o.payment && o.payment.method) === 'cod' ? 'cod' : ONLINE, status: map[0], paymentStatus: map[1],
       address: { name: a.name, line1: a.line1, line2: a.line2, city: a.city, district: a.district, districtLabel: a.districtLabel, phone: (o.contact || {}).phone },
       eta: o.eta || { min: 2, max: 3 }, dates: dates
     };
@@ -133,6 +137,11 @@
     return '<span class="status status--' + value + '"><span class="visually-hidden">' + kind + ': </span>' + STATUS_LABEL[value] + '</span>';
   }
 
+  function methodLabel(o) { return METHOD_LABEL[o.method] || METHOD_LABEL.online; }
+  // "Pay on delivery" badge: outline, neutral, banknote icon plus text; shown only for an order paid by the cash option
+  function methodBadge(o) {
+    return o.method === 'cod' ? '<span class="badge badge--outline pay-badge"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg><span class="visually-hidden">Payment method: </span>Pay on delivery</span>' : '';
+  }
   // "Resume payment": only while the payment is pending or failed, the method is the online gateway and the order is not cancelled
   function canResume(o) {
     return (o.paymentStatus === 'pending' || o.paymentStatus === 'failed') && o.method === ONLINE && o.status !== 'cancelled';
@@ -183,6 +192,8 @@
       note.hidden = false; note.textContent = 'Payment failed. If you were charged, contact us with your order number.';
     } else if (o.status === 'pending' && o.paymentStatus === 'paid') {
       note.hidden = false; note.textContent = 'Payment received. We are confirming your order.';
+    } else if (o.status === 'pending' && o.method === 'cod') {
+      note.hidden = false; note.textContent = 'We are confirming your order. You pay the courier on delivery.';
     } else if (o.status === 'pending') {
       note.hidden = false; note.textContent = 'Waiting for payment confirmation';
     }
@@ -199,7 +210,7 @@
   }
 
   window.KayaaOrders = {
-    all: all, find: find, page: page, money: money, date: date, badge: badge, linesHtml: linesHtml, renderStepper: renderStepper,
+    all: all, find: find, page: page, money: money, date: date, badge: badge, methodBadge: methodBadge, methodLabel: methodLabel, linesHtml: linesHtml, renderStepper: renderStepper,
     canResume: canResume, canCancel: canCancel, cancel: cancel, etaText: etaText, STATUS_LABEL: STATUS_LABEL
   };
 })();

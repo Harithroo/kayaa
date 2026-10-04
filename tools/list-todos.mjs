@@ -5,7 +5,9 @@
 //
 // Sources
 //   docs/content/*.md   [[TODO: ...]] (a fact only Kayaa knows) and [[PROPOSED: ...]] (a default for the client to approve)
-//   html/**/*.html      the rendered <mark class="todo"> and <mark class="proposed"> (review.html and proto-onepay.html are prototype-only and skipped)
+//   html/**/*.html      the rendered <mark class="todo"> and <mark class="proposed"> (review.html, review-decisions.html and proto-onepay.html are prototype-only and skipped)
+//   html/assets/js/catalogue-data.js   the category and size intros are rendered at runtime from this file, so their markers count as rendered too
+//                                      (a marker inside a meta description shows as plain "[TODO: ...]" text, because a meta tag cannot hold markup)
 // Markers written inside backticks (for example in the README) are documentation, not open markers.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const failOnOpen = process.argv.includes('--fail-on-open');
-const SKIP_HTML = new Set(['review.html', 'proto-onepay.html']);
+const SKIP_HTML = new Set(['review.html', 'review-decisions.html', 'proto-onepay.html']);
 
 const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : e.name.endsWith('.html') ? [path.join(d, e.name)] : []));
 const kindOf = (t) => (t === 'TODO' || t === 'todo' ? 'TODO' : 'PROPOSED');
@@ -38,6 +40,18 @@ for (const file of walk(htmlDir).sort()) {
     const t = m[2].replace(/<span class="marker-label">[^<]*<\/span>/, '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
     (html[label] = html[label] || []).push({ type: kindOf(m[1]), text: t });
   }
+}
+
+// the category and size intros reach the page at runtime from catalogue-data.js (generated from docs/content/category-and-age-intros.md)
+const dataFile = path.join(htmlDir, 'assets', 'js', 'catalogue-data.js');
+if (fs.existsSync(dataFile)) {
+  const text = fs.readFileSync(dataFile, 'utf8').replace(/\\"/g, '"');
+  const label = 'assets/js/catalogue-data.js (category intros)';
+  for (const m of text.matchAll(/<mark class="(todo|proposed)">([\s\S]*?)<\/mark>/g)) {
+    const t = m[2].replace(/<span class="marker-label">[^<]*<\/span>/, '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    (html[label] = html[label] || []).push({ type: kindOf(m[1]), text: t });
+  }
+  for (const m of text.matchAll(/\[(TODO|PROPOSED): ([^\]]*)\]/g)) (html[label] = html[label] || []).push({ type: m[1], text: m[2].trim() });
 }
 
 const count = (group, type) => Object.values(group).flat().filter((x) => kindOf(x.type) === type).length;

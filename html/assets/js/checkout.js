@@ -4,6 +4,8 @@
    - shows the delivery estimate once a district is chosen (district -> { min, max } days in <script type="application/json" id="district-eta">,
      worded by Kayaa.formatEta in app.js)
    - loading state on a valid submit: disabled, aria-busy, spinner, "Redirecting to secure payment..."; no double submit
+   - payment method: when the second option is enabled by the server (fieldset [data-pay-choice]), the radios name="payment_method"
+     (online, cod) change the button label (pay_button_label or cod_button_label), its icon and the helper text under it
    The prototype hook data-demo-pay on the form hands the valid submit to proto-checkout.js instead of posting. */
 (function () {
   'use strict';
@@ -22,6 +24,8 @@
   var payIcon = $('.icon', payBtn);
   var fields = $$('[data-field]', form);
   var attempted = false;
+  var choice = $('[data-pay-choice]');
+  var payHelper = $('[data-pay-helper]');
 
   /* ---------- Rules ---------- */
   var RULES = {
@@ -120,13 +124,36 @@
   }
   if (district && etaText) { district.addEventListener('change', updateEta); updateEta(); }
 
+  /* ---------- Payment method ---------- */
+  function method() {
+    var on = choice && !choice.disabled ? $('input[name="payment_method"]:checked', choice) : null;
+    return on ? on.value : 'online';
+  }
+  function applyMethod() {
+    var cod = method() === 'cod';
+    var cfg = window.KAYAA_CONFIG || {};
+    payLabel.textContent = cod ? (payLabel.getAttribute('data-label-cod') || cfg.cod_button_label || 'Place order') : (payLabel.getAttribute('data-label-card') || cfg.pay_button_label || 'Pay now');
+    payLabel.removeAttribute('data-label-idle');
+    var use = payIcon && payIcon.querySelector('use');
+    if (use) use.setAttribute('href', cod ? '#i-package' : '#i-lock');
+    if (payHelper) {
+      $('[data-helper-text]', payHelper).textContent = payHelper.getAttribute(cod ? 'data-helper-cod' : 'data-helper-card');
+      var hu = $('[data-helper-icon] use', payHelper);
+      if (hu) hu.setAttribute('href', cod ? '#i-banknote' : '#i-lock');
+    }
+  }
+  if (choice) {
+    choice.addEventListener('change', applyMethod);
+    new MutationObserver(applyMethod).observe(choice, { attributes: true, attributeFilter: ['disabled'] });
+  }
+
   /* ---------- Submit ---------- */
   function setBusy(on) {
     payBtn.disabled = on;
     if (on) payBtn.setAttribute('aria-busy', 'true'); else payBtn.removeAttribute('aria-busy');
     spinner.hidden = !on;
     if (payIcon) payIcon.hidden = on;
-    if (on) { payLabel.setAttribute('data-label-idle', payLabel.textContent); payLabel.textContent = 'Redirecting to secure payment...'; }
+    if (on) { payLabel.setAttribute('data-label-idle', payLabel.textContent); payLabel.textContent = method() === 'cod' ? 'Placing your order...' : 'Redirecting to secure payment...'; }
     else if (payLabel.getAttribute('data-label-idle')) payLabel.textContent = payLabel.getAttribute('data-label-idle');
   }
 

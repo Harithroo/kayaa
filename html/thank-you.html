@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="assets/css/fonts.css?v=92b3d5a5">
   <link rel="stylesheet" href="assets/css/tokens.css?v=844f337a">
   <link rel="stylesheet" href="assets/css/base.css?v=f248e28f">
-  <link rel="stylesheet" href="assets/css/components.css?v=74cdec1b">
+  <link rel="stylesheet" href="assets/css/components.css?v=186fb5f1">
   <link rel="stylesheet" href="assets/css/layout.css?v=d6181657">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/thank-you.css?v=6945e5de">
@@ -261,6 +261,19 @@
         </div>
       </section>
 
+      <!-- blade: an order whose payment_method is cod. Same layout as paid; the amount to pay the courier is the order total. -->
+      <section class="thanks__hero" data-state-block="cod" hidden>
+        <span class="thanks__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg></span>
+        <h1 class="thanks__title">Order confirmed</h1>
+        <p class="thanks__thanks">Thank you, <span data-customer-name>Amaya</span></p>
+        <p class="thanks__lede">You'll pay <strong data-cod-total>Rs. 6,550</strong> to the courier on delivery.</p>
+        <p class="thanks__email" data-email-line hidden><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg> <span>A confirmation has been sent to <strong data-confirm-email>amaya@example.com</strong></span></p>
+        <div class="thanks__actions">
+          <a class="btn btn--primary btn--lg" href="track.html?ref=KY-261001-C0D1" data-track-link>Track your order</a>
+          <a class="btn btn--secondary btn--lg" href="shop.html">Continue shopping</a>
+        </div>
+      </section>
+
       <section class="thanks__hero" data-state-block="pending" hidden>
         <span class="thanks__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg></span>
         <h1 class="thanks__title">We’re confirming your payment</h1>
@@ -320,8 +333,9 @@
             <span class="visually-hidden" role="status" aria-live="polite" data-copy-status></span>
           </div>
           <div class="pay-line">
-            <span class="pay-line__method"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg> Card - Onepay</span>
+            <span class="pay-line__method"><svg class="icon icon--16" aria-hidden="true" focusable="false" data-method-icon><use href="#i-credit-card"></use></svg> <span data-method-label>Card</span></span>
             <span class="status status--paid" data-payment-status>Paid</span>
+            <span class="badge badge--outline pay-badge" data-method-badge hidden><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg><span class="visually-hidden">Payment method: </span>Pay on delivery</span>
           </div>
         </section>
 
@@ -346,7 +360,7 @@
           <p class="eta-line"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg> <span data-order-eta>Estimated delivery to Colombo: 2–3 working days</span></p>
         </section>
 
-        <!-- blade: @guest and paid -->
+        <!-- blade: @guest and (paid or cod) -->
         <aside class="summary-card thanks-account thanks__wide" data-account-card hidden>
           <p>Create an account with the same email to see this order later.</p>
           <a class="btn btn--secondary" href="account/register.html">Create an account</a>
@@ -371,13 +385,13 @@
   <!-- /partial: footer-minimal -->
 
   <!-- partial: scripts -->
-  <script src="assets/js/site-config.js?v=664f743c" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
+  <script src="assets/js/site-config.js?v=2f53bf8e" defer></script> <!-- generated from tools/site-config.json; Blade prints the real config instead -->
   <script src="assets/js/catalogue-data.js?v=c5517d9e" defer></script> <!-- generated from tools/catalogue.json; Blade prints the real catalogue instead -->
   <script src="assets/js/proto-cart.js?v=3ae8ad4c" defer></script> <!-- PROTOTYPE ONLY: demo cart store, replaced by the server cart -->
   <script src="assets/js/app.js?v=28afb4aa" defer></script>
   <!-- /partial: scripts -->
   <script src="assets/js/thank-you.js?v=d86d4512" defer></script>
   <!-- PROTOTYPE ONLY: delete at Blade conversion -->
-  <script src="assets/js/proto-thankyou.js?v=601b0aac" defer></script>
+  <script src="assets/js/proto-thankyou.js?v=9499f645" defer></script>
 </body>
 </html>

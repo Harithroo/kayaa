@@ -135,57 +135,112 @@
   .trust__list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* ---------- Shop by age ---------- */
-.scroller--age { --scroller-item: min(160px, 42vw); --scroller-cols: 5; }   /* always leaves a peek of the next tile */
-@media (min-width: 900px) {
-  /* nine sizes: the row keeps scrolling sideways instead of becoming a grid */
-  .scroller.scroller--age {
-    display: flex;
-    margin-inline: calc(var(--gutter) * -1);
-    padding: 0 var(--gutter) var(--space-2);
-    overflow-x: auto;
-  }
-  .scroller--age > * { flex: 0 0 176px; }
+/* ---------- Shop by age: growth steps ----------
+   Nine size tiles (--step 0 to 8 on each li). The tint deepens step by step from the lightest tone towards Wisteria; the label
+   and meta stay Ink, which passes AA on every step.
+   - 1100px and up: one row of nine, bottom-aligned, each tile 10px taller than the previous (150px to 230px), no scrollbar
+   - 600 to 1099px: 3 x 3 grid of equal-height tiles
+   - below 600px: scroll-snap row with a peek of the next tile, hidden scrollbar, soft right-edge fade, "See all sizes" link below */
+.age-steps { min-width: 0; }
+.age-steps__row { position: relative; }
+.scroller.scroller--age {
+  --scroller-item: min(148px, 40vw);
+  gap: var(--space-3);
+  align-items: stretch;
+  scrollbar-width: none;
 }
+.scroller--age::-webkit-scrollbar { display: none; }
+.age-steps__row::after {   /* soft right-edge fade over the peeking tile */
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: var(--space-2);
+  right: calc(var(--gutter) * -1);
+  width: 40px;
+  background: linear-gradient(to right, transparent, var(--bg));
+  pointer-events: none;
+}
+.age-steps__more { margin-top: var(--space-4); }
+.age-steps__more .link-arrow { min-height: var(--tap); }
 
+.scroller--age > li { --tint: calc(var(--step) * 8.5%); }
 .age-tile {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-5);
+  gap: var(--space-2);
   height: 100%;
   min-height: 176px;
-  padding: var(--space-5) var(--space-4);
+  padding: var(--space-5) var(--space-4) var(--space-4);
   border-radius: var(--radius-card);
-  background: var(--tone, var(--tone-1));
+  background: color-mix(in srgb, var(--primary) var(--tint), var(--tone-2));
   color: var(--ink);
   text-decoration: none;
   transition: transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
 }
+.age-tile:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
 .age-tile__label {
   font-family: var(--font-display);
   font-size: var(--fs-h2);
   font-weight: 700;
   line-height: 1.1;
 }
+.age-tile__meta {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--fs-ui);
+  line-height: 1.4;
+  color: var(--ink);
+}
 .age-tile__go {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  margin-top: auto;
+  padding-top: var(--space-3);
   font-size: var(--fs-ui);
   font-weight: 700;
-  color: var(--primary-deep);
+  color: var(--ink);
 }
 .age-tile__go .icon { transition: transform var(--dur-base) var(--ease); }
 @media (hover: hover) and (pointer: fine) {
   .age-tile:hover {
-    transform: translateY(var(--lift-card));
+    transform: translateY(-3px);
     box-shadow: var(--shadow-card-hover);
   }
   .age-tile:hover .age-tile__go .icon { transform: translateX(var(--shift-arrow)); }
 }
-@media (min-width: 900px) {
-  .age-tile { min-height: 208px; padding: var(--space-5); }
+@media (prefers-reduced-motion: reduce) {
+  .age-tile, .age-tile__go .icon { transition: none; }
+  .age-tile:hover, .age-tile:hover .age-tile__go .icon { transform: none; }
+}
+
+@media (min-width: 600px) {
+  .age-steps__row::after { display: none; }
+  .scroller.scroller--age {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin-inline: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  .age-steps__more { display: none; }
+  .age-tile { min-height: 168px; }
+}
+@media (min-width: 1100px) {
+  .scroller.scroller--age {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 12px;
+    align-items: end;
+  }
+  .scroller--age > li { align-self: end; height: calc(150px + var(--step) * 10px); }
+  .age-tile { min-height: 0; padding: var(--space-4) 10px var(--space-3); }
+  .age-tile__label { font-size: clamp(18px, 1.2vw + 5px, 22px); overflow-wrap: anywhere; }
+  .age-tile__meta { font-size: 13.5px; }
+}
+@media (min-width: 1280px) {
+  .age-tile { padding-inline: var(--space-3); }
+  .age-tile__meta { font-size: var(--fs-ui); }
 }
 
 /* ---------- New this week (scroller) ---------- */

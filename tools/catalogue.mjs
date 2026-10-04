@@ -9,10 +9,12 @@
 //   size-chips-mega | size-chips-drawer | size-links-footer | size-tiles-home   the nine sizes
 //   size-chips FILE                           listing chips: "All ages" + the nine sizes (shop.html, category.html, search.html)
 //   size-rows                                 <tr> rows of the size table on the product page (the rows come from docs/content/size-guide.md)
+//   decisions                                 the open-decisions table for html/review-decisions.html (tools/build-decisions.mjs)
 //   content NAME | faqs PLACEMENT | home-intro | district-eta | todo-counts | listing-intro KIND/SLUG   built from docs/content (see tools/content.mjs)
 //   product-grid SCOPE                        <li> cards: all | new | featured | related:SLUG
 import fs from 'node:fs';
 import path from 'node:path';
+import { renderDecisions } from './build-decisions.mjs';
 import { renderContentPage, renderFaqs, renderHomeIntro, renderDistrictEtaJson, renderTodoCounts, sizeTableRows } from './content.mjs';
 
 export function loadCatalogue(repo) {
@@ -105,8 +107,16 @@ export function generate(name, args, ctx) {
       return S.map((s) => `<li><a class="chip" href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
     case 'size-links-footer':
       return S.map((s) => `<li><a href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
-    case 'size-tiles-home':
-      return S.map((s, i) => `<li><a class="age-tile" href="${sizeHref(s)}" style="--tone: ${tone((i % 4) + 1)}"><span class="age-tile__label">${esc(s.label)}</span><span class="age-tile__go">Shop ${icon('arrow-right', 16)}</span></a></li>`).join('\n');
+    case 'decisions': return renderDecisions(ctx.repo);
+    case 'size-tiles-home': {
+      // growth steps: --step (0 to 8) drives the tint and, from 1100px, the height; height and weight come from the size chart in docs/content/size-guide.md
+      const pack = sizeTableRows(ctx.repo);
+      return S.map((s, i) => {
+        const row = pack.find((x) => x.size === s.label);
+        if (!row) throw new Error('size chart in docs/content/size-guide.md has no row for ' + s.label);
+        return `<li style="--step: ${i}"><a class="age-tile" href="${sizeHref(s)}" aria-label="Shop size ${esc(s.label)}"><span class="age-tile__label">${esc(s.label)}</span><span class="age-tile__meta"><span>${esc(row.height)}</span><span>${esc(row.weight)}</span></span><span class="age-tile__go">Shop ${icon('arrow-right', 16)}</span></a></li>`;
+      }).join('\n');
+    }
     case 'size-chips': {
       const file = (args || 'shop.html').trim();
       return [`<li><a class="chip" href="${root}${file}" aria-current="page">All ages</a></li>`]

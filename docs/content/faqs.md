@@ -17,7 +17,7 @@ Colombo and suburbs usually take {{cfg:delivery_colombo_days}} working days and 
 Exchange any unworn, unwashed item with its tags on within {{cfg:return_window_days}} days of delivery. We cover the return courier cost on size swaps. See [Returns & exchanges](returns.html).
 
 ### How can I pay?
-You pay online by card (Visa or Mastercard) through our payment partner. You enter your card details on a secure payment page and we never see your full card number. We do not offer cash on delivery.
+At checkout you will see the payment options available. Card payments (Visa and Mastercard) are taken securely through our payment partner, so we never see your full card number.
 
 ## Contact FAQs (placement: contact)
 

@@ -2,7 +2,8 @@
    Renders the order summary from the demo cart, applies the ?demo= states and simulates the hand-off to the
    payment gateway: a valid submit stores the order in sessionStorage (reference KY-YYMMDD-XXXX), empties the bag (the server empties
    the cart when it creates the order), waits about 1.2s on the loading state, then goes to proto-onepay.html.
-   ?demo=: errors, throttle, gateway-error, signed-in, empty. */
+   A cash order skips the gateway: the order is stored with payment method cod and the next page is thank-you.html?state=cod.
+   ?demo=: errors, throttle, gateway-error, signed-in, empty, cod-on (the second payment option; in production the server shows it only when the admin setting cod_enabled is on). */
 (function () {
   'use strict';
 
@@ -64,6 +65,14 @@
     setValue('district', '');
     form.dispatchEvent(new Event('submit', { cancelable: true }));
   }
+  if ((window.KAYAA_CONFIG || {}).cod_enabled || demo === 'cod-on') {
+    var single = $('[data-pay-single]', page);
+    var choice = $('[data-pay-choice]', page);
+    single.hidden = true;
+    $('[data-pay-default]', single).disabled = true;
+    choice.hidden = false;
+    choice.disabled = false;
+  }
   if (demo === 'throttle') showAlert('throttle');
   if (demo === 'gateway-error') showAlert('gateway');
 
@@ -71,6 +80,7 @@
   window.KayaaDemoPay = {
     start: function (f) {
       var t = store.totals();
+      var cod = new FormData(f).get('payment_method') === 'cod';
       var districtEl = f.elements.district;
       var eta = null;   // { min, max } working days for the chosen district
       try { eta = JSON.parse(document.getElementById('district-eta').textContent)[districtEl.value] || null; } catch (e) { /* none */ }
@@ -91,11 +101,11 @@
           notes: f.elements.notes.value.trim()
         },
         eta: eta,
-        payment: { method: 'Card - Onepay', status: 'pending' }
+        payment: { method: cod ? 'cod' : 'online', status: cod ? 'cod' : 'pending' }
       });
       // the order exists now, so the bag is empty whatever the payment outcome is (silent: this page is still showing)
       store.clear(true);
-      setTimeout(function () { location.href = 'proto-onepay.html'; }, 1200);
+      setTimeout(function () { location.href = cod ? 'thank-you.html?state=cod' : 'proto-onepay.html'; }, cod ? 600 : 1200);
     }
   };
 })();

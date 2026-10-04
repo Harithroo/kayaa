@@ -1680,3 +1680,6 @@ mark > .marker-label:only-child { margin-right: 0; }
 .prose li a:not(.btn):not(.chip):not(.link-arrow):not(.anchor),
 .content__lede a,
 .accordion__body p a:not(.link-arrow) { padding-block: 13px; margin-inline: 3px; }
+
+/* "Pay on delivery" badge: outline neutral pill with the banknote icon (an order that uses the cash option) */
+.pay-badge { display: inline-flex; align-items: center; gap: var(--space-1); }

@@ -7,7 +7,7 @@
 //          an internal link that does not resolve; invalid JSON-LD; an indexable page (except Home) without a BreadcrumbList.
 // Warnings: a title over 60 characters; a description outside 120 to 160 characters; missing Open Graph tags;
 //          on staging, a robots tag that is not noindex,nofollow.
-// Prototype-only pages (review.html, proto-onepay.html) are skipped. Headings and h1s inside hidden elements (the other states of a
+// Prototype-only pages (review.html, review-decisions.html, proto-onepay.html) are skipped. Headings and h1s inside hidden elements (the other states of a
 // page) are not counted. "Indexable" comes from the production robots values in tools/seo.json, not the staging override.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const htmlDir = path.join(repo, 'html');
 const seo = JSON.parse(fs.readFileSync(path.join(repo, 'tools', 'seo.json'), 'utf8'));
-const SKIP = new Set(['review.html', 'proto-onepay.html']);
+const SKIP = new Set(['review.html', 'review-decisions.html', 'proto-onepay.html']);
 const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
 const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : e.name.endsWith('.html') ? [path.join(d, e.name)] : []));
 const decode = (s) => String(s).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");

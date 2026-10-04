@@ -1,6 +1,6 @@
 /* PROTOTYPE ONLY - delete at Blade conversion.
    In production this page is reached ONLY through a signed, expiring link supplied by the backend; it is never built from the
-   order reference. ?state= is the demo switch: paid (default), pending, failed, cancelled, expired.
+   order reference. ?state= is the demo switch: paid (default), cod (order placed with the cash option), pending, failed, cancelled, expired.
    ?demo=emails-on shows the "A confirmation has been sent to {email}" line (in production it needs order_emails_enabled in the site
    config AND an email on the order; it is hidden otherwise).
    Fills the order from sessionStorage (a sample order when none exists). The bag was already emptied when the order was created. */
@@ -17,6 +17,7 @@
 
   var STATES = {
     paid: { label: 'Paid', title: 'Order confirmed' },
+    cod: { label: 'Pending', title: 'Order confirmed' },
     pending: { label: 'Pending', title: 'Confirming your payment' },
     failed: { label: 'Failed', title: 'Payment failed' },
     cancelled: { label: 'Cancelled', title: 'Order cancelled' },
@@ -66,11 +67,24 @@
   $$('[data-order-ref]', page).forEach(function (n) { n.textContent = order.ref; });
 
   // confirmation email line: only when order emails are enabled AND the guest gave an email; never claim email otherwise
-  var emailLine = $('[data-email-line]', page);
+  var emailLine = $('[data-state-block="' + state + '"] [data-email-line]', page);
   var email = (order.contact && order.contact.email) || '';
   if (emailLine && email && (cfg.order_emails_enabled || params.get('demo') === 'emails-on')) {
     $('[data-confirm-email]', emailLine).textContent = email;
     emailLine.hidden = false;
+  }
+
+  // cash orders: the hero names the amount for the courier, the pay line shows the method and its badge, the bag is cleared
+  var cod = state === 'cod';
+  if (cod) {
+    order.payment = order.payment || {};
+    order.payment.method = 'cod';
+    $('[data-cod-total]', page).textContent = money(order.totals.total);
+    $('[data-method-label]', page).textContent = 'Cash on delivery';
+    $('[data-method-icon] use', page).setAttribute('href', '#i-banknote');
+    $('[data-method-badge]', page).hidden = false;
+    $('[data-payment-status]', page).hidden = true;   // the badge replaces the status pill: a cash order is simply pending until collected
+    store.clear(true);
   }
 
   // keep the outcome with the order so My orders and /track show the same status
@@ -99,9 +113,9 @@
 
   // payment line
   var badge = $('[data-payment-status]', page);
-  badge.className = 'status status--' + (state === 'paid' ? 'paid' : state);
+  badge.className = 'status status--' + (state === 'paid' ? 'paid' : state === 'cod' ? 'pending' : state);
   badge.textContent = STATES[state].label;
 
   // guests who paid get a soft prompt to create an account
-  $('[data-account-card]', page).hidden = !(state === 'paid' && !order.signedIn);
+  $('[data-account-card]', page).hidden = !((state === 'paid' || cod) && !order.signedIn);
 })();

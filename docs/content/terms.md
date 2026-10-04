@@ -35,7 +35,7 @@ When you place an order you are making an offer to buy. Each order gets an order
 
 ## 7. Payment
 
-We accept online card payment (Visa and Mastercard) through our payment provider, Onepay. We do not offer cash on delivery. You enter your card details on Onepay's secure page; we never see or store your full card number. If a payment fails or stays pending, please do not pay again: check your order with our Track order page, and if you were charged but the order shows as failed, contact us with your order number.
+The payment methods available are shown at checkout. Card payments (Visa and Mastercard) are processed by our payment provider, Onepay; you enter your card details on their secure page and we never see or store your full card number. If a payment fails or stays pending, please do not pay again: check your order on our Track order page, and if you were charged but the order shows as failed, contact us with your order number.
 
 ## 8. Delivery
 

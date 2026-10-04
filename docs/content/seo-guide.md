@@ -3,7 +3,7 @@
 Practical rules for a small baby clothing store in Sri Lanka. Write for parents first; no keyword stuffing.
 
 ## 0. What the staging site shows today (technical findings)
-- Every page uses the same meta description ("Soft cotton baby clothing sized by age, delivered island-wide. Cash on delivery available."). Each page needs its own, and none should mention cash on delivery.
+- Every page uses the same meta description ("Soft cotton baby clothing sized by age, delivered island-wide."). Each page needs its own.
 - Size filter URLs contain an encoded en dash (?size=0%E2%80%933m). Use clean ASCII slugs (?size=0-3m) in URLs and show the en dash only in the label.
 - Pages are `noindex, nofollow` (correct for staging). The launch checklist below says how to switch it.
 - URLs are clean: /baby/{category}, /products/{slug}. Keep them, with 301 redirects if a slug ever changes.
@@ -102,7 +102,7 @@ While on staging, every page is `noindex,nofollow`.
 5. Publish `robots.txt` (allow all; disallow /cart, /checkout, /account, /track, /search, /wishlist, /orders; point to the sitemap).
 6. Submit the sitemap in Google Search Console and Bing Webmaster Tools and verify the domain.
 7. Check a few pages with the Rich Results Test (Product, Breadcrumb) and PageSpeed Insights on a phone.
-8. Remove every "Cash on delivery" and "PayHere" mention that is no longer true.
+8. Remove every "PayHere" mention that is no longer true.
 9. Replace every `[[TODO]]` and `[[PROPOSED]]` marker with approved text.
 
 ## 11. Phase 2: guides that earn traffic
