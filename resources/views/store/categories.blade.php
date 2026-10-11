@@ -22,6 +22,7 @@
             <a class="cat-tile" href="{{ $cat->url() }}">
               <x-store.photo :image="null" alt="" :seed="$cat->id" ratio="4 / 3" />
               <span class="cat-tile__label">{{ $cat->name }} <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
+              <span class="cat-tile__count">{{ $cat->product_count ?? 0 }} {{ Str::plural('item', $cat->product_count ?? 0) }}</span>
             </a>
           </li>
         @endforeach

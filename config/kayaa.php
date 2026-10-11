@@ -16,6 +16,9 @@ return [
     // Shared secret for POST /deploy/migrate. Empty disables the route.
     'deploy_token' => env('DEPLOY_TOKEN', ''),
     'noindex' => (bool) env('APP_NOINDEX', false),
+    // "Last updated" on the written pages (delivery, returns, privacy, terms,
+    // size guide, our story). One date, set when the copy is next revised.
+    'content_updated' => env('STORE_CONTENT_UPDATED', '2026-10-12'),
     'districts' => [
         'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya', 'Galle', 'Matara', 'Hambantota',
         'Jaffna', 'Kilinochchi', 'Mannar', 'Vavuniya', 'Mullaitivu', 'Batticaloa', 'Ampara', 'Trincomalee',

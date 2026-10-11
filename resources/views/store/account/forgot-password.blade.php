@@ -30,6 +30,10 @@
       </form>
 
       <p class="auth-switch">Remembered it? <a class="auth-link" href="{{ route('account.login') }}">Sign in</a></p>
+      <div class="auth-guest">
+        <p>No account needed to order. You can check out as a guest and track an order any time.</p>
+        <p class="auth-guest__links"><a class="auth-link" href="{{ route('shop.index') }}">Shop as a guest</a><a class="auth-link" href="{{ route('orders.track') }}">Track an order</a></p>
+      </div>
     </div>
   </div>
 </x-layouts.store>

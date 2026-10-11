@@ -9,6 +9,8 @@
   $freeOver = (int) config('kayaa.free_shipping_over');
   $remaining = $cart->remainingForFreeShipping();
   $low = \App\Models\ProductVariant::lowStockThreshold();
+  // A line whose variant has gone means checkout cannot proceed until it is removed.
+  $blocked = $lines->contains(fn ($line) => ! $line->variant->inStock());
 @endphp
 <x-layouts.store title="Your bag" page="cart">
   <div class="container cart-page" data-cart-page data-low-stock-threshold="{{ $low }}">
@@ -88,7 +90,13 @@
                 </progress>
               </div>
             @endif
-            <a class="btn btn--primary btn--lg btn--block" href="{{ route('checkout.show') }}" data-checkout-btn data-checkout-link>Checkout</a>
+            @if($blocked)
+              <p class="summary-card__hint" id="checkout-hint" data-checkout-hint>Remove the unavailable item to continue to checkout.</p>
+              {{-- The design system styles .btn[aria-disabled="true"]. --}}
+              <span class="btn btn--primary btn--lg btn--block" role="link" aria-disabled="true" aria-describedby="checkout-hint" data-checkout-btn>Checkout</span>
+            @else
+              <a class="btn btn--primary btn--lg btn--block" href="{{ route('checkout.show') }}" data-checkout-btn data-checkout-link>Checkout</a>
+            @endif
             <a class="link-arrow" href="{{ route('shop.index') }}">Continue shopping <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
             <ul class="assure" role="list">
               <li><span class="assure__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg></span><span>Secure card payment · Visa &amp; Mastercard</span></li>

@@ -6,8 +6,8 @@
      are stated as fact, so neither is asserted here. --}}
 <x-store.content-page title="Our story" heading="Our story" crumb="Our story" page="about"
   metaDescription="Kayaa is a Sri Lankan baby clothing brand: soft, honest clothing made for Sri Lankan weather, from newborn up to three years."
-  lede="Kayaa is a Sri Lankan baby clothing brand. Soft, honest clothing made for Sri Lankan weather, for babies from newborn up to three years."
-  :toc="['#values' => 'What we care about', '#sizes' => 'Shop by size', '#say-hello' => 'Say hello']">
+  lede="Kayaa is a Sri Lankan baby clothing brand. Soft, honest clothing made for Sri Lankan weather, for babies from newborn up to three years.">
+  {{-- No table of contents: the prototype's about page runs full width. --}}
 
   <h2 id="values">What we care about <x-store.anchor id="values" label="What we care about" /></h2>
   <p><strong>Made for our weather.</strong> Breathable cotton and bamboo pieces that stay comfortable in the heat.</p>

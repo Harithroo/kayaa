@@ -33,7 +33,8 @@
         </div>
         <x-store.password-field id="password" name="password" label="Password" autocomplete="new-password" required-message="Choose a password" hint="At least 8 characters." />
         <x-store.password-field id="password_confirmation" name="password_confirmation" label="Confirm password" autocomplete="new-password" required-message="Repeat your password" />
-        <button type="submit" class="btn btn--primary btn--lg btn--block">Create account</button>
+        <p class="terms">By creating an account you agree to our <a href="{{ route('pages.show', 'terms') }}">Terms</a> and <a href="{{ route('pages.show', 'privacy') }}">Privacy policy</a>.</p>
+        <button type="submit" class="btn btn--primary btn--lg btn--block">Create an account</button>
       </form>
 
       <p class="auth-switch">Already have an account? <a class="auth-link" href="{{ route('account.login') }}">Sign in</a></p>

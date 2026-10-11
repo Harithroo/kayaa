@@ -102,26 +102,26 @@
           <h2 id="faq-title">Common questions</h2>
           <div class="accordion">
             @forelse($faqs as $faq)
-              <details class="accordion__item">
+              <details class="accordion__item contact-faq">
                 <summary class="accordion__summary">{{ $faq->question }} <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
                 <div class="accordion__body">{!! nl2br(e($faq->answer)) !!}</div>
               </details>
             @empty
               {{-- The prototype's four default questions, shown until Admin > FAQs has
                    contact questions of its own. --}}
-              <details class="accordion__item">
+              <details class="accordion__item contact-faq">
                 <summary class="accordion__summary">How quickly will you reply? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
                 <div class="accordion__body"><p>WhatsApp is fastest, Mon–Sat 9am–6pm. We reply to messages within one working day.</p></div>
               </details>
-              <details class="accordion__item">
+              <details class="accordion__item contact-faq">
                 <summary class="accordion__summary">Can I change my delivery address after ordering? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
                 <div class="accordion__body"><p>Contact us as soon as possible with your order number and mobile number. We can change the address only if the order has not been dispatched.</p></div>
               </details>
-              <details class="accordion__item">
+              <details class="accordion__item contact-faq">
                 <summary class="accordion__summary">How do I track my order? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
                 <div class="accordion__body"><p>Open <a href="{{ route('orders.track') }}">Track order</a> and enter your order number and the mobile number you used at checkout.</p></div>
               </details>
-              <details class="accordion__item">
+              <details class="accordion__item contact-faq">
                 <summary class="accordion__summary">I paid but my order shows "pending". What should I do? <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
                 <div class="accordion__body"><p>Card payments can take a few minutes to be confirmed. Please do not pay again. Check your order on the <a href="{{ route('orders.track') }}">Track order</a> page, and if it has not updated after half an hour, contact us with your order number.</p></div>
               </details>

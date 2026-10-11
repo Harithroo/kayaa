@@ -25,6 +25,15 @@
       </div>
     @endif
 
+    @if(session('error'))
+      <div class="track-alerts">
+        <div class="alert alert--error" role="alert" tabindex="-1" data-track-alert="notfound">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
+          <div><p>{{ session('error') }}</p></div>
+        </div>
+      </div>
+    @endif
+
     <form class="track-form" method="post" action="{{ route('orders.track') }}" novalidate data-auth-form data-summary="track-summary" data-track-form>
       @csrf
       <div class="track-form__fields">

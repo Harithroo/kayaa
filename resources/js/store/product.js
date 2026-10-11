@@ -227,6 +227,9 @@
   form.addEventListener('submit', function (e) {
     var sel = selected();
     if (addBtn.disabled) { e.preventDefault(); return; }
+    // Laravel port: Save posts to the wishlist with its own formaction, so it is
+    // not an add to cart and must not be held back by the size check.
+    if (e.submitter && e.submitter.hasAttribute('data-wishlist-toggle')) return;
     if (!sel.size) { e.preventDefault(); showSizeError(); return; }
     // The prototype adds to the demo cart (proto-cart.js) and opens the drawer. In Laravel the form posts to the backend: remove data-demo-cart.
     if (form.hasAttribute('data-demo-cart') && window.KayaaCart) {

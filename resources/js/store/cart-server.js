@@ -67,6 +67,9 @@
   document.addEventListener('submit', function (e) {
     var form = e.target;
     if (!form.matches('[data-cart-form], [data-quick-add-form], [data-cart-panel] form')) return;
+    // A submitter with its own formaction (the product page's Save button) is not
+    // posting to the cart: let the browser handle it.
+    if (e.submitter && e.submitter.hasAttribute('data-native-submit')) return;
     if (!drawer || !window.fetch || !window.DOMParser) return;   // no JS path: let it post normally
 
     var opens = form.hasAttribute('data-cart-form') || form.hasAttribute('data-quick-add-form');

@@ -7,7 +7,13 @@
 <section class="help-card" aria-labelledby="help-title">
   <div>
     <h2 id="help-title">Still need help?</h2>
-    <p>@if($wa)Message us on WhatsApp {{ $wa }} or send@else Send @endif us a note from the contact page.</p>
+    <p>
+      @if($wa)
+        Message us on WhatsApp {{ $wa }} or send us a note from the contact page.
+      @else
+        Send us a note from the contact page.
+      @endif
+    </p>
   </div>
   <div class="help-card__actions">
     @if($waHref)

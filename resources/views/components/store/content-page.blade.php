@@ -13,6 +13,10 @@
     <header class="content__head">
       <h1>{{ $heading ?? $title }}</h1>
       @if($lede)<p class="content__lede">{{ $lede }}</p>@endif
+      @php $updatedAt = config('kayaa.content_updated'); @endphp
+      @if($updatedAt)
+        <p class="content__updated">Last updated <time datetime="{{ $updatedAt }}">{{ \Illuminate\Support\Carbon::parse($updatedAt)->format('j F Y') }}</time></p>
+      @endif
     </header>
     <div @class(['content__layout', 'content__layout--toc' => (bool) $toc])>
       @if($toc)

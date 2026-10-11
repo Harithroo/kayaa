@@ -17,13 +17,29 @@ class SearchController extends Controller
 
         if ($q !== '') {
             $like = '%'.str_replace(['%', '_'], ['\%', '\_'], $q).'%';
-            $results = Product::active()->forCards()
+            $query = Product::active()->forCards()
                 ->where(fn ($w) => $w
                     ->where('name', 'like', $like)
                     ->orWhere('description', 'like', $like)
                     ->orWhereHas('category', fn ($c) => $c->where('name', 'like', $like))
-                    ->orWhereHas('variants.color', fn ($c) => $c->where('name', 'like', $like)))
-                ->limit(48)->get();
+                    ->orWhereHas('variants.color', fn ($c) => $c->where('name', 'like', $like)));
+
+            // The toolbar on the results page offers the same sort and sale switch
+            // as the shop listing, so they work the same way here.
+            if ($request->query('sale')) {
+                $query->whereHas('variants', fn ($v) => $v->whereNotNull('compare_at_price')->whereColumn('compare_at_price', '>', 'price'));
+            }
+
+            $minPrice = fn ($q) => $q->selectRaw('min(price)')->from('product_variants')->whereColumn('product_id', 'products.id');
+
+            match ($request->query('sort')) {
+                'price_asc' => $query->orderBy($minPrice),
+                'price_desc' => $query->orderByDesc($minPrice),
+                'new' => $query->orderByDesc('created_at'),
+                default => $query->orderByDesc('is_featured')->orderByDesc('is_new')->orderByDesc('created_at'),
+            };
+
+            $results = $query->limit(48)->get();
         }
 
         // "Also matches": categories whose name contains the query, shown as chips

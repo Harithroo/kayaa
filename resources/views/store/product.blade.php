@@ -167,6 +167,12 @@
               </tbody>
             </table>
             <p class="size-guide__units">Height in centimetres, weight in kilograms.</p>
+            <details class="sg-disclosure">
+              <summary class="sg-disclosure__summary">How to measure your baby <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <div class="sg-disclosure__body">
+                <x-store.size-steps id-prefix="sgp" label="How to measure your baby" />
+              </div>
+            </details>
             <a class="link-arrow" href="{{ route('pages.size-guide') }}">Open the full size guide <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
           </div>
 
@@ -179,17 +185,16 @@
               <button type="button" class="qty__btn" data-qty-plus aria-label="Increase quantity"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg></button>
             </div>
             <button type="submit" class="btn btn--primary btn--lg buy__submit" data-add-btn @disabled(! $inStock)>{{ $inStock ? 'Add to cart' : 'Out of stock' }}</button>
+            {{-- Save posts to the wishlist instead of the cart: its own formaction,
+                 so the row keeps the prototype's three controls without a nested form. --}}
+            <button type="submit" class="btn btn--secondary btn--lg buy__save"
+                    formaction="{{ route('wishlist.toggle', $product) }}" formnovalidate
+                    data-wishlist-toggle data-native-submit aria-pressed="{{ ($isWishlisted ?? false) ? 'true' : 'false' }}">
+              <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg>
+              <span data-save-label>{{ ($isWishlisted ?? false) ? 'Saved' : 'Save' }}</span>
+            </button>
           </div>
           <p class="buy__dispatch">Order before 2pm for same-day dispatch</p>
-        </form>
-
-        {{-- Save is its own form: the wishlist lives on the server. --}}
-        <form method="post" action="{{ route('wishlist.toggle', $product) }}" class="buy__save-form">
-          @csrf
-          <button type="submit" class="btn btn--secondary btn--lg buy__save" data-wishlist-toggle aria-pressed="{{ $isWishlisted ?? false ? 'true' : 'false' }}">
-            <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg>
-            <span data-save-label>{{ ($isWishlisted ?? false) ? 'Saved' : 'Save' }}</span>
-          </button>
         </form>
 
         <ul class="assure" role="list">
@@ -202,7 +207,24 @@
           @if($product->fabric_care)
             <details class="accordion__item" open>
               <summary class="accordion__summary">Fabric &amp; care <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body">{!! nl2br(e($product->fabric_care)) !!}</div>
+              <div class="accordion__body">
+                @php
+                  // One line per rule. A "Composition:" line leads, the rest become the care list.
+                  $careLines = collect(preg_split('/
+||
+/', $product->fabric_care))->map(fn ($l) => trim($l))->filter();
+                  $composition = $careLines->first(fn ($l) => Str::startsWith(Str::lower($l), 'composition'));
+                  $careRules = $careLines->reject(fn ($l) => $l === $composition);
+                @endphp
+                @if($composition)
+                  <p><strong>Composition:</strong> {{ Str::of($composition)->after(':')->trim() }}</p>
+                @endif
+                @if($careRules->isNotEmpty())
+                  <ul class="care-list" role="list">
+                    @foreach($careRules as $rule)<li>{{ $rule }}</li>@endforeach
+                  </ul>
+                @endif
+              </div>
             </details>
           @endif
           @if($product->description)
@@ -220,13 +242,21 @@
               <p><a class="link-arrow" href="{{ route('pages.show', 'returns') }}">Returns information <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
             </div>
           </details>
-          @foreach($faqs as $faq)
-            <details class="accordion__item">
-              <summary class="accordion__summary">{{ $faq->question }} <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-              <div class="accordion__body">{!! nl2br(e($faq->answer)) !!}</div>
-            </details>
-          @endforeach
         </div>
+
+        @php $tags = $product->collections->where('is_active', true); @endphp
+        @if($tags->isNotEmpty())
+          <div class="product__tags" data-product-tags>
+            <p class="product__tags-label" id="tags-label">Tags</p>
+            <nav aria-labelledby="tags-label" aria-label="Product tags">
+              <ul class="chip-list" role="list">
+                @foreach($tags as $tag)
+                  <li><a class="chip" href="{{ route('shop.index', ['tag' => $tag->slug]) }}">{{ $tag->name }}</a></li>
+                @endforeach
+              </ul>
+            </nav>
+          </div>
+        @endif
       </div>
     </div>
 
@@ -282,12 +312,17 @@
                   </li>
                 @endforeach
               </ul>
+              @if($ratingCount > $reviews->count())
+                <div class="reviews__more" data-reviews-more>
+                  <p class="reviews__count" data-reviews-count>Showing {{ $reviews->count() }} of {{ $ratingCount }}</p>
+                  <a class="btn btn--secondary" href="{{ request()->fullUrlWithQuery(['reviews' => 'all']) }}#reviews" data-reviews-more-link>See more reviews</a>
+                </div>
+              @endif
             </div>
           @else
-            <div class="empty-state">
-              <span class="empty-state__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg></span>
-              <h3 class="empty-state__title">No reviews yet</h3>
-              <p>Bought this? Tell other parents how it fits.</p>
+            <div class="reviews__empty">
+              <p>No reviews yet — be the first to tell other parents how it fits.</p>
+              <a class="btn btn--primary" href="#write-review">Write a review</a>
             </div>
           @endif
 
@@ -346,6 +381,9 @@
                     <p class="field__hint" id="body-hint">Reviews are checked by us before they appear.</p>
                   </div>
                 </div>
+                @guest
+                  <p class="review-form__signin" data-review-signin>Sign in to have your review marked as a verified purchase. <a href="{{ route('account.login') }}">Sign in</a></p>
+                @endguest
                 <button type="submit" class="btn btn--primary">Submit review</button>
               </form>
             @endunless
@@ -353,6 +391,23 @@
         </div>
       </div>
     </section>
+
+    @if($faqs->isNotEmpty())
+      <section class="faqs" aria-labelledby="faq-title">
+        <h2 id="faq-title">Questions parents ask</h2>
+        <div class="accordion">
+          @foreach($faqs as $faq)
+            <details class="accordion__item">
+              <summary class="accordion__summary">{{ $faq->question }} <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+              <div class="accordion__body">{!! nl2br(e($faq->answer)) !!}</div>
+            </details>
+          @endforeach
+        </div>
+        @if($waHref = \App\Support\StoreContact::whatsappHref())
+          <a class="link-arrow" href="{{ $waHref }}" target="_blank" rel="noopener">Still unsure? Chat on WhatsApp <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+        @endif
+      </section>
+    @endif
 
     @if($related->isNotEmpty())
       <section class="related" aria-labelledby="related-title">

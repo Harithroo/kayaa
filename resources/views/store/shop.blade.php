@@ -27,12 +27,14 @@
     </nav>
 
     <header class="listing-head">
-      <h1 data-listing-title>{{ $isCategory ? $category->name : ($sale ? 'Sale' : 'All baby clothing') }}</h1>
-      @if($isCategory && $category->description)
-        <p class="listing-head__intro" data-listing-intro>{{ $category->description }}</p>
-      @elseif(! $isCategory)
-        <p class="listing-head__intro" data-listing-intro>Soft everyday essentials, sorted by age and stage.</p>
-      @endif
+      <h1 data-listing-title>{{ $isCategory ? $category->name : ($collection?->name ?? ($sale ? 'Sale' : 'All baby clothing')) }}</h1>
+      <p class="listing-head__intro" data-listing-intro>
+        @if($isCategory)
+          {{ $category->description ?: 'Soft '.Str::lower($category->name).' for babies, sized by age.' }}
+        @else
+          Soft everyday essentials, sorted by age and stage.
+        @endif
+      </p>
       <p class="listing-head__count" data-listing-count>{{ $total }} {{ Str::plural('product', $total) }}</p>
     </header>
 
@@ -62,6 +64,7 @@
       {{-- Keep whatever else is filtering the list when the sort or the sale switch changes. --}}
       @if($activeSize)<input type="hidden" name="size" value="{{ $activeSize }}">@endif
       @if(request('q'))<input type="hidden" name="q" value="{{ request('q') }}">@endif
+      @if(request('tag'))<input type="hidden" name="tag" value="{{ request('tag') }}">@endif
       <p class="toolbar__count" data-listing-range>
         @if($total)Showing {{ $products->firstItem() }}-{{ $products->lastItem() }} of {{ $total }}@endif
       </p>

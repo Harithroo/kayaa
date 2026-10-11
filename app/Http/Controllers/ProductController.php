@@ -16,7 +16,7 @@ class ProductController extends Controller
 
         $product->load([
             'images', 'category.department', 'sizeScale.options',
-            'variants.sizeOption', 'variants.color',
+            'variants.sizeOption', 'variants.color', 'collections',
         ]);
 
         $related = Product::active()->forCards()
@@ -37,7 +37,10 @@ class ProductController extends Controller
             ];
         }
 
-        $reviews = $product->reviews()->approved()->latest()->limit(20)->get();
+        // Five reviews, then a "See more reviews" link that drops the cap.
+        $reviews = $product->reviews()->approved()->latest()
+            ->limit($request->query('reviews') === 'all' ? 100 : 5)
+            ->get();
         $ratingBreakdown = $product->reviews()->approved()
             ->selectRaw('rating, count(*) as total')->groupBy('rating')->pluck('total', 'rating');
 

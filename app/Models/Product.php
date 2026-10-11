@@ -65,7 +65,9 @@ class Product extends Model
 
     public function collections(): BelongsToMany
     {
-        return $this->belongsToMany(Collection::class)->withPivot('position');
+        // Fully qualified: `Collection` in this file is Illuminate's support
+        // collection (imported above), not the Collection model.
+        return $this->belongsToMany(\App\Models\Collection::class)->withPivot('position');
     }
 
     // ---------- scopes ----------

@@ -23,11 +23,11 @@
     data-new="{{ $product->is_new ? 1 : 0 }}"
     data-sale="{{ $onSale ? 1 : 0 }}"
     data-stock="{{ $product->totalStock() }}">
-  <article class="product-card">
+  <article @class(['product-card', 'product-card--oos' => ! $inStock])>
     <div class="product-card__media">
       <x-store.photo :image="$product->primaryImage()" :alt="$product->name" :seed="$product->id" :eager="$eager" />
       @if(! $inStock)
-        <span class="badge product-card__badge">Out of stock</span>
+        <span class="badge badge--muted product-card__badge">Out of stock</span>
       @elseif($onSale)
         <span class="badge badge--accent product-card__badge">Sale</span>
       @elseif($product->is_new)
