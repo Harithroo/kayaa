@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Faq;
 use App\Models\Product;
+use App\Services\WishlistService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -47,8 +48,11 @@ class ProductController extends Controller
             ? $product->reviews()->where('user_id', $request->user()->id)->exists()
             : false;
 
+        // The product page's Save button renders in its saved state.
+        $isWishlisted = app(WishlistService::class)->has($product->id);
+
         return view('store.product', compact(
-            'product', 'related', 'matrix', 'reviews', 'ratingBreakdown', 'faqs', 'hasReviewed'
+            'product', 'related', 'matrix', 'reviews', 'ratingBreakdown', 'faqs', 'hasReviewed', 'isWishlisted'
         ));
     }
 }

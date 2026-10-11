@@ -27,6 +27,8 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/cart/panel', [CartController::class, 'panel'])->name('cart.panel');
 Route::post('/cart/items', [CartController::class, 'add'])->name('cart.add');
+// The quick-add sheet on a product card posts product + size + colour instead of a variant.
+Route::post('/cart/quick-add', [CartController::class, 'quickAdd'])->name('cart.quick-add');
 Route::patch('/cart/items/{variant}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/items/{variant}', [CartController::class, 'remove'])->name('cart.remove');
 
@@ -97,6 +99,8 @@ Route::post('/deploy/migrate', DeployController::class)
     ->name('deploy.migrate');
 
 Route::get('/search', SearchController::class)->name('search');
+// Typeahead for the search boxes in the header and on the search page.
+Route::get('/search/suggest', [SearchController::class, 'suggest'])->middleware('throttle:120,1')->name('search.suggest');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
 Route::post('/contact', [PageController::class, 'sendMessage'])->middleware('throttle:5,1')->name('pages.contact.send');
 

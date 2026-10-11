@@ -1,0 +1,37 @@
+/* The handful of rules the ported prototype had no markup for, because the real
+   store does server-side what the prototype faked in JS. Kept in its own file so
+   every other sheet in resources/css stays byte-identical to the `frontend` branch.
+   Everything here reuses the design-system tokens — no new colours or sizes. */
+
+/* Sign out is a POST form, so it is a <button> where the prototype had a link. */
+.menu-group__signout,
+.account-nav__signout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .menu-group__signout:hover,
+  .account-nav__signout:hover { color: var(--primary-deep); }
+}
+
+/* Quantity and remove in the cart are real forms, so the stepper and the remove
+   control sit inside a <form> the prototype did not have. The form must not
+   introduce a box of its own. */
+.cart-item__form,
+.cart-line__form { display: contents; }
+
+/* Wishlist and quick-add post to the server: the prototype's buttons become
+   submit buttons inside forms that wrap nothing visible. */
+.inline-form { display: inline; }

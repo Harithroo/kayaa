@@ -1,53 +1,117 @@
+{{-- Contact, from the prototype's html/contact.html. The contact cards take the
+     numbers from Admin > Settings > Contact details; the form is the existing
+     one (name, contact, order_reference, message). --}}
 @php
   $wa = \App\Support\StoreContact::whatsapp();
   $waHref = \App\Support\StoreContact::whatsappHref();
   $tel = \App\Support\StoreContact::phone();
   $telHref = \App\Support\StoreContact::phoneHref();
 @endphp
-<x-layouts.store title="Contact us">
-  <div class="section">
-  <div class="wrap">
-    <h1 class="h2 page">Contact us</h1>
-    <p class="muted" style="margin:0 0 22px;font-size:15px">Fastest on WhatsApp, 9am–6pm Monday to Saturday.</p>
-    <div class="split" style="gap:30px">
-      <div class="main" style="flex-basis:300px">
-        @if($waHref)
-          <a class="wa-card" href="{{ $waHref }}">
-            <span class="dot"></span>
-            <span><strong>WhatsApp {{ $wa }}</strong><span>Order help, sizing, exchanges</span></span>
-          </a>
-        @endif
-        <div class="rows">
-          @if($tel)
-            <div><p class="k">Call us</p><p class="v"><a href="{{ $telHref }}">{{ $tel }}</a></p></div>
-          @endif
-          <div><p class="k">Email</p><p class="v"><a href="mailto:{{ config('kayaa.email') }}">{{ config('kayaa.email') }}</a></p></div>
-          <div><p class="k">Hours</p><p class="v">Mon–Sat 9am–6pm</p></div>
-          <div><p class="k">Delivery</p><p class="v">Island-wide by courier · cash on delivery available</p></div>
-        </div>
-      </div>
-      <form class="side panel" method="post" action="{{ route('pages.contact.send') }}" style="flex-basis:300px">
-        @csrf
-        <h2 class="h3" style="font-size:17px">Send a message</h2>
-        <x-store.field name="name" label="Your name" required />
-        <x-store.field name="contact" label="Mobile or email" required />
-        <x-store.field name="order_reference" label="Order number (optional)" placeholder="KY-260917-AB12" />
-        <x-store.field name="message" label="Message" type="textarea" rows="4" required />
-        <button class="btn dark" style="width:100%">Send message</button>
-      </form>
-    </div>
+<x-layouts.store title="Contact" page="contact">
+  <div class="container content">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li aria-current="page">Contact</li>
+      </ol>
+    </nav>
+    <header class="content__head">
+      <h1>Contact us</h1>
+      <p class="content__lede">Fastest on WhatsApp, 9am–6pm Monday to Saturday</p>
+    </header>
 
-    @if($faqs->isNotEmpty())
-      <section class="faqs" id="faqs" style="margin-top:36px">
-        <h2 class="h2">Frequently asked</h2>
-        @foreach($faqs as $faq)
-          <details class="acc">
-            <summary>{{ $faq->question }}</summary>
-            <p>{!! nl2br(e($faq->answer)) !!}</p>
-          </details>
-        @endforeach
-      </section>
-    @endif
-  </div>
+    <div data-contact-page>
+      <ul class="contact-cards" role="list">
+        @if($waHref)
+          <li class="contact-card">
+            <span class="contact-card__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg></span>
+            <h2>WhatsApp</h2>
+            <p class="contact-card__value">{{ $wa }}</p>
+            <p>Order help, sizing, exchanges</p>
+            <a class="link-arrow" href="{{ $waHref }}" target="_blank" rel="noopener">Chat on WhatsApp <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+          </li>
+        @endif
+        @if($tel)
+          <li class="contact-card">
+            <span class="contact-card__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg></span>
+            <h2>Call us</h2>
+            <p class="contact-card__value">{{ $tel }}</p>
+            <a class="link-arrow" href="{{ $telHref }}">Call now <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+          </li>
+        @endif
+        <li class="contact-card">
+          <span class="contact-card__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg></span>
+          <h2>Email</h2>
+          <p class="contact-card__value">{{ config('kayaa.email') }}</p>
+          <a class="link-arrow" href="mailto:{{ config('kayaa.email') }}">Send an email <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+        </li>
+        <li class="contact-card">
+          <span class="contact-card__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg></span>
+          <h2>Hours</h2>
+          <p class="contact-card__value">Mon–Sat 9am–6pm</p>
+        </li>
+        <li class="contact-card">
+          <span class="contact-card__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span>
+          <h2>Delivery</h2>
+          <p class="contact-card__value">Island-wide by courier</p>
+          <a class="link-arrow" href="{{ route('pages.show', 'delivery') }}">Delivery information <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+        </li>
+      </ul>
+
+      <div class="contact-main">
+        <section class="contact-form" aria-labelledby="contact-title">
+          <h2 id="contact-title">Send us a message</h2>
+          <p class="contact-form__lede">We'll reply on the number or email you give us.</p>
+
+          @if($errors->any())
+            <div class="alert alert--error" role="alert" tabindex="-1" id="contact-summary">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
+              <div><p class="alert__title">Please check your message</p><ul class="alert__list">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul></div>
+            </div>
+          @endif
+
+          <form class="contact-form__fields" method="post" action="{{ route('pages.contact.send') }}" novalidate data-auth-form data-summary="contact-summary">
+            @csrf
+            <div class="field" data-field>
+              <label for="name">Your name</label>
+              <input id="name" name="name" type="text" required autocomplete="name" value="{{ old('name') }}" data-required-message="Enter your name">
+              <p class="field__error" id="name-error" hidden></p>
+            </div>
+            <div class="field" data-field>
+              <label for="contact">Mobile or email</label>
+              <input id="contact" name="contact" type="text" required value="{{ old('contact') }}" aria-describedby="contact-hint" data-required-message="Tell us how to reach you">
+              <p class="field__hint" id="contact-hint">However you'd like us to reply.</p>
+              <p class="field__error" id="contact-error" hidden></p>
+            </div>
+            <div class="field" data-field>
+              <label for="order_reference">Order number (optional)</label>
+              <input id="order_reference" name="order_reference" type="text" placeholder="KY-260917-AB12" maxlength="20"
+                     autocapitalize="characters" autocomplete="off" spellcheck="false" value="{{ old('order_reference') }}">
+              <p class="field__error" id="order_reference-error" hidden></p>
+            </div>
+            <div class="field" data-field>
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" required data-required-message="Write your message">{{ old('message') }}</textarea>
+              <p class="field__error" id="message-error" hidden></p>
+            </div>
+            <button type="submit" class="btn btn--primary btn--lg">Send message</button>
+          </form>
+        </section>
+
+        @if($faqs->isNotEmpty())
+          <section class="contact-faqs" aria-labelledby="faq-title">
+            <h2 id="faq-title">Common questions</h2>
+            <div class="accordion">
+              @foreach($faqs as $faq)
+                <details class="accordion__item">
+                  <summary class="accordion__summary">{{ $faq->question }} <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+                  <div class="accordion__body">{!! nl2br(e($faq->answer)) !!}</div>
+                </details>
+              @endforeach
+            </div>
+          </section>
+        @endif
+      </div>
+    </div>
   </div>
 </x-layouts.store>

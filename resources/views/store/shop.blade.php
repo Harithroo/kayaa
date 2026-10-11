@@ -1,64 +1,116 @@
-<x-layouts.store :title="$title" :category="$category" nav="shop">
-  <div class="section">
-  <div class="wrap">
-    @if($category)
-      <p class="crumbs"><a href="{{ route('home') }}">Home</a> › <a href="{{ route('categories.index') }}">{{ $department->name }}</a> ›@if($category->parent) <a href="{{ $category->parent->url() }}">{{ $category->parent->name }}</a> ›@endif {{ $category->name }}</p>
-    @else
-      <p class="eyebrow">Newborn – 2 years</p>
-    @endif
-    <h1 class="h2 page">{{ $title }}</h1>
-    @if($category?->description)<p class="muted small" style="margin:0 0 6px;max-width:60ch">{{ $category->description }}</p>@endif
-    <p class="muted small" style="margin:0 0 18px">{{ $products->total() }} {{ Str::plural('item', $products->total()) }}</p>
+{{-- Shop and category listings, from the prototype's html/shop.html and
+     html/category.html (one template: the two differ only in the head and the
+     breadcrumb). Filtering and sorting stay on the server; the toolbar's
+     [data-autosubmit] controls just submit the form. --}}
+@php
+  $isCategory = (bool) $category;
+  $sale = (bool) request('sale');
+  $sort = request('sort', 'featured');
+  $total = $products->total();
+@endphp
+<x-layouts.store :title="$title" :page="$isCategory ? 'category shop' : 'shop'"
+  :metaDescription="$category?->description">
 
-    @if($category && $category->children->isNotEmpty())
-      <nav class="chips subnav" aria-label="{{ $category->name }} types" style="margin-bottom:10px">
-        <a class="chip on" href="{{ $category->url() }}">All {{ Str::lower($category->name) }}</a>
-        @foreach($category->children->where('is_active', true) as $child)
-          <a class="chip" href="{{ $child->url() }}">{{ $child->name }}</a>
-        @endforeach
+  <div class="container listing" data-listing>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol data-breadcrumb>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        @if($isCategory)
+          <li><a href="{{ route('shop.index') }}">Shop</a></li>
+          @if($category->parent)<li><a href="{{ $category->parent->url() }}">{{ $category->parent->name }}</a></li>@endif
+          <li aria-current="page">{{ $category->name }}</li>
+        @else
+          <li aria-current="page">{{ $sale ? 'Sale' : 'Shop' }}</li>
+        @endif
+      </ol>
+    </nav>
+
+    <header class="listing-head">
+      <h1 data-listing-title>{{ $isCategory ? $category->name : ($sale ? 'Sale' : 'All baby clothing') }}</h1>
+      @if($isCategory && $category->description)
+        <p class="listing-head__intro" data-listing-intro>{{ $category->description }}</p>
+      @elseif(! $isCategory)
+        <p class="listing-head__intro" data-listing-intro>Soft everyday essentials, sorted by age and stage.</p>
+      @endif
+      <p class="listing-head__count" data-listing-count>{{ $total }} {{ Str::plural('product', $total) }}</p>
+    </header>
+
+    @if($isCategory && $category->children->where('is_active', true)->isNotEmpty())
+      <nav class="age-chips" aria-label="{{ $category->name }} types">
+        <ul class="age-chips__list" role="list">
+          <li><a class="chip is-selected" href="{{ $category->url() }}" aria-current="page">All {{ Str::lower($category->name) }}</a></li>
+          @foreach($category->children->where('is_active', true) as $child)
+            <li><a class="chip" href="{{ $child->url() }}">{{ $child->name }}</a></li>
+          @endforeach
+        </ul>
       </nav>
-    @elseif(!$category)
-      <p style="margin:0 0 14px"><a class="small" href="{{ route('categories.index') }}">Browse by category →</a></p>
+    @elseif($sizes->isNotEmpty())
+      <nav class="age-chips" aria-label="Filter by size">
+        <ul class="age-chips__list" role="list">
+          <li><a @class(['chip', 'is-selected' => ! $activeSize]) href="{{ route('shop.index', array_filter(['sale' => $sale ? 1 : null, 'sort' => $sort !== 'featured' ? $sort : null])) }}" @unless($activeSize) aria-current="page" @endunless>All sizes</a></li>
+          @foreach($sizes as $size)
+            <li><a @class(['chip', 'is-selected' => $activeSize === $size->label])
+                   href="{{ route('shop.index', array_filter(['size' => $size->label, 'sale' => $sale ? 1 : null, 'sort' => $sort !== 'featured' ? $sort : null])) }}"
+                   @if($activeSize === $size->label) aria-current="page" @endif>{{ $size->label }}</a></li>
+          @endforeach
+        </ul>
+      </nav>
     @endif
 
-    <div class="chips" style="margin-bottom:12px">
-      <a class="chip {{ $activeSize ? '' : 'on' }}" href="{{ request()->fullUrlWithoutQuery(['size', 'page']) }}">All ages</a>
-      @foreach($sizes as $size)
-        <a class="chip {{ $activeSize === $size->label ? 'on' : '' }}" href="{{ request()->fullUrlWithQuery(['size' => $size->label, 'page' => null]) }}">{{ $size->label }}</a>
-      @endforeach
-    </div>
-
-    <form class="toolbar" method="get">
-      @foreach(request()->except('sort', 'page') as $k => $v)<input type="hidden" name="{{ $k }}" value="{{ $v }}">@endforeach
-      <select name="sort" aria-label="Sort" onchange="this.form.submit()">
-        <option value="" @selected(!request('sort'))>Featured</option>
-        <option value="price_asc" @selected(request('sort') === 'price_asc')>Price: low to high</option>
-        <option value="price_desc" @selected(request('sort') === 'price_desc')>Price: high to low</option>
-        <option value="new" @selected(request('sort') === 'new')>Newest</option>
-      </select>
-      <a class="btn line" href="{{ $category ? $category->url() : route('shop.index') }}">Clear filters</a>
+    <form class="toolbar" method="get" action="{{ $isCategory ? $category->url() : route('shop.index') }}" data-listing-form>
+      {{-- Keep whatever else is filtering the list when the sort or the sale switch changes. --}}
+      @if($activeSize)<input type="hidden" name="size" value="{{ $activeSize }}">@endif
+      @if(request('q'))<input type="hidden" name="q" value="{{ request('q') }}">@endif
+      <p class="toolbar__count" data-listing-range>
+        @if($total)Showing {{ $products->firstItem() }}-{{ $products->lastItem() }} of {{ $total }}@endif
+      </p>
+      <div class="toolbar__controls">
+        <div class="field toolbar__sort">
+          <label for="sort">Sort by</label>
+          <select id="sort" name="sort" data-autosubmit>
+            <option value="featured" @selected($sort === 'featured')>Featured</option>
+            <option value="new" @selected($sort === 'new')>Newest</option>
+            <option value="price_asc" @selected($sort === 'price_asc')>Price: low to high</option>
+            <option value="price_desc" @selected($sort === 'price_desc')>Price: high to low</option>
+          </select>
+        </div>
+        <label class="switch">
+          <input type="checkbox" role="switch" name="sale" value="1" data-autosubmit @checked($sale)>
+          <span class="switch__track" aria-hidden="true"></span>
+          <span class="switch__label">Sale only</span>
+        </label>
+        <noscript><button type="submit" class="btn btn--secondary btn--sm">Apply</button></noscript>
+      </div>
     </form>
 
-    @if($products->isEmpty())
-      <div class="empty">
-        <h3>Nothing in this filter yet</h3>
-        <p>Try another age band or category.</p>
-        <a class="btn dark sm" href="{{ route('shop.index') }}">Clear filters</a>
+    @if($products->isNotEmpty())
+      <div data-listing-results>
+        <h2 class="visually-hidden">Products</h2>
+        <ul class="product-grid" role="list" data-listing-grid>
+          @foreach($products as $i => $product)
+            <x-store.product-card :product="$product" :eager="$i < 4" />
+          @endforeach
+        </ul>
+        {{ $products->links('vendor.pagination.kayaa') }}
       </div>
     @else
-      <div class="grid">
-        @foreach($products as $product)<x-store.product-card :product="$product" />@endforeach
+      <div class="empty-state listing-empty">
+        <span class="empty-state__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-package"></use></svg></span>
+        <h2 class="empty-state__title">No products match these filters</h2>
+        <p class="listing-empty__text">Try removing a filter to see more.</p>
+        <a class="btn btn--primary" href="{{ route('shop.index') }}" data-clear-filters>Clear filters</a>
       </div>
-      @if($products->hasPages())
-        <nav class="pagination" aria-label="Pages">
-          @if($products->onFirstPage())<span class="muted">‹</span>@else<a href="{{ $products->previousPageUrl() }}" rel="prev">‹</a>@endif
-          @foreach($products->getUrlRange(1, $products->lastPage()) as $p => $url)
-            @if($p === $products->currentPage())<span class="current">{{ $p }}</span>@else<a href="{{ $url }}">{{ $p }}</a>@endif
-          @endforeach
-          @if($products->hasMorePages())<a href="{{ $products->nextPageUrl() }}" rel="next">›</a>@else<span class="muted">›</span>@endif
-        </nav>
-      @endif
     @endif
-  </div>
+
+    <aside class="size-help" aria-labelledby="size-help-title">
+      <span class="size-help__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-ruler"></use></svg></span>
+      <div class="size-help__text">
+        <h2 class="size-help__title" id="size-help-title">Not sure about the size?</h2>
+        <p>Our size guide shows what fits each age band; height and weight are the better guide.</p>
+      </div>
+      <a class="link-arrow" href="{{ route('pages.size-guide') }}">Open the size guide <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+    </aside>
+
   </div>
 </x-layouts.store>

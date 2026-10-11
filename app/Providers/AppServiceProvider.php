@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\Banner;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Setting;
+use App\Models\SizeOption;
 use App\Services\CartService;
 use App\Services\WishlistService;
 use Illuminate\Auth\Events\Login;
@@ -37,7 +39,9 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Every storefront view gets the nav categories, cart and wishlist counts.
-        View::composer('components.layouts.store', function ($view) {
+        // The store pages are composed too, not just the shell: several of them
+        // (the empty bag, the search page) use the same size and category lists.
+        View::composer(['components.layouts.store', 'store.*'], function ($view) {
             $view->with('navCategories', Category::query()
                 ->whereNull('parent_id')
                 ->where('is_active', true)
@@ -47,6 +51,15 @@ class AppServiceProvider extends ServiceProvider
             $view->with('cartCount', app(CartService::class)->count());
             $view->with('wishCount', app(WishlistService::class)->count());
             $view->with('topbar', Banner::live('topbar')->first());
+
+            // The shell's "Shop by size" chips (header mega menu, menu drawer, footer),
+            // and the size and colour labels the quick-add sheet fills itself from.
+            $view->with('navSizes', SizeOption::query()
+                ->orderBy('size_scale_id')
+                ->orderBy('position')
+                ->get());
+            $view->with('navColors', Color::query()->orderBy('name')->get());
+            $view->with('popularSearches', []);
         });
     }
 

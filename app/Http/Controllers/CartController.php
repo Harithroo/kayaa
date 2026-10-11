@@ -49,6 +49,41 @@ class CartController extends Controller
         return back()->with('cart_open', true)->with('success', $variant->product->name.' added to your cart.');
     }
 
+    /**
+     * The quick-add sheet on a product card, and the product page's own buy form.
+     * Both know the product and the size and colour the shopper picked, not the
+     * variant, so resolve the pair here and hand over to the cart.
+     */
+    public function quickAdd(Request $request): RedirectResponse|View
+    {
+        $data = $request->validate([
+            'product' => ['required', 'integer', 'exists:products,id'],
+            'size' => ['required', 'integer'],
+            'colour' => ['nullable', 'integer'],
+            'quantity' => ['nullable', 'integer', 'min:1', 'max:10'],
+        ]);
+
+        $variant = ProductVariant::query()
+            ->with('product')
+            ->where('product_id', $data['product'])
+            ->where('size_option_id', $data['size'])
+            ->when($data['colour'] ?? null, fn ($q, $colour) => $q->where('color_id', $colour))
+            ->where('is_active', true)
+            ->first();
+
+        if (! $variant || ! $variant->inStock()) {
+            return back()->with('error', 'Sorry, that size has just sold out.');
+        }
+
+        $this->cart->add($variant, (int) ($data['quantity'] ?? 1));
+
+        if ($this->wantsPanel($request)) {
+            return $this->panel();
+        }
+
+        return back()->with('cart_open', true)->with('success', $variant->product->name.' added to your cart.');
+    }
+
     public function update(Request $request, ProductVariant $variant): RedirectResponse|View
     {
         $data = $request->validate(['qty' => ['required', 'integer', 'min:0', 'max:10']]);

@@ -1,27 +1,63 @@
-@props(['product'])
+@props(['product', 'eager' => false])
+{{-- The design system's product card (prototype: the `product-grid` items on
+     shop.html). Badge priority is out of stock, then sale, then new; an out-of-stock
+     card has no quick add. The <li> keeps the prototype's data-* attributes: the
+     quick-add sheet reads them, and they are handy hooks for anything client-side. --}}
 @php
-  $tints = ['butter','sage','cloud','blush','sand'];
-  $tint = $tints[$product->id % count($tints)];
-  $colors = $product->colors()->count();
-  $meta = collect([$colors ? "$colors colour".($colors > 1 ? 's' : '') : null, $product->sizeRangeLabel()])->filter()->implode(' · ');
+  $price = $product->minPrice();
   $was = $product->compareAtPrice();
-  $url = route('products.show', $product);
+  $onSale = $was !== null && $was > $price;
+  $inStock = $product->totalStock() > 0;
+  $colors = $product->colors();
+  $sizes = $product->sizeOptions();
+  $meta = array_values(array_filter([
+    $colors->count() > 1 ? $colors->count().' colours' : ($colors->count() === 1 ? $colors->first()->name : null),
+    $product->sizeRangeLabel(),
+  ]));
 @endphp
-{{-- The heart sits beside the link, not inside it: a form inside an <a> is invalid HTML. --}}
-<div class="card">
-  <div class="cardmedia">
-    <a href="{{ $url }}" tabindex="-1" aria-hidden="true">
-      <x-store.photo :image="$product->primaryImage()" :tint="$tint" :alt="$product->name">
-        @if($was)<span class="badge clay">Sale</span>
-        @elseif($product->is_new)<span class="badge">New</span>
-        @elseif($product->isLowStock())<span class="badge clay">Low stock</span>
-        @elseif($product->totalStock() === 0)<span class="badge">Sold out</span>@endif
-      </x-store.photo>
-    </a>
-    <x-store.wish-button :product="$product" />
-  </div>
-  <a class="cardname" href="{{ $url }}">{{ $product->name }}</a>
-  @if($meta)<span class="cardmeta">{{ $meta }}</span>@endif
-  <span class="cardrow"><span class="price">{{ money($product->minPrice()) }}</span>@if($was)<span class="was">{{ money($was) }}</span>@endif</span>
-  {{ $slot }}
-</div>
+<li data-product
+    data-slug="{{ $product->slug }}"
+    data-name="{{ $product->name }}"
+    data-price="{{ (int) ($price / 100) }}"
+    data-category="{{ $product->category?->slug }}"
+    data-new="{{ $product->is_new ? 1 : 0 }}"
+    data-sale="{{ $onSale ? 1 : 0 }}"
+    data-stock="{{ $product->totalStock() }}">
+  <article class="product-card">
+    <div class="product-card__media">
+      <x-store.photo :image="$product->primaryImage()" :alt="$product->name" :seed="$product->id" :eager="$eager" />
+      @if(! $inStock)
+        <span class="badge product-card__badge">Out of stock</span>
+      @elseif($onSale)
+        <span class="badge badge--accent product-card__badge">Sale</span>
+      @elseif($product->is_new)
+        <span class="badge badge--lilac product-card__badge">New</span>
+      @endif
+      @if($inStock && $sizes->isNotEmpty())
+        <button type="button" class="product-card__quick" data-quick-add
+                data-product="{{ $product->id }}"
+                data-slug="{{ $product->slug }}"
+                data-name="{{ $product->name }}"
+                data-price="{{ (int) ($price / 100) }}"
+                @if($onSale) data-was="{{ (int) ($was / 100) }}" @endif
+                data-tone="{{ ($product->id % 4) + 1 }}"
+                data-sizes="{{ $sizes->pluck('id')->join(' ') }}"
+                data-colours="{{ $colors->pluck('id')->join(' ') }}"
+                aria-haspopup="dialog" aria-label="Quick add, {{ $product->name }}">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+          <span class="product-card__quick-label">Quick add</span>
+        </button>
+      @endif
+    </div>
+    <div class="product-card__info">
+      <h3 class="product-card__name"><a class="product-card__link" href="{{ route('products.show', $product) }}">{{ $product->name }}</a></h3>
+      @if($meta)<p class="product-card__meta">{{ implode(' · ', $meta) }}</p>@endif
+      <p @class(['price', 'price--sale' => $onSale])>
+        @if($onSale)<span class="visually-hidden">Sale price </span>@endif
+        <span class="price__now">{{ money($price) }}</span>
+        @if($onSale) <s class="price__was"><span class="visually-hidden">Was </span>{{ money($was) }}</s>@endif
+      </p>
+    </div>
+    {{ $slot }}
+  </article>
+</li>

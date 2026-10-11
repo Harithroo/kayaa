@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<path d="M0,70 C240,20 480,100 720,58 C960,18 1200,90 1440,48 L1440,260 L0,260 Z" fill="#E6DBF1" opacity=".85"/>
+<path d="M0,108 C260,68 520,140 780,100 C1040,64 1260,124 1440,92 L1440,260 L0,260 Z" fill="#D9CAEA" opacity=".9"/>
+<path d="M0,150 C300,118 560,172 840,140 C1100,112 1300,160 1440,134 L1440,260 L0,260 Z" fill="#C3AFDA" opacity=".85"/>
+</svg>

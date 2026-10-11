@@ -1,0 +1,119 @@
+/* Review index (review-only page) */
+
+.review {
+  padding-block: var(--space-6) var(--space-7);
+  max-width: calc(860px + var(--gutter) * 2);
+}
+.review__head { margin-bottom: var(--space-6); }
+.review__intro {
+  margin-top: var(--space-3);
+  color: var(--ink-soft);
+  max-width: 56ch;
+}
+.review__group { margin-bottom: var(--space-6); }
+.review__group h2 { margin-bottom: var(--space-3); }
+.review__list {
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.review__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 64px;
+  padding: var(--space-3) var(--space-4);
+}
+.review__item + .review__item { border-top: 1px solid var(--line); }
+.review__text { min-width: 0; }
+.review__name {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  color: var(--primary-deep);
+}
+.review__name { min-width: var(--tap); justify-content: flex-start; }
+span.review__name { color: var(--ink-soft); }
+.review__note {
+  margin-top: -6px;
+  font-size: var(--fs-ui);
+  color: var(--ink-soft);
+}
+.review__item--soon .review__name { color: var(--ink-soft); }
+.review__item .badge { flex: none; }
+.review__footnote {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-ui);
+  color: var(--ink-soft);
+}
+
+@media (max-width: 599px) {
+  .review__item { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
+}
+
+/* "Try these states" links under ready pages */
+.review__item { flex-wrap: wrap; }
+.review__states {
+  flex: 1 0 100%;
+  padding-top: var(--space-2);
+}
+.review__states-label {
+  margin-bottom: var(--space-1);
+  font-size: var(--fs-caption);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+}
+.review__states ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+}
+.review__states a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 var(--space-4);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-ui);
+  font-weight: 700;
+  color: var(--primary-deep);
+  text-decoration: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .review__states a:hover { background: var(--secondary); }
+}
+@media (max-width: 599px) {
+  .review__states { flex: none; width: 100%; }
+}
+/* Decisions page: a plain table that stacks into label and value rows on narrow screens */
+.review-table { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); overflow: hidden; }
+.review-table table { width: 100%; border-collapse: collapse; font-size: var(--fs-dense); }
+.review-table th, .review-table td { padding: var(--space-3) var(--space-4); text-align: left; vertical-align: top; border-top: 1px solid var(--line); }
+.review-table thead th { border-top: 0; background: var(--secondary); font-size: var(--fs-ui); }
+.review-table tbody th { font-weight: 700; }
+@media (max-width: 799px) {
+  .review-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .review-table tr, .review-table th, .review-table td { display: block; }
+  .review-table tbody tr { padding: var(--space-3) var(--space-4); border-top: 1px solid var(--line); }
+  .review-table tbody tr:first-child { border-top: 0; }
+  .review-table th, .review-table td { padding: 2px 0; border: 0; }
+  .review-table td::before { content: attr(data-label) ": "; font-weight: 700; color: var(--ink-soft); }
+}
+@media (min-width: 800px) {
+  .review-table th:first-child { width: 28%; }
+  .review-table td:nth-child(2) { width: 32%; }
+}
+
+.review__footnote a { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 600; }
+.review__note--try { margin-top: var(--space-2); max-width: 70ch; }
