@@ -1,8 +1,8 @@
-@props(['title', 'heading' => null, 'lede' => null, 'crumb' => null, 'toc' => null, 'page' => null])
+@props(['title', 'heading' => null, 'lede' => null, 'crumb' => null, 'toc' => null, 'page' => null, 'metaDescription' => null])
 {{-- The shared shell for the written pages (prototype: html/delivery.html and the
      rest). `toc` is an optional ['#anchor' => 'Label'] list; content.js keeps the
      disclosure open on a wide screen and highlights the section being read. --}}
-<x-layouts.store :title="$title" :page="$page">
+<x-layouts.store :title="$title" :page="$page" :metaDescription="$metaDescription">
   <div class="container content">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <ol>
@@ -29,6 +29,8 @@
         <div class="prose">
           {{ $slot }}
         </div>
+        {{-- Anything that sits outside the prose column, such as the help card. --}}
+        {{ $after ?? '' }}
       </div>
     </div>
   </div>

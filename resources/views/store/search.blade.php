@@ -26,6 +26,17 @@
       @endif
     </header>
 
+    @if($alsoMatches->isNotEmpty())
+      <div class="also-matches" data-also-matches>
+        <p class="also-matches__label" id="also-label">Also matches</p>
+        <ul class="chip-list" role="list" aria-labelledby="also-label" data-also-list>
+          @foreach($alsoMatches as $cat)
+            <li><a class="chip" href="{{ $cat->url() }}">{{ $cat->name }}</a></li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
+
     @if($results->isNotEmpty())
       <div data-listing-results>
         <h2 class="visually-hidden">Products</h2>

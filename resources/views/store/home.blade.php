@@ -73,7 +73,7 @@
               @endforeach
             </ul>
           </div>
-          <p class="age-steps__more"><a class="link-arrow" href="{{ route('pages.size-guide') }}">See the size guide <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
+          <p class="age-steps__more"><a class="link-arrow" href="{{ route('shop.index') }}">See all sizes <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
         </div>
       </div>
     </section>

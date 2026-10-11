@@ -26,7 +26,14 @@ class SearchController extends Controller
                 ->limit(48)->get();
         }
 
-        return view('store.search', compact('q', 'results'));
+        // "Also matches": categories whose name contains the query, shown as chips
+        // under the heading (prototype: the also-matches block on search.html).
+        $alsoMatches = $q === '' ? collect() : Category::active()
+            ->where('name', 'like', '%'.str_replace(['%', '_'], ['\%', '\_'], $q).'%')
+            ->with('department')
+            ->limit(6)->get();
+
+        return view('store.search', compact('q', 'results', 'alsoMatches'));
     }
 
     /**

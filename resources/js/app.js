@@ -4,10 +4,9 @@
    on its own page root ([data-product-page], [data-checkout-form], ...) and no-ops
    elsewhere, so one bundle serves every page.
 
-   The prototype's proto-*.js and catalogue-data.js live in resources/js/store/proto/
-   for reference only: they fake server behaviour (demo cart in sessionStorage, static
-   catalogue, fake auth) and are deliberately not imported — the real server does that
-   work now. */
+   The prototype's proto-*.js files are not here: they faked server behaviour (a demo
+   cart in sessionStorage, a static catalogue, a fake sign-in) and the real server does
+   that work now. cart-server.js replaces the demo cart. */
 
 // Shell: header, drawers, mega menu, quick add, tab bar, topbar, wishlist buttons.
 import './store/search-core.js';
