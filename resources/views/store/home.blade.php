@@ -118,8 +118,9 @@
   @if($promos->isNotEmpty())
     <section class="section" aria-label="Promotions">
       <div class="container promos__grid">
-        {{-- Admin > Banners (home_promo). The design system has two promo tints; they
-             alternate, as the prototype's pair did. --}}
+        {{-- Admin > Banners (home_promo). The design system has two promo tints,
+             alternating as the prototype's pair does. With one live banner it
+             spans the row (resources/css/laravel.css). --}}
         @foreach($promos as $i => $promo)
           <article class="promo promo--{{ $i % 2 === 0 ? 'lilac' : 'sky' }}">
             @if($promo->eyebrow)<p class="eyebrow">{{ $promo->eyebrow }}</p>@endif

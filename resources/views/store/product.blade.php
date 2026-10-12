@@ -210,8 +210,10 @@
               <div class="accordion__body">
                 @php
                   // One line per rule. A "Composition:" line leads, the rest become the care list.
-                  $careLines = collect(preg_split('/
-||
+                  $careLines = collect(preg_split('/
+
+|
+|
 /', $product->fabric_care))->map(fn ($l) => trim($l))->filter();
                   $composition = $careLines->first(fn ($l) => Str::startsWith(Str::lower($l), 'composition'));
                   $careRules = $careLines->reject(fn ($l) => $l === $composition);
@@ -326,70 +328,71 @@
             </div>
           @endif
 
-          <section class="review-form" id="write-review" aria-labelledby="write-review-title" tabindex="-1">
-            <h3 id="write-review-title">Write a review</h3>
-
-            <div class="review-form__alerts">
-              @if($errors->any())
-                <div class="alert alert--error" role="alert" tabindex="-1">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
-                  <div>
-                    <p class="alert__title">Please check your review</p>
-                    <ul class="alert__list">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
-                  </div>
-                </div>
-              @endif
-              @if($hasReviewed)
-                <div class="alert alert--info">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>
-                  <div><p>You've already reviewed this product.</p></div>
-                </div>
-              @endif
-            </div>
-
-            @unless($hasReviewed)
-              <form method="post" action="{{ route('reviews.store', $product) }}" novalidate data-review-form>
-                @csrf
-                <div class="review-form__fields">
-                  <fieldset class="rating-input" data-field="rating">
-                    <legend>Your rating</legend>
-                    <div class="rating-input__stars">
-                      @for($star = 1; $star <= 5; $star++)
-                        <input type="radio" name="rating" id="rating-{{ $star }}" value="{{ $star }}" required @checked(old('rating') == $star)>
-                        <label for="rating-{{ $star }}"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><span class="visually-hidden">{{ $star }} {{ Str::plural('star', $star) }}</span></label>
-                      @endfor
-                    </div>
-                  </fieldset>
-                  @guest
-                    <div class="field" data-field="name">
-                      <label for="review-name">Name</label>
-                      <input id="review-name" name="name" type="text" autocomplete="name" value="{{ old('name') }}" required>
-                    </div>
-                    <div class="field" data-field="email">
-                      <label for="review-email">Email</label>
-                      <input id="review-email" name="email" type="email" inputmode="email" autocomplete="email" value="{{ old('email') }}" aria-describedby="email-hint">
-                      <p class="field__hint" id="email-hint">Not shown on the page.</p>
-                    </div>
-                  @endguest
-                  <div class="field" data-field="headline">
-                    <label for="review-headline">Headline (optional)</label>
-                    <input id="review-headline" name="title" type="text" maxlength="120" autocomplete="off" value="{{ old('title') }}">
-                  </div>
-                  <div class="field" data-field="body">
-                    <label for="review-body">Your review</label>
-                    <textarea id="review-body" name="body" rows="5" required aria-describedby="body-hint">{{ old('body') }}</textarea>
-                    <p class="field__hint" id="body-hint">Reviews are checked by us before they appear.</p>
-                  </div>
-                </div>
-                @guest
-                  <p class="review-form__signin" data-review-signin>Sign in to have your review marked as a verified purchase. <a href="{{ route('account.login') }}">Sign in</a></p>
-                @endguest
-                <button type="submit" class="btn btn--primary">Submit review</button>
-              </form>
-            @endunless
-          </section>
         </div>
       </div>
+
+      <section class="review-form" id="write-review" aria-labelledby="write-review-title" tabindex="-1">
+        <h3 id="write-review-title">Write a review</h3>
+
+        <div class="review-form__alerts">
+          @if($errors->any())
+            <div class="alert alert--error" role="alert" tabindex="-1">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-circle-alert"></use></svg>
+              <div>
+                <p class="alert__title">Please check your review</p>
+                <ul class="alert__list">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+              </div>
+            </div>
+          @endif
+          @if($hasReviewed)
+            <div class="alert alert--info">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>
+              <div><p>You've already reviewed this product.</p></div>
+            </div>
+          @endif
+        </div>
+
+        @unless($hasReviewed)
+          <form method="post" action="{{ route('reviews.store', $product) }}" novalidate data-review-form>
+            @csrf
+            <div class="review-form__fields">
+              <fieldset class="rating-input" data-field="rating">
+                <legend>Your rating</legend>
+                <div class="rating-input__stars">
+                  @for($star = 1; $star <= 5; $star++)
+                    <input type="radio" name="rating" id="rating-{{ $star }}" value="{{ $star }}" required @checked(old('rating') == $star)>
+                    <label for="rating-{{ $star }}"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg><span class="visually-hidden">{{ $star }} {{ Str::plural('star', $star) }}</span></label>
+                  @endfor
+                </div>
+              </fieldset>
+              <div class="field" data-field="name">
+                <label for="review-name">Name</label>
+                <input id="review-name" name="name" type="text" autocomplete="name" required
+                       value="{{ old('name', auth()->user()?->name) }}" data-required-message="Enter your name">
+              </div>
+              <div class="field" data-field="email">
+                <label for="review-email">Email</label>
+                <input id="review-email" name="email" type="email" inputmode="email" autocomplete="email"
+                       value="{{ old('email', auth()->user()?->email) }}" aria-describedby="email-hint">
+                <p class="field__hint" id="email-hint">Not shown on the page.</p>
+              </div>
+              <div class="field" data-field="headline">
+                <label for="review-headline">Headline (optional)</label>
+                <input id="review-headline" name="title" type="text" maxlength="120" autocomplete="off" value="{{ old('title') }}">
+              </div>
+              <div class="field" data-field="body">
+                <label for="review-body">Your review</label>
+                <textarea id="review-body" name="body" rows="5" required aria-describedby="body-hint">{{ old('body') }}</textarea>
+                <p class="field__hint" id="body-hint">Reviews are checked by us before they appear.</p>
+              </div>
+            </div>
+            @guest
+              <p class="review-form__signin" data-review-signin>Sign in to have your review marked as a verified purchase. <a href="{{ route('account.login') }}">Sign in</a></p>
+            @endguest
+            <button type="submit" class="btn btn--primary">Submit review</button>
+          </form>
+        @endunless
+      </section>
     </section>
 
     @if($faqs->isNotEmpty())

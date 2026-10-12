@@ -35,3 +35,8 @@
 /* Wishlist and quick-add post to the server: the prototype's buttons become
    submit buttons inside forms that wrap nothing visible. */
 .inline-form { display: inline; }
+
+/* The design system's promo grid is a fixed two-column grid, which the prototype
+   always filled with a pair. Admin > Banners decides how many are live, so a lone
+   banner spans the row instead of leaving half of it empty. */
+.promos__grid:has(.promo:only-child) .promo { grid-column: 1 / -1; }
