@@ -365,17 +365,28 @@
                   @endfor
                 </div>
               </fieldset>
-              <div class="field" data-field="name">
-                <label for="review-name">Name</label>
-                <input id="review-name" name="name" type="text" autocomplete="name" required
-                       value="{{ old('name', auth()->user()?->name) }}" data-required-message="Enter your name">
-              </div>
-              <div class="field" data-field="email">
-                <label for="review-email">Email</label>
-                <input id="review-email" name="email" type="email" inputmode="email" autocomplete="email"
-                       value="{{ old('email', auth()->user()?->email) }}" aria-describedby="email-hint">
-                <p class="field__hint" id="email-hint">Not shown on the page.</p>
-              </div>
+              @auth
+                {{-- Signed in: the review is saved against the account, so the name
+                     and email are shown rather than asked for, and cannot be edited
+                     here. The server takes them from the account either way. --}}
+                <p class="review-form__identity" data-review-identity>
+                  Posting as <strong>{{ auth()->user()->name }}</strong>.
+                  Your email ({{ auth()->user()->email }}) is saved with the review and never shown on the page.
+                  <a href="{{ route('account.profile') }}">Change your details</a>
+                </p>
+              @else
+                <div class="field" data-field="name">
+                  <label for="review-name">Name</label>
+                  <input id="review-name" name="name" type="text" autocomplete="name" required
+                         value="{{ old('name') }}" data-required-message="Enter your name">
+                </div>
+                <div class="field" data-field="email">
+                  <label for="review-email">Email</label>
+                  <input id="review-email" name="email" type="email" inputmode="email" autocomplete="email"
+                         value="{{ old('email') }}" aria-describedby="email-hint">
+                  <p class="field__hint" id="email-hint">Not shown on the page.</p>
+                </div>
+              @endauth
               <div class="field" data-field="headline">
                 <label for="review-headline">Headline (optional)</label>
                 <input id="review-headline" name="title" type="text" maxlength="120" autocomplete="off" value="{{ old('title') }}">
