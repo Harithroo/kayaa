@@ -13,7 +13,7 @@
 //   size-rows                                 <tr> rows of the size table on the product page (the rows come from docs/content/size-guide.md)
 //   product-tags SLUG                         the "Tags" chip row of the product page (links to shop.html?tag=)
 //   size-guide-slider [panel]                 the three-step "How to find your size" slider (tools/content.mjs; used in the product page panel)
-//   wardrobe-items                            the seven hanging garments of html/mockups/wardrobe.html (prototype only)
+//   wardrobe-items | wardrobe-ticker          the seven hanging garments and the optional message strip of html/mockups/wardrobe.html (prototype only)
 //   footer-clothesline                        the footer's clothesline art (html/assets/img/footer/footer-clothesline.svg, inlined)
 //   decisions                                 the open-decisions table for html/review-decisions.html (tools/build-decisions.mjs)
 //   content NAME | faqs PLACEMENT | district-eta | todo-counts | listing-intro KIND/SLUG   built from docs/content (see tools/content.mjs)
@@ -133,23 +133,41 @@ export function generate(name, args, ctx) {
       return S.map((s) => `<li><a href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
     case 'decisions': return renderDecisions(ctx.repo);
     case 'wardrobe-items': {
-      // html/mockups/wardrobe.html (prototype only): one hanging garment per category; the counts and the size range come from the products
+      // html/mockups/wardrobe.html (prototype only): one hanging garment per category; the counts and the size range come from the products.
+      // Each item has two layers that share the hook ring's centre as their pivot: the back half of the ring (behind the rod) and the front
+      // (ring, stem, hanger, garment). The artwork is ONE replaceable element (.art): its size, the hook point inside it, the wall-shadow offset and the
+      // hover scale are per-item CSS custom properties (sizes are fractions of the cell width), so a photo cut-out can replace it without any JS change.
       const order = new Map(S.map((s, i) => [s.slug, i]));
+      const hangers = { newborn: 'wd-h-small', napkins: 'wd-h-bar', accessories: 'wd-h-mini' };
+      const art = { newborn: [1.14, 1.45], bodysuits: [1.07, 1.35], sleepwear: [1.12, 1.25], sets: [1.11, 1.2], outerwear: [1.12, 1.32], napkins: [1.29, 1.31], accessories: [1.43, 1.45] };
+      const ringBack = '<svg class="wardrobe__ring" viewBox="-9 -9 18 18" aria-hidden="true" focusable="false"><path class="wd-ring" d="M-6.5,0 A6.5,6.5 0 0 1 6.5,0"></path></svg>';
+      const ringFront = '<svg class="wardrobe__ring" viewBox="-9 -9 18 18" aria-hidden="true" focusable="false"><path class="wd-ring" d="M6.5,0 A6.5,6.5 0 0 1 1.4,6.35 M-6.5,0 A6.5,6.5 0 0 0 -1.4,6.35"></path></svg>';
       return C.map((c, i) => {
         const items = cat.products.filter((p) => p.category === c.slug);
         const n = items.length;
         const lo = S[Math.min(...items.map((p) => order.get(p.from)))].lo;
         const hi = S[Math.max(...items.map((p) => order.get(p.to)))].hi;
-        const hanger = c.slug === 'napkins' ? 'wd-clip' : 'wd-hanger';
-        const label = `${c.label}, ${n} ${n === 1 ? 'item' : 'items'}`;
-        return `<li class="wardrobe__item" style="--i: ${i}" data-index="${i}">
-  <a class="wardrobe__link" href="${root}category.html?c=${c.slug}" draggable="false" aria-describedby="wd-d-${c.slug}">
+        const hanger = hangers[c.slug] || 'wd-h-hanger';
+        const [aw, ah] = art[c.slug] || [1.1, 1.3];
+        const count = `${n} ${n === 1 ? 'item' : 'items'}`;
+        const label = `${c.label}, ${count}`;
+        const meta = `${count} · ${lo}–${hi}`;
+        const href = `${root}category.html?c=${c.slug}`;
+        return `<li class="wardrobe__item" style="--i: ${i}; --aw: ${aw}; --ah: ${ah}; --hx: 0.5; --hy: ${(-0.05 / ah).toFixed(4)}; --sx: 0.04; --sy: 0.06; --hs: 1.5" data-index="${i}" data-slug="${c.slug}" data-name="${esc(c.label)}" data-meta="${esc(meta)}" data-href="${href}">
+  <span class="wardrobe__back" aria-hidden="true">${ringBack}</span>
+  <a class="wardrobe__link" href="${href}" draggable="false" aria-describedby="wd-d-${c.slug}">
     <span class="visually-hidden">${esc(label)}</span>
-    <span class="wardrobe__drop"><span class="wardrobe__shadow"></span><span class="wardrobe__pull"><span class="wardrobe__sway"><svg class="wardrobe__art" viewBox="0 -12 240 300" aria-hidden="true" focusable="false"><use href="#${hanger}"></use><use href="#wd-g-${c.slug}"></use></svg></span></span></span>
-    <span class="wardrobe__card" aria-hidden="true"><span class="wardrobe__name">${esc(c.label)}</span><span id="wd-d-${c.slug}"><span class="wardrobe__meta">${n} ${n === 1 ? 'item' : 'items'} · ${esc(lo)}–${esc(hi)}</span><span class="wardrobe__desc">${esc(c.blurb)}</span></span><span class="btn btn--secondary wardrobe__go">Shop ${esc(c.label)} <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+    <span class="wardrobe__front" aria-hidden="true"><span class="wardrobe__shadow"></span>${ringFront}<svg class="art wardrobe__art" viewBox="0 0 240 244" preserveAspectRatio="none" focusable="false"><use class="wd-ill wd-lag" href="#wd-b-${c.slug}"></use><use class="wd-ill wd-hang" href="#${hanger}"></use><use class="wd-ill wd-lag" href="#wd-g-${c.slug}"></use><use class="wd-sil" href="#wd-s-${c.slug}"></use></svg></span>
   </a>
+  <span class="visually-hidden" id="wd-d-${c.slug}">${esc(meta)}. ${esc(c.blurb)}</span>
 </li>`;
       }).join('\n');
+    }
+    case 'wardrobe-ticker': {
+      // the optional strip under the wardrobe (a mock control): short messages from tools/site-config.json
+      const msgs = [`Free delivery over ${money(cfg, cfg.free_shipping_over)}`, `Swap sizes free within ${cfg.return_window_days} days`, 'Secure card payment', 'Island-wide delivery'];
+      const list = (hidden) => `<ul class="wardrobe-ticker__list"${hidden ? ' aria-hidden="true"' : ' role="list"'}>${msgs.map((m) => `<li>${esc(m)}</li>`).join('')}</ul>`;
+      return list(false) + '\n' + list(true);
     }
     case 'footer-clothesline': {
       // the supplied footer-clothesline.svg, inlined so the page CSS can sway the garments; metadata and comments are dropped
