@@ -36,6 +36,11 @@
       "description": "Index of every screen in the Kayaa prototype, with review status. Review only: removed when the site moves to Laravel.",
       "path": "/review", "robots": "noindex,nofollow", "og": "website", "canonical": false
     },
+    "mockups/wardrobe.html": {
+      "title": "Wardrobe category carousel (mock-up) | Kayaa",
+      "description": "Prototype-only mock-up of a wardrobe-style category carousel for the Home page. Review only: removed before launch unless approved.",
+      "path": "/mockups/wardrobe", "robots": "noindex,nofollow", "og": "website", "canonical": false
+    },
     "review-decisions.html": {
       "title": "Open decisions | Kayaa prototype review",
       "description": "The open decisions for the client, rendered from docs/content/01-open-decisions.md. Review only: removed when the site moves to Laravel.",

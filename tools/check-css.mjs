@@ -37,7 +37,8 @@ const errors = [];
 const warnings = [];
 
 /* ---------- CSS files: comments, braces, url() targets ---------- */
-const cssFiles = walk(cssDir, '.css');
+const mockDir = path.join(htmlDir, 'mockups');   // prototype-only mock-ups keep their own stylesheet next to the page
+const cssFiles = [...walk(cssDir, '.css'), ...(fs.existsSync(mockDir) ? walk(mockDir, '.css') : [])];
 let definedText = '';
 for (const file of cssFiles) {
   const text = fs.readFileSync(file, 'utf8');

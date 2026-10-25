@@ -31,7 +31,8 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 .footer__title {
   display: flex;
   align-items: center;
-  min-height: var(--tap);   /* same row height as the wordmark so every column starts on one line */
+  padding-block: 8px;
+  line-height: 1.4;
   margin-bottom: var(--space-1);
   font-family: var(--font-body);
   font-size: var(--fs-caption);
@@ -43,12 +44,11 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 .footer__list,
 .footer__contact,
 .footer__social { list-style: none; }
-.footer__list { display: flex; flex-direction: column; gap: var(--space-2); }   /* 8px between tap targets */
+.footer__list { display: flex; flex-direction: column; }   /* rows are as tall as their text needs: line-height 1.5 plus 8px above and below, no gap */
 .footer__contact {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-2);
   margin-top: var(--space-2);
 }
 .footer__contact a,
@@ -56,9 +56,10 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: var(--tap);
+  padding-block: 8px;
   font-size: var(--fs-dense);
   font-weight: 500;
+  line-height: 1.5;
   color: var(--ink);
   text-decoration: none;
 }
@@ -138,10 +139,12 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 }
 /* The tab bar (layout.css) shows below 900px in px, so the room kept for it follows the same px break */
 @media (min-width: 900px) { .footer__art { padding-bottom: 0; } }
-/* Footer links: compact (about 8px between links) with a mouse on desktop; 44px tap rows everywhere else */
+/* Footer links: tighter again with a mouse on desktop (2px above and below, 6px between links) */
 @media (min-width: 56.25em) and (hover: hover) and (pointer: fine) {
+  .footer__list,
+  .footer__contact { gap: 6px; }
   .footer__list a,
-  .footer__contact a { min-height: 0; padding-block: 2px; }
+  .footer__contact a { padding-block: 2px; }
   .footer__title { margin-bottom: var(--space-2); }
 }
 /* The footer carries the room for the tab bar (inside .footer__art), so the page needs none of its own */

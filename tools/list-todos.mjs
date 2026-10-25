@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const failOnOpen = process.argv.includes('--fail-on-open');
-const SKIP_HTML = new Set(['review.html', 'review-decisions.html', 'proto-onepay.html']);
+const SKIP_HTML = new Set(['review.html', 'review-decisions.html', 'proto-onepay.html', 'mockups/wardrobe.html']);
 
 const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : e.name.endsWith('.html') ? [path.join(d, e.name)] : []));
 const kindOf = (t) => (t === 'TODO' || t === 'todo' ? 'TODO' : 'PROPOSED');

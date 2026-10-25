@@ -15,7 +15,7 @@
     "account/profile.html": "full", "account/register.html": "full", "account/reset-password.html": "full", "account/reviews.html": "full",
     "account/verify-email.html": "full",
     "cart.html": "full", "categories.html": "full", "category.html": "full", "checkout.html": "checkout", "contact.html": "full",
-    "delivery.html": "full", "index.html": "full", "privacy.html": "full", "product.html": "full", "proto-onepay.html": "none",
+    "delivery.html": "full", "index.html": "full", "mockups/wardrobe.html": "none", "privacy.html": "full", "product.html": "full", "proto-onepay.html": "none",
     "returns.html": "full", "review-decisions.html": "full", "review.html": "full", "search.html": "full", "shop.html": "full",
     "size-guide.html": "full", "terms.html": "full", "thank-you.html": "full", "track.html": "full", "wishlist.html": "full"
   }

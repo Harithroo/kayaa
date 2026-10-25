@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Wardrobe category carousel (mock-up) | Kayaa</title>
+  <meta name="description" content="Prototype-only mock-up of a wardrobe-style category carousel for the Home page.">
+  <!-- partial: styles -->
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#FAF7FB">
+  <link rel="icon" href="data:,"> <!-- TODO: replace with the real favicon once the logo exists; data:, stops browsers asking for /favicon.ico (a 404 on every first visit) -->
+  <script>
+    /* Preload the two fonts used above the fold. Skipped over file:// (a CORS-mode font request is blocked there and logs an error).
+       Blade: two static <link rel="preload" href="..." as="font" type="font/woff2" crossorigin> tags instead. */
+    if (location.protocol !== 'file:') ['public-sans', 'urbanist'].forEach(function (n) {
+      var l = document.createElement('link'); l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = '';
+      l.href = '../assets/fonts/' + n + '-latin-wght-normal.woff2'; document.head.appendChild(l);
+    });
+  </script>
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=92b3d5a5">
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=31987cd1">
+  <link rel="stylesheet" href="../assets/css/base.css?v=c7479e07">
+  <link rel="stylesheet" href="../assets/css/components.css?v=86a4ca95">
+  <link rel="stylesheet" href="../assets/css/layout.css?v=1f32df9c">
+  <link rel="stylesheet" href="../assets/css/suggest.css?v=314384f7">
+  <link rel="stylesheet" href="../assets/css/footer.css?v=ca45fd6e">
+  <!-- /partial: styles -->
+  <link rel="stylesheet" href="wardrobe.css?v=711cb708">
+  <script src="wardrobe.js?v=12653c2f" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Stub header for the mock only: no shell. -->
+  <header class="wd-stub">
+    <div class="container wd-stub__bar">
+      <a class="wordmark" href="../index.html" aria-label="Kayaa home">kayaa</a>
+      <a class="link-arrow" href="../index.html"><svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Home</a>
+    </div>
+  </header>
+
+  <main id="main" class="container wd-page">
+    <h1>Wardrobe carousel <span class="badge badge--lilac">Mock-up</span></h1>
+    <p class="wd-intro">A prototype of the Home "Shop by category" block as a wardrobe: seven categories hang on a rail. Scroll or swipe sideways; hover (or, on a phone, rest on the middle one) to see the details. Prototype only, removed before launch unless approved.</p>
+
+    <!-- mock-only -->
+    <details class="mock-bar" data-mock-only>
+      <summary>Mock controls</summary>
+      <div class="mock-bar__body">
+        <fieldset><legend>Hover style</legend><div class="mock-seg">
+          <label><input type="radio" name="hover" value="forward" checked> Forward</label><label><input type="radio" name="hover" value="lift"> Lift</label></div></fieldset>
+        <fieldset><legend>Intro doors</legend><div class="mock-seg">
+          <label><input type="radio" name="doors" value="1" checked> On</label><label><input type="radio" name="doors" value="0"> Off</label></div></fieldset>
+        <fieldset><legend>Idle sway</legend><div class="mock-seg">
+          <label><input type="radio" name="sway" value="1" checked> On</label><label><input type="radio" name="sway" value="0"> Off</label></div></fieldset>
+        <fieldset><legend>Items in view</legend><div class="mock-seg">
+          <label><input type="radio" name="view" value="auto" checked> Auto</label><label><input type="radio" name="view" value="3"> 3</label><label><input type="radio" name="view" value="5"> 5</label></div></fieldset>
+        <fieldset><legend>Animation speed</legend><div class="mock-seg">
+          <label><input type="radio" name="speed" value="slow"> Slow</label><label><input type="radio" name="speed" value="normal" checked> Normal</label><label><input type="radio" name="speed" value="fast"> Fast</label></div></fieldset>
+        <div class="mock-bar__actions">
+          <button type="button" class="btn btn--secondary" data-mock-replay>Replay intro</button>
+          <button type="button" class="btn btn--secondary" data-mock-reset>Reset</button>
+        </div>
+      </div>
+    </details>
+    <!-- /mock-only -->
+
+    <section class="wd-section" aria-labelledby="wd-title">
+      <h2 id="wd-title">Shop by category</h2>
+      <p class="wd-lede">Seven ways into the range. Every one is a real link, in order, so nothing depends on the animation.</p>
+
+      <div class="wardrobe" data-wardrobe data-hover="forward" data-sway="on">
+        <div class="wardrobe__cornice" aria-hidden="true"></div>
+        <div class="wardrobe__track" role="group" aria-roledescription="carousel" aria-label="Shop by category" data-wardrobe-track>
+          <ul class="wardrobe__rack" role="list">
+            <!-- TODO: the one-line descriptions are placeholder copy (the catalogue blurbs), confirm with the client -->
+            <!-- gen: wardrobe-items -->
+            <li class="wardrobe__item" style="--i: 0" data-index="0">
+              <a class="wardrobe__link" href="../category.html?c=newborn" draggable="false" aria-describedby="wd-d-newborn">
+                <span class="visually-hidden">Newborn, 3 items</span>
+                <span class="wardrobe__drop"><span class="wardrobe__shadow"></span><span class="wardrobe__pull"><span class="wardrobe__sway"><svg class="wardrobe__art" viewBox="0 -12 240 300" aria-hidden="true" focusable="false"><use href="#wd-hanger"></use><use href="#wd-g-newborn"></use></svg></span></span></span>
+                <span class="wardrobe__card" aria-hidden="true"><span class="wardrobe__name">Newborn</span><span id="wd-d-newborn"><span class="wardrobe__meta">3 items · NB–3m</span><span class="wardrobe__desc">Soft first pieces for the newborn weeks.</span></span><span class="btn btn--secondary wardrobe__go">Shop Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </a>
+            </li>
+            <li class="wardrobe__item" style="--i: 1" data-index="1">
+              <a class="wardrobe__link" href="../category.html?c=bodysuits" draggable="false" aria-describedby="wd-d-bodysuits">
+                <span class="visually-hidden">Bodysuits, 5 items</span>
+                <span class="wardrobe__drop"><span class="wardrobe__shadow"></span><span class="wardrobe__pull"><span class="wardrobe__sway"><svg class="wardrobe__art" viewBox="0 -12 240 300" aria-hidden="true" focusable="false"><use href="#wd-hanger"></use><use href="#wd-g-bodysuits"></use></svg></span></span></span>
+                <span class="wardrobe__card" aria-hidden="true"><span class="wardrobe__name">Bodysuits</span><span id="wd-d-bodysuits"><span class="wardrobe__meta">5 items · NB–3Y</span><span class="wardrobe__desc">Everyday bodysuits in soft cotton.</span></span><span class="btn btn--secondary wardrobe__go">Shop Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </a>
+            </li>
+            <li class="wardrobe__item" style="--i: 2" data-index="2">
+              <a class="wardrobe__link" href="../category.html?c=sleepwear" draggable="false" aria-describedby="wd-d-sleepwear">
+                <span class="visually-hidden">Sleepwear, 3 items</span>
+                <span class="wardrobe__drop"><span class="wardrobe__shadow"></span><span class="wardrobe__pull"><span class="wardrobe__sway"><svg class="wardrobe__art" viewBox="0 -12 240 300" aria-hidden="true" focusable="false"><use href="#wd-hanger"></use><use href="#wd-g-sleepwear"></use></svg></span></span></span>
+                <span class="wardrobe__card" aria-hidden="true"><span class="wardrobe__name">Sleepwear</span><span id="wd-d-sleepwear"><span class="wardrobe__meta">3 items · NB–3Y</span><span class="wardrobe__desc">Gowns, sleep bags and bamboo pieces for calm nights.</span></span><span class="btn btn--secondary wardrobe__go">Shop Sleepwear <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </a>
+            </li>
+            <li class="wardrobe__item" style="--i: 3" data-index="3">
+              <a class="wardrobe__link" href="../category.html?c=sets" draggable="false" aria-describedby="wd-d-sets">
+                <span class="visually-hidden">Sets, 4 items</span>
+                <span class="wardrobe__drop"><span class="wardrobe__shadow"></span><span class="wardrobe__pull"><span class="wardrobe__sway"><svg class="wardrobe__art" viewBox="0 -12 240 300" aria-hidden="true" focusable="false"><use href="#wd-hanger"></use><use href="#wd-g-sets"></use></svg></span></span></span>
+                <span class="wardrobe__card" aria-hidden="true"><span class="wardrobe__name">Sets</span><span id="wd-d-sets"><span class="wardrobe__meta">4 items · 6m–3Y</span><span class="wardrobe__desc">Matching pieces, ready to wear together.</span></span><span class="btn btn--secondary wardrobe__go">Shop Sets <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </a>
+            </li>
+            <li class="wardrobe__item" style="--i: 4" data-index="4">
+              <a class="wardrobe__link" href="../category.html?c=outerwear" draggable="false" aria-describedby="wd-d-outerwear">
+                <span class="visually-hidden">Outerwear, 4 items</span>
+                <span class="wardrobe__drop"><span class="wardrobe__shadow"></span><span class="wardrobe__pull"><span class="wardrobe__sway"><svg class="wardrobe__art" viewBox="0 -12 240 300" aria-hidden="true" focusable="false"><use href="#wd-hanger"></use><use href="#wd-g-outerwear"></use></svg></span></span></span>
+                <span class="wardrobe__card" aria-hidden="true"><span class="wardrobe__name">Outerwear</span><span id="wd-d-outerwear"><span class="wardrobe__meta">4 items · 3m–3Y</span><span class="wardrobe__desc">Cardigans, jackets and layers for cooler days.</span></span><span class="btn btn--secondary wardrobe__go">Shop Outerwear <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </a>
+            </li>
+            <li class="wardrobe__item" style="--i: 5" data-index="5">
+              <a class="wardrobe__link" href="../category.html?c=napkins" draggable="false" aria-describedby="wd-d-napkins">
+                <span class="visually-hidden">Napkins, 3 items</span>
+                <span class="wardrobe__drop"><span class="wardrobe__shadow"></span><span class="wardrobe__pull"><span class="wardrobe__sway"><svg class="wardrobe__art" viewBox="0 -12 240 300" aria-hidden="true" focusable="false"><use href="#wd-clip"></use><use href="#wd-g-napkins"></use></svg></span></span></span>
+                <span class="wardrobe__card" aria-hidden="true"><span class="wardrobe__name">Napkins</span><span id="wd-d-napkins"><span class="wardrobe__meta">3 items · NB–3Y</span><span class="wardrobe__desc">Soft napkins and cloths for every day.</span></span><span class="btn btn--secondary wardrobe__go">Shop Napkins <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </a>
+            </li>
+            <li class="wardrobe__item" style="--i: 6" data-index="6">
+              <a class="wardrobe__link" href="../category.html?c=accessories" draggable="false" aria-describedby="wd-d-accessories">
+                <span class="visually-hidden">Accessories, 3 items</span>
+                <span class="wardrobe__drop"><span class="wardrobe__shadow"></span><span class="wardrobe__pull"><span class="wardrobe__sway"><svg class="wardrobe__art" viewBox="0 -12 240 300" aria-hidden="true" focusable="false"><use href="#wd-hanger"></use><use href="#wd-g-accessories"></use></svg></span></span></span>
+                <span class="wardrobe__card" aria-hidden="true"><span class="wardrobe__name">Accessories</span><span id="wd-d-accessories"><span class="wardrobe__meta">3 items · NB–3Y</span><span class="wardrobe__desc">Mittens, booties, bibs and hats.</span></span><span class="btn btn--secondary wardrobe__go">Shop Accessories <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+              </a>
+            </li>
+            <!-- /gen: wardrobe-items -->
+          </ul>
+        </div>
+        <div class="wardrobe__light" aria-hidden="true"></div>
+        <div class="wardrobe__floor" aria-hidden="true"></div>
+        <div class="wardrobe__shade" aria-hidden="true"></div>
+        <div class="wardrobe__doors" aria-hidden="true"><div class="wardrobe__door wardrobe__door--l"></div><div class="wardrobe__door wardrobe__door--r"></div></div>
+      </div>
+
+      <div class="wardrobe-ui" data-wardrobe-ui>
+        <button type="button" class="wardrobe-ui__btn" data-wd-prev aria-label="Previous category"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="wardrobe-ui__mid">
+          <p class="wardrobe-ui__count" data-wd-count>1 of 7</p>
+          <div class="wardrobe-ui__dots" data-wd-dots></div>
+        </div>
+        <button type="button" class="wardrobe-ui__btn" data-wd-next aria-label="Next category"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <p class="wardrobe-more"><a class="link-arrow" href="../categories.html">View all categories <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></p>
+    </section>
+  </main>
+
+  <!-- The drawings: one symbol per garment (restyle one without touching the rest), plus two hangers. Drawn in the style of the footer clothesline:
+       rounded shapes, deep-plum outline at 60%, flat lilac, periwinkle, pale and white fills. All share one 240 x 300 canvas (hook at the top). -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="wd-hanger" viewBox="0 -12 240 300">
+        <path class="wd wd-n wd-h" d="M120,42 V30 C120,22 134,22 134,12 C134,2 118,-2 113,8"/>
+        <path class="wd wd-n wd-h" d="M120,42 L44,72 Q38,76 44,79 H196 Q202,76 196,72 Z"/>
+      </symbol>
+      <symbol id="wd-clip" viewBox="0 -12 240 300">
+        <path class="wd wd-n wd-h" d="M120,62 V30 C120,22 134,22 134,12 C134,2 118,-2 113,8"/>
+        <path class="wd wd-n wd-h" d="M72,64 H168"/>
+        <rect class="wd-p" x="84" y="56" width="14" height="26" rx="3"/><rect class="wd-p" x="142" y="56" width="14" height="26" rx="3"/>
+      </symbol>
+
+      <symbol id="wd-g-newborn" viewBox="0 -12 240 300">
+        <g transform="translate(120,78) scale(1.36)">
+          <path class="wd wd-c" d="M-22,0 Q0,14 22,0 L50,10 L62,34 L42,42 L32,28 L30,92 Q14,112 0,104 Q-14,112 -30,92 L-32,28 L-42,42 L-62,34 L-50,10 Z"/>
+          <path class="wd wd-n wd-s" d="M-22,0 Q0,22 22,0"/>
+          <path class="wd wd-n wd-s" d="M-12,96 Q0,90 12,96"/>
+          <path class="wd wd-w" transform="translate(0,46)" d="M0,-10 L2.9,-3.4 L9.5,-3.1 L4.4,1.4 L5.9,8.1 L0,4.6 L-5.9,8.1 L-4.4,1.4 L-9.5,-3.1 L-2.9,-3.4 Z"/>
+        </g>
+      </symbol>
+      <symbol id="wd-g-bodysuits" viewBox="0 -12 240 300">
+        <g transform="translate(120,78) scale(1.6)">
+          <path class="wd wd-a" d="M-22,0 Q0,14 22,0 L50,10 L62,34 L42,42 L32,28 L30,92 Q14,112 0,104 Q-14,112 -30,92 L-32,28 L-42,42 L-62,34 L-50,10 Z"/>
+          <path class="wd wd-n wd-s" d="M-22,0 Q0,22 22,0"/>
+          <path class="wd wd-n wd-s" d="M-14,93 Q0,86 14,93"/>
+          <circle class="wd-p" cx="-7" cy="98" r="1.7"/><circle class="wd-p" cx="0" cy="100" r="1.7"/><circle class="wd-p" cx="7" cy="98" r="1.7"/>
+        </g>
+      </symbol>
+      <symbol id="wd-g-sleepwear" viewBox="0 -12 240 300">
+        <g transform="translate(120,78)">
+          <path class="wd wd-b" d="M-24,0 Q0,16 24,0 L52,8 L66,72 L48,78 L40,32 L37,122 L39,170 Q40,188 20,188 L5,188 L5,130 L-5,130 L-5,188 L-20,188 Q-40,188 -39,170 L-37,122 L-40,32 L-48,78 L-66,72 L-52,8 Z"/>
+          <path class="wd wd-n wd-s" d="M-24,0 Q0,22 24,0"/>
+          <path class="wd wd-n wd-s" d="M0,18 V130"/>
+          <circle class="wd-p" cx="0" cy="24" r="3.2"/>
+          <path class="wd wd-w" d="M-18,48 A12,12 0 1 0 -18,72 A9,9 0 1 1 -18,48 Z"/>
+        </g>
+      </symbol>
+      <symbol id="wd-g-sets" viewBox="0 -12 240 300">
+        <g transform="translate(120,78)">
+          <path class="wd wd-a" d="M-32,62 L32,62 L36,190 L6,190 L0,112 L-6,190 L-36,190 Z"/>
+          <rect class="wd wd-d" x="-32" y="62" width="64" height="12" rx="2"/>
+          <path class="wd wd-w" d="M-22,0 Q0,14 22,0 L52,10 L62,36 L42,44 L34,30 L34,94 Q0,104 -34,94 L-34,30 L-42,44 L-62,36 L-52,10 Z"/>
+          <path class="wd wd-n wd-s" d="M-22,0 Q0,22 22,0"/>
+          <path class="wd wd-n wd-s" d="M-34,84 Q0,94 34,84"/>
+        </g>
+      </symbol>
+      <symbol id="wd-g-outerwear" viewBox="0 -12 240 300">
+        <g transform="translate(120,78) scale(1.3)">
+          <path class="wd wd-e" d="M-26,0 Q0,10 26,0 L60,12 L72,100 L52,106 L44,40 L44,140 Q0,150 -44,140 L-44,40 L-52,106 L-72,100 L-60,12 Z"/>
+          <path class="wd wd-n wd-s" d="M-26,0 L0,40 L26,0"/>
+          <path class="wd wd-n wd-s" d="M0,40 V146"/>
+          <path class="wd wd-n wd-s" d="M-44,128 Q0,138 44,128"/>
+          <circle class="wd-p" cx="0" cy="62" r="3.2"/><circle class="wd-p" cx="0" cy="86" r="3.2"/><circle class="wd-p" cx="0" cy="110" r="3.2"/>
+        </g>
+      </symbol>
+      <symbol id="wd-g-napkins" viewBox="0 -12 240 300">
+        <g transform="translate(120,76) scale(1.45)">
+          <path class="wd wd-c" d="M-60,0 L60,0 L60,124 Q0,134 -60,124 Z"/>
+          <path class="wd wd-w" d="M-60,124 L-60,60 L2,126 Z"/>
+          <path class="wd wd-n wd-s" d="M-52,8 H52"/>
+          <circle class="wd wd-w" cx="-46" cy="112" r="4"/>
+        </g>
+      </symbol>
+      <symbol id="wd-g-accessories" viewBox="0 -12 240 300">
+        <g transform="translate(88,204) scale(0.78)">
+          <path class="wd wd-a" d="M-18,0 L18,0 L18,38 Q18,64 0,64 Q-18,64 -18,38 Z"/>
+          <path class="wd wd-a" d="M-18,26 Q-36,24 -33,40 Q-30,52 -18,47"/>
+          <rect class="wd wd-d" x="-18" y="0" width="36" height="12" rx="2"/>
+        </g>
+        <g transform="translate(152,204) scale(0.78)">
+          <path class="wd wd-a" d="M-18,0 L18,0 L18,38 Q18,64 0,64 Q-18,64 -18,38 Z"/>
+          <path class="wd wd-a" d="M18,26 Q36,24 33,40 Q30,52 18,47"/>
+          <rect class="wd wd-d" x="-18" y="0" width="36" height="12" rx="2"/>
+        </g>
+        <g transform="translate(120,78) scale(1.25)">
+          <path class="wd wd-w" d="M-20,0 Q0,12 20,0 Q46,22 46,58 Q46,104 0,104 Q-46,104 -46,58 Q-46,22 -20,0 Z"/>
+          <path class="wd wd-n wd-s" d="M-20,0 Q0,22 20,0"/>
+          <path class="wd wd-d" d="M0,70 C-15,57 -11,46 0,53 C11,46 15,57 0,70 Z"/>
+        </g>
+        <rect class="wd-p" x="81" y="198" width="14" height="14" rx="3"/><rect class="wd-p" x="145" y="198" width="14" height="14" rx="3"/>
+      </symbol>
+    </defs>
+  </svg>
+</body>
+</html>

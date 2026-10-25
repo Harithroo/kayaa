@@ -13,6 +13,7 @@
 //   size-rows                                 <tr> rows of the size table on the product page (the rows come from docs/content/size-guide.md)
 //   product-tags SLUG                         the "Tags" chip row of the product page (links to shop.html?tag=)
 //   size-guide-slider [panel]                 the three-step "How to find your size" slider (tools/content.mjs; used in the product page panel)
+//   wardrobe-items                            the seven hanging garments of html/mockups/wardrobe.html (prototype only)
 //   footer-clothesline                        the footer's clothesline art (html/assets/img/footer/footer-clothesline.svg, inlined)
 //   decisions                                 the open-decisions table for html/review-decisions.html (tools/build-decisions.mjs)
 //   content NAME | faqs PLACEMENT | district-eta | todo-counts | listing-intro KIND/SLUG   built from docs/content (see tools/content.mjs)
@@ -131,6 +132,25 @@ export function generate(name, args, ctx) {
     case 'size-links-drawer':
       return S.map((s) => `<li><a href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
     case 'decisions': return renderDecisions(ctx.repo);
+    case 'wardrobe-items': {
+      // html/mockups/wardrobe.html (prototype only): one hanging garment per category; the counts and the size range come from the products
+      const order = new Map(S.map((s, i) => [s.slug, i]));
+      return C.map((c, i) => {
+        const items = cat.products.filter((p) => p.category === c.slug);
+        const n = items.length;
+        const lo = S[Math.min(...items.map((p) => order.get(p.from)))].lo;
+        const hi = S[Math.max(...items.map((p) => order.get(p.to)))].hi;
+        const hanger = c.slug === 'napkins' ? 'wd-clip' : 'wd-hanger';
+        const label = `${c.label}, ${n} ${n === 1 ? 'item' : 'items'}`;
+        return `<li class="wardrobe__item" style="--i: ${i}" data-index="${i}">
+  <a class="wardrobe__link" href="${root}category.html?c=${c.slug}" draggable="false" aria-describedby="wd-d-${c.slug}">
+    <span class="visually-hidden">${esc(label)}</span>
+    <span class="wardrobe__drop"><span class="wardrobe__shadow"></span><span class="wardrobe__pull"><span class="wardrobe__sway"><svg class="wardrobe__art" viewBox="0 -12 240 300" aria-hidden="true" focusable="false"><use href="#${hanger}"></use><use href="#wd-g-${c.slug}"></use></svg></span></span></span>
+    <span class="wardrobe__card" aria-hidden="true"><span class="wardrobe__name">${esc(c.label)}</span><span id="wd-d-${c.slug}"><span class="wardrobe__meta">${n} ${n === 1 ? 'item' : 'items'} · ${esc(lo)}–${esc(hi)}</span><span class="wardrobe__desc">${esc(c.blurb)}</span></span><span class="btn btn--secondary wardrobe__go">Shop ${esc(c.label)} <svg class="icon icon--16" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></span>
+  </a>
+</li>`;
+      }).join('\n');
+    }
     case 'footer-clothesline': {
       // the supplied footer-clothesline.svg, inlined so the page CSS can sway the garments; metadata and comments are dropped
       const svg = fs.readFileSync(path.join(ctx.repo, 'html', 'assets', 'img', 'footer', 'footer-clothesline.svg'), 'utf8')

@@ -7,7 +7,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { load, start, write, BASE, modulesDir, outDir } from './lib.mjs';
 
-const PAGES = [['home', 'index.html'], ['shop', 'shop.html'], ['category', 'category.html?c=bodysuits'], ['product', 'product.html'], ['cart', 'cart.html'], ['checkout', 'checkout.html'], ['thank-you', 'thank-you.html?state=paid'], ['delivery', 'delivery.html'], ['privacy', 'privacy.html']];
+const PAGES = [['home', 'index.html'], ['shop', 'shop.html'], ['category', 'category.html?c=bodysuits'], ['product', 'product.html'], ['cart', 'cart.html'], ['checkout', 'checkout.html'], ['thank-you', 'thank-you.html?state=paid'], ['delivery', 'delivery.html'], ['privacy', 'privacy.html'], ['wardrobe-mock', 'mockups/wardrobe.html']];
 const onlyIdx = process.argv.indexOf('--only');
 const only = onlyIdx > 0 ? process.argv[onlyIdx + 1] : '';
 const formIdx = process.argv.indexOf('--form');
