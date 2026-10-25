@@ -4,7 +4,7 @@
 // At 320, 375, 768, 1024, 1280 and 1920 wide: the footer's text is made transparent, the footer is screenshotted, and for every text element the
 // real background pixels behind it are read. The ratio is text colour against the WORST (lowest-contrast) pixel behind that element.
 // Prints the lowest ratio per width and the element it belongs to; exit 1 when anything is under 4.5:1.
-import { load, start, BASE, launchBrowser } from './lib.mjs';
+import { load, start, BASE, launchBrowser, settleTall } from './lib.mjs';
 
 const pages = process.argv.slice(2).length ? process.argv.slice(2) : ['index.html', 'product.html', 'size-guide.html'];
 const WIDTHS = [320, 375, 768, 1024, 1280, 1920];
@@ -20,6 +20,7 @@ for (const p of pages) {
     await page.goto(BASE + p, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.querySelectorAll('img[loading=lazy]').forEach((i) => { i.loading = 'eager'; }));
     await page.waitForTimeout(400);
+    await settleTall(page, width);
     // text elements: those with a direct, non-empty text node (the art zone is aria-hidden and has none)
     const items = await page.evaluate(() => {
       const f = document.querySelector('footer.site-footer');
@@ -36,7 +37,7 @@ for (const p of pages) {
       return { items: out, top, height: fr.height };
     });
     await page.addStyleTag({ content: '.site-footer *{color:transparent!important;text-decoration-color:transparent!important}.site-footer .icon,.site-footer img.footer__wordmark{visibility:hidden}' });
-    const buf = await page.screenshot({ fullPage: true, clip: { x: 0, y: items.top, width, height: items.height } });
+    const buf = await page.screenshot({ clip: { x: 0, y: items.top, width, height: items.height } });
     // the pixel maths runs inside the blank page, so the screenshot never has to be copied out as numbers
     const { min, who } = await reader.evaluate(async ({ b64, list }) => {
       const lum = (r, g, b) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };

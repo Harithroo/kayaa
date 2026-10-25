@@ -1,13 +1,14 @@
 #!/usr/bin/env node
-// Footer seam check (dev-only, needs Playwright from the temp QA folder, see tools/qa/README.md):
+// Footer separation check (dev-only, needs Playwright from the temp QA folder, see tools/qa/README.md):
 //   node tools/check-footer-seam.mjs [--pages=a.html,b.html]      KAYAA_ROOT_FONT=150 runs it with a 150% browser text size (Firefox)
-// For every full-shell page at 375 and 1280 wide it looks at the 6 pixel rows just above the footer and the 6 rows just below its top edge
-// (read from a real screenshot, at both side gutters, away from any text) and fails when any colour channel differs by more than 6.
-// The footer's gradient starts from <body data-footer-from="white|secondary"> (tools/shell-map.json "footerFrom"); when a page fails, set
-// that for the page and run node tools/sync-shell.mjs. The final line is a table of every page; exit 1 on any failure.
+// The footer must look like its own block, not one more section of the page. For every full-shell page at 375 and 1280 wide this compares the
+// page colour just above the footer's top edge with the footer colour 40px inside it (read from a real screenshot, at both side gutters, away
+// from any text) and fails when no colour channel differs by at least 8. (The wave that cuts the footer's top edge is a mask, so the page
+// shows through above it.) The footer's first colour can be changed per page with <body data-footer-from> (tools/shell-map.json "footerFrom").
+// The final lines are a table of every page; exit 1 on any failure.
 import fs from 'node:fs';
 import path from 'node:path';
-import { load, start, BASE, repo, launchBrowser } from './qa/lib.mjs';
+import { load, start, BASE, repo, launchBrowser, settleTall } from './qa/lib.mjs';
 
 const only = (process.argv.find((a) => a.startsWith('--pages=')) || '').slice(8).split(',').filter(Boolean);
 const map = JSON.parse(fs.readFileSync(path.join(repo, 'tools', 'shell-map.json'), 'utf8'));
@@ -28,21 +29,23 @@ for (const width of [375, 1280]) {
   const page = await ctx.newPage();
   for (const p of pages) {
     await page.goto(BASE + p, { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready);
+    await settleTall(page, width);
     const top = await page.evaluate(() => { const f = document.querySelector('footer.site-footer'); return f ? Math.round(f.getBoundingClientRect().top + scrollY) : -1; });
     const from = await page.evaluate(() => document.body.getAttribute('data-footer-from') || '-');
-    const clip = { x: 0, y: top - 6, width, height: 12 };
-    const buf = await page.screenshot({ fullPage: true, clip });
+    const buf = await page.screenshot({ clip: { x: 0, y: top - 6, width, height: 60 } });
     const img = await pixels(buf);
     const px = (x, y) => { const i = (y * img.width + x) * 4; return [img.data[i], img.data[i + 1], img.data[i + 2]]; };
     let worst = 0;
     for (const x of [2, width - 3]) {
       for (let c = 0; c < 3; c++) {
         let above = 0, below = 0;
-        for (let y = 0; y < 6; y++) { above += px(x, y)[c]; below += px(x, y + 6)[c]; }
-        worst = Math.max(worst, Math.abs(above / 6 - below / 6));
+        for (let y = 0; y < 3; y++) { above += px(x, y)[c]; below += px(x, y + 50)[c]; }   // rows 0-2 are 6-4px above the footer, rows 50-52 are 44-46px inside it
+        worst = Math.max(worst, Math.abs(above / 3 - below / 3));
       }
     }
-    const ok = worst <= 6;
+    if (process.env.KAYAA_DEBUG && worst < 8) console.log(p, width, 'top', top, 'above', px(2, 0), 'below', px(2, 50), 'img', img.width, img.data.length / 4 / img.width);
+    const ok = worst >= 8;
     if (!ok) failed++;
     rows.push({ page: p, width, from, delta: worst.toFixed(1), result: ok ? 'ok' : 'FAIL' });
   }
@@ -50,7 +53,7 @@ for (const width of [375, 1280]) {
 }
 await browser.close();
 server.close();
-console.log('page'.padEnd(34) + 'width  from       max channel diff  result');
+console.log('page'.padEnd(34) + 'width  from       largest channel step  result');
 for (const r of rows) console.log(r.page.padEnd(34) + String(r.width).padEnd(7) + r.from.padEnd(11) + r.delta.padEnd(18) + r.result);
-console.log(failed ? `\n${failed} seam(s) over 6: set data-footer-from for those pages in tools/shell-map.json ("footerFrom") and run node tools/sync-shell.mjs` : `\nAll ${rows.length} seams are within 6 per channel.`);
+console.log(failed ? `\n${failed} page(s) where the footer is not clearly separate (under 8): check --footer-g1 and data-footer-from` : `\nAll ${rows.length} footers are clearly separate from the page (at least 8 on a channel).`);
 process.exit(failed ? 1 : 0);

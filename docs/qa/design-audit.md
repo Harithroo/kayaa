@@ -106,10 +106,10 @@ The full footer is a vertical lilac gradient (`--footer-g1..g4`: #FAF7FB, #F3ECF
 
 | Page | 320 | 375 | 768 | 1024 | 1280 | 1920 |
 |---|---|---|---|---|---|---|
-| Lowest ratio, Home | 5.51 | 5.51 | 5.51 | 5.47 | 5.47 | 5.47 |
-| Lowest ratio, Product | 5.51 | 5.51 | 5.51 | 5.47 | 5.48 | 5.48 |
-| Lowest ratio, Size guide | 5.51 | 5.55 | 5.51 | 5.47 | 5.47 | 5.47 |
+| Lowest ratio, Home | 4.71 | 4.74 | 4.74 | 4.67 | 4.67 | 4.70 |
+| Lowest ratio, Product | 4.74 | 4.74 | 4.74 | 4.67 | 4.70 | 4.70 |
+| Lowest ratio, Size guide | 4.74 | 4.74 | 4.74 | 4.67 | 4.70 | 4.70 |
 
-The lowest line at every width is the small "kayaa" wordmark link at the top of the brand column (Primary Deep, 5.5:1); the Ink text is higher. The target is 4.5:1: met everywhere, no gradient stop had to change. Focus rings inside the footer are Ink 3px (Primary Deep is too faint on the lilac).
+The lowest line at every width is the small "kayaa" wordmark link at the top of the brand column (Primary Deep, about 4.7:1 on the darker footer); the Ink text is higher. The target is 4.5:1: met everywhere, no gradient stop had to change. Focus rings inside the footer are Ink 3px (Primary Deep is too faint on the lilac).
 
-`node tools/check-footer-seam.mjs` compares the 6 pixel rows above the footer's top edge with the 6 below it, at both side gutters, on every full-shell page at 375 and 1280 (62 readings). Result: the largest difference on any channel is 0.3 of 255 (limit 6), so **no page needs `data-footer-from`** today; `footerFrom` in tools/shell-map.json is empty and is there for the day a page ends on a full-bleed white or Secondary band.
+`node tools/check-footer-seam.mjs` checks that the footer is clearly separate from the page: the page colour just above its wave-cut top edge against the footer colour 40px inside, at both side gutters, on every full-shell page at 375 and 1280 (62 readings). Result: every page differs by at least 8 on a channel (the first footer stop is #EDE3F5 against the page's #FAF7FB). The contrast table above was re-measured with the darker first stop: the lowest ratio is 4.67 (the small Primary Deep "kayaa" link at the top of the brand column); all Ink text is higher.

@@ -115,8 +115,8 @@ Anything below is derived from the tokens in `design/kayaa-final-design-system.h
 
 | Component | Where | Notes |
 | --- | --- | --- |
-| Footer gradient, `--footer-g1`..`--footer-g4` | tokens.css, footer.css | `linear-gradient(180deg, var(--footer-from, var(--bg)) 0%, #F3ECF8 28%, #E4D8F1 62%, #CDB9E3 100%)`. No flat background, no top border. Light only, never dark; no dark mode. |
-| `<body data-footer-from="white|secondary">` | tools/shell-map.json (`footerFrom`), written by sync-shell | The colour the gradient starts from when the last section of a page is a full-bleed white or Secondary band. No entry = the page background. `tools/check-footer-seam.mjs` measures the seam (today every page is within 1 per channel with no entry). |
+| Footer gradient, `--footer-g1`..`--footer-g4` | tokens.css, footer.css | `linear-gradient(180deg, #EDE3F5 0%, #E6DAF2 28%, #DACBEA 62%, #CDB9E3 100%)`. The first stop is a visible step darker than the page (#FAF7FB) and the top edge is a 36px soft wave (a repeating SVG `mask`, also `-webkit-mask`), so the footer reads as its own block. Light only, never dark; no dark mode. |
+| `<body data-footer-from="white|| `<body data-footer-from="white|secondary">` | tools/shell-map.json (`footerFrom`), written by sync-shell | Optional override of the gradient's first stop; no page uses it. `tools/check-footer-seam.mjs` checks the opposite of a seam now: the page colour above the footer and the footer colour 40px inside it must differ by at least 8 on a channel. |
 | Footer text | footer.css | All text, headings, links and the focus ring are Ink: Ink Soft and Primary Deep fail 4.5:1 on the lower stops. Contact links are bold and underlined. `tools/qa/footer-contrast.mjs` proves it. |
 | Layout | footer.css | 1200px container. Desktop: brand column plus Shop by size, Help, Company. Below 900px: two columns, the brand block spans both. 44px tap rows for touch, compact rows for a mouse from 900px. Legal row (© and "Secure card payments · Island-wide delivery"). Contact lines kept. |
 | Social buttons (`.footer__social`, `.footer__social-link`) | tools/partials/footer.html, footer.css, sprite.svg | Instagram, Facebook, TikTok, WhatsApp: a `<ul>` in `<nav aria-label="Social media">`, 44x44 round, translucent white with a 1px #D9CBEA border, Ink glyph, `aria-label`. Mouse only: 3px lift and a white fill. Instagram, Facebook and TikTok are `href="#"` with a TODO comment (add `target="_blank" rel="noopener noreferrer"` with the real URL); WhatsApp is `https://wa.me/` pending the number. There are no text-only social links any more. |
@@ -375,3 +375,6 @@ The art zone uses `content-visibility: auto` with an estimated intrinsic height,
 
 ### Footer and menu follow-ups
 The footer's first column is "Shop by category" (the seven categories) instead of the sizes. The art zone is shorter: the clothesline is `max(110px, 12.4vw)` high and the giant wordmark overlaps it on purpose (client request), which replaces the earlier rule that no garment may touch a letter.
+
+### Footer separation
+The footer used to fade out of the page with no edge; it now has a wave-cut top edge and a darker first stop. check-footer-seam.mjs and footer-contrast.mjs take their screenshots with a viewport as tall as the page (`settleTall` in tools/qa/lib.mjs), because a full-page capture resizes the viewport and vh-sized sections would move the footer.

@@ -75,3 +75,17 @@ export async function launchBrowser() {
   if (pct === 100) return load('playwright').chromium.launch();
   return load('playwright').firefox.launch({ firefoxUserPrefs: { 'font.size.variable.x-western': Math.round(16 * pct / 100), 'font.minimum-size.x-western': 0 } });
 }
+
+// Makes the viewport as tall as the page so a screenshot of any part of it is taken in the layout the page really has: a full-page capture
+// resizes the viewport, and sections sized in vh would then grow and push the footer down, so clips measured before it would miss.
+// Returns once the height has stopped changing. Measure and clip AFTER calling this (document coordinates == viewport coordinates).
+export async function settleTall(page, width) {
+  let h = 0;
+  for (let i = 0; i < 6; i++) {
+    const next = await page.evaluate(() => document.documentElement.scrollHeight);
+    if (next === h) break;
+    h = next;
+    await page.setViewportSize({ width, height: Math.min(h + 40, 16000) });
+    await page.waitForTimeout(150);
+  }
+}
