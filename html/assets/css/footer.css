@@ -39,8 +39,6 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 .footer__contact,
 .footer__social { list-style: none; }
 .footer__list { display: flex; flex-direction: column; gap: var(--space-2); }   /* 8px between tap targets */
-/* nine sizes: two columns so the column is not three times taller than its neighbours */
-.footer__list--cols { display: grid; grid-template-columns: repeat(2, minmax(min-content, max-content)); column-gap: var(--space-5); }
 .footer__contact {
   display: flex;
   flex-direction: column;
@@ -59,7 +57,6 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
   color: var(--ink);
   text-decoration: none;
 }
-.footer__list--cols a { min-width: var(--tap); }   /* the short size links ("2Y", "3Y") keep a 44px-wide tap target */
 .footer__contact a { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 @media (hover: hover) and (pointer: fine) {
   .footer__list a:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -101,14 +98,14 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 
 /* Art zone: decorative, aria-hidden. The waves reach the bottom edge of the footer, so the zone carries the footer's bottom padding. */
 .footer__art {
-  --line-h: clamp(150px, 16vw, max(230px, 12.15vw));   /* height of the clothesline: 150-230px, and from about 1900px up it keeps growing with the width so the slice never cuts a hem off */
+  --line-h: max(110px, 12.4vw);   /* height of the clothesline: just enough that the slice never cuts a hem off (the garments are 175 of the canvas's 200 units deep) */
   position: relative;
   isolation: isolate;
   overflow: hidden;
   padding-bottom: calc(var(--bottom-bar-h) + var(--space-4) + env(safe-area-inset-bottom, 0px));
   pointer-events: none;
   content-visibility: auto;   /* off screen it costs no layout or paint; the estimate below is close to its real height */
-  contain-intrinsic-block-size: auto calc(clamp(150px, 16vw, 230px) + (min(100vw - 40px, 1200px) + 2vw) * 0.364 + 56px);   /* an estimate of its height until it has been drawn once */
+  contain-intrinsic-block-size: auto calc(0.55 * var(--line-h) + (min(100vw - 40px, 1200px) + 2vw) * 0.364 + 56px);   /* an estimate of its height until it has been drawn once */
 }
 .footer__waves {
   position: absolute;
@@ -117,16 +114,17 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
   width: 100%;
   height: 62%;
 }
-.footer__line { height: var(--line-h); }
+.footer__line { position: relative; z-index: 1; height: var(--line-h); }   /* in front of the wordmark: the garments hang over the top of the letters */
 .footer__line-svg { display: block; width: 100%; height: 100%; }
 .footer__wordmark {
   display: block;
   width: calc(100% + 2vw);
   max-width: none;
   height: auto;
-  /* The wordmark starts 18px below the lowest garment. The garments are drawn on a 1440x200 canvas scaled with "slice" (scale = the larger of
-     width/1440 and height/200); their lowest edge is at 175 canvas units, and the line's box clips whatever is below it. */
-  margin: calc(min(var(--line-h), max(12.15vw, 0.875 * var(--line-h))) + 18px - var(--line-h)) -1vw 0;
+  /* The wordmark is tucked behind the clothesline: its top sits 45% of the way down the garments. The garments are drawn on a 1440x200 canvas
+     scaled with "slice" (scale = the larger of width/1440 and height/200); their lowest edge is at 175 canvas units. */
+  position: relative;
+  margin: calc(0.45 * min(var(--line-h), max(12.15vw, 0.875 * var(--line-h))) - var(--line-h)) -1vw 0;
 }
 @media (min-width: 56.25em) {   /* 900px at the normal text size; em so a larger text size moves the break with it */
   .footer__grid { grid-template-columns: 1.5fr 1.2fr 1fr 1fr; gap: var(--space-7); }

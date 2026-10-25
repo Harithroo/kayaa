@@ -8,7 +8,7 @@
 //   cat-row | cat-links | cat-drawer          the seven categories as a header row, mega-menu text links, drawer list
 //   cat-tiles-home | cat-tiles-page           category tiles (home, with photo markers; categories page, with item counts)
 //   size-chips-mega                           the nine sizes as chips (cart, 404 and search "browse by age" blocks)
-//   size-links-mega | size-links-drawer | size-links-footer | size-tiles-home   the nine sizes (plain text links in the menus and footer)
+//   size-links-mega | size-links-drawer | size-tiles-home   the nine sizes (plain text links in the menus)
 //   size-chips FILE                           listing chips: "All ages" + the nine sizes (shop.html, category.html, search.html)
 //   size-rows                                 <tr> rows of the size table on the product page (the rows come from docs/content/size-guide.md)
 //   product-tags SLUG                         the "Tags" chip row of the product page (links to shop.html?tag=)
@@ -129,7 +129,6 @@ export function generate(name, args, ctx) {
       return S.map((s) => `<li><a class="chip" href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
     case 'size-links-mega':
     case 'size-links-drawer':
-    case 'size-links-footer':
       return S.map((s) => `<li><a href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
     case 'decisions': return renderDecisions(ctx.repo);
     case 'footer-clothesline': {

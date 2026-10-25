@@ -34,9 +34,9 @@
   <link rel="stylesheet" href="assets/css/tokens.css?v=69db5b44">
   <link rel="stylesheet" href="assets/css/base.css?v=c7479e07">
   <link rel="stylesheet" href="assets/css/components.css?v=86a4ca95">
-  <link rel="stylesheet" href="assets/css/layout.css?v=86d6e8ba">
+  <link rel="stylesheet" href="assets/css/layout.css?v=1f32df9c">
   <link rel="stylesheet" href="assets/css/suggest.css?v=314384f7">
-  <link rel="stylesheet" href="assets/css/footer.css?v=a0e0c407">
+  <link rel="stylesheet" href="assets/css/footer.css?v=dffb6dda">
   <!-- /partial: styles -->
   <link rel="stylesheet" href="assets/css/pages/review.css?v=8ed431ae">
 </head>
@@ -276,7 +276,21 @@
               <div class="mega__panel">
                 <div class="mega__main">
                   <div class="mega__col">
-                    <p class="mega__title">Shop by size</p>
+                    <p class="mega__title">Shop by category</p>
+                    <ul class="mega__list" role="list">
+                      <!-- gen: cat-links -->
+                      <li><a href="category.html?c=newborn">Newborn</a></li>
+                      <li><a href="category.html?c=bodysuits">Bodysuits</a></li>
+                      <li><a href="category.html?c=sleepwear">Sleepwear</a></li>
+                      <li><a href="category.html?c=sets">Sets</a></li>
+                      <li><a href="category.html?c=outerwear">Outerwear</a></li>
+                      <li><a href="category.html?c=napkins">Napkins</a></li>
+                      <li><a href="category.html?c=accessories">Accessories</a></li>
+                      <!-- /gen: cat-links -->
+                    </ul>
+                  </div>
+                  <div class="mega__col">
+                    <p class="mega__title">Shop by age</p>
                     <ul class="mega__list mega__list--sizes" role="list">
                       <!-- gen: size-links-mega -->
                       <li><a href="shop.html?size=newborn">Newborn</a></li>
@@ -289,20 +303,6 @@
                       <li><a href="shop.html?size=2y">2Y</a></li>
                       <li><a href="shop.html?size=3y">3Y</a></li>
                       <!-- /gen: size-links-mega -->
-                    </ul>
-                  </div>
-                  <div class="mega__col">
-                    <p class="mega__title">Shop by category</p>
-                    <ul class="mega__list" role="list">
-                      <!-- gen: cat-links -->
-                      <li><a href="category.html?c=newborn">Newborn</a></li>
-                      <li><a href="category.html?c=bodysuits">Bodysuits</a></li>
-                      <li><a href="category.html?c=sleepwear">Sleepwear</a></li>
-                      <li><a href="category.html?c=sets">Sets</a></li>
-                      <li><a href="category.html?c=outerwear">Outerwear</a></li>
-                      <li><a href="category.html?c=napkins">Napkins</a></li>
-                      <li><a href="category.html?c=accessories">Accessories</a></li>
-                      <!-- /gen: cat-links -->
                     </ul>
                   </div>
                 </div>
@@ -605,20 +605,18 @@
             <li><a href="mailto:hello@example.com">hello@example.com</a></li> <!-- TODO: confirm email with client -->
           </ul>
         </div>
-        <nav aria-labelledby="footer-age">
-          <h2 class="footer__title" id="footer-age">Shop by size</h2>
-          <ul class="footer__list footer__list--cols" role="list">
-            <!-- gen: size-links-footer -->
-            <li><a href="shop.html?size=newborn">Newborn</a></li>
-            <li><a href="shop.html?size=0-3m">0–3m</a></li>
-            <li><a href="shop.html?size=3-6m">3–6m</a></li>
-            <li><a href="shop.html?size=6-9m">6–9m</a></li>
-            <li><a href="shop.html?size=9-12m">9–12m</a></li>
-            <li><a href="shop.html?size=12-18m">12–18m</a></li>
-            <li><a href="shop.html?size=18-24m">18–24m</a></li>
-            <li><a href="shop.html?size=2y">2Y</a></li>
-            <li><a href="shop.html?size=3y">3Y</a></li>
-            <!-- /gen: size-links-footer -->
+        <nav aria-labelledby="footer-shop">
+          <h2 class="footer__title" id="footer-shop">Shop by category</h2>
+          <ul class="footer__list" role="list">
+            <!-- gen: cat-links -->
+            <li><a href="category.html?c=newborn">Newborn</a></li>
+            <li><a href="category.html?c=bodysuits">Bodysuits</a></li>
+            <li><a href="category.html?c=sleepwear">Sleepwear</a></li>
+            <li><a href="category.html?c=sets">Sets</a></li>
+            <li><a href="category.html?c=outerwear">Outerwear</a></li>
+            <li><a href="category.html?c=napkins">Napkins</a></li>
+            <li><a href="category.html?c=accessories">Accessories</a></li>
+            <!-- /gen: cat-links -->
           </ul>
         </nav>
         <nav aria-labelledby="footer-help">
@@ -697,7 +695,7 @@
   <!-- partial: menu-drawer -->
   <div class="drawer drawer--left" id="menu-drawer" data-layer="menu" role="dialog" aria-modal="true" aria-labelledby="menu-title" aria-hidden="true">
     <div class="drawer__head">
-      <h2 class="drawer__title" id="menu-title"><span class="wordmark">kayaa</span><span class="drawer__label">Menu</span></h2>
+      <h2 class="drawer__title" id="menu-title"><span class="wordmark">kayaa</span><span class="visually-hidden"> menu</span></h2>
       <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close menu"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
     </div>
     <div class="drawer__body">
@@ -712,23 +710,7 @@
             <li><a href="about.html" data-nav="about">Our story</a></li>
           </ul>
         </div>
-        <!-- Shop by size and Shop by category are collapsed so the first screen stays short (native details: works without JS) -->
-        <details class="menu-group menu-group--fold">
-          <summary class="menu-group__title"><span>Shop by size</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
-          <ul class="menu-group__cols" role="list">
-            <!-- gen: size-links-drawer -->
-            <li><a href="shop.html?size=newborn">Newborn</a></li>
-            <li><a href="shop.html?size=0-3m">0–3m</a></li>
-            <li><a href="shop.html?size=3-6m">3–6m</a></li>
-            <li><a href="shop.html?size=6-9m">6–9m</a></li>
-            <li><a href="shop.html?size=9-12m">9–12m</a></li>
-            <li><a href="shop.html?size=12-18m">12–18m</a></li>
-            <li><a href="shop.html?size=18-24m">18–24m</a></li>
-            <li><a href="shop.html?size=2y">2Y</a></li>
-            <li><a href="shop.html?size=3y">3Y</a></li>
-            <!-- /gen: size-links-drawer -->
-          </ul>
-        </details>
+        <!-- Shop by category and Shop by age are collapsed so the first screen stays short (native details: works without JS). Help lives in the footer. -->
         <details class="menu-group menu-group--fold">
           <summary class="menu-group__title"><span>Shop by category</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
           <ul role="list">
@@ -743,16 +725,22 @@
             <!-- /gen: cat-drawer -->
           </ul>
         </details>
-        <div class="menu-group">
-          <p class="menu-group__title">Help</p>
-          <ul role="list">
-            <li><a href="track.html" data-nav="track">Track order</a></li>
-            <li><a href="size-guide.html" data-nav="size-guide">Size guide</a></li>
-            <li><a href="delivery.html" data-nav="delivery">Delivery</a></li>
-            <li><a href="returns.html" data-nav="returns">Returns</a></li>
-            <li><a href="contact.html" data-nav="contact">Contact</a></li>
+        <details class="menu-group menu-group--fold">
+          <summary class="menu-group__title"><span>Shop by age</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+          <ul class="menu-group__cols" role="list">
+            <!-- gen: size-links-drawer -->
+            <li><a href="shop.html?size=newborn">Newborn</a></li>
+            <li><a href="shop.html?size=0-3m">0–3m</a></li>
+            <li><a href="shop.html?size=3-6m">3–6m</a></li>
+            <li><a href="shop.html?size=6-9m">6–9m</a></li>
+            <li><a href="shop.html?size=9-12m">9–12m</a></li>
+            <li><a href="shop.html?size=12-18m">12–18m</a></li>
+            <li><a href="shop.html?size=18-24m">18–24m</a></li>
+            <li><a href="shop.html?size=2y">2Y</a></li>
+            <li><a href="shop.html?size=3y">3Y</a></li>
+            <!-- /gen: size-links-drawer -->
           </ul>
-        </div>
+        </details>
         <div class="menu-group">
           <p class="menu-group__title">Account</p>
           <!-- blade: @auth My account @else Sign in / register -->

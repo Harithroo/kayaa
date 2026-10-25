@@ -254,7 +254,7 @@
   box-shadow: var(--shadow-card-hover);
 }
 /* Two quiet text lists (no pills, no buttons): a hairline under each heading, plain links under it */
-.mega__main { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: var(--space-6); align-content: start; }
+.mega__main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: var(--space-6); align-content: start; }
 .mega__col { min-width: 0; }
 .mega__title {
   margin-bottom: var(--space-2);
@@ -508,7 +508,7 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
 .drawer__title {
   font-size: var(--fs-h3);
 }
-/* the menu drawer's head: a lilac band, a bigger wordmark and a visible "Menu" label (the cart drawer keeps the plain head) */
+/* the menu drawer's head: a lilac band, a bigger wordmark and a white round close button (the cart drawer keeps the plain head) */
 .drawer--left .drawer__head {
   min-height: 76px;
   background: var(--secondary);
@@ -516,15 +516,6 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
 }
 .drawer--left .drawer__title { display: flex; align-items: center; gap: var(--space-3); }
 .drawer--left .drawer__title .wordmark { min-height: 0; font-size: 34px; }
-.drawer__label {
-  padding-left: var(--space-3);
-  border-left: 2px solid var(--primary);
-  font-family: var(--font-display);
-  font-size: var(--fs-h3);
-  font-weight: 600;
-  line-height: 1.1;
-  color: var(--ink);
-}
 .drawer--left .icon-btn--plain { background: var(--surface); border-radius: 50%; }
 .drawer__body {
   flex: 1;
