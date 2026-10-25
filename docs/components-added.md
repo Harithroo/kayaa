@@ -361,3 +361,14 @@ The art zone uses `content-visibility: auto` with an estimated intrinsic height,
 
 ### Breakpoints in em (footer, search suggestions)
 `footer.css` and `suggest.css` (and the matching `matchMedia` in `search-suggest.js`) use em breakpoints (`56.25em` and `56.1875em` = 900px and 899px at the normal text size), so a larger browser text size moves the layout break with it. The only px breakpoint left in the footer is the one that follows the tab bar (layout.css, still px). While the phone suggestion panel is open on the search page, the results, the toolbar, "Also matches" and the "Not sure about the size?" card are hidden and return when it closes.
+
+## Menu round (mobile drawer and desktop mega menu)
+
+| Component | Where | Notes |
+| --- | --- | --- |
+| Menu drawer head | menu-drawer.html, layout.css | Lilac (`--secondary`) band, 34px wordmark, a visible "Menu" label after a thin divider, and a white round close button. The cart drawer keeps its plain head. |
+| Menu rows | layout.css `.menu-group a` | The 44px `min-height` and the 8px gap are gone: line-height 1.5 plus 8px above and below = 40px rows with no gap. Below the 44px tap guideline on purpose (client request); still above WCAG 2.2's 24px minimum. |
+| Group headings | layout.css `.menu-group__title`, `.mega__title` | One style everywhere: 14px, weight 800, uppercase, 0.08em tracking, Primary Deep, with a hairline above each group (drawer) or below the heading (mega menu). |
+| Folded groups (`.menu-group--fold`) | menu-drawer.html | "Shop by size" and "Shop by category" are native `<details>` (closed by default, work without JS): the heading is the summary, with a chevron that turns. The first screen is the main links, Help and Account. |
+| Sizes in menus | catalogue.mjs `size-links-drawer`, `size-links-mega` | Plain text links like every other row (two to a line in the drawer), no pills. `size-chips-mega` and `cat-chips` stay for the cart, 404 and search "browse" blocks. |
+| Mega menu (desktop) | header.html, layout.css | Two text lists (sizes in two columns, categories in one) under hairline headings instead of pill chips. The "Fresh styles just landed" card with the "Shop new in" link became an editorial image with a caption (`.mega__feature`, shown from 1100px): one link, no card, no button. Placeholder copy still to confirm with the client. |

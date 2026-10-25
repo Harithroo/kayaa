@@ -1,6 +1,6 @@
   <div class="drawer drawer--left" id="menu-drawer" data-layer="menu" role="dialog" aria-modal="true" aria-labelledby="menu-title" aria-hidden="true">
     <div class="drawer__head">
-      <h2 class="drawer__title" id="menu-title"><span class="wordmark">kayaa</span><span class="visually-hidden"> menu</span></h2>
+      <h2 class="drawer__title" id="menu-title"><span class="wordmark">kayaa</span><span class="drawer__label">Menu</span></h2>
       <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close menu"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
     </div>
     <div class="drawer__body">
@@ -15,20 +15,21 @@
             <li><a href="{{root}}about.html" data-nav="about">Our story</a></li>
           </ul>
         </div>
-        <div class="menu-group">
-          <p class="menu-group__title">Shop by size</p>
-          <ul class="chip-list menu-group__chips" role="list">
-            <!-- gen: size-chips-drawer -->
-            <!-- /gen: size-chips-drawer -->
+        <!-- Shop by size and Shop by category are collapsed so the first screen stays short (native details: works without JS) -->
+        <details class="menu-group menu-group--fold">
+          <summary class="menu-group__title"><span>Shop by size</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+          <ul class="menu-group__cols" role="list">
+            <!-- gen: size-links-drawer -->
+            <!-- /gen: size-links-drawer -->
           </ul>
-        </div>
-        <div class="menu-group">
-          <p class="menu-group__title">Shop by category</p>
+        </details>
+        <details class="menu-group menu-group--fold">
+          <summary class="menu-group__title"><span>Shop by category</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
           <ul role="list">
             <!-- gen: cat-drawer -->
             <!-- /gen: cat-drawer -->
           </ul>
-        </div>
+        </details>
         <div class="menu-group">
           <p class="menu-group__title">Help</p>
           <ul role="list">

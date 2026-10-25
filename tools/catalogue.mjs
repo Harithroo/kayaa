@@ -4,9 +4,11 @@
 // tools/process-images.mjs wrote there. {{root}} inside a generated link is the page's root.
 //
 // Regions
-//   cat-row | cat-chips | cat-drawer          the seven categories as a header row, mega-menu chips, drawer list
+//   cat-chips                                 the categories as chips (cart, 404 and search "browse" blocks)
+//   cat-row | cat-links | cat-drawer          the seven categories as a header row, mega-menu text links, drawer list
 //   cat-tiles-home | cat-tiles-page           category tiles (home, with photo markers; categories page, with item counts)
-//   size-chips-mega | size-chips-drawer | size-links-footer | size-tiles-home   the nine sizes
+//   size-chips-mega                           the nine sizes as chips (cart, 404 and search "browse by age" blocks)
+//   size-links-mega | size-links-drawer | size-links-footer | size-tiles-home   the nine sizes (plain text links in the menus and footer)
 //   size-chips FILE                           listing chips: "All ages" + the nine sizes (shop.html, category.html, search.html)
 //   size-rows                                 <tr> rows of the size table on the product page (the rows come from docs/content/size-guide.md)
 //   product-tags SLUG                         the "Tags" chip row of the product page (links to shop.html?tag=)
@@ -99,6 +101,8 @@ export function generate(name, args, ctx) {
       return C.map((c) => `<li><a href="${catHref(c)}">${esc(c.label)}</a></li>`).join('\n');
     case 'cat-chips':
       return C.map((c) => `<li><a class="chip" href="${catHref(c)}">${esc(c.label)}</a></li>`).join('\n');
+    case 'cat-links':
+      return C.map((c) => `<li><a href="${catHref(c)}">${esc(c.label)}</a></li>`).join('\n');
     case 'cat-drawer':
       return C.map((c) => `<li><a href="${catHref(c)}">${esc(c.label)} ${icon('chevron-right', 16)}</a></li>`).join('\n');
     case 'cat-tiles-home':
@@ -123,8 +127,8 @@ export function generate(name, args, ctx) {
       }).join('\n');
     case 'size-chips-mega':
       return S.map((s) => `<li><a class="chip" href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
-    case 'size-chips-drawer':
-      return S.map((s) => `<li><a class="chip" href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
+    case 'size-links-mega':
+    case 'size-links-drawer':
     case 'size-links-footer':
       return S.map((s) => `<li><a href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
     case 'decisions': return renderDecisions(ctx.repo);

@@ -253,17 +253,49 @@
   border-radius: 0 0 var(--radius-xl) var(--radius-xl);
   box-shadow: var(--shadow-card-hover);
 }
-.mega__main .eyebrow { margin-bottom: var(--space-3); }
-.mega__eyebrow { margin-top: var(--space-5); }
-.mega__sizes { max-width: 640px; }
+/* Two quiet text lists (no pills, no buttons): a hairline under each heading, plain links under it */
+.mega__main { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: var(--space-6); align-content: start; }
+.mega__col { min-width: 0; }
+.mega__title {
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-body);
+  font-size: var(--fs-ui);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+}
+.mega__list { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: var(--space-5); list-style: none; }
+.mega__list--sizes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mega__list a {
+  display: block;
+  padding-block: 6px;
+  font-size: var(--fs-body);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ink);
+  text-decoration: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .mega__list a:hover { color: var(--primary-deep); text-decoration: underline; text-underline-offset: 4px; }
+}
+/* the editorial image (from 1100px): one link made of a picture and a caption, not a card with a button */
 .mega__feature { display: none; }
+.mega__feature-eyebrow {
+  font-size: var(--fs-caption);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
 .mega__feature-title {
   font-family: var(--font-display);
   font-size: var(--fs-h3);
   font-weight: 600;
   line-height: 1.2;
 }
-.mega__feature-text { margin: var(--space-2) 0 var(--space-2); font-size: var(--fs-dense); color: var(--ink-soft); }
 
 .mega-scrim {
   position: fixed;
@@ -400,16 +432,14 @@
   .header-search:focus-within .header-search__field { width: 320px; }
   .mega__panel { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
   .mega__feature {
-    display: grid;
-    grid-template-columns: 42% minmax(0, 1fr);
-    gap: var(--space-4);
-    align-items: center;
-    padding: var(--space-4);
-    background: var(--tone-2);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-card);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    color: var(--ink);
+    text-decoration: none;
   }
-  .mega__feature .media { border-radius: var(--radius-tile); }
+  .mega__feature .media { margin-bottom: var(--space-2); border-radius: var(--radius-tile); }
+  .mega__feature:hover .mega__feature-title { text-decoration: underline; text-underline-offset: 4px; }
 }
 
 @media (min-width: 1200px) {
@@ -478,6 +508,24 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
 .drawer__title {
   font-size: var(--fs-h3);
 }
+/* the menu drawer's head: a lilac band, a bigger wordmark and a visible "Menu" label (the cart drawer keeps the plain head) */
+.drawer--left .drawer__head {
+  min-height: 76px;
+  background: var(--secondary);
+  border-bottom: 1px solid var(--line-strong);
+}
+.drawer--left .drawer__title { display: flex; align-items: center; gap: var(--space-3); }
+.drawer--left .drawer__title .wordmark { min-height: 0; font-size: 34px; }
+.drawer__label {
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--primary);
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.drawer--left .icon-btn--plain { background: var(--surface); border-radius: 50%; }
 .drawer__body {
   flex: 1;
   min-height: 0;
@@ -492,40 +540,52 @@ html.is-locked { padding-right: var(--scrollbar-w, 0px); }   /* app.js measures 
   background: var(--surface);
 }
 
-/* Menu drawer content */
-.menu-group + .menu-group { margin-top: var(--space-5); }
+/* Menu drawer content. Rows are as tall as their text needs (line-height 1.5 plus 8px above and below = 40px), with no gap between them. */
+.menu-group + .menu-group { margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--line); }
 .menu-group__title {
   margin-bottom: var(--space-1);
-  font-size: var(--fs-caption);
+  font-family: var(--font-body);
+  font-size: var(--fs-ui);
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
   text-transform: uppercase;
   color: var(--primary-deep);
 }
-.menu-group ul {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);   /* 8px between tap targets */
-  list-style: none;
-}
+.menu-group ul { list-style: none; }
 .menu-group a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: var(--tap);
+  padding-block: 8px;
   font-size: var(--fs-body);
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 1.5;
   color: var(--ink);
   text-decoration: none;
 }
+.menu-group:first-child a { font-weight: 600; }   /* the main links (Shop, Categories, ...) are a step heavier than the lists under the headings */
 .menu-group a[aria-current="page"] { color: var(--primary-deep); }
 @media (hover: hover) and (pointer: fine) {
   .menu-group a:hover { color: var(--primary-deep); }
 }
 .menu-group a .icon { color: var(--ink-soft); }
-/* sizes in the drawer are a wrapping pill grid, not a list of rows */
-.menu-group .menu-group__chips { flex-direction: row; flex-wrap: wrap; }
-.menu-group .menu-group__chips a { display: inline-flex; justify-content: center; font-size: var(--fs-ui); font-weight: 700; }
+/* the two folded groups: the heading is the button (a native summary), with a chevron that turns */
+.menu-group--fold > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 36px;
+  margin-bottom: 0;
+  cursor: pointer;
+  list-style: none;
+}
+.menu-group--fold > summary::-webkit-details-marker { display: none; }
+.menu-group--fold > summary .icon { transition: transform var(--dur-fast) var(--ease); }
+.menu-group--fold[open] > summary .icon { transform: rotate(180deg); }
+.menu-group--fold[open] > summary { margin-bottom: var(--space-1); }
+/* the nine sizes: plain links like every other row, two to a line */
+.menu-group .menu-group__cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-4); }
 
 /* Cart panel shell. Line-item and empty-state styles are in components.css. */
 .cart-panel {

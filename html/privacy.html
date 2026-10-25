@@ -55,7 +55,7 @@
   <link rel="stylesheet" href="assets/css/tokens.css?v=69db5b44">
   <link rel="stylesheet" href="assets/css/base.css?v=c7479e07">
   <link rel="stylesheet" href="assets/css/components.css?v=86a4ca95">
-  <link rel="stylesheet" href="assets/css/layout.css?v=6d6544a0">
+  <link rel="stylesheet" href="assets/css/layout.css?v=86d6e8ba">
   <link rel="stylesheet" href="assets/css/suggest.css?v=314384f7">
   <link rel="stylesheet" href="assets/css/footer.css?v=a0e0c407">
   <!-- /partial: styles -->
@@ -296,43 +296,43 @@
             <div class="mega" id="mega-shop" data-mega-panel inert>
               <div class="mega__panel">
                 <div class="mega__main">
-                  <p class="eyebrow">Shop by size</p>
-                  <ul class="chip-list mega__sizes" role="list">
-                    <!-- gen: size-chips-mega -->
-                    <li><a class="chip" href="shop.html?size=newborn">Newborn</a></li>
-                    <li><a class="chip" href="shop.html?size=0-3m">0–3m</a></li>
-                    <li><a class="chip" href="shop.html?size=3-6m">3–6m</a></li>
-                    <li><a class="chip" href="shop.html?size=6-9m">6–9m</a></li>
-                    <li><a class="chip" href="shop.html?size=9-12m">9–12m</a></li>
-                    <li><a class="chip" href="shop.html?size=12-18m">12–18m</a></li>
-                    <li><a class="chip" href="shop.html?size=18-24m">18–24m</a></li>
-                    <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
-                    <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
-                    <!-- /gen: size-chips-mega -->
-                  </ul>
-                  <p class="eyebrow mega__eyebrow">Browse by category</p>
-                  <ul class="chip-list" role="list">
-                    <!-- gen: cat-chips -->
-                    <li><a class="chip" href="category.html?c=newborn">Newborn</a></li>
-                    <li><a class="chip" href="category.html?c=bodysuits">Bodysuits</a></li>
-                    <li><a class="chip" href="category.html?c=sleepwear">Sleepwear</a></li>
-                    <li><a class="chip" href="category.html?c=sets">Sets</a></li>
-                    <li><a class="chip" href="category.html?c=outerwear">Outerwear</a></li>
-                    <li><a class="chip" href="category.html?c=napkins">Napkins</a></li>
-                    <li><a class="chip" href="category.html?c=accessories">Accessories</a></li>
-                    <!-- /gen: cat-chips -->
-                  </ul>
-                </div>
-                <!-- TODO: placeholder copy, confirm with client -->
-                <aside class="mega__feature" aria-label="Featured">
-                  <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                  <div class="mega__feature-body">
-                    <p class="eyebrow">New this week</p>
-                    <p class="mega__feature-title">Fresh styles just landed</p>
-                    <p class="mega__feature-text">Placeholder text about the latest arrivals.</p>
-                    <a class="link-arrow" href="shop.html?sort=new">Shop new in <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+                  <div class="mega__col">
+                    <p class="mega__title">Shop by size</p>
+                    <ul class="mega__list mega__list--sizes" role="list">
+                      <!-- gen: size-links-mega -->
+                      <li><a href="shop.html?size=newborn">Newborn</a></li>
+                      <li><a href="shop.html?size=0-3m">0–3m</a></li>
+                      <li><a href="shop.html?size=3-6m">3–6m</a></li>
+                      <li><a href="shop.html?size=6-9m">6–9m</a></li>
+                      <li><a href="shop.html?size=9-12m">9–12m</a></li>
+                      <li><a href="shop.html?size=12-18m">12–18m</a></li>
+                      <li><a href="shop.html?size=18-24m">18–24m</a></li>
+                      <li><a href="shop.html?size=2y">2Y</a></li>
+                      <li><a href="shop.html?size=3y">3Y</a></li>
+                      <!-- /gen: size-links-mega -->
+                    </ul>
                   </div>
-                </aside>
+                  <div class="mega__col">
+                    <p class="mega__title">Shop by category</p>
+                    <ul class="mega__list" role="list">
+                      <!-- gen: cat-links -->
+                      <li><a href="category.html?c=newborn">Newborn</a></li>
+                      <li><a href="category.html?c=bodysuits">Bodysuits</a></li>
+                      <li><a href="category.html?c=sleepwear">Sleepwear</a></li>
+                      <li><a href="category.html?c=sets">Sets</a></li>
+                      <li><a href="category.html?c=outerwear">Outerwear</a></li>
+                      <li><a href="category.html?c=napkins">Napkins</a></li>
+                      <li><a href="category.html?c=accessories">Accessories</a></li>
+                      <!-- /gen: cat-links -->
+                    </ul>
+                  </div>
+                </div>
+                <!-- TODO: placeholder copy, confirm with client. An editorial image with a caption, not a card and not a button: the whole figure is one link. -->
+                <a class="mega__feature" href="shop.html?sort=new">
+                  <div class="media" data-placeholder style="--tone: var(--tone-3); --ratio: 4 / 3"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  <span class="mega__feature-eyebrow">New this week</span>
+                  <span class="mega__feature-title">Fresh styles just landed</span>
+                </a>
               </div>
             </div>
           </li>
@@ -627,7 +627,7 @@
   <!-- partial: menu-drawer -->
   <div class="drawer drawer--left" id="menu-drawer" data-layer="menu" role="dialog" aria-modal="true" aria-labelledby="menu-title" aria-hidden="true">
     <div class="drawer__head">
-      <h2 class="drawer__title" id="menu-title"><span class="wordmark">kayaa</span><span class="visually-hidden"> menu</span></h2>
+      <h2 class="drawer__title" id="menu-title"><span class="wordmark">kayaa</span><span class="drawer__label">Menu</span></h2>
       <button type="button" class="icon-btn icon-btn--plain" data-close-layer aria-label="Close menu"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
     </div>
     <div class="drawer__body">
@@ -642,24 +642,25 @@
             <li><a href="about.html" data-nav="about">Our story</a></li>
           </ul>
         </div>
-        <div class="menu-group">
-          <p class="menu-group__title">Shop by size</p>
-          <ul class="chip-list menu-group__chips" role="list">
-            <!-- gen: size-chips-drawer -->
-            <li><a class="chip" href="shop.html?size=newborn">Newborn</a></li>
-            <li><a class="chip" href="shop.html?size=0-3m">0–3m</a></li>
-            <li><a class="chip" href="shop.html?size=3-6m">3–6m</a></li>
-            <li><a class="chip" href="shop.html?size=6-9m">6–9m</a></li>
-            <li><a class="chip" href="shop.html?size=9-12m">9–12m</a></li>
-            <li><a class="chip" href="shop.html?size=12-18m">12–18m</a></li>
-            <li><a class="chip" href="shop.html?size=18-24m">18–24m</a></li>
-            <li><a class="chip" href="shop.html?size=2y">2Y</a></li>
-            <li><a class="chip" href="shop.html?size=3y">3Y</a></li>
-            <!-- /gen: size-chips-drawer -->
+        <!-- Shop by size and Shop by category are collapsed so the first screen stays short (native details: works without JS) -->
+        <details class="menu-group menu-group--fold">
+          <summary class="menu-group__title"><span>Shop by size</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+          <ul class="menu-group__cols" role="list">
+            <!-- gen: size-links-drawer -->
+            <li><a href="shop.html?size=newborn">Newborn</a></li>
+            <li><a href="shop.html?size=0-3m">0–3m</a></li>
+            <li><a href="shop.html?size=3-6m">3–6m</a></li>
+            <li><a href="shop.html?size=6-9m">6–9m</a></li>
+            <li><a href="shop.html?size=9-12m">9–12m</a></li>
+            <li><a href="shop.html?size=12-18m">12–18m</a></li>
+            <li><a href="shop.html?size=18-24m">18–24m</a></li>
+            <li><a href="shop.html?size=2y">2Y</a></li>
+            <li><a href="shop.html?size=3y">3Y</a></li>
+            <!-- /gen: size-links-drawer -->
           </ul>
-        </div>
-        <div class="menu-group">
-          <p class="menu-group__title">Shop by category</p>
+        </details>
+        <details class="menu-group menu-group--fold">
+          <summary class="menu-group__title"><span>Shop by category</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
           <ul role="list">
             <!-- gen: cat-drawer -->
             <li><a href="category.html?c=newborn">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
@@ -671,7 +672,7 @@
             <li><a href="category.html?c=accessories">Accessories <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
             <!-- /gen: cat-drawer -->
           </ul>
-        </div>
+        </details>
         <div class="menu-group">
           <p class="menu-group__title">Help</p>
           <ul role="list">
