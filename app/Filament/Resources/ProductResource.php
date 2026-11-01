@@ -5,9 +5,17 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use BackedEnum;
+use App\Models\ProductVariant;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Notifications\Notification;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -31,9 +39,22 @@ class ProductResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Catalog';
+
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 1;
+
+    // Search the whole admin for a product by name, URL slug or SKU.
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'slug', 'variants.sku'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return ['Category' => $record->category?->name ?? '—', 'Status' => ucfirst($record->status)];
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -113,16 +134,42 @@ class ProductResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $low = fn () => max(0, ProductVariant::lowStockThreshold());
+
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['images', 'variants', 'category']))
             ->columns([
-                TextColumn::make('name')->searchable()->sortable(),
+                ImageColumn::make('thumb')->label('')->disk('public')->square()->size(48)
+                    ->state(fn (Product $r) => $r->images->first()?->path),
+                TextColumn::make('name')->searchable()->sortable()
+                    ->description(fn (Product $r) => $r->variants->pluck('sku')->take(2)->implode(', ')
+                        .($r->variants->count() > 2 ? '…' : '')),
                 TextColumn::make('category.name')->sortable(),
-                TextColumn::make('variants_count')->counts('variants')->label('Variants'),
-                TextColumn::make('variants_sum_stock')->sum('variants', 'stock')->label('Stock'),
+                TextColumn::make('price')->label('Price')
+                    ->state(function (Product $r) {
+                        $prices = $r->variants->where('is_active', true)->pluck('price');
+                        if ($prices->isEmpty()) {
+                            return '—';
+                        }
+
+                        return $prices->min() === $prices->max()
+                            ? money($prices->min())
+                            : money($prices->min()).' – '.money($prices->max());
+                    }),
+                TextColumn::make('variants_sum_stock')->sum('variants', 'stock')->label('Stock')->sortable()
+                    ->badge()
+                    ->color(fn ($state) => (int) $state === 0 ? 'danger' : ((int) $state <= $low() ? 'warning' : 'success'))
+                    ->formatStateUsing(fn ($state) => (int) $state === 0 ? 'Sold out' : (string) (int) $state)
+                    ->description(function (Product $r) use ($low) {
+                        $n = $r->variants->where('is_active', true)->filter(fn ($v) => $v->stock <= $low())->count();
+
+                        return $n > 0 ? "{$n} ".str('variant')->plural($n).' low or out' : null;
+                    }),
                 TextColumn::make('status')->badge()->color(fn (string $state) => match ($state) {
                     'active' => 'success', 'draft' => 'gray', default => 'warning',
                 }),
-                IconColumn::make('is_new')->boolean()->label('New'),
+                IconColumn::make('is_featured')->boolean()->label('Featured')->toggleable(isToggledHiddenByDefault: true),
+                IconColumn::make('is_new')->boolean()->label('New')->toggleable(),
                 TextColumn::make('updated_at')->since()->sortable(),
             ])
             ->defaultSort('updated_at', 'desc')
@@ -131,15 +178,61 @@ class ProductResource extends Resource
                     'draft' => 'Draft', 'active' => 'Active', 'archived' => 'Archived',
                 ]),
                 SelectFilter::make('category')->relationship('category', 'name'),
+                Filter::make('low_stock')->label('Low or sold out')->toggle()
+                    ->query(fn (Builder $query) => $query->whereHas('variants', fn ($v) => $v
+                        ->where('is_active', true)
+                        ->where('stock', '<=', $low()))),
             ])
             ->recordActions([
                 EditAction::make(),
+                Action::make('duplicate')->label('Duplicate')->icon(Heroicon::DocumentDuplicate)->color('gray')
+                    ->requiresConfirmation()
+                    ->modalDescription('Makes a draft copy with its own SKUs and photos. Nothing goes live until you publish it.')
+                    ->action(function (Product $record) {
+                        $copy = $record->duplicate();
+
+                        Notification::make()->success()->title('Draft copy created')
+                            ->actions([Action::make('open')->label('Open copy')->url(static::getUrl('edit', ['record' => $copy]))])
+                            ->send();
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    self::statusBulkAction('publish', 'Publish selected', 'active', Heroicon::Eye, 'success'),
+                    self::statusBulkAction('draft', 'Move to draft', 'draft', Heroicon::PencilSquare, 'gray'),
+                    self::statusBulkAction('archive', 'Archive selected', 'archived', Heroicon::ArchiveBox, 'warning'),
+                    BulkAction::make('delete')->label('Delete selected')->icon(Heroicon::Trash)->color('danger')
+                        ->requiresConfirmation()
+                        ->modalDescription('Products that appear in past orders cannot be deleted — they are kept, and you can archive them instead.')
+                        ->action(function (Collection $records) {
+                            $deleted = 0;
+                            $kept = 0;
+                            foreach ($records as $product) {
+                                $product->delete() ? $deleted++ : $kept++;
+                            }
+
+                            Notification::make()
+                                ->title("{$deleted} ".str('product')->plural($deleted).' deleted')
+                                ->body($kept > 0 ? "{$kept} kept because customers have ordered them. Archive those instead." : null)
+                                ->color($kept > 0 ? 'warning' : 'success')
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                 ]),
             ]);
+    }
+
+    protected static function statusBulkAction(string $name, string $label, string $status, Heroicon $icon, string $color): BulkAction
+    {
+        return BulkAction::make($name)->label($label)->icon($icon)->color($color)
+            ->action(function (Collection $records) use ($status) {
+                $records->each->update(['status' => $status]);
+
+                Notification::make()->success()
+                    ->title($records->count().' '.str('product')->plural($records->count()).' set to '.$status)
+                    ->send();
+            })
+            ->deselectRecordsAfterCompletion();
     }
 
     public static function getPages(): array

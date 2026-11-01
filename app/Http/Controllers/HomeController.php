@@ -21,6 +21,16 @@ class HomeController extends Controller
             ->whereNotIn('id', $newIn->pluck('id'))
             ->limit(4)->get();
 
+        // The home page always ends on a product row. With nothing flagged as
+        // featured (or everything flagged already shown in "New this week"),
+        // fall back to the rest of the catalogue rather than dropping the section.
+        if ($bestsellers->isEmpty()) {
+            $bestsellers = Product::active()->forCards()
+                ->whereNotIn('id', $newIn->pluck('id'))
+                ->orderByDesc('is_featured')->orderByDesc('created_at')
+                ->limit(4)->get();
+        }
+
         $scale = SizeScale::with('options')->where('name', 'Baby age')->first();
 
         return view('store.home', [

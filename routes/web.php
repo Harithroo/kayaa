@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PackingSlipController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
+// Staff-only printable slip, opened from the order page in /admin.
+Route::get('/admin/orders/{order}/packing-slip', PackingSlipController::class)
+    ->middleware('auth')
+    ->name('admin.orders.packing-slip');
+
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
@@ -27,6 +33,8 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/cart/panel', [CartController::class, 'panel'])->name('cart.panel');
 Route::post('/cart/items', [CartController::class, 'add'])->name('cart.add');
+// The quick-add sheet on a product card posts product + size + colour instead of a variant.
+Route::post('/cart/quick-add', [CartController::class, 'quickAdd'])->name('cart.quick-add');
 Route::patch('/cart/items/{variant}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/items/{variant}', [CartController::class, 'remove'])->name('cart.remove');
 
@@ -97,6 +105,8 @@ Route::post('/deploy/migrate', DeployController::class)
     ->name('deploy.migrate');
 
 Route::get('/search', SearchController::class)->name('search');
+// Typeahead for the search boxes in the header and on the search page.
+Route::get('/search/suggest', [SearchController::class, 'suggest'])->middleware('throttle:120,1')->name('search.suggest');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
 Route::post('/contact', [PageController::class, 'sendMessage'])->middleware('throttle:5,1')->name('pages.contact.send');
 

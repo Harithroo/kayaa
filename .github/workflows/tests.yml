@@ -1,0 +1,33 @@
+name: Tests
+
+# Runs the PHPUnit suite on every push and pull request, on any branch.
+# It never deploys: deployment stays in main.yml (master only).
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, intl, pdo_sqlite, sqlite3
+
+      - name: Create Laravel Storage Directories
+        run: mkdir -p storage/framework/{cache/data,sessions,views,testing} storage/logs bootstrap/cache
+
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      # phpunit.xml points the suite at in-memory SQLite and fixes APP_KEY, so no
+      # .env or database server is needed.
+      - name: Run tests
+        run: vendor/bin/phpunit

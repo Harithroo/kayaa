@@ -1,23 +1,33 @@
-<x-layouts.store title="About Kayaa">
-  <div class="section">
-  <div class="wrap">
-    <div class="prose">
-      <p class="eyebrow">About Kayaa</p>
-      <h1>Clothes for the first two years, made for this climate.</h1>
-      <p>Kayaa started in Colombo with a simple problem: most baby clothes sold here are cut for cold countries. Heavy knits, closed necks, layers a Colombo afternoon does not need.</p>
-      <p>We work with local knitters and a small cut-and-sew team to make lightweight cotton and bamboo basics — bodysuits, sleepsuits, sleep bags and sets sized by age band rather than guesswork. Every fabric is OEKO-TEX certified and washed before it ships, so it arrives soft.</p>
-      <p style="margin-bottom:30px"><em>This copy is placeholder — replace with the real story, founding year and team.</em></p>
-    </div>
-    <div class="values">
-      <div><strong>Sized by age</strong><p>Age bands with real height and weight ranges, so you order once.</p></div>
-      <div><strong>Made nearby</strong><p>Knitted and sewn with small teams in the Western Province.</p></div>
-      <div><strong>Honest fabric</strong><p>OEKO-TEX cotton and bamboo, pre-washed before it ships.</p></div>
-    </div>
-    <div class="photos">
-      <x-store.photo tint="sage" cap="workshop photo" />
-      <x-store.photo tint="butter" cap="fabric detail" />
-      <x-store.photo tint="sand" cap="team photo" />
-    </div>
-  </div>
-  </div>
-</x-layouts.store>
+{{-- Our story, with the copy from the prototype's html/about.html
+     (docs/content/about.md). The size chips come from the real size scale.
+
+     TODO before launch: the founder's story is Kayaa's to write, and the fabric
+     claims (including any OEKO-TEX certification) need confirming before they
+     are stated as fact, so neither is asserted here. --}}
+<x-store.content-page title="Our story" heading="Our story" crumb="Our story" page="about"
+  metaDescription="Kayaa is a Sri Lankan baby clothing brand: soft, honest clothing made for Sri Lankan weather, from newborn up to three years."
+  lede="Kayaa is a Sri Lankan baby clothing brand. Soft, honest clothing made for Sri Lankan weather, for babies from newborn up to three years.">
+  {{-- No table of contents: the prototype's about page runs full width. --}}
+
+  <h2 id="values">What we care about <x-store.anchor id="values" label="What we care about" /></h2>
+  <p><strong>Made for our weather.</strong> Breathable cotton and bamboo pieces that stay comfortable in the heat.</p>
+  <p><strong>Sized by age, guided by height and weight.</strong> Our sizes follow age bands, and our <a href="{{ route('pages.size-guide') }}">size guide</a> helps you check them against your baby's height and weight, so you can order once and it fits.</p>
+  <p><strong>Simple to shop.</strong> Clear prices, secure card payment, island-wide delivery and an order you can track with your order number and mobile number. If the size is wrong, <a href="{{ route('pages.show', 'returns') }}">swapping it is free</a>.</p>
+
+  @if($navSizes->isNotEmpty())
+    <h2 id="sizes">Shop by size <x-store.anchor id="sizes" label="Shop by size" /></h2>
+    <p class="chip-list__label">Find pieces for each stage:</p>
+    <ul class="chip-list" role="list">
+      @foreach($navSizes as $size)
+        <li><a class="chip" href="{{ route('shop.index', ['size' => $size->label]) }}">{{ $size->label }}</a></li>
+      @endforeach
+    </ul>
+  @endif
+
+  <h2 id="say-hello">Say hello <x-store.anchor id="say-hello" label="Say hello" /></h2>
+  <p>Questions, ideas or feedback? WhatsApp us (Mon–Sat 9am–6pm) or visit the <a href="{{ route('pages.contact') }}">contact page</a>.</p>
+
+  <x-slot:after>
+    <x-store.help-card />
+  </x-slot:after>
+</x-store.content-page>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Collection;
 use App\Models\Department;
 use App\Models\Product;
 use App\Models\SizeOption;
@@ -48,6 +49,13 @@ class ShopController extends Controller
                 ->where('stock', '>', 0));
         }
 
+        // ?tag=<collection slug>: the tag chips on the product page.
+        $tag = $request->query('tag');
+        $collection = $tag ? Collection::where('slug', $tag)->where('is_active', true)->first() : null;
+        if ($collection) {
+            $query->whereHas('collections', fn ($q) => $q->whereKey($collection->id));
+        }
+
         if ($request->query('sale')) {
             $query->whereHas('variants', fn ($q) => $q->whereNotNull('compare_at_price')->whereColumn('compare_at_price', '>', 'price'));
         }
@@ -70,7 +78,8 @@ class ShopController extends Controller
             'products' => $products,
             'sizes' => $sizes,
             'activeSize' => $sizeLabel,
-            'title' => $category?->name ?? ($request->query('sale') ? 'Sale' : 'All products'),
+            'collection' => $collection,
+            'title' => $category?->name ?? $collection?->name ?? ($request->query('sale') ? 'Sale' : 'All products'),
         ]);
     }
 }

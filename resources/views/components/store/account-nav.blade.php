@@ -1,8 +1,14 @@
-@props(['active' => 'orders'])
-<nav class="accnav" aria-label="Account">
-  <a href="{{ route('account.index') }}" @class(['on' => $active === 'orders'])>Orders</a>
-  <a href="{{ route('wishlist.index') }}">Wishlist</a>
-  <a href="{{ route('account.reviews') }}" @class(['on' => $active === 'reviews'])>My reviews</a>
-  <a href="{{ route('account.profile') }}" @class(['on' => $active === 'profile'])>Details</a>
-  <form method="post" action="{{ route('account.logout') }}">@csrf<button type="submit">Sign out</button></form>
+@props(['active' => null])
+{{-- Account sidebar, from the prototype's html/account/*. Sign out is a POST
+     form, so it is a button styled like the links around it (resources/css/laravel.css). --}}
+<nav class="account-nav" aria-label="Account">
+  <ul>
+    <li><a class="account-nav__link" href="{{ route('account.index') }}" @if($active === 'orders') aria-current="page" @endif>My orders</a></li>
+    <li><a class="account-nav__link" href="{{ route('account.reviews') }}" @if($active === 'reviews') aria-current="page" @endif>My reviews</a></li>
+    <li><a class="account-nav__link" href="{{ route('account.profile') }}" @if($active === 'profile') aria-current="page" @endif>Profile</a></li>
+  </ul>
+  <form class="account-nav__logout" method="post" action="{{ route('account.logout') }}">
+    @csrf
+    <button type="submit" class="account-nav__link account-nav__signout">Sign out</button>
+  </form>
 </nav>

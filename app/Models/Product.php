@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -21,9 +24,81 @@ class Product extends Model
         return ['is_featured' => 'boolean', 'is_new' => 'boolean'];
     }
 
+    protected static function booted(): void
+    {
+        // Past orders point at these variants. Returning false stops the delete,
+        // so no screen (single, bulk, or a future one) can erase a sold product.
+        // Archive it instead.
+        static::deleting(fn (Product $product) => ! $product->hasOrders());
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    /** True when any order, in any state, contains one of this product's variants. */
+    public function hasOrders(): bool
+    {
+        return OrderItem::query()
+            ->whereIn('product_variant_id', $this->variants()->select('id'))
+            ->exists();
+    }
+
+    /**
+     * A draft copy with fresh slug and SKUs. Photos are copied to new files:
+     * the upload field deletes the file when a photo is removed, so two products
+     * must never share one.
+     */
+    public function duplicate(): self
+    {
+        return DB::transaction(function () {
+            $this->loadMissing(['variants', 'images']);
+
+            // Copy only real columns. A record from the admin list also carries
+            // computed attributes (variants_sum_stock, ...) that replicate() would
+            // try to insert.
+            $copy = new self($this->only($this->getFillable()));
+            $copy->name = Str::limit($this->name, 108, '').' (copy)';
+            $copy->slug = self::uniqueSlug($this->slug.'-copy');
+            $copy->status = 'draft';
+            $copy->is_featured = false;
+            $copy->save();
+
+            foreach ($this->variants as $variant) {
+                $new = $variant->replicate();
+                $new->product_id = $copy->id;
+                $new->sku = ProductVariant::uniqueSku($variant->sku.'-COPY');
+                $new->save();
+            }
+
+            $disk = Storage::disk('public');
+            foreach ($this->images as $image) {
+                $path = $image->path;
+                if (! $path || ! $disk->exists($path)) {
+                    continue;
+                }
+                $newPath = trim(dirname($path), '.\\/').'/'.Str::uuid().'.'.pathinfo($path, PATHINFO_EXTENSION);
+                $disk->copy($path, ltrim($newPath, '/'));
+                $new = $image->replicate();
+                $new->product_id = $copy->id;
+                $new->path = ltrim($newPath, '/');
+                $new->save();
+            }
+
+            return $copy;
+        });
+    }
+
+    public static function uniqueSlug(string $base): string
+    {
+        $slug = $base;
+        $i = 2;
+        while (self::where('slug', $slug)->exists()) {
+            $slug = $base.'-'.$i++;
+        }
+
+        return $slug;
     }
 
     // ---------- relations ----------
@@ -65,7 +140,9 @@ class Product extends Model
 
     public function collections(): BelongsToMany
     {
-        return $this->belongsToMany(Collection::class)->withPivot('position');
+        // Fully qualified: `Collection` in this file is Illuminate's support
+        // collection (imported above), not the Collection model.
+        return $this->belongsToMany(\App\Models\Collection::class)->withPivot('position');
     }
 
     // ---------- scopes ----------
