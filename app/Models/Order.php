@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Support\StoreContact;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,7 +26,7 @@ class Order extends Model
         'user_id', 'reference', 'status', 'payment_method', 'payment_status', 'payment_reference',
         'first_name', 'last_name', 'phone', 'email', 'address', 'city', 'district', 'note',
         'subtotal', 'shipping', 'total',
-        'paid_at', 'shipped_at', 'delivered_at', 'cancelled_at', 'confirmation_sent_at',
+        'paid_at', 'shipped_at', 'delivered_at', 'cancelled_at', 'refunded_at', 'confirmation_sent_at',
         'courier', 'tracking_number', 'admin_note', 'shipped_email_sent_at',
     ];
 
@@ -39,6 +40,7 @@ class Order extends Model
             'shipped_at' => 'datetime',
             'delivered_at' => 'datetime',
             'cancelled_at' => 'datetime',
+            'refunded_at' => 'datetime',
             'confirmation_sent_at' => 'datetime',
             'shipped_email_sent_at' => 'datetime',
         ];
@@ -83,8 +85,25 @@ class Order extends Model
         return number_format($this->total / 100, 2, '.', '');
     }
 
+    /**
+     * Orders that count as money earned: not cancelled and not refunded. Every
+     * revenue figure in the admin goes through this so they cannot disagree.
+     */
+    public function scopeCountsAsSale(Builder $query): Builder
+    {
+        return $query->where('status', '!=', 'cancelled')->where('payment_status', '!=', 'refunded');
+    }
+
+    /**
+     * A refunded order stays refunded: a retried gateway callback or a delivered
+     * COD parcel must not flip it back to paid.
+     */
     public function markPaid(?string $paymentReference = null): void
     {
+        if ($this->payment_status === 'refunded') {
+            return;
+        }
+
         $this->forceFill([
             'payment_status' => 'paid',
             'payment_reference' => $paymentReference ?? $this->payment_reference,

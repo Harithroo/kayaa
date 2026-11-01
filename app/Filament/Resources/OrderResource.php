@@ -121,12 +121,13 @@ class OrderResource extends Resource
                 TextEntry::make('admin_note')->label('Internal note (staff only)')->placeholder('None — use “Add note” above.')->columnSpanFull(),
             ]),
 
-            Section::make('Timeline')->columns(5)->schema([
+            Section::make('Timeline')->columns(6)->schema([
                 TextEntry::make('created_at')->label('Placed')->dateTime('d M, H:i'),
                 TextEntry::make('paid_at')->label('Paid')->dateTime('d M, H:i')->placeholder($dash),
                 TextEntry::make('shipped_at')->label('Shipped')->dateTime('d M, H:i')->placeholder($dash),
                 TextEntry::make('delivered_at')->label('Delivered')->dateTime('d M, H:i')->placeholder($dash),
                 TextEntry::make('cancelled_at')->label('Cancelled')->dateTime('d M, H:i')->placeholder($dash),
+                TextEntry::make('refunded_at')->label('Refunded')->dateTime('d M, H:i')->placeholder($dash),
             ]),
         ]);
     }
@@ -249,14 +250,30 @@ class OrderResource extends Resource
                 ->action(fn (Order $record) => app(OrderService::class)->deliver($record)),
 
             Action::make('paid')->label('Mark paid')->icon(Heroicon::Banknotes)
-                ->visible(fn (Order $record) => $record->payment_status !== 'paid' && $record->status !== 'cancelled')
+                ->visible(fn (Order $record) => ! in_array($record->payment_status, ['paid', 'refunded'], true) && $record->status !== 'cancelled')
                 ->requiresConfirmation()
                 ->action(fn (Order $record) => $record->markPaid()),
+
+            Action::make('refund')->label('Mark refunded')->icon(Heroicon::ReceiptRefund)->color('warning')
+                ->visible(fn (Order $record) => $record->payment_status === 'paid')
+                ->modalHeading('Mark as refunded')
+                ->modalDescription('Do this after the money has gone back to the customer. It does not send any money: refund through Onepay or a bank transfer first. The order stops counting as a sale.')
+                ->schema([
+                    Textarea::make('note')->label('Note (optional)')->rows(3)->maxLength(500)
+                        ->placeholder('How it was refunded, e.g. Onepay refund, bank transfer reference'),
+                ])
+                ->action(function (Order $record, array $data) {
+                    if (app(OrderService::class)->refund($record, $data['note'] ?? null)) {
+                        Notification::make()->success()->title('Marked as refunded')->send();
+                    }
+                }),
 
             Action::make('cancel')->label('Cancel order')->icon(Heroicon::XMark)->color('danger')
                 ->visible(fn (Order $record) => ! in_array($record->status, ['delivered', 'cancelled']))
                 ->requiresConfirmation()
-                ->modalDescription('Stock for each item will be returned to the shelf.')
+                ->modalDescription(fn (Order $record) => $record->payment_status === 'paid'
+                    ? 'This order is already PAID. Cancelling returns the stock to the shelf but does not refund the customer. Send the money back, then use Mark refunded.'
+                    : 'Stock for each item will be returned to the shelf.')
                 ->action(fn (Order $record) => app(OrderService::class)->cancel($record, 'Cancelled in the admin panel.')),
         ];
     }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,7 +42,7 @@ class CustomerAuthController extends Controller
             'is_admin' => false,
         ]);
 
-        $this->claimGuestOrders($user);
+        $user->claimGuestOrders();
 
         Auth::login($user);
         $request->session()->regenerate();
@@ -70,7 +69,7 @@ class CustomerAuthController extends Controller
         }
 
         $request->session()->regenerate();
-        $this->claimGuestOrders($request->user());
+        $request->user()->claimGuestOrders();
 
         return redirect()->intended(route('account.index'));
     }
@@ -82,26 +81,6 @@ class CustomerAuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('home')->with('success', 'Signed out.');
-    }
-
-    /**
-     * Attach past guest orders to this account.
-     *
-     * Both the email and the phone number have to match. Email alone is not
-     * enough: anyone can register with an address they don't own, and claiming
-     * on email alone would hand them that person's orders, delivery address and
-     * phone number. An account with no phone number on it claims nothing.
-     */
-    private function claimGuestOrders(User $user): void
-    {
-        if (blank($user->phone)) {
-            return;
-        }
-
-        Order::whereNull('user_id')
-            ->where('email', $user->email)
-            ->where('phone', $user->phone)
-            ->update(['user_id' => $user->id]);
     }
 
     /**

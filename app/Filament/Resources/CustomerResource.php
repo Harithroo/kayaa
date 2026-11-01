@@ -44,9 +44,9 @@ class CustomerResource extends Resource
         return parent::getEloquentQuery()
             ->where('is_admin', false)
             ->withCount('orders')
-            ->withCount(['orders as kept_orders_count' => fn (Builder $q) => $q->where('status', '!=', 'cancelled')])
-            // Cancelled orders are not money the customer spent.
-            ->withSum(['orders as total_spent' => fn (Builder $q) => $q->where('status', '!=', 'cancelled')], 'total')
+            ->withCount(['orders as kept_orders_count' => fn (Builder $q) => $q->countsAsSale()])
+            // Cancelled and refunded orders are not money the customer spent.
+            ->withSum(['orders as total_spent' => fn (Builder $q) => $q->countsAsSale()], 'total')
             ->withMax('orders as last_order_at', 'created_at');
     }
 

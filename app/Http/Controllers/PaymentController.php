@@ -103,10 +103,44 @@ class PaymentController extends Controller
         return response()->json(['message' => 'ok']);
     }
 
-    /** Ask Onepay what happened, then record it. Idempotent — safe to run twice. */
+    /**
+     * Ask Onepay what happened, then record it. Idempotent — safe to run twice.
+     *
+     * A successful transaction only proves that somebody paid something. Before it
+     * settles *this* order it has to be shown to belong to it: otherwise a shopper
+     * could pay for a cheap order and present that transaction id with an expensive
+     * order's reference. So a transaction is rejected (and the order left exactly
+     * as it was — not paid, and not failed either) when:
+     *  - it is already recorded on a different order, or
+     *  - Onepay reports an amount that differs from the order total, or
+     *  - Onepay reports a reference that is not this order's.
+     * Amount and reference are only checked when the response carries them.
+     */
     private function settle(Order $order, string $transactionId): void
     {
-        if ($order->payment_status === 'paid') {
+        // Paid is final, and so is refunded: a retried callback must not turn money
+        // that went back to the customer into a sale again.
+        if (in_array($order->payment_status, ['paid', 'refunded'], true)) {
+            return;
+        }
+
+        // Only online orders are paid through the gateway; a COD order is settled
+        // in cash at the door.
+        if ($order->payment_method !== 'onepay') {
+            Log::warning('Onepay payment presented for a non-online order', [
+                'order' => $order->reference,
+                'transaction_id' => $transactionId,
+            ]);
+
+            return;
+        }
+
+        if (Order::where('payment_reference', $transactionId)->whereKeyNot($order->getKey())->exists()) {
+            Log::warning('Onepay transaction already belongs to another order', [
+                'order' => $order->reference,
+                'transaction_id' => $transactionId,
+            ]);
+
             return;
         }
 
@@ -123,6 +157,18 @@ class PaymentController extends Controller
         }
 
         if ($result['paid']) {
+            if (! $this->transactionMatches($order, $result)) {
+                Log::warning('Onepay transaction does not match the order', [
+                    'order' => $order->reference,
+                    'transaction_id' => $transactionId,
+                    'expected_amount' => $order->total,
+                    'reported_amount' => $result['amount'],
+                    'reported_reference' => $result['reference'],
+                ]);
+
+                return;
+            }
+
             $order->markPaid($transactionId);
 
             return;
@@ -135,5 +181,17 @@ class PaymentController extends Controller
             'status' => $result['status'],
             'message' => $result['message'],
         ]);
+    }
+
+    /**
+     * @param  array{amount: int|null, reference: string|null}  $result
+     */
+    private function transactionMatches(Order $order, array $result): bool
+    {
+        if ($result['amount'] !== null && $result['amount'] !== $order->total) {
+            return false;
+        }
+
+        return $result['reference'] === null || $result['reference'] === $order->reference;
     }
 }
