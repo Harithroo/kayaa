@@ -21,3 +21,24 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Claude Code scratch worktrees
+/.claude/worktrees
+
+# Secrets and private keys: never commit these. .env.example is the template.
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+
+# Source snapshots and database dumps (they can contain .env files or customer data)
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.sql
+*.sql.gz

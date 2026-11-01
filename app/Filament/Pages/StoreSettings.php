@@ -29,7 +29,9 @@ class StoreSettings extends Page
 
     protected static ?string $title = 'Store settings';
 
-    protected static ?int $navigationSort = 21;
+    protected static string|\UnitEnum|null $navigationGroup = 'Storefront';
+
+    protected static ?int $navigationSort = 3;
 
     protected string $view = 'filament.pages.store-settings';
 
@@ -40,6 +42,8 @@ class StoreSettings extends Page
     {
         $this->form->fill([
             'low_stock_threshold' => (int) config('kayaa.low_stock_threshold', 5),
+            'shipping_fee' => intdiv((int) config('kayaa.shipping_fee'), 100),
+            'free_shipping_over' => intdiv((int) config('kayaa.free_shipping_over'), 100),
         ]);
     }
 
@@ -48,6 +52,28 @@ class StoreSettings extends Page
         return $schema
             ->statePath('data')
             ->components([
+                Section::make('Delivery charges')
+                    ->description('Applied at checkout and quoted across the storefront (cart, delivery page, terms). Existing orders keep the fee they were placed with.')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('shipping_fee')
+                            ->label('Delivery fee')
+                            ->numeric()
+                            ->required()
+                            ->minValue(0)
+                            ->maxValue(100000)
+                            ->prefix('Rs.')
+                            ->helperText('Charged per order.'),
+                        TextInput::make('free_shipping_over')
+                            ->label('Free delivery from')
+                            ->numeric()
+                            ->required()
+                            ->minValue(0)
+                            ->maxValue(10000000)
+                            ->prefix('Rs.')
+                            ->helperText('Orders at or above this subtotal ship free. Set to 0 to make all delivery free.'),
+                    ]),
+
                 Section::make('Stock')
                     ->description('Controls the urgency note customers see on a product page.')
                     ->schema([
@@ -88,6 +114,8 @@ class StoreSettings extends Page
 
         Setting::putMany([
             'low_stock_threshold' => (string) (int) $data['low_stock_threshold'],
+            'shipping_fee' => (string) (int) $data['shipping_fee'],
+            'free_shipping_over' => (string) (int) $data['free_shipping_over'],
         ]);
 
         Notification::make()

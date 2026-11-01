@@ -27,7 +27,9 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationLabel = 'Categories';
 
-    protected static ?int $navigationSort = 20;
+    protected static string|\UnitEnum|null $navigationGroup = 'Catalog';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

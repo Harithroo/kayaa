@@ -77,6 +77,56 @@ class OrderService
         });
     }
 
+    // ---------- admin status transitions ----------
+    // One place for the rules, shared by the single-order buttons and the bulk
+    // actions on the list. Each returns false (and changes nothing) when the
+    // order is not in a state the move makes sense from.
+
+    public function confirm(Order $order): bool
+    {
+        if ($order->status !== 'pending') {
+            return false;
+        }
+
+        $order->update(['status' => 'confirmed']);
+
+        return true;
+    }
+
+    public function ship(Order $order, ?string $courier = null, ?string $trackingNumber = null): bool
+    {
+        if (! in_array($order->status, ['pending', 'confirmed'], true)) {
+            return false;
+        }
+
+        $order->update([
+            'status' => 'shipped',
+            'shipped_at' => now(),
+            'courier' => filled($courier) ? trim($courier) : null,
+            'tracking_number' => filled($trackingNumber) ? trim($trackingNumber) : null,
+        ]);
+
+        app(OrderMailer::class)->sendShipped($order);
+
+        return true;
+    }
+
+    public function deliver(Order $order): bool
+    {
+        if ($order->status !== 'shipped') {
+            return false;
+        }
+
+        $order->update(['status' => 'delivered', 'delivered_at' => now()]);
+
+        // Cash is collected at the door, so a delivered COD order is a paid one.
+        if ($order->payment_method === 'cod' && $order->payment_status !== 'paid') {
+            $order->markPaid();
+        }
+
+        return true;
+    }
+
     /**
      * Cancel an order and put its stock back. Used by the customer (while the
      * order is still pending) and by the admin panel, so the restock rule lives

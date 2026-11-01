@@ -36,7 +36,9 @@ class ReviewResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedStar;
 
-    protected static ?int $navigationSort = 7;
+    protected static string|\UnitEnum|null $navigationGroup = 'Engagement';
+
+    protected static ?int $navigationSort = 1;
 
     public static function getNavigationBadge(): ?string
     {

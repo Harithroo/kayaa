@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PackingSlipController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -19,6 +20,11 @@ use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+
+// Staff-only printable slip, opened from the order page in /admin.
+Route::get('/admin/orders/{order}/packing-slip', PackingSlipController::class)
+    ->middleware('auth')
+    ->name('admin.orders.packing-slip');
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
