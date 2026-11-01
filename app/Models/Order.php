@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\StoreContact;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,6 +26,7 @@ class Order extends Model
         'first_name', 'last_name', 'phone', 'email', 'address', 'city', 'district', 'note',
         'subtotal', 'shipping', 'total',
         'paid_at', 'shipped_at', 'delivered_at', 'cancelled_at', 'confirmation_sent_at',
+        'courier', 'tracking_number', 'admin_note', 'shipped_email_sent_at',
     ];
 
     protected function casts(): array
@@ -38,6 +40,7 @@ class Order extends Model
             'delivered_at' => 'datetime',
             'cancelled_at' => 'datetime',
             'confirmation_sent_at' => 'datetime',
+            'shipped_email_sent_at' => 'datetime',
         ];
     }
 
@@ -59,6 +62,14 @@ class Order extends Model
     public function customerName(): string
     {
         return trim("{$this->first_name} {$this->last_name}");
+    }
+
+    /** wa.me link to the customer, or null when the number is too short to be real. */
+    public function whatsappUrl(): ?string
+    {
+        $digits = preg_replace('/\D+/', '', (string) $this->phone);
+
+        return strlen($digits) >= 9 ? 'https://wa.me/'.StoreContact::international((string) $this->phone) : null;
     }
 
     public function paymentMethodLabel(): string

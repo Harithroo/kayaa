@@ -24,7 +24,9 @@ class SizeScaleResource extends Resource
 
     protected static ?string $navigationLabel = 'Size scales';
 
-    protected static ?int $navigationSort = 40;
+    protected static string|\UnitEnum|null $navigationGroup = 'Catalog';
+
+    protected static ?int $navigationSort = 5;
 
     public static function form(Schema $schema): Schema
     {

@@ -25,7 +25,9 @@ class ColorResource extends Resource
 
     protected static ?string $navigationLabel = 'Colours';
 
-    protected static ?int $navigationSort = 30;
+    protected static string|\UnitEnum|null $navigationGroup = 'Catalog';
+
+    protected static ?int $navigationSort = 4;
 
     public static function form(Schema $schema): Schema
     {

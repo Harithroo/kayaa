@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\OrderPlaced;
+use App\Mail\OrderShipped;
 use App\Models\Order;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -34,6 +35,29 @@ class OrderMailer
         }
 
         $order->forceFill(['confirmation_sent_at' => now()])->save();
+
+        return true;
+    }
+
+    /** Tells the customer the parcel has left. Sent once per order, and only if we have an email. */
+    public function sendShipped(Order $order): bool
+    {
+        if (blank($order->email) || $order->shipped_email_sent_at !== null) {
+            return false;
+        }
+
+        try {
+            Mail::to($order->email)->send(new OrderShipped($order));
+        } catch (Throwable $e) {
+            Log::warning('Order shipped email failed', [
+                'order' => $order->reference,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
+
+        $order->forceFill(['shipped_email_sent_at' => now()])->save();
 
         return true;
     }

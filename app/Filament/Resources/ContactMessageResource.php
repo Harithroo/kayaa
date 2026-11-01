@@ -24,7 +24,9 @@ class ContactMessageResource extends Resource
 
     protected static ?string $navigationLabel = 'Messages';
 
-    protected static ?int $navigationSort = 6;
+    protected static string|\UnitEnum|null $navigationGroup = 'Engagement';
+
+    protected static ?int $navigationSort = 2;
 
     public static function getNavigationBadge(): ?string
     {

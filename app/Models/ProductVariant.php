@@ -37,6 +37,17 @@ class ProductVariant extends Model
         return $this->belongsTo(Color::class);
     }
 
+    public static function uniqueSku(string $base): string
+    {
+        $sku = $base;
+        $i = 2;
+        while (self::where('sku', $sku)->exists()) {
+            $sku = $base.$i++;
+        }
+
+        return $sku;
+    }
+
     /** "Butter · 0–3m" */
     public function label(): string
     {

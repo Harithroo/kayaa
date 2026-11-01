@@ -28,7 +28,9 @@ class ContactSettings extends Page
 
     protected static ?string $title = 'Contact details';
 
-    protected static ?int $navigationSort = 20;
+    protected static string|\UnitEnum|null $navigationGroup = 'Storefront';
+
+    protected static ?int $navigationSort = 2;
 
     protected string $view = 'filament.pages.contact-settings';
 

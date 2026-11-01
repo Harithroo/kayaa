@@ -74,6 +74,16 @@ class AppServiceProvider extends ServiceProvider
         if ($threshold !== null) {
             config(['kayaa.low_stock_threshold' => (int) $threshold]);
         }
+
+        // Stored as whole rupees in the settings table; config holds cents. "0" is
+        // a real value here (free delivery on everything), so compare to null.
+        foreach (['shipping_fee', 'free_shipping_over'] as $key) {
+            $rupees = Setting::get($key);
+
+            if ($rupees !== null) {
+                config(['kayaa.'.$key => (int) $rupees * 100]);
+            }
+        }
     }
 
     /**
