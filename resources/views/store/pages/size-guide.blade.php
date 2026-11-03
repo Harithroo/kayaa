@@ -2,8 +2,7 @@
      size scale from the admin; the three illustrations are the prototype's own
      artwork, copied to public/assets/img/size-guide. size-guide.js turns the
      steps into a carousel on a narrow screen. --}}
-<x-layouts.store title="Size guide" page="size-guide"
-  metaDescription="Kayaa baby sizes by age, height and weight, with how to measure and what to do between two sizes.">
+<x-layouts.store page="size-guide" :meta="$meta">
   <div class="container content">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <ol>

@@ -1,6 +1,6 @@
 {{-- My reviews, from the prototype's html/account/reviews.html. A review waiting
      for moderation shows its status rather than disappearing. --}}
-<x-layouts.store title="My reviews" page="account">
+<x-layouts.store page="account" :meta="$meta">
   <div class="container account">
     <header class="account__head">
       <h1>My reviews</h1>

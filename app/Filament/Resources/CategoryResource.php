@@ -11,6 +11,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -45,6 +46,29 @@ class CategoryResource extends Resource
             Textarea::make('description')->rows(3),
             TextInput::make('position')->numeric()->default(0)->helperText('Lower numbers come first.'),
             Toggle::make('is_active')->default(true),
+
+            Section::make('SEO')
+                ->description('How this category appears in Google. Both fields are optional — left blank, the storefront writes one from the category name and description.')
+                ->collapsed()
+                ->schema([
+                    TextInput::make('meta_title')
+                        ->label('Search title')
+                        ->maxLength(70)
+                        ->live(debounce: 500)
+                        ->helperText(fn (?string $state) => 'Around 60 characters reads best; 70 is the limit. '.mb_strlen((string) $state).'/70 used.')
+                        ->placeholder(fn (?Category $record) => $record?->metaTitle() ?? 'Generated from the category name'),
+                    Textarea::make('meta_description')
+                        ->label('Search description')
+                        ->maxLength(170)
+                        ->rows(2)
+                        ->live(debounce: 500)
+                        ->helperText(fn (?string $state) => 'The pitch under the link in Google. Around 155 characters. '.mb_strlen((string) $state).'/170 used.')
+                        ->placeholder(fn (?Category $record) => $record?->metaDescription() ?? 'Generated from the description above'),
+                    Toggle::make('noindex')
+                        ->label('Hide from search engines')
+                        ->helperText('The category stays browsable on the site; it just will not appear in search results.')
+                        ->inline(false),
+                ]),
         ]);
     }
 

@@ -112,6 +112,45 @@ class ProductResource extends Resource
                         ->itemLabel(fn (array $state) => $state['sku'] ?? null),
                 ]),
 
+            Section::make('SEO')
+                ->description('How this product appears in Google and when its link is shared. Every field is optional — left blank, the storefront writes one from the product itself.')
+                ->collapsed()
+                ->columns(2)
+                ->schema([
+                    TextInput::make('meta_title')
+                        ->label('Search title')
+                        ->maxLength(70)
+                        ->live(debounce: 500)
+                        ->helperText(fn (?string $state) => 'Shown as the blue link in Google. Around 60 characters reads best; 70 is the limit. '.mb_strlen((string) $state).'/70 used.')
+                        // The placeholder is the value that actually ships when
+                        // this is left blank, so the admin can see it rather
+                        // than guess at it.
+                        ->placeholder(fn (?Product $record) => $record?->metaTitle() ?? 'Generated from the product name and size range')
+                        ->columnSpanFull(),
+                    Textarea::make('meta_description')
+                        ->label('Search description')
+                        ->maxLength(170)
+                        ->rows(2)
+                        ->live(debounce: 500)
+                        ->helperText(fn (?string $state) => 'Not a ranking factor — this is the sales pitch under the link. Around 155 characters. '.mb_strlen((string) $state).'/170 used.')
+                        ->placeholder(fn (?Product $record) => $record?->metaDescription() ?? 'Generated from the product description')
+                        ->columnSpanFull(),
+                    Select::make('og_image_id')
+                        ->label('Share image')
+                        ->helperText('Used when the link is pasted into WhatsApp or Instagram. Defaults to the first photo.')
+                        ->options(fn (?Product $record) => $record
+                            ? $record->images()->get()->mapWithKeys(fn ($image) => [
+                                $image->id => $image->alt ?: 'Photo '.($image->position + 1),
+                            ])->all()
+                            : [])
+                        ->placeholder('First photo')
+                        ->hidden(fn (?Product $record) => $record === null),
+                    Toggle::make('noindex')
+                        ->label('Hide from search engines')
+                        ->helperText('The product stays on the site and stays buyable; it just will not appear in search results.')
+                        ->inline(false),
+                ]),
+
             Section::make('Photos')
                 ->description('4:5 portrait, consistent background. First photo is the card image. Optionally tie a photo to a colour.')
                 ->schema([
@@ -121,7 +160,8 @@ class ProductResource extends Resource
                                 ->disk('public')->directory('products')
                                 ->imageEditor()->imageEditorAspectRatios(['4:5'])
                                 ->maxSize(2048)->required(),
-                            TextInput::make('alt')->label('Alt text')->maxLength(160),
+                            TextInput::make('alt')->label('Alt text')->required()->maxLength(160)
+                                ->helperText('Describe the garment as you would to someone who cannot see it, e.g. "Butter yellow ribbed romper, long sleeves". Read aloud by screen readers and read by Google.'),
                             Select::make('color_id')->label('Colour')->relationship('color', 'name')->preload(),
                         ])
                         ->columns(3)

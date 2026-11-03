@@ -3,8 +3,7 @@
 
      TODO before launch: the registered business name and registered address are
      facts only Kayaa knows. Have a Sri Lankan lawyer review this page. --}}
-<x-store.content-page title="Terms" heading="Terms &amp; conditions" crumb="Terms" page="terms"
-  metaDescription="The terms your Kayaa order is sold under: orders, prices, payment, delivery, returns, reviews and your rights."
+<x-store.content-page :meta="$meta" title="Terms" heading="Terms &amp; conditions" crumb="Terms" page="terms"
   lede="These terms apply when you buy from Kayaa or use this website."
   :toc="[
     '#about-us' => '1. About us',

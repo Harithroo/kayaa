@@ -1,7 +1,6 @@
 {{-- All categories, from the prototype's html/categories.html. One grid per
      department, with the product count the controller already works out. --}}
-<x-layouts.store title="All categories" page="categories"
-  metaDescription="Every Kayaa category for babies: bodysuits, sleepwear, sets, outerwear and more.">
+<x-layouts.store page="categories" :meta="$meta">
   <div class="container categories">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <ol>

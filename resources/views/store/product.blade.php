@@ -28,19 +28,13 @@
 
   $reviewTotal = max(1, $ratingCount);
 @endphp
-<x-layouts.store :title="$product->name" page="product"
-  :metaDescription="Str::limit(strip_tags($product->description ?? ''), 155) ?: null">
+<x-layouts.store page="product" :meta="$meta" :json-ld="$jsonLd">
 
   <div class="container product" data-product-page>
 
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <ol>
-        <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('categories.index') }}">{{ $product->category?->department?->name ?? 'Shop' }}</a></li>
-        @if($product->category)<li><a href="{{ $product->category->url() }}">{{ $product->category->name }}</a></li>@endif
-        <li aria-current="page">{{ $product->name }}</li>
-      </ol>
-    </nav>
+    {{-- Rendered from the same trail the BreadcrumbList markup is built from
+         (App\Support\Seo\Breadcrumbs), so the two can never disagree. --}}
+    <x-store.breadcrumb :trail="$breadcrumbs" />
     @if($product->category)
       <a class="back-link" href="{{ $product->category->url() }}"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg> Back to {{ $product->category->name }}</a>
     @endif

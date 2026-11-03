@@ -1,6 +1,6 @@
 {{-- Profile, from the prototype's html/account/profile.html. Two independent
      forms: details (PATCH) and password (PATCH), each with its own messages. --}}
-<x-layouts.store title="Profile" page="account profile">
+<x-layouts.store page="account profile" :meta="$meta">
   <div class="container account">
     <header class="account__head">
       <h1>Profile</h1>

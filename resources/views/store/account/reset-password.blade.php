@@ -1,5 +1,5 @@
 {{-- Set a new password, from the prototype's html/account/reset-password.html. --}}
-<x-layouts.store title="Set a new password" page="account login">
+<x-layouts.store page="account login" :meta="$meta">
   <div class="container auth" data-auth-page="reset">
     <div class="auth-card">
       <h1>Set a new password</h1>

@@ -8,7 +8,7 @@
   $pendingOnline = ! $paid && ! $failed && ! $cancelled && $order->payment_method === 'onepay';
   $cod = ! $cancelled && $order->payment_method === 'cod';
 @endphp
-<x-layouts.store title="Order confirmed" page="thank-you" shell="minimal">
+<x-layouts.store page="thank-you" :meta="$meta" shell="minimal">
   <div class="container thanks" data-thanks-page>
 
     @if($cancelled)

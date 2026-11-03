@@ -1,7 +1,13 @@
 @props(['code', 'icon' => 'i-circle-alert', 'heading', 'text' => null, 'search' => false])
+@php
+  // Error pages render outside the normal controller flow (the exception
+  // handler reaches them directly), so they build their own metadata here.
+  // noindex,nofollow: a 404 must never be indexed, whatever URL produced it.
+  $meta = \App\Services\Seo\SeoMeta::noindex(request(), $heading);
+@endphp
 {{-- The error pages, from the prototype's html/404.html and friends. They run on
      the error shell: wordmark and the short footer, nothing to click away into. --}}
-<x-layouts.store :title="$heading" shell="error">
+<x-layouts.store shell="error" :meta="$meta">
   <div class="container error-page">
     <div class="error-card">
       <span class="error-disc"><svg class="icon" aria-hidden="true" focusable="false"><use href="#{{ $icon }}"></use></svg></span>

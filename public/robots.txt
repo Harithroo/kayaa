@@ -1,4 +1,34 @@
+# Kayaa — https://kayaa.lk
+#
+# Checkout, account and order pages are private: nothing there should ever
+# appear in a search result. The ?param rules block the listing's filter and
+# sort URLs, which are near-duplicates of the clean category pages; the pages
+# themselves also send noindex,follow (see App\Services\Seo\SeoMeta), which is
+# what actually keeps them out of the index — these lines just save crawl
+# budget getting there.
+#
+# Deliberately not blocked: /search. It sends noindex,follow, so a crawler
+# should be allowed to read it and follow the product links it finds.
+#
+# NOTE: this is a static file, so the Sitemap line below cannot read APP_URL.
+# Confirm the domain here when the live domain is settled.
+
 User-agent: *
-Disallow: /admin
 Disallow: /cart
 Disallow: /checkout
+Disallow: /account
+Disallow: /orders/
+Disallow: /track
+Disallow: /wishlist
+Disallow: /deploy/
+Disallow: /admin
+Disallow: /*?size=
+Disallow: /*?sort=
+Disallow: /*?tag=
+Disallow: /*?sale=
+Disallow: /*&size=
+Disallow: /*&sort=
+Disallow: /*&tag=
+Disallow: /*&sale=
+
+Sitemap: https://kayaa.lk/sitemap.xml

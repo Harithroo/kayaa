@@ -7,6 +7,9 @@ use App\Models\Collection;
 use App\Models\Department;
 use App\Models\Product;
 use App\Models\SizeOption;
+use App\Services\Seo\JsonLd;
+use App\Services\Seo\SeoMeta;
+use App\Support\Seo\Breadcrumbs;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -72,6 +75,21 @@ class ShopController extends Controller
         // Size chips come from the scale in use. With one department that is always "Baby age".
         $sizes = SizeOption::whereHas('scale', fn ($q) => $q->where('name', 'Baby age'))->orderBy('position')->get();
 
+        $sale = (bool) $request->query('sale');
+
+        // A real category gets its own metadata; /shop and the collection and
+        // sale views fall back to the config page map. Either way the canonical
+        // drops ?size=/?sort=/?tag=/?sale= and the robots tag turns to
+        // noindex,follow the moment one of them is present — that single rule is
+        // what stops this listing minting thousands of thin duplicate URLs.
+        $meta = $category
+            ? SeoMeta::forCategory($category, $request)
+            : SeoMeta::forPage($sale ? 'sale' : 'shop', $request);
+
+        $breadcrumbs = $category
+            ? Breadcrumbs::forCategory($category)
+            : Breadcrumbs::forListing($collection, $sale);
+
         return view('store.shop', [
             'department' => $department,
             'category' => $category,
@@ -79,7 +97,10 @@ class ShopController extends Controller
             'sizes' => $sizes,
             'activeSize' => $sizeLabel,
             'collection' => $collection,
-            'title' => $category?->name ?? $collection?->name ?? ($request->query('sale') ? 'Sale' : 'All products'),
+            'title' => $category?->name ?? $collection?->name ?? ($sale ? 'Sale' : 'All products'),
+            'meta' => $meta,
+            'breadcrumbs' => $breadcrumbs,
+            'jsonLd' => JsonLd::breadcrumbs($breadcrumbs),
         ]);
     }
 }

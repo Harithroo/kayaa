@@ -1,5 +1,5 @@
 {{-- Create an account, from the prototype's html/account/register.html. --}}
-<x-layouts.store title="Create an account" page="account register">
+<x-layouts.store page="account register" :meta="$meta">
   <div class="container auth" data-auth-page="register">
     <div class="auth-card">
       <h1>Create an account</h1>

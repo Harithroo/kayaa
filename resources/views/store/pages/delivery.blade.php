@@ -25,8 +25,7 @@
   $colombo = $eta('Colombo');
   $island = $eta('default');
 @endphp
-<x-store.content-page title="Delivery" heading="Delivery across Sri Lanka" page="delivery"
-  metaDescription="How Kayaa delivers baby clothing island-wide: estimates by district, the delivery fee, how tracking works and what to do if a parcel is late."
+<x-store.content-page :meta="$meta" title="Delivery" heading="Delivery across Sri Lanka" page="delivery"
   lede="We deliver baby clothing island-wide by courier."
   :toc="[
     '#estimates' => 'Where and how fast',

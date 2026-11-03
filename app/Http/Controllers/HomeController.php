@@ -6,11 +6,14 @@ use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SizeScale;
+use App\Services\Seo\JsonLd;
+use App\Services\Seo\SeoMeta;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(Request $request): View
     {
         $newIn = Product::active()->forCards()
             ->orderByDesc('is_new')->orderByDesc('created_at')
@@ -39,6 +42,9 @@ class HomeController extends Controller
             'sizes' => $scale?->options ?? collect(),
             'tiles' => Category::active()->whereNull('parent_id')->with('department')->orderBy('position')->limit(5)->get(),
             'promos' => Banner::live('home_promo')->get(),
+            'meta' => SeoMeta::forPage('home', $request),
+            // Organization and WebSite belong on one page only, and this is it.
+            'jsonLd' => [JsonLd::organization(), JsonLd::webSite()],
         ]);
     }
 }
