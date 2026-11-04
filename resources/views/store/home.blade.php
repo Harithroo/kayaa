@@ -1,6 +1,5 @@
 {{-- Home, from the prototype's html/index.html. --}}
-<x-layouts.store page="home"
-  metaDescription="Soft cotton baby clothing from Newborn to 3Y, with a clear size guide. Secure card payment and island-wide delivery across Sri Lanka.">
+<x-layouts.store page="home" :meta="$meta" :json-ld="$jsonLd">
 
   <section class="hero" aria-labelledby="hero-title">
     <div class="container hero__grid">

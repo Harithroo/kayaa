@@ -31,3 +31,51 @@ jobs:
       # .env or database server is needed.
       - name: Run tests
         run: vendor/bin/phpunit
+
+  # The same suite against MySQL 8, the database production runs on. SQLite is
+  # more forgiving (grouped queries, strict mode, collations), so this catches
+  # what the job above cannot.
+  phpunit-mysql:
+    name: PHPUnit (MySQL 8)
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: kayaa_phpunit
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, intl, pdo_mysql
+
+      - name: Create Laravel Storage Directories
+        run: mkdir -p storage/framework/{cache/data,sessions,views,testing} storage/logs bootstrap/cache
+
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      # phpunit.xml sets DB_CONNECTION=sqlite and DB_DATABASE=:memory:, but its <env>
+      # entries never override a variable that is already set. Setting them here, in
+      # the job's environment, is what points the suite at MySQL.
+      - name: Run tests
+        run: vendor/bin/phpunit
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: kayaa_phpunit
+          DB_USERNAME: root
+          DB_PASSWORD: root

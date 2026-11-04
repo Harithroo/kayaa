@@ -1,5 +1,5 @@
 {{-- Sign in, from the prototype's html/account/login.html. --}}
-<x-layouts.store title="Sign in" page="account login">
+<x-layouts.store page="account login" :meta="$meta">
   <div class="container auth" data-auth-page="login">
     <div class="auth-card">
       <h1>Sign in</h1>

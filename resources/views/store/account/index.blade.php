@@ -1,5 +1,5 @@
 {{-- My orders, from the prototype's html/account/index.html. --}}
-<x-layouts.store title="My account" page="account">
+<x-layouts.store page="account" :meta="$meta">
   <div class="container account">
     <header class="account__head">
       <h1>Hi, <span data-greeting-name>{{ auth()->user()->name }}</span></h1>

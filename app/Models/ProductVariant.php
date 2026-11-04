@@ -22,6 +22,26 @@ class ProductVariant extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        // Stock history. A new variant starts with an "initial" entry; a stock change
+        // saved through the model (the product form) is an "admin_edit". Orders move
+        // stock with query-builder increments, which fire no events here, and log
+        // their own movement, so no change is ever recorded twice.
+        static::created(function (ProductVariant $variant) {
+            if ($variant->stock !== 0) {
+                StockMovement::record($variant, $variant->stock, $variant->stock, 'initial');
+            }
+        });
+
+        static::updated(function (ProductVariant $variant) {
+            if ($variant->wasChanged('stock')) {
+                $before = (int) $variant->getOriginal('stock');
+                StockMovement::record($variant, $variant->stock - $before, $variant->stock, 'admin_edit');
+            }
+        });
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

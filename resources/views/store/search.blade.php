@@ -6,7 +6,7 @@
   $sort = request('sort', 'featured');
   $count = $results->count();
 @endphp
-<x-layouts.store title="Search" page="search">
+<x-layouts.store page="search" :meta="$meta">
   <div class="container listing" data-listing>
 
     <nav class="breadcrumb" aria-label="Breadcrumb">

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Faq;
 use App\Models\Product;
+use App\Services\Seo\JsonLd;
+use App\Services\Seo\SeoMeta;
 use App\Services\WishlistService;
+use App\Support\Seo\Breadcrumbs;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -54,8 +57,27 @@ class ProductController extends Controller
         // The product page's Save button renders in its saved state.
         $isWishlisted = app(WishlistService::class)->has($product->id);
 
+        $breadcrumbs = Breadcrumbs::forProduct($product);
+
+        // $reviews is what the page actually renders, and it is what the rating
+        // markup is built from: no approved reviews on the page means no
+        // aggregateRating in the JSON-LD. Marking up a rating a visitor cannot
+        // see is the most commonly penalised structured-data mistake there is.
+        //
+        // Product and BreadcrumbList only. The page does render FAQs, but
+        // FAQPage markup is for pages whose subject IS a list of questions;
+        // declaring it on a product page is schema Google is entitled to
+        // ignore. The contact page carries that block instead.
+        $jsonLd = [
+            JsonLd::product($product, $reviews),
+            JsonLd::breadcrumbs($breadcrumbs),
+        ];
+
+        $meta = SeoMeta::forProduct($product, $request);
+
         return view('store.product', compact(
-            'product', 'related', 'matrix', 'reviews', 'ratingBreakdown', 'faqs', 'hasReviewed', 'isWishlisted'
+            'product', 'related', 'matrix', 'reviews', 'ratingBreakdown', 'faqs', 'hasReviewed', 'isWishlisted',
+            'breadcrumbs', 'jsonLd', 'meta'
         ));
     }
 }

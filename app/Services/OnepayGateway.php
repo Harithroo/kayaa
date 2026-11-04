@@ -89,7 +89,12 @@ class OnepayGateway
      * Server-to-server check of what actually happened. This, not the callback
      * body, decides whether an order counts as paid.
      *
-     * @return array{paid: bool, status: int|null, message: string|null}
+     * `amount` (in cents) and `reference` are what Onepay says the transaction was
+     * for, or null when the response does not carry them. They are looked up the
+     * same tolerant way as the status, because the response shape has moved
+     * between Onepay versions.
+     *
+     * @return array{paid: bool, status: int|null, message: string|null, amount: int|null, reference: string|null}
      */
     public function transactionStatus(string $transactionId): array
     {
@@ -112,13 +117,27 @@ class OnepayGateway
         $body = $response->json() ?? [];
         $status = $this->findFirst($body, ['status', 'transaction_status', 'status_code']);
         $message = $this->findFirst($body, ['status_message', 'message']);
+        $amount = $this->findFirst($body, ['amount', 'transaction_amount', 'paid_amount']);
+        $reference = $this->findFirst($body, ['additional_data', 'additionalData', 'reference']);
 
         return [
             // Onepay reports success as status 1 / "SUCCESS" depending on the field.
             'paid' => in_array((string) $status, ['1', '1000', 'SUCCESS', 'success'], true),
             'status' => is_numeric($status) ? (int) $status : null,
             'message' => is_string($message) ? $message : null,
+            'amount' => $this->toCents($amount),
+            'reference' => is_string($reference) && trim($reference) !== '' ? trim($reference) : null,
         ];
+    }
+
+    /** "9,000.00", "9000", 9000.0 → 900000. Null when it is absent or not a number. */
+    private function toCents(mixed $amount): ?int
+    {
+        if (is_string($amount)) {
+            $amount = str_replace([',', ' '], '', $amount);
+        }
+
+        return is_numeric($amount) ? (int) round((float) $amount * 100) : null;
     }
 
     public function hash(string $currency, string $amount): string

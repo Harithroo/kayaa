@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\ProductVariant;
+use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
@@ -30,6 +31,7 @@ class OrderService
         return DB::transaction(function () use ($lines, $customer, $paymentMethod) {
             $subtotal = 0;
             $items = [];
+            $movements = [];
 
             foreach ($lines as $line) {
                 /** @var ProductVariant $variant */
@@ -42,7 +44,10 @@ class OrderService
                     throw new OutOfStockException($variant, $line->qty);
                 }
 
-                $variant->decrement('stock', $line->qty);
+                // Query builder, not $variant->decrement(): no model events, so the
+                // movement below is the only record of this change.
+                ProductVariant::whereKey($variant->id)->decrement('stock', $line->qty);
+                $movements[] = [$variant, $line->qty];
 
                 $lineTotal = $variant->price * $line->qty;
                 $subtotal += $lineTotal;
@@ -70,6 +75,10 @@ class OrderService
                 'total' => $subtotal + $shipping,
             ]);
             $order->items()->createMany($items);
+
+            foreach ($movements as [$variant, $qty]) {
+                StockMovement::record($variant, -$qty, $variant->stock - $qty, 'order_placed', $order);
+            }
 
             $this->cart->clear();
 
@@ -128,6 +137,32 @@ class OrderService
     }
 
     /**
+     * Record that the money for a paid order has gone back to the customer. The
+     * refund itself is made outside the app (Onepay dashboard, bank transfer);
+     * this keeps the books honest: the order stops counting as a sale and the
+     * payment can never be marked paid again. Stock is not touched here — that is
+     * what cancelling the order is for.
+     */
+    public function refund(Order $order, ?string $note = null): bool
+    {
+        if ($order->payment_status !== 'paid') {
+            return false;
+        }
+
+        $line = filled($note) ? 'Refund: '.trim($note) : null;
+
+        $order->forceFill([
+            'payment_status' => 'refunded',
+            'refunded_at' => now(),
+            'admin_note' => $line === null
+                ? $order->admin_note
+                : trim(($order->admin_note ? $order->admin_note."\n" : '').$line),
+        ])->save();
+
+        return true;
+    }
+
+    /**
      * Cancel an order and put its stock back. Used by the customer (while the
      * order is still pending) and by the admin panel, so the restock rule lives
      * in one place. Locks each variant so a concurrent checkout can't read a
@@ -148,7 +183,12 @@ class OrderService
                 }
 
                 $variant = ProductVariant::lockForUpdate()->find($item->product_variant_id);
-                $variant?->increment('stock', $item->qty);
+                if ($variant === null) {
+                    continue;
+                }
+
+                ProductVariant::whereKey($variant->id)->increment('stock', $item->qty);
+                StockMovement::record($variant, $item->qty, $variant->stock + $item->qty, 'order_cancelled', $order);
             }
 
             $order->forceFill([

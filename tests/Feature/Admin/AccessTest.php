@@ -56,7 +56,8 @@ class AccessTest extends TestCase
         $this->actingAsAdmin();
 
         foreach (['orders', 'products', 'customers', 'reviews', 'contact-messages', 'faqs', 'banners',
-            'categories', 'departments', 'colors', 'size-scales', 'contact-settings', 'store-settings'] as $path) {
+            'categories', 'departments', 'colors', 'size-scales', 'contact-settings', 'store-settings',
+            'stock-movements', 'admin-users'] as $path) {
             $this->get("/admin/{$path}")->assertOk();
         }
     }

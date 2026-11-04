@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\Seo\SeoMeta;
 use App\Services\WishlistService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -13,9 +14,14 @@ class WishlistController extends Controller
 {
     public function __construct(private WishlistService $wishlist) {}
 
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('store.wishlist', ['products' => $this->wishlist->products()]);
+        return view('store.wishlist', [
+            'products' => $this->wishlist->products(),
+            // Not private, but personal and thin: noindex,follow keeps it out of
+            // the index while the saved products stay crawlable.
+            'meta' => SeoMeta::forPage('wishlist', $request),
+        ]);
     }
 
     /** Heart button. Works as a plain form post; answers JSON when called from app.js. */

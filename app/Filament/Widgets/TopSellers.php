@@ -8,7 +8,7 @@ use Filament\Widgets\TableWidget;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Best sellers over the last 30 days, by units. Cancelled orders do not count.
+ * Best sellers over the last 30 days, by units. Cancelled and refunded orders do not count.
  *
  * Rows are groups, not records, so this feeds the table plain arrays instead of
  * an Eloquent query (Filament would add `ORDER BY order_items.id` to a grouped
@@ -27,6 +27,7 @@ class TopSellers extends TableWidget
             ->records(fn (): array => DB::table('order_items')
                 ->join('orders', 'orders.id', '=', 'order_items.order_id')
                 ->where('orders.status', '!=', 'cancelled')
+                ->where('orders.payment_status', '!=', 'refunded')
                 ->where('orders.created_at', '>=', now()->subDays(30)->startOfDay())
                 ->selectRaw('order_items.product_name, SUM(order_items.qty) as units, SUM(order_items.line_total) as revenue')
                 ->groupBy('order_items.product_name')

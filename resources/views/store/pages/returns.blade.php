@@ -1,7 +1,6 @@
 {{-- Returns & exchanges, with the full copy from the prototype's html/returns.html
      (docs/content/returns.md). Day counts come from the store config. --}}
-<x-store.content-page title="Returns &amp; exchanges" heading="Returns &amp; exchanges" crumb="Returns" page="returns"
-  metaDescription="Kayaa's returns and exchanges policy: free size swaps within 14 days, refunds, faulty items and what we cannot take back."
+<x-store.content-page :meta="$meta" title="Returns &amp; exchanges" heading="Returns &amp; exchanges" crumb="Returns" page="returns"
   lede="Babies grow quickly and sizes can be hard to judge. If something does not fit or is not right, we want to make it easy to put it right."
   :toc="[
     '#short' => 'The short version',

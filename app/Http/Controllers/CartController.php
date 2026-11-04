@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductVariant;
 use App\Services\CartService;
+use App\Services\Seo\SeoMeta;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,9 +17,12 @@ class CartController extends Controller
      * The full cart page. It is the no-JS fallback for the slide-in cart drawer,
      * and the page the drawer's "View full cart" link points at.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('store.cart', ['cart' => $this->cart]);
+        return view('store.cart', [
+            'cart' => $this->cart,
+            'meta' => SeoMeta::noindex($request, 'Your Bag'),
+        ]);
     }
 
     /** Just the drawer contents — fetched by the front end after every cart change. */

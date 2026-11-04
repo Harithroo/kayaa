@@ -12,13 +12,12 @@
   that app.js matches against every [data-nav] link to set aria-current.
 --}}
 @props([
-  'title' => null,
-  'metaDescription' => null,
+  'meta' => null,      // App\Services\Seo\SeoMeta, built in the controller
+  'jsonLd' => null,    // one schema.org array, or a list of them
   'page' => null,
   'shell' => 'full',
   'back' => null,
   'backLabel' => null,
-  'canonical' => null,
   'bodyClass' => null,
 ])
 @php
@@ -26,8 +25,6 @@
   $waHref = \App\Support\StoreContact::whatsappHref();
   $tel = \App\Support\StoreContact::phone();
   $telHref = \App\Support\StoreContact::phoneHref();
-  $pageTitle = $title ? "$title | Kayaa" : 'Kayaa: Baby Clothes in Sri Lanka, Sized by Age';
-  $description = $metaDescription ?? 'Soft cotton baby clothing from Newborn to 3Y, with a clear size guide. Secure card payment and island-wide delivery across Sri Lanka.';
   $freeOver = (int) config('kayaa.free_shipping_over');
   // Island-wide window, written from config/kayaa.php rather than typed into the page.
   $days = (array) config('kayaa.delivery_days.default', [3, 5]);
@@ -61,21 +58,10 @@
   <meta name="theme-color" content="#FAF7FB">
   <link rel="icon" href="data:,">{{-- TODO: real favicon once the logo exists --}}
 
-  <title>{{ $pageTitle }}</title>
-  <meta name="description" content="{{ $description }}">
-  <link rel="canonical" href="{{ $canonical ?? url()->current() }}">
-  @if (config('kayaa.noindex'))
-    <meta name="robots" content="noindex, nofollow">
-  @endif
-  <meta property="og:title" content="{{ $pageTitle }}">
-  <meta property="og:description" content="{{ $description }}">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ url()->current() }}">
-  <meta property="og:site_name" content="Kayaa">
-  <meta property="og:locale" content="en_LK">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="{{ $pageTitle }}">
-  <meta name="twitter:description" content="{{ $description }}">
+  {{-- Title, description, canonical, robots and the share cards. The staging
+       noindex switch (APP_NOINDEX) is applied inside SeoMeta, not here. --}}
+  <x-seo :meta="$meta" />
+  <x-json-ld :data="$jsonLd" />
 
   {{-- The two faces used above the fold. Vite hashes them, so the URLs come from the manifest. --}}
   <link rel="preload" href="{{ Vite::asset('resources/fonts/urbanist-latin-wght-normal.woff2') }}" as="font" type="font/woff2" crossorigin>

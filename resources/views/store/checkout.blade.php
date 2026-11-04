@@ -15,7 +15,7 @@
     return [$d => ['min' => $days[0], 'max' => $days[1]]];
   });
 @endphp
-<x-layouts.store title="Checkout" page="checkout" shell="minimal" :back="route('cart.index')" back-label="Back to bag">
+<x-layouts.store page="checkout" :meta="$meta" shell="minimal" :back="route('cart.index')" back-label="Back to bag">
   <div class="container checkout" data-checkout-page>
     <h1 class="checkout__title">Checkout</h1>
 

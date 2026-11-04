@@ -8,23 +8,12 @@
   $sort = request('sort', 'featured');
   $total = $products->total();
 @endphp
-<x-layouts.store :title="$title" :page="$isCategory ? 'category shop' : 'shop'"
-  :metaDescription="$category?->description">
+<x-layouts.store :page="$isCategory ? 'category shop' : 'shop'" :meta="$meta" :json-ld="$jsonLd">
 
   <div class="container listing" data-listing>
 
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <ol data-breadcrumb>
-        <li><a href="{{ route('home') }}">Home</a></li>
-        @if($isCategory)
-          <li><a href="{{ route('shop.index') }}">Shop</a></li>
-          @if($category->parent)<li><a href="{{ $category->parent->url() }}">{{ $category->parent->name }}</a></li>@endif
-          <li aria-current="page">{{ $category->name }}</li>
-        @else
-          <li aria-current="page">{{ $sale ? 'Sale' : 'Shop' }}</li>
-        @endif
-      </ol>
-    </nav>
+    {{-- One trail, used for both the visible nav and the BreadcrumbList. --}}
+    <x-store.breadcrumb :trail="$breadcrumbs" />
 
     <header class="listing-head">
       <h1 data-listing-title>{{ $isCategory ? $category->name : ($collection?->name ?? ($sale ? 'Sale' : 'All baby clothing')) }}</h1>

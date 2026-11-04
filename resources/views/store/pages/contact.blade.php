@@ -7,7 +7,7 @@
   $tel = \App\Support\StoreContact::phone();
   $telHref = \App\Support\StoreContact::phoneHref();
 @endphp
-<x-layouts.store title="Contact" page="contact">
+<x-layouts.store page="contact" :meta="$meta" :json-ld="$jsonLd">
   <div class="container content">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <ol>

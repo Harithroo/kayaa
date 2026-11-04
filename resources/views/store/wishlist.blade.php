@@ -1,7 +1,7 @@
 {{-- Wishlist, from the prototype's html/wishlist.html. The prototype kept saved
      products in sessionStorage and hid the rest; here the server returns the
      saved products, and each card gets the page's own Remove button. --}}
-<x-layouts.store title="Your wishlist" page="wishlist">
+<x-layouts.store page="wishlist" :meta="$meta">
   <div class="container wishlist" data-wishlist-page>
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <ol>

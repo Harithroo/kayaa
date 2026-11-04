@@ -7,8 +7,8 @@ use Carbon\CarbonInterface;
 use Illuminate\Support\Carbon;
 
 /**
- * Numbers behind the admin dashboard. A cancelled order is not a sale, so it is
- * left out everywhere. Totals are in cents, like the rest of the app.
+ * Numbers behind the admin dashboard. A cancelled or refunded order is not a sale,
+ * so it is left out everywhere. Totals are in cents, like the rest of the app.
  *
  * Grouping by day happens in PHP rather than SQL so it behaves the same on
  * MySQL in production and SQLite in the tests.
@@ -19,7 +19,7 @@ class SalesReport
     public static function between(CarbonInterface $from, CarbonInterface $to): array
     {
         $orders = Order::query()
-            ->where('status', '!=', 'cancelled')
+            ->countsAsSale()
             ->whereBetween('created_at', [$from, $to])
             ->get(['total']);
 
@@ -56,7 +56,7 @@ class SalesReport
         }
 
         Order::query()
-            ->where('status', '!=', 'cancelled')
+            ->countsAsSale()
             ->where('created_at', '>=', $start)
             ->get(['total', 'created_at'])
             ->each(function (Order $order) use (&$series) {
