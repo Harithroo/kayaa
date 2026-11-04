@@ -24,9 +24,20 @@ final class MetaText
             return null;
         }
 
-        // Tags first, then entities: decoding first could turn &lt;b&gt; into a
-        // tag that strip_tags then eats, losing the text around it.
+        // Tags first, then entities. Decoding first would let strip_tags eat the
+        // text around a &lt;b&gt;, because once decoded it is a real tag.
         $plain = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        // Decoding can itself reveal markup: copy pasted into the admin as
+        // "&lt;b&gt;bold&lt;/b&gt;" survives the strip above and comes out of
+        // the decode as a literal <b> tag, which would then show as angle
+        // brackets in the search result. Remove what is now plainly a tag.
+        //
+        // Matched narrowly rather than with a second strip_tags() pass: that
+        // treats "Fits 5 < 10 kg" as an unterminated tag and deletes the rest
+        // of the sentence. This pattern needs a letter after the < and a
+        // closing >, so prose with a stray comparison is left alone.
+        $plain = (string) preg_replace('/<\/?[a-zA-Z][^<>]*>/', '', $plain);
 
         // Collapse every run of whitespace, newlines included, to one space.
         $plain = trim((string) preg_replace('/\s+/u', ' ', $plain));

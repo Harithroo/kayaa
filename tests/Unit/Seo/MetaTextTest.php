@@ -16,11 +16,20 @@ class MetaTextTest extends TestCase
         );
     }
 
-    public function test_it_does_not_let_a_decoded_entity_become_a_tag(): void
+    public function test_markup_revealed_by_decoding_an_entity_is_removed(): void
     {
-        // Tags are stripped before entities are decoded, so escaped markup in
-        // admin copy survives as readable text instead of being eaten.
+        // Pasted into the admin as "&lt;b&gt;...", this survives the first strip
+        // and only becomes a tag once entities are decoded. Left in, the search
+        // result would show the angle brackets.
         $this->assertSame('bold text', MetaText::flatten('&lt;b&gt;bold&lt;/b&gt; text'));
+    }
+
+    public function test_a_bare_comparison_in_prose_is_not_mistaken_for_a_tag(): void
+    {
+        // The reason markup is matched narrowly instead of with a second
+        // strip_tags() pass: that would delete everything after the "<".
+        $this->assertSame('Fits 5 < 10 kg babies', MetaText::flatten('Fits 5 &lt; 10 kg babies'));
+        $this->assertSame('Sizes 3 < 6 < 9 months', MetaText::flatten('Sizes 3 < 6 < 9 months'));
     }
 
     public function test_empty_and_tag_only_input_become_null_so_callers_can_fall_through(): void
