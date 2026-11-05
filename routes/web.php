@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\PackingSlipController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\PackingSlipController;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DeployController;
+use App\Http\Controllers\DeployLogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
@@ -103,6 +104,12 @@ Route::middleware('auth')->group(function () {
 Route::post('/deploy/migrate', DeployController::class)
     ->middleware('throttle:6,1')
     ->name('deploy.migrate');
+
+// Same token, same reason: no SSH on this host, so the stack trace behind a 500
+// is otherwise unreadable. GET so it can be piped straight into a file.
+Route::get('/deploy/logs', DeployLogController::class)
+    ->middleware('throttle:30,1')
+    ->name('deploy.logs');
 
 Route::get('/search', SearchController::class)->name('search');
 // Typeahead for the search boxes in the header and on the search page.
