@@ -12,7 +12,10 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -75,13 +78,45 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('email')->searchable()->copyable(),
-                TextColumn::make('phone')->searchable()->placeholder('—'),
-                TextColumn::make('orders_count')->label('Orders')->sortable(),
-                TextColumn::make('total_spent')->label('Spent')->formatStateUsing(fn ($state) => money((int) $state))->sortable()->placeholder('Rs. 0'),
-                TextColumn::make('last_order_at')->label('Last order')->date('d M Y')->sortable()->placeholder('—'),
-                TextColumn::make('created_at')->label('Joined')->date('d M Y')->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Split::make([
+                    Stack::make([
+                        TextColumn::make('name')->searchable()->weight('bold')->size(TextSize::Medium),
+                        Split::make([
+                            TextColumn::make('email')->searchable()->copyable()
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedEnvelope)
+                                ->grow(false),
+                            TextColumn::make('phone')->searchable()
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedPhone)
+                                ->placeholder('')
+                                ->grow(false),
+                        ]),
+                    ])->space(1)->grow(),
+                    Stack::make([
+                        // Spend is the figure this table is scanned for, so it
+                        // leads; the order count and dates sit under it as
+                        // context rather than as separate labelled fields.
+                        Split::make([
+                            TextColumn::make('total_spent')->label('Spent')->sortable()
+                                ->formatStateUsing(fn ($state) => money((int) $state))->placeholder('Rs. 0')
+                                ->weight('bold')->size(TextSize::Medium)
+                                ->grow(false),
+                            TextColumn::make('orders_count')->label('Orders')->sortable()
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedShoppingBag)
+                                ->formatStateUsing(fn ($state) => (int) $state.' '.str('order')->plural((int) $state))
+                                ->grow(false),
+                        ]),
+                        Split::make([
+                            TextColumn::make('last_order_at')->label('Last order')->date('d M Y')->sortable()
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedClock)
+                                ->placeholder('No orders yet')
+                                ->grow(false),
+                            TextColumn::make('created_at')->label('Joined')->date('d M Y')->sortable()
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedCalendar)
+                                ->toggleable(isToggledHiddenByDefault: true)
+                                ->grow(false),
+                        ]),
+                    ])->space(1)->grow(false),
+                ])->from('md'),
             ])
             ->defaultSort('created_at', 'desc')
             ->recordActions([

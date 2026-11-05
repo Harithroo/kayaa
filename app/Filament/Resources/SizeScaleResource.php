@@ -12,7 +12,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -60,9 +62,15 @@ class SizeScaleResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('type')->badge(),
-                TextColumn::make('options_count')->counts('options')->label('Sizes'),
+                Split::make([
+                    TextColumn::make('name')->weight('bold')->size(TextSize::Medium)->grow(),
+                    TextColumn::make('type')->badge()->grow(false),
+                    TextColumn::make('options_count')->counts('options')->label('Sizes')
+                        ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedCube)
+                        ->formatStateUsing(fn ($state) => (int) $state.' '.str('size')->plural((int) $state))
+                        ->grow(false),
+                    // Three short fields: one row at every width.
+                ]),
             ])
             ->recordActions([EditAction::make()]);
     }

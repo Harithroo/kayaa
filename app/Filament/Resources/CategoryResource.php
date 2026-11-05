@@ -14,8 +14,10 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
@@ -76,12 +78,34 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('department.name'),
-                TextColumn::make('parent.name')->label('Parent')->placeholder('—'),
-                TextColumn::make('products_count')->counts('products')->label('Products'),
-                TextColumn::make('position')->sortable(),
-                IconColumn::make('is_active')->boolean(),
+                Split::make([
+                    Stack::make([
+                        TextColumn::make('name')->searchable()->weight('bold')->size(TextSize::Medium),
+                        // Department and parent are one breadcrumb, not two
+                        // labelled fields.
+                        TextColumn::make('path')
+                            ->state(fn (Category $r) => collect([$r->department?->name, $r->parent?->name])
+                                ->filter()->implode(' › '))
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedTag)
+                            ->placeholder('Top level'),
+                    ])->space(1)->grow(),
+                    // A Split with no from() stays horizontal at every width, so
+                    // these short facts run across the card instead of taking a
+                    // line each and leaving the right half of a phone empty.
+                    Split::make([
+                        TextColumn::make('is_active')->label('Active')->badge()
+                            ->formatStateUsing(fn ($state) => $state ? 'Active' : 'Hidden')
+                            ->color(fn ($state) => $state ? 'success' : 'gray')
+                            ->grow(false),
+                        TextColumn::make('products_count')->counts('products')->label('Products')
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedShoppingBag)
+                            ->formatStateUsing(fn ($state) => (int) $state.' '.str('product')->plural((int) $state))
+                            ->grow(false),
+                        TextColumn::make('position')->sortable()
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedHashtag)
+                            ->grow(false),
+                    ])->grow(false),
+                ])->from('md'),
             ])
             ->defaultSort('position')
             ->recordActions([EditAction::make()]);

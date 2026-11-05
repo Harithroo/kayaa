@@ -15,8 +15,10 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -61,16 +63,58 @@ class BannerResource extends Resource
         ]);
     }
 
+    /**
+     * The banner's schedule as one readable phrase.
+     *
+     * Both ends are optional and each means something on its own, so the four
+     * combinations are spelled out rather than printed as two dates with a
+     * dash between them.
+     */
+    private static function scheduleSummary(Banner $banner): string
+    {
+        $from = $banner->starts_at?->format('d M Y');
+        $until = $banner->ends_at?->format('d M Y');
+
+        return match (true) {
+            $from !== null && $until !== null => "{$from} – {$until}",
+            $from !== null => "From {$from}",
+            $until !== null => "Until {$until}",
+            default => 'Always on',
+        };
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('placement')->badge()->formatStateUsing(fn ($s) => Banner::PLACEMENTS[$s] ?? $s),
-                TextColumn::make('title')->searchable()->limit(50),
-                IconColumn::make('live')->label('Live now')->boolean()->state(fn (Banner $r) => $r->isLive()),
-                TextColumn::make('starts_at')->dateTime('d M, H:i')->placeholder('—'),
-                TextColumn::make('ends_at')->dateTime('d M, H:i')->placeholder('—'),
-                TextColumn::make('position')->sortable(),
+                Split::make([
+                    Stack::make([
+                        TextColumn::make('title')->searchable()->limit(50)
+                            ->weight('bold')->size(TextSize::Medium),
+                        // One line for the whole schedule. Two columns gave two
+                        // lines that only made sense read together, and each
+                        // needed its own label to say which end it was.
+                        TextColumn::make('window')
+                            ->state(fn (Banner $r) => self::scheduleSummary($r))
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedClock),
+                    ])->space(1)->grow(),
+                    Split::make([
+                        // A worded badge rather than a tick: with no column header
+                        // above it, a bare icon in a card says nothing.
+                        TextColumn::make('live')->label('Live now')->badge()
+                            ->state(fn (Banner $r) => $r->isLive() ? 'Live now' : 'Not live')
+                            ->color(fn (Banner $r) => $r->isLive() ? 'success' : 'gray')
+                            ->grow(false),
+                        TextColumn::make('placement')->badge()->color('gray')
+                            ->formatStateUsing(fn ($state) => Banner::PLACEMENTS[$state] ?? $state)
+                            ->grow(false),
+                        // Kept as a column, not just a default sort, so it stays
+                        // in the toolbar's Sort by list.
+                        TextColumn::make('position')->sortable()
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedHashtag)
+                            ->grow(false),
+                    ])->grow(false),
+                ])->from('md'),
             ])
             ->defaultSort('position')
             ->filters([SelectFilter::make('placement')->options(Banner::PLACEMENTS)])

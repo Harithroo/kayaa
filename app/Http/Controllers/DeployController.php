@@ -37,9 +37,11 @@ class DeployController extends Controller
      * pinned to one by MultiPHP Manager or an AddHandler line in .htaccess.
      * When "Select PHP Version" shows an extension ticked but the request
      * still cannot load it, the two are not the same build — the binary path
-     * and the ini files below name the one that counts. A stray php.ini or
-     * .user.ini in the account can also drop an extension on its own, which
-     * is why the scanned files are listed and not just the loaded one.
+     * and the ini files below name the one that counts. That is exactly how
+     * the missing intl hid for a while: the site runs ea-php84, while the
+     * Selector was enabling intl on alt-php84. A stray php.ini or .user.ini
+     * in the account can also drop an extension on its own, which is why the
+     * scanned files are listed and not just the loaded one.
      */
     private static function phpEnvironmentReport(): string
     {
@@ -89,11 +91,15 @@ class DeployController extends Controller
             return response(
                 'FAILED: this server is missing the PHP extension(s): '
                 .implode(', ', $missing)
-                ."\nEnable them for PHP ".PHP_VERSION
-                ." (cPanel > Select PHP Version > Extensions), then re-run the deploy.\n\n"
-                ."If the box is already ticked there, the web requests are running a\n"
-                ."different PHP build than that page controls. These are the one that\n"
-                ."actually served this request — check them against cPanel:\n\n"
+                ."\nThis request ran PHP ".PHP_VERSION.".\n\n"
+                ."Careful which cPanel screen you use. This account serves its domains\n"
+                ."with ea-php (MultiPHP Manager, and the AddHandler line in\n"
+                ."public/.htaccess), but the \"Select PHP Version\" extension list is the\n"
+                ."CloudLinux PHP Selector, which only configures alt-php builds. Ticking\n"
+                ."an extension there does nothing for an ea-php site — it looks enabled\n"
+                ."and stays missing. Installing an ea-php package (ea-php84-php-intl,\n"
+                ."say) needs root, so it is a request to the host.\n\n"
+                ."The PHP that actually served this request:\n\n"
                 .self::phpEnvironmentReport(),
                 500,
             )->header('Content-Type', 'text/plain');

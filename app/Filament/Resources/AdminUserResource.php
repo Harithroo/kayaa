@@ -10,7 +10,9 @@ use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -59,10 +61,19 @@ class AdminUserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->searchable()
-                    ->description(fn (User $r) => $r->is(auth()->user()) ? 'You' : null),
-                TextColumn::make('email')->searchable()->copyable(),
-                TextColumn::make('created_at')->label('Added')->date('d M Y')->sortable(),
+                Split::make([
+                    TextColumn::make('name')->searchable()->weight('bold')->size(TextSize::Medium)
+                        ->formatStateUsing(fn (User $r, $state) => $r->is(auth()->user()) ? "{$state} (you)" : $state)
+                        ->grow(),
+                    Split::make([
+                        TextColumn::make('email')->searchable()->copyable()
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedEnvelope)
+                            ->grow(false),
+                        TextColumn::make('created_at')->label('Added')->date('d M Y')->sortable()
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedCalendar)
+                            ->grow(false),
+                    ])->grow(false),
+                ])->from('md'),
             ])
             ->defaultSort('created_at')
             ->recordActions([

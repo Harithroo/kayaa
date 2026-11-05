@@ -20,7 +20,11 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\FontFamily;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -138,17 +142,54 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('reference')->searchable()->weight('bold')->copyable(),
-                TextColumn::make('created_at')->label('Placed')->dateTime('d M, H:i')->sortable(),
-                TextColumn::make('customer_name')->label('Customer')->state(fn (Order $r) => $r->customerName())
-                    ->searchable(['first_name', 'last_name'])
-                    ->description(fn (Order $r) => $r->district),
-                TextColumn::make('phone')->searchable(),
-                TextColumn::make('total')->formatStateUsing(fn ($state) => money((int) $state))->sortable(),
-                TextColumn::make('payment_method')->label('Pay')->formatStateUsing(fn ($s) => $s === 'cod' ? 'COD' : 'Onepay'),
-                TextColumn::make('payment_status')->label('Payment')->badge()->color(fn (string $state) => self::paymentColor($state)),
-                TextColumn::make('status')->badge()->color(fn (string $state) => self::statusColor($state)),
-                TextColumn::make('tracking_number')->label('Tracking')->placeholder('—')->toggleable(isToggledHiddenByDefault: true),
+                Split::make([
+                    Stack::make([
+                        TextColumn::make('reference')->searchable()->copyable()
+                            ->weight('bold')->size(TextSize::Medium)
+                            ->fontFamily(FontFamily::Mono),
+                        TextColumn::make('customer_name')->label('Customer')->state(fn (Order $r) => $r->customerName())
+                            ->searchable(['first_name', 'last_name'])
+                            ->size(TextSize::Small)
+                            ->description(fn (Order $r) => $r->district),
+                        Split::make([
+                            TextColumn::make('phone')->searchable()
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedPhone)
+                                ->grow(false),
+                            TextColumn::make('created_at')->label('Placed')->dateTime('d M, H:i')->sortable()
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedClock)
+                                ->grow(false),
+                        ]),
+                        TextColumn::make('tracking_number')->label('Tracking')
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedTruck)
+                            ->placeholder('No tracking number')
+                            ->toggleable(isToggledHiddenByDefault: true),
+                    ])->space(1)->grow(),
+                    Stack::make([
+                        Split::make([
+                            TextColumn::make('total')->sortable()
+                                ->formatStateUsing(fn ($state) => money((int) $state))
+                                ->weight('bold')->size(TextSize::Medium)
+                                ->grow(false),
+                            TextColumn::make('payment_method')->label('Pay')
+                                // Must be named $state: Filament binds closure
+                                // arguments by name, and fn ($s) silently got null,
+                                // which made every COD order read as Onepay.
+                                ->formatStateUsing(fn ($state) => $state === 'cod' ? 'COD' : 'Onepay')
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedBanknotes)
+                                ->grow(false),
+                        ]),
+                        Split::make([
+                            TextColumn::make('status')->badge()
+                                ->formatStateUsing(fn (string $state) => ucfirst($state))
+                                ->color(fn (string $state) => self::statusColor($state))
+                                ->grow(false),
+                            TextColumn::make('payment_status')->label('Payment')->badge()
+                                ->color(fn (string $state) => self::paymentColor($state))
+                                ->formatStateUsing(fn (string $state) => ucfirst($state))
+                                ->grow(false),
+                        ]),
+                    ])->space(1)->grow(false),
+                ])->from('md'),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
