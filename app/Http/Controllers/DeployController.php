@@ -29,6 +29,34 @@ class DeployController extends Controller
      */
     private const REQUIRED_EXTENSIONS = ['intl'];
 
+    /**
+     * Which PHP actually served this request, and where it reads its config.
+     *
+     * cPanel can offer several builds of the same version (ea-php84 and
+     * alt-php84, say) with separate extension lists, and a domain can be
+     * pinned to one by MultiPHP Manager or an AddHandler line in .htaccess.
+     * When "Select PHP Version" shows an extension ticked but the request
+     * still cannot load it, the two are not the same build — the binary path
+     * and the ini files below name the one that counts. A stray php.ini or
+     * .user.ini in the account can also drop an extension on its own, which
+     * is why the scanned files are listed and not just the loaded one.
+     */
+    private static function phpEnvironmentReport(): string
+    {
+        $scanned = trim((string) php_ini_scanned_files());
+
+        $lines = [
+            'php_sapi_name(): '.php_sapi_name(),
+            'PHP_BINARY:      '.(PHP_BINARY !== '' ? PHP_BINARY : '(unknown)'),
+            'PHP_VERSION:     '.PHP_VERSION,
+            'Loaded php.ini:  '.(php_ini_loaded_file() ?: '(none)'),
+            'extension_dir:   '.(ini_get('extension_dir') ?: '(unset)'),
+            'Scanned .ini:    '.($scanned !== '' ? $scanned : '(none)'),
+        ];
+
+        return implode("\n", $lines)."\n";
+    }
+
     public function __invoke(Request $request): Response
     {
         $expected = (string) config('kayaa.deploy_token');
@@ -62,7 +90,11 @@ class DeployController extends Controller
                 'FAILED: this server is missing the PHP extension(s): '
                 .implode(', ', $missing)
                 ."\nEnable them for PHP ".PHP_VERSION
-                ." (cPanel > Select PHP Version > Extensions), then re-run the deploy.\n",
+                ." (cPanel > Select PHP Version > Extensions), then re-run the deploy.\n\n"
+                ."If the box is already ticked there, the web requests are running a\n"
+                ."different PHP build than that page controls. These are the one that\n"
+                ."actually served this request — check them against cPanel:\n\n"
+                .self::phpEnvironmentReport(),
                 500,
             )->header('Content-Type', 'text/plain');
         }
