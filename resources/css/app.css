@@ -27,6 +27,7 @@
 @import './pages/review.css';
 @import './pages/errors.css';
 @import './pages/stub.css';
+@import './pages/site-notice.css';
 
 /* Laravel-only additions, last so they win. */
 @import './laravel.css';

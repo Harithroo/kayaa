@@ -7,6 +7,8 @@
     minimal  — wordmark, "Secure checkout" and a back link; short footer. Checkout and
                thank-you, where nothing should pull the customer out of the flow.
     error    — wordmark only, short footer.
+    notice   — wordmark only, copyright line. The coming-soon and maintenance
+               pages, where every link in the short footer is behind the notice.
 
   `page` is what the prototype wrote as <body data-page="...">: space-separated tokens
   that app.js matches against every [data-nav] link to set aria-current.
@@ -95,6 +97,15 @@
 <body @class([$bodyClass]) @if($page) data-page="{{ $page }}" @endif @if(session('cart_open')) data-cart-open @endif>
 <x-store.icons />
 
+{{-- Only an admin ever sees this: everyone else is on the notice page itself. --}}
+@if(! \App\Support\SiteMode::isLive() && \App\Support\SiteMode::viewerBypasses())
+  <div class="mode-band" role="status">
+    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>
+    <span>{{ \App\Support\SiteMode::label() }} mode is on &mdash; customers see the notice page, not the shop.</span>
+    <a href="{{ \App\Filament\Pages\SiteAvailability::getUrl(panel: 'admin') }}">Change this</a>
+  </div>
+@endif
+
 @if($shell === 'full')
   <x-store.shell.announcement :topbar="$topbar" :free-over="$freeOver" :island-days="$islandDays" />
   <x-store.shell.header :nav-categories="$navCategories" :size-options="$navSizes ?? collect()" :cart-count="$cartCount" :wish-count="$wishCount" />
@@ -132,6 +143,8 @@
   <x-store.shell.quick-add />
   <x-store.shell.tabbar :cart-count="$cartCount" />
   <div class="overlay" data-overlay data-close-layer></div>
+@elseif($shell === 'notice')
+  <x-store.shell.footer-notice />
 @else
   <x-store.shell.footer-minimal />
 @endif

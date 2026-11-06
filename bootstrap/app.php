@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\NoIndex;
+use App\Http\Middleware\SiteAvailability;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(NoIndex::class);
+        // Coming-soon / under-maintenance notice. It goes in the web group, not the
+        // global stack, because it has to run after the session has started: the
+        // admin bypass asks who is signed in. /admin runs its own middleware stack,
+        // so the owner can always get back in and switch the notice off.
+        $middleware->appendToGroup('web', SiteAvailability::class);
 
         // Storefront accounts live under /account, not Laravel's default /login.
         $middleware->redirectGuestsTo(fn () => route('account.login'));
