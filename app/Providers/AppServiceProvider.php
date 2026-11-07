@@ -10,6 +10,7 @@ use App\Models\SizeOption;
 use App\Services\CartService;
 use App\Services\Seo\SeoMeta;
 use App\Services\WishlistService;
+use App\Support\SiteMode;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->bootContactSettings();
         $this->bootStoreSettings();
+        $this->bootSiteMode();
         $this->bootSeoSettings();
         $this->bootPrivatePageMeta();
 
@@ -64,6 +66,44 @@ class AppServiceProvider extends ServiceProvider
             $view->with('navColors', Color::query()->orderBy('name')->get());
             $view->with('popularSearches', []);
         });
+    }
+
+    /**
+     * Site availability (live / coming soon / under maintenance) and the copy
+     * shown on each notice. Same pattern as the settings above: whatever the
+     * admin saved wins over the config/.env defaults.
+     */
+    private function bootSiteMode(): void
+    {
+        $mode = Setting::get('site_mode');
+
+        if ($mode !== null && array_key_exists($mode, SiteMode::LABELS)) {
+            config(['kayaa.site_mode' => $mode]);
+        }
+
+        // Saved as "1"/"0", so "0" (bypass off) has to beat the config default.
+        $bypass = Setting::get('site_mode_admin_bypass');
+
+        if ($bypass !== null) {
+            config(['kayaa.site_mode_admin_bypass' => (bool) (int) $bypass]);
+        }
+
+        $copy = [
+            'coming_soon.heading' => 'coming_soon_heading',
+            'coming_soon.message' => 'coming_soon_message',
+            'coming_soon.date' => 'coming_soon_date',
+            'maintenance.heading' => 'maintenance_heading',
+            'maintenance.message' => 'maintenance_message',
+            'maintenance.back_at' => 'maintenance_back_at',
+        ];
+
+        foreach ($copy as $configKey => $settingKey) {
+            $value = Setting::get($settingKey);
+
+            if ($value !== null) {
+                config(['kayaa.'.$configKey => $value]);
+            }
+        }
     }
 
     /**

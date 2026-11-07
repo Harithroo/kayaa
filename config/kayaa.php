@@ -12,6 +12,23 @@ return [
     'email' => env('MAIL_FROM_ADDRESS', 'hello@kayaa.lk'),
     // "Only N left" on the product page. Admin > Settings > Store overrides this.
     'low_stock_threshold' => (int) env('STORE_LOW_STOCK_THRESHOLD', 5),
+    // Site availability. Admin > Storefront > Site availability overrides all of
+    // this at runtime (see App\Providers\AppServiceProvider::bootSiteMode), so the
+    // owner can put the shop behind a coming-soon or maintenance page themselves.
+    // One of: live, coming_soon, maintenance.
+    'site_mode' => env('STORE_SITE_MODE', 'live'),
+    // Signed-in admins keep browsing the real storefront while a notice is up.
+    'site_mode_admin_bypass' => (bool) env('STORE_SITE_MODE_ADMIN_BYPASS', true),
+    'coming_soon' => [
+        'heading' => 'Something lovely is on the way',
+        'message' => 'We are putting the finishing touches to the shop. Leave us a message and we will tell you the moment the doors open.',
+        'date' => null,
+    ],
+    'maintenance' => [
+        'heading' => 'We are back shortly',
+        'message' => 'The shop is down for a short update. Please try again in a few minutes: your cart and your orders are safe.',
+        'back_at' => null,
+    ],
     // Staging: keep the site out of search engines. Set to false (or remove) in production.
     // Shared secret for POST /deploy/migrate. Empty disables the route.
     'deploy_token' => env('DEPLOY_TOKEN', ''),
