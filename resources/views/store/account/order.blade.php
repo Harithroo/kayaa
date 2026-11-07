@@ -6,7 +6,7 @@
   $cancelled = $order->status === 'cancelled';
   $days = config('kayaa.delivery_days.'.$order->district, config('kayaa.delivery_days.default'));
 @endphp
-<x-layouts.store :title="'Order '.$order->reference" page="account">
+<x-layouts.store page="account" :meta="$meta">
   <div class="container account">
     <div class="account__layout">
       <x-store.account-nav active="orders" />

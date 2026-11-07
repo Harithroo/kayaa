@@ -8,6 +8,7 @@ use App\Models\Color;
 use App\Models\Setting;
 use App\Models\SizeOption;
 use App\Services\CartService;
+use App\Services\Seo\SeoMeta;
 use App\Services\WishlistService;
 use App\Support\SiteMode;
 use Illuminate\Auth\Events\Login;
@@ -28,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
         $this->bootContactSettings();
         $this->bootStoreSettings();
         $this->bootSiteMode();
+        $this->bootSeoSettings();
+        $this->bootPrivatePageMeta();
 
         // Signing in (or registering) folds whatever was saved as a guest into the account,
         // so the cart and wishlist carry over instead of disappearing. Fires for remember-me
@@ -139,5 +142,76 @@ class AppServiceProvider extends ServiceProvider
                 config(['kayaa.'.$key => $value]);
             }
         }
+    }
+
+    /**
+     * Admin-managed search metadata wins over the config/.env defaults, so the
+     * storefront and the JSON-LD builders only ever read config('seo.*').
+     *
+     * @var array<string, string>  settings key => config path
+     */
+    private const SEO_SETTINGS = [
+        'seo_title_suffix' => 'seo.title_suffix',
+        'seo_default_og_image' => 'seo.default_og_image',
+        'org_name' => 'seo.org.name',
+        'org_logo_path' => 'seo.org.logo_path',
+        'org_city' => 'seo.org.city',
+        'org_region' => 'seo.org.region',
+        'org_instagram' => 'seo.org.instagram',
+        'org_facebook' => 'seo.org.facebook',
+    ];
+
+    private function bootSeoSettings(): void
+    {
+        foreach (self::SEO_SETTINGS as $key => $path) {
+            $value = Setting::get($key);
+
+            if ($value !== null) {
+                config([$path => $value]);
+            }
+        }
+    }
+
+    /**
+     * Pages that must never be indexed: anything holding a basket, an address,
+     * an order or an account.
+     *
+     * These get their SeoMeta here rather than in each controller on purpose. A
+     * missing $meta on an indexable page is caught by <x-seo>, which throws in
+     * development; but a private page that quietly shipped without a robots tag
+     * would leak a customer's order into search results, and there is no good
+     * reason to let a future account page be one edit away from that. Set
+     * centrally, it cannot be forgotten.
+     *
+     * @var array<string, string>  view name => page title
+     */
+    private const PRIVATE_PAGES = [
+        'store.cart' => 'Your Bag',
+        'store.checkout' => 'Checkout',
+        'store.thanks' => 'Thank You',
+        'store.track' => 'Track Your Order',
+        'store.account.index' => 'Your Account',
+        'store.account.order' => 'Your Order',
+        'store.account.reviews' => 'Your Reviews',
+        'store.account.profile' => 'Your Details',
+        'store.account.login' => 'Sign In',
+        'store.account.register' => 'Create an Account',
+        'store.account.forgot-password' => 'Reset Your Password',
+        'store.account.reset-password' => 'Reset Your Password',
+    ];
+
+    private function bootPrivatePageMeta(): void
+    {
+        View::composer(array_keys(self::PRIVATE_PAGES), function ($view) {
+            // A controller that passes its own $meta wins; this is the floor,
+            // not an override.
+            if (isset($view->getData()['meta'])) {
+                return;
+            }
+
+            $title = self::PRIVATE_PAGES[$view->getName()] ?? null;
+
+            $view->with('meta', SeoMeta::noindex(request(), $title));
+        });
     }
 }

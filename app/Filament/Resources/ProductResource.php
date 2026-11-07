@@ -4,33 +4,35 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
-use BackedEnum;
 use App\Models\ProductVariant;
+use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\EditAction;
-use Filament\Notifications\Notification;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Filters\Filter;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class ProductResource extends Resource
@@ -112,6 +114,45 @@ class ProductResource extends Resource
                         ->itemLabel(fn (array $state) => $state['sku'] ?? null),
                 ]),
 
+            Section::make('SEO')
+                ->description('How this product appears in Google and when its link is shared. Every field is optional — left blank, the storefront writes one from the product itself.')
+                ->collapsed()
+                ->columns(2)
+                ->schema([
+                    TextInput::make('meta_title')
+                        ->label('Search title')
+                        ->maxLength(70)
+                        ->live(debounce: 500)
+                        ->helperText(fn (?string $state) => 'Shown as the blue link in Google. Around 60 characters reads best; 70 is the limit. '.mb_strlen((string) $state).'/70 used.')
+                        // The placeholder is the value that actually ships when
+                        // this is left blank, so the admin can see it rather
+                        // than guess at it.
+                        ->placeholder(fn (?Product $record) => $record?->metaTitle() ?? 'Generated from the product name and size range')
+                        ->columnSpanFull(),
+                    Textarea::make('meta_description')
+                        ->label('Search description')
+                        ->maxLength(170)
+                        ->rows(2)
+                        ->live(debounce: 500)
+                        ->helperText(fn (?string $state) => 'Not a ranking factor — this is the sales pitch under the link. Around 155 characters. '.mb_strlen((string) $state).'/170 used.')
+                        ->placeholder(fn (?Product $record) => $record?->metaDescription() ?? 'Generated from the product description')
+                        ->columnSpanFull(),
+                    Select::make('og_image_id')
+                        ->label('Share image')
+                        ->helperText('Used when the link is pasted into WhatsApp or Instagram. Defaults to the first photo.')
+                        ->options(fn (?Product $record) => $record
+                            ? $record->images()->get()->mapWithKeys(fn ($image) => [
+                                $image->id => $image->alt ?: 'Photo '.($image->position + 1),
+                            ])->all()
+                            : [])
+                        ->placeholder('First photo')
+                        ->hidden(fn (?Product $record) => $record === null),
+                    Toggle::make('noindex')
+                        ->label('Hide from search engines')
+                        ->helperText('The product stays on the site and stays buyable; it just will not appear in search results.')
+                        ->inline(false),
+                ]),
+
             Section::make('Photos')
                 ->description('4:5 portrait, consistent background. First photo is the card image. Optionally tie a photo to a colour.')
                 ->schema([
@@ -121,7 +162,8 @@ class ProductResource extends Resource
                                 ->disk('public')->directory('products')
                                 ->imageEditor()->imageEditorAspectRatios(['4:5'])
                                 ->maxSize(2048)->required(),
-                            TextInput::make('alt')->label('Alt text')->maxLength(160),
+                            TextInput::make('alt')->label('Alt text')->required()->maxLength(160)
+                                ->helperText('Describe the garment as you would to someone who cannot see it, e.g. "Butter yellow ribbed romper, long sleeves". Read aloud by screen readers and read by Google.'),
                             Select::make('color_id')->label('Colour')->relationship('color', 'name')->preload(),
                         ])
                         ->columns(3)
@@ -139,38 +181,65 @@ class ProductResource extends Resource
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['images', 'variants', 'category']))
             ->columns([
-                ImageColumn::make('thumb')->label('')->disk('public')->square()->size(48)
-                    ->state(fn (Product $r) => $r->images->first()?->path),
-                TextColumn::make('name')->searchable()->sortable()
-                    ->description(fn (Product $r) => $r->variants->pluck('sku')->take(2)->implode(', ')
-                        .($r->variants->count() > 2 ? '…' : '')),
-                TextColumn::make('category.name')->sortable(),
-                TextColumn::make('price')->label('Price')
-                    ->state(function (Product $r) {
-                        $prices = $r->variants->where('is_active', true)->pluck('price');
-                        if ($prices->isEmpty()) {
-                            return '—';
-                        }
+                Split::make([
+                    ImageColumn::make('thumb')->label('')->disk('public')->square()->size(48)
+                        ->state(fn (Product $r) => $r->images->first()?->path)
+                        ->grow(false),
+                    Stack::make([
+                        TextColumn::make('name')->searchable()->sortable()
+                            ->weight('bold')->size(TextSize::Medium)
+                            ->description(fn (Product $r) => $r->variants->pluck('sku')->take(2)->implode(', ')
+                                .($r->variants->count() > 2 ? '…' : '')),
+                        TextColumn::make('category.name')->sortable()
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedTag),
+                    ])->space(1)->grow(),
+                    Split::make([
+                        TextColumn::make('price')->label('Price')
+                            ->weight('bold')->size(TextSize::Medium)
+                            ->grow(false)
+                            ->state(function (Product $r) {
+                                $prices = $r->variants->where('is_active', true)->pluck('price');
+                                if ($prices->isEmpty()) {
+                                    return '—';
+                                }
 
-                        return $prices->min() === $prices->max()
-                            ? money($prices->min())
-                            : money($prices->min()).' – '.money($prices->max());
-                    }),
-                TextColumn::make('variants_sum_stock')->sum('variants', 'stock')->label('Stock')->sortable()
-                    ->badge()
-                    ->color(fn ($state) => (int) $state === 0 ? 'danger' : ((int) $state <= $low() ? 'warning' : 'success'))
-                    ->formatStateUsing(fn ($state) => (int) $state === 0 ? 'Sold out' : (string) (int) $state)
-                    ->description(function (Product $r) use ($low) {
-                        $n = $r->variants->where('is_active', true)->filter(fn ($v) => $v->stock <= $low())->count();
+                                return $prices->min() === $prices->max()
+                                    ? money($prices->min())
+                                    : money($prices->min()).' – '.money($prices->max());
+                            }),
+                        TextColumn::make('variants_sum_stock')->sum('variants', 'stock')->label('Stock')->sortable()
+                            ->badge()
+                            ->color(fn ($state) => (int) $state === 0 ? 'danger' : ((int) $state <= $low() ? 'warning' : 'success'))
+                            ->formatStateUsing(fn ($state) => (int) $state === 0 ? 'Sold out' : (int) $state.' in stock')
+                            ->description(function (Product $r) use ($low) {
+                                $n = $r->variants->where('is_active', true)->filter(fn ($v) => $v->stock <= $low())->count();
 
-                        return $n > 0 ? "{$n} ".str('variant')->plural($n).' low or out' : null;
-                    }),
-                TextColumn::make('status')->badge()->color(fn (string $state) => match ($state) {
-                    'active' => 'success', 'draft' => 'gray', default => 'warning',
-                }),
-                IconColumn::make('is_featured')->boolean()->label('Featured')->toggleable(isToggledHiddenByDefault: true),
-                IconColumn::make('is_new')->boolean()->label('New')->toggleable(),
-                TextColumn::make('updated_at')->since()->sortable(),
+                                return $n > 0 ? "{$n} ".str('variant')->plural($n).' low or out' : null;
+                            })->grow(false),
+                    ])->grow(false),
+                    Split::make([
+                        TextColumn::make('status')->badge()
+                            ->formatStateUsing(fn (string $state) => ucfirst($state))
+                            ->color(fn (string $state) => match ($state) {
+                                'active' => 'success', 'draft' => 'gray', default => 'warning',
+                            })
+                            ->grow(false),
+                        // One column for both flags, as an array of labels. A
+                        // per-flag badge drew an empty pill when the flag was
+                        // false — a badge renders whatever it is given, null
+                        // included — while an empty array renders nothing.
+                        TextColumn::make('flags')->label('Flags')->badge()->color('info')
+                            ->state(fn (Product $r) => array_values(array_filter([
+                                $r->is_featured ? 'Featured' : null,
+                                $r->is_new ? 'New' : null,
+                            ])))
+                            ->toggleable()
+                            ->grow(false),
+                        TextColumn::make('updated_at')->since()->sortable()
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedClock)
+                            ->grow(false),
+                    ])->grow(false),
+                ])->from('md'),
             ])
             ->defaultSort('updated_at', 'desc')
             ->filters([

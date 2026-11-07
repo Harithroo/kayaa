@@ -4,8 +4,7 @@
      TODO before launch: the founder's story is Kayaa's to write, and the fabric
      claims (including any OEKO-TEX certification) need confirming before they
      are stated as fact, so neither is asserted here. --}}
-<x-store.content-page title="Our story" heading="Our story" crumb="Our story" page="about"
-  metaDescription="Kayaa is a Sri Lankan baby clothing brand: soft, honest clothing made for Sri Lankan weather, from newborn up to three years."
+<x-store.content-page :meta="$meta" title="Our story" heading="Our story" crumb="Our story" page="about"
   lede="Kayaa is a Sri Lankan baby clothing brand. Soft, honest clothing made for Sri Lankan weather, for babies from newborn up to three years.">
   {{-- No table of contents: the prototype's about page runs full width. --}}
 

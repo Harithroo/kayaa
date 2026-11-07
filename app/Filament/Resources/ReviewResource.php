@@ -17,8 +17,11 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -81,15 +84,33 @@ class ReviewResource extends Resource
     {
         return $table
             ->columns([
-                IconColumn::make('is_approved')->label('')->boolean()
-                    ->trueIcon(Heroicon::CheckCircle)->falseIcon(Heroicon::OutlinedClock)
-                    ->trueColor('success')->falseColor('warning'),
-                TextColumn::make('created_at')->dateTime('d M, H:i')->sortable(),
-                TextColumn::make('product.name')->searchable()->limit(28),
-                TextColumn::make('rating')->formatStateUsing(fn (int $state) => str_repeat('★', $state).str_repeat('☆', 5 - $state))->sortable(),
-                TextColumn::make('name')->label('Customer')->searchable()
-                    ->description(fn (Review $r) => $r->is_verified_purchase ? 'Verified purchase' : null),
-                TextColumn::make('body')->label('Review')->limit(60)->wrap(),
+                Split::make([
+                    IconColumn::make('is_approved')->label('')->boolean()
+                        ->trueIcon(Heroicon::CheckCircle)->falseIcon(Heroicon::OutlinedClock)
+                        ->trueColor('success')->falseColor('warning')
+                        ->grow(false),
+                    Stack::make([
+                        TextColumn::make('product.name')->searchable()->limit(40)
+                            ->weight('bold')->size(TextSize::Medium),
+                        Split::make([
+                            TextColumn::make('rating')->sortable()->color('warning')
+                                ->formatStateUsing(fn (int $state) => str_repeat('★', $state).str_repeat('☆', 5 - $state))
+                                // The reviewer belongs beside the stars, not on a
+                                // line of its own.
+                                ->description(fn (Review $r) => $r->name
+                                    .($r->is_verified_purchase ? ' · Verified purchase' : ''))
+                                ->grow(false),
+                            TextColumn::make('created_at')->dateTime('d M, H:i')->sortable()
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedClock)
+                                ->grow(false),
+                        ]),
+                        // Carries the reviewer-name search that the folded-away
+                        // `name` column used to provide.
+                        TextColumn::make('body')->label('Review')->limit(100)->wrap()
+                            ->searchable(['name', 'body'])
+                            ->size(TextSize::Small)->color('gray'),
+                    ])->space(1)->grow(),
+                ])->from('md'),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([

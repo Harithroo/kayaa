@@ -1,5 +1,5 @@
 {{-- Forgot password, from the prototype's html/account/forgot-password.html. --}}
-<x-layouts.store title="Forgot password" page="account login">
+<x-layouts.store page="account login" :meta="$meta">
   <div class="container auth" data-auth-page="forgot">
     <div class="auth-card">
       <h1>Forgot your password?</h1>

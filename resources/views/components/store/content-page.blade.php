@@ -1,8 +1,8 @@
-@props(['title', 'heading' => null, 'lede' => null, 'crumb' => null, 'toc' => null, 'page' => null, 'metaDescription' => null])
+@props(['title', 'meta' => null, 'heading' => null, 'lede' => null, 'crumb' => null, 'toc' => null, 'page' => null])
 {{-- The shared shell for the written pages (prototype: html/delivery.html and the
      rest). `toc` is an optional ['#anchor' => 'Label'] list; content.js keeps the
      disclosure open on a wide screen and highlights the section being read. --}}
-<x-layouts.store :title="$title" :page="$page" :metaDescription="$metaDescription">
+<x-layouts.store :page="$page" :meta="$meta">
   <div class="container content">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <ol>

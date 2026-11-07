@@ -5,8 +5,7 @@
      TODO before launch: the registered business name and registered address are
      facts only Kayaa knows, and the prototype left them as markers. They are
      marked below. Have a Sri Lankan lawyer review this page. --}}
-<x-store.content-page title="Privacy" heading="Privacy policy" page="privacy"
-  metaDescription="What personal information Kayaa collects when you shop with us, why we need it, who we share it with and what choices you have."
+<x-store.content-page :meta="$meta" title="Privacy" heading="Privacy policy" page="privacy"
   :lede="'This policy explains what personal information Kayaa collects when you shop with us, why we need it, who we share it with and what choices you have. We have kept it as plain as we can. If anything is unclear, write to us at '.config('kayaa.email').' and we will explain.'"
   :toc="[
     '#who-we-are' => 'Who we are',

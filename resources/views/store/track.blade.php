@@ -13,7 +13,7 @@
   $cancelled = $order && $order->status === 'cancelled';
   $waHref = \App\Support\StoreContact::whatsappHref();
 @endphp
-<x-layouts.store title="Track your order" page="track">
+<x-layouts.store page="track" :meta="$meta">
   <div class="container track" data-track-page>
     <h1>Track your order</h1>
     <p class="track__lede">Enter the order number from your confirmation and the mobile number you used.</p>

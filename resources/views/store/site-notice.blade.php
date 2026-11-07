@@ -9,8 +9,12 @@
   $wa = \App\Support\StoreContact::whatsapp();
   $waHref = \App\Support\StoreContact::whatsappHref();
   $date = $notice['date'] ?? null;
+  // Served by the middleware, outside the normal controller flow, so the page
+  // builds its own metadata. noindex,nofollow: a placeholder must never be
+  // indexed in place of the real pages (the response carries the header too).
+  $meta = \App\Services\Seo\SeoMeta::noindex(request(), $notice['heading']);
 @endphp
-<x-layouts.store :title="$notice['heading']" shell="notice" :meta-description="$notice['message']">
+<x-layouts.store shell="notice" :meta="$meta">
   <div class="container site-notice">
     <div class="site-notice__card">
       <span class="site-notice__disc">

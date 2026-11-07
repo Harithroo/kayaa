@@ -11,8 +11,11 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\FontFamily;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ColorColumn;
+use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
@@ -44,9 +47,16 @@ class ColorResource extends Resource
     {
         return $table
             ->columns([
-                ColorColumn::make('hex')->label(''),
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('hex'),
+                Split::make([
+                    ColorColumn::make('hex')->label('')->grow(false),
+                    TextColumn::make('name')->searchable()->weight('bold')->size(TextSize::Medium)
+                        ->grow(),
+                    TextColumn::make('hex')->copyable()
+                        ->size(TextSize::Small)->color('gray')->fontFamily(FontFamily::Mono)
+                        ->grow(false),
+                    // No from(): a swatch, a name and a hex code fit on one
+                    // phone row, so there is nothing to gain by stacking them.
+                ]),
             ])
             ->recordActions([EditAction::make()]);
     }

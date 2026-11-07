@@ -16,8 +16,10 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -66,11 +68,26 @@ class FaqResource extends Resource
     {
         return $table
             ->columns([
-                IconColumn::make('is_active')->label('')->boolean(),
-                TextColumn::make('placement')->badge()->formatStateUsing(fn (string $state) => Faq::PLACEMENTS[$state] ?? $state),
-                TextColumn::make('question')->searchable()->limit(60)->wrap(),
-                TextColumn::make('target')->label('Shows on')->state(fn (Faq $r) => $r->targetLabel()),
-                TextColumn::make('position')->sortable(),
+                Split::make([
+                    Stack::make([
+                        TextColumn::make('question')->searchable()->limit(80)->wrap()
+                            ->weight('bold')->size(TextSize::Medium),
+                        TextColumn::make('target')->label('Shows on')->state(fn (Faq $r) => $r->targetLabel())
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedTag),
+                    ])->space(1)->grow(),
+                    Split::make([
+                        TextColumn::make('is_active')->label('Active')->badge()
+                            ->formatStateUsing(fn ($state) => $state ? 'Active' : 'Hidden')
+                            ->color(fn ($state) => $state ? 'success' : 'gray')
+                            ->grow(false),
+                        TextColumn::make('placement')->badge()->color('gray')
+                            ->formatStateUsing(fn (string $state) => Faq::PLACEMENTS[$state] ?? $state)
+                            ->grow(false),
+                        TextColumn::make('position')->sortable()
+                            ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedHashtag)
+                            ->grow(false),
+                    ])->grow(false),
+                ])->from('md'),
             ])
             ->defaultSort('position')
             ->reorderable('position')

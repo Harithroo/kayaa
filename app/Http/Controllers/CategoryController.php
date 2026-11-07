@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\Product;
+use App\Services\Seo\SeoMeta;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
     /** /categories — every active category, grouped by department, with live product counts. */
-    public function index(): View
+    public function index(Request $request): View
     {
         $departments = Department::where('is_active', true)
             ->orderBy('position')
@@ -32,6 +34,9 @@ class CategoryController extends Controller
             }
         }
 
-        return view('store.categories', ['departments' => $departments]);
+        return view('store.categories', [
+            'departments' => $departments,
+            'meta' => SeoMeta::forPage('categories', $request),
+        ]);
     }
 }

@@ -12,7 +12,7 @@
   // A line whose variant has gone means checkout cannot proceed until it is removed.
   $blocked = $lines->contains(fn ($line) => ! $line->variant->inStock());
 @endphp
-<x-layouts.store title="Your bag" page="cart">
+<x-layouts.store page="cart" :meta="$meta">
   <div class="container cart-page" data-cart-page data-low-stock-threshold="{{ $low }}">
     <h1 class="cart-page__title" data-cart-title>Your bag ({{ $count }} {{ Str::plural('item', $count) }})</h1>
 

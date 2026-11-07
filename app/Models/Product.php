@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Concerns\HasSeoMeta;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,14 +15,17 @@ use Illuminate\Support\Str;
 
 class Product extends Model
 {
+    use HasSeoMeta;
+
     protected $fillable = [
         'category_id', 'size_scale_id', 'name', 'slug', 'collection_label',
         'description', 'fabric_care', 'status', 'is_featured', 'is_new',
+        'meta_title', 'meta_description', 'og_image_id', 'noindex',
     ];
 
     protected function casts(): array
     {
-        return ['is_featured' => 'boolean', 'is_new' => 'boolean'];
+        return ['is_featured' => 'boolean', 'is_new' => 'boolean', 'noindex' => 'boolean'];
     }
 
     protected static function booted(): void

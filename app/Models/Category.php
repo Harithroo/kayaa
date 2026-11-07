@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Concerns\HasSeoMeta;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,11 +10,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-    protected $fillable = ['department_id', 'parent_id', 'name', 'slug', 'description', 'position', 'is_active'];
+    use HasSeoMeta;
+
+    protected $fillable = [
+        'department_id', 'parent_id', 'name', 'slug', 'description', 'position', 'is_active',
+        'meta_title', 'meta_description', 'noindex',
+    ];
 
     protected function casts(): array
     {
-        return ['is_active' => 'boolean'];
+        return ['is_active' => 'boolean', 'noindex' => 'boolean'];
     }
 
     public function department(): BelongsTo

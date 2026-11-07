@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\Seo\SeoMeta;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -49,7 +50,11 @@ class SearchController extends Controller
             ->with('department')
             ->limit(6)->get();
 
-        return view('store.search', compact('q', 'results', 'alsoMatches'));
+        // Search results are noindex,follow: the query strings are endless and
+        // the pages are thin, but the products they link to are worth crawling.
+        $meta = SeoMeta::forPage('search', $request);
+
+        return view('store.search', compact('q', 'results', 'alsoMatches', 'meta'));
     }
 
     /**

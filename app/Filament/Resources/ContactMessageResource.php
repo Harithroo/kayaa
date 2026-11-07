@@ -11,8 +11,11 @@ use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -50,12 +53,29 @@ class ContactMessageResource extends Resource
     {
         return $table
             ->columns([
-                IconColumn::make('is_read')->label('')->boolean()->trueIcon(Heroicon::OutlinedEnvelopeOpen)->falseIcon(Heroicon::Envelope),
-                TextColumn::make('created_at')->dateTime('d M, H:i')->sortable(),
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('contact')->searchable(),
-                TextColumn::make('order_reference')->placeholder('—'),
-                TextColumn::make('message')->limit(60),
+                Split::make([
+                    IconColumn::make('is_read')->label('')->boolean()
+                        ->trueIcon(Heroicon::OutlinedEnvelopeOpen)->falseIcon(Heroicon::Envelope)
+                        ->grow(false),
+                    Stack::make([
+                        // Searches both columns, so folding `contact` into this
+                        // card line does not lose the old contact search.
+                        TextColumn::make('name')->searchable(['name', 'contact'])
+                            ->weight('bold')->size(TextSize::Medium)
+                            ->description(fn (ContactMessage $r) => $r->contact),
+                        TextColumn::make('message')->limit(80)->wrap()
+                            ->size(TextSize::Small)->color('gray'),
+                        Split::make([
+                            TextColumn::make('order_reference')
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedHashtag)
+                                ->placeholder('')
+                                ->grow(false),
+                            TextColumn::make('created_at')->dateTime('d M, H:i')->sortable()
+                                ->size(TextSize::Small)->color('gray')->icon(Heroicon::OutlinedClock)
+                                ->grow(false),
+                        ]),
+                    ])->space(1)->grow(),
+                ])->from('md'),
             ])
             ->defaultSort('created_at', 'desc')
             ->recordActions([
