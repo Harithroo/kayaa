@@ -55,13 +55,22 @@ export function states() {
   add('header suggestions open (gift, row highlighted)', 'index.html', async (pg) => { const f = pg.locator('#header-q'); if (!(await f.isVisible())) return 'na'; await f.click(); await pg.keyboard.type('gift'); await pg.waitForTimeout(500); await pg.keyboard.press('ArrowDown'); });
   add('search page suggestions inline (phone)', 'search.html?focus=1', async (pg) => { if ((await pg.viewportSize()).width >= 900) return 'na'; await pg.keyboard.type('gift'); await pg.waitForTimeout(500); });
   add('404 suggestions open', '404.html', async (pg) => { await pg.locator('#error-q').click(); await pg.keyboard.type('bod'); await pg.waitForTimeout(500); });
+  add('home rail: a hanger turned to face front', 'index.html', async (pg) => {
+    await pg.locator('#rail').scrollIntoViewIfNeeded(); await pg.waitForTimeout(3800);
+    const hit = pg.locator('.hanger .hit').nth(3);
+    if ((await pg.viewportSize()).width < 900) await hit.tap(); else await hit.hover();
+    await pg.waitForTimeout(1600);
+  });
   add('track result (cash, paid)', 'track.html?ref=KY-260930-C0D2', async (pg) => { await pg.fill('#phone', '071 234 5678'); await pg.locator('[data-track-form] button[type=submit]').click(); await pg.waitForSelector('[data-track-result]:not([hidden])'); });
   return s;
 }
 
 export async function open(page, st, withBag = true) {
+  // Home plays its preloader on the first visit of a session: the audits mark it as already seen (the preloader has its own test, tools/qa/home.mjs)
+  if (!page.__introSeen) { await page.addInitScript(() => { try { sessionStorage.setItem('kayaa-intro', '1'); } catch (e) { /* storage blocked */ } }); page.__introSeen = true; }
   if (withBag) await seedBag(page);
   await page.goto(BASE + st.url, { waitUntil: 'networkidle' });
+  if (/^index.html/.test(st.url)) await page.waitForTimeout(3500);   // Home: let the hero entrance finish (an audit of a half-faded text measures the fade, not the page)
   if (st.prepare) return await st.prepare(page);   // 'na' = the state does not exist at this viewport (for example the mega menu on a phone)
 }
 

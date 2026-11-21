@@ -13,6 +13,7 @@
 //   size-rows                                 <tr> rows of the size table on the product page (the rows come from docs/content/size-guide.md)
 //   product-tags SLUG                         the "Tags" chip row of the product page (links to shop.html?tag=)
 //   size-guide-slider [panel]                 the three-step "How to find your size" slider (tools/content.mjs; used in the product page panel)
+//   home-rail | home-rail-links | home-size-range | home-age-chips | home-age-text | home-age-data   the Home rail, the size range in the hero tag and the shop-by-age explorer
 //   wardrobe-items | wardrobe-ticker          the seven hanging garments and the optional message strip of html/mockups/wardrobe.html (prototype only)
 //   footer-clothesline                        the footer's clothesline art (html/assets/img/footer/footer-clothesline.svg, inlined)
 //   decisions                                 the open-decisions table for html/review-decisions.html (tools/build-decisions.mjs)
@@ -61,6 +62,31 @@ const tone = (n) => `var(--tone-${n})`;
 
 function rangeText(cat, p) {
   return `${cat.sizeBySlug[p.from].lo}–${cat.sizeBySlug[p.to].hi}`;
+}
+
+// Home: per-category count and size range ("NB–3Y"), the accessible name of a hanger, and the photo cut-out path when the file exists
+function homeRailInfo(cat, c, root, repo) {
+  const items = cat.products.filter((p) => p.category === c.slug);
+  const count = items.length;
+  const lo = cat.sizes[Math.min(...items.map((p) => cat.sizeIndex[p.from]))].lo;
+  const hi = cat.sizes[Math.max(...items.map((p) => cat.sizeIndex[p.to]))].hi;
+  const range = `${lo}–${hi}`;
+  const file = path.join(repo, 'html', 'assets', 'img', 'rail', c.slug + '.webp');
+  return { count, range, label: `${c.label}, ${count} ${count === 1 ? 'style' : 'styles'}, sizes ${range}`, photo: fs.existsSync(file) ? `${root}assets/img/rail/${c.slug}.webp` : '' };
+}
+// Home: the nine ages with their height and weight ranges (numbers read from the size chart; "Up to X" starts at the scale minimum, 45 cm and 2 kg)
+function homeAges(cat, repo) {
+  const rows = sizeTableRows(repo);
+  const num = (s) => (String(s).match(/[0-9]+([.][0-9]+)?/g) || []).map(Number);
+  const range = (s, min) => { const n = num(s); return /^up to/i.test(String(s).trim()) ? [min, n[0]] : [n[0], n[1]]; };
+  const garment = ['newborn', 'newborn', 'bodysuit', 'bodysuit', 'bodysuit', 'set', 'set', 'set', 'set'];
+  return cat.sizes.map((s, i) => {
+    const row = rows.find((x) => x.size === s.label);
+    if (!row) throw new Error('size chart in docs/content/size-guide.md has no row for ' + s.label);
+    const m = /^([0-9]+)–([0-9]+)m$/.exec(s.label), y = /^([0-9]+)Y$/.exec(s.label);
+    const name = m ? `${m[1]}–${m[2]} months` : y ? `${y[1]} ${y[1] === '1' ? 'year' : 'years'}` : s.label;
+    return { name, height: row.height, weight: row.weight, h: range(row.height, 45), w: range(row.weight, 2), g: garment[i] || 'set' };
+  });
 }
 
 function card(cat, cfg, p, root) {
@@ -132,6 +158,41 @@ export function generate(name, args, ctx) {
     case 'size-links-drawer':
       return S.map((s) => `<li><a href="${sizeHref(s)}">${esc(s.label)}</a></li>`).join('\n');
     case 'decisions': return renderDecisions(ctx.repo);
+    // ---- Home (html/index.html): the category rail, the shop-by-age explorer and the hero tag ----
+    case 'home-rail': {
+      // one real link per category: the drawing is made in the browser by assets/js/home/garments.js from the data-* values; a photo cut-out at
+      // html/assets/img/rail/{slug}.webp replaces the drawing when it exists (data-photo)
+      return C.map((c, i) => {
+        const r = homeRailInfo(cat, c, root, ctx.repo);
+        const v = c.rail || {};
+        const photo = r.photo ? ` data-photo="${r.photo}"` : '';
+        return `<a class="hanger" href="${catHref(c)}" draggable="false" data-i="${i}" data-name="${esc(c.label)}" data-count="${r.count}" data-range="${esc(r.range)}" data-type="${esc(v.type || 'bodysuit')}" data-c="${esc(v.c || 'white')}"${v.c2 ? ` data-c2="${esc(v.c2)}"` : ''}${photo} aria-label="${esc(r.label)}"><span class="turn"></span><span class="hit"></span></a>`;
+      }).join('\n');
+    }
+    case 'home-rail-links':
+      // what a browser without scripts shows instead of the rail
+      return C.map((c) => {
+        const r = homeRailInfo(cat, c, root, ctx.repo);
+        return `<li><a href="${catHref(c)}">${esc(c.label)} <span>${r.count} ${r.count === 1 ? 'style' : 'styles'} · ${esc(r.range)}</span></a></li>`;
+      }).join('\n');
+    case 'home-size-range':
+      return `${esc(S[0].label)}, ${esc(S[1].label)} … ${esc(S[S.length - 1].label)}`;
+    case 'home-age-chips':
+      return S.map((s, i) => `<button class="age-chip" type="button" aria-pressed="${i === 1}" data-i="${i}">${esc(s.label)}</button>`).join('\n');
+    case 'home-age-text': {
+      const a = homeAges(cat, ctx.repo)[1];
+      return `<p class="age-name" id="ageName">${esc(a.name)}</p>
+<p class="age-meta" id="ageMeta">Height <b>${esc(a.height)}</b> · Weight <b>${esc(a.weight)}</b></p>
+<div class="age-actions">
+  <a class="btn btn--primary" id="ageShop" href="${sizeHref(S[1])}">Shop ${esc(S[1].label)}</a>
+  <a class="link-arrow" href="${root}size-guide.html">Size guide ${icon('arrow-right', 16)}</a>
+</div>`;
+    }
+    case 'home-age-data': {
+      // the nine sizes for the explorer: names, the shop-by-size URLs, and height and weight from the size chart (docs/content/size-guide.md)
+      const data = homeAges(cat, ctx.repo).map((a, i) => ({ slug: S[i].slug, label: S[i].label, name: a.name, href: sizeHref(S[i]), height: a.height, weight: a.weight, h: a.h, w: a.w, g: a.g }));
+      return `<script type="application/json" id="age-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
+    }
     case 'wardrobe-items': {
       // html/mockups/wardrobe.html (prototype only): one hanging garment per category; the counts and the size range come from the products.
       // Each item has two layers that share the hook ring's centre as their pivot: the back half of the ring (behind the rod) and the front

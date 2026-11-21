@@ -400,3 +400,27 @@ Follows the client's reference reel: an open, minimal stage with ONE thin rod, s
 | Optional ticker (`.wardrobe-ticker`, off by default) | wardrobe.html, `gen: wardrobe-ticker` | A slim lilac strip under the stage with four messages read from tools/site-config.json (free delivery over the threshold, swaps within the return window, secure card payment, island-wide delivery). It scrolls slowly only when motion is allowed, with a visible Pause / Play button (`aria-pressed`, WCAG 2.2.2); with reduced motion it is static and wrapped and the button is not shown. Ink on `#EAE0F2`, 9:1. |
 | Tokens | wardrobe.css | `--wardrobe-wall`, `--wardrobe-wall-deep`, `--wardrobe-panel`, `--wardrobe-rail`, `--wardrobe-wood` (lilac, used by the doors), `--wardrobe-shadow`. |
 | Weight | | See the report: wardrobe.js about 5.7 KB gzip, wardrobe.css about 7.5 KB gzip, no raster images. |
+
+## Home page, part A (preloader, hero, trust strip, Shop by age, category rail)
+
+Built from design/home-v2-concept.html (the client-approved reference); the header and footer of that file are stand-ins and were not ported. Part B (fabrics, marquee, products, promos, reviews, size help) comes next.
+
+| Part | Where | Notes |
+|---|---|---|
+| Preloader (`#intro`) | index.html, home-core.js, home.css | Plays once per session (`sessionStorage kayaa-intro`), never under reduced motion; a click skips it; hidden with a class (`out`, then `gone`). `html.intro-on` (set by the head script before first paint) offsets the hero delays by `--intro` (1500 ms). |
+| Hero | home-hero.js, home.css | h1 words rise (server-written spans), an underline draws under the last word, an arch with a washing line (three pegged garments, a breeze, pointer gusts, light scroll parallax), drifting blobs, three tags: the size range, the free-delivery threshold, "Feel the fabrics". The loop sleeps off-screen and while the tab is hidden. |
+| Trust strip | index.html, home.css | The same items as before; the icons draw in once (`pathLength=1`). |
+| Shop by age | home-age.js, `gen: home-age-*` | Nine chips (`aria-pressed`), name, counted height and weight, a growing garment, a "Shop {age}" link to the size page. Data from the size chart. |
+| Category rail | home-rail.js, home.css, `gen: home-rail` | Replaces "Shop by category". Seven hangers (real links, accessible name "{name}, {n} styles, sizes {range}"), side-on at rest and turning to face front on hover, keyboard `:focus-visible` or the first touch tap; springs, a damped pendulum and drag; wardrobe doors; a caption with the name, count, range and link; fit layout when it fits, a scroller with arrows when it does not; roving tabindex (arrows, Home, End, Enter); an "All categories" link; a no-JS list. |
+| Garments | assets/js/home/garments.js | One file (`window.KayaaGarments`): garment drawings, canvas fabric textures, the hanger and hook. The SVG pattern defs are written once per page. |
+| Photo slot | docs/rail-photo-guide.md | html/assets/img/rail/{slug}.webp replaces the drawing. |
+| Tokens and rules | home.css | `--wall`, `--ease-out`, `--spring` (Home only). Breakpoints in em. No green, yellow, orange, peach, brown or wood tones. |
+
+### Changes from the concept
+- The caption has no `aria-live` (it duplicated the focused hanger's name for screen readers); the hanger links carry the full name.
+- The concept's motion pill and hero facts row are not ported (the facts are the hero tags; Part B has the rest).
+- The hero loop also restarts on `visibilitychange`.
+- The rail stage height has a CSS default equal to the script's formula, so nothing moves when the script runs (CLS 0).
+- Data wins over the concept's numbers: style counts, size ranges (Napkins 3 styles) and the height/weight of each age come from catalogue.json and the size chart.
+- Hero and category photo slots on Home are retired (the hero is the arch; the rail has its own slot).
+- The hero tag links to `#fabrics`, which arrives with Part B.

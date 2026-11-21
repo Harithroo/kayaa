@@ -61,7 +61,24 @@
   <link rel="stylesheet" href="assets/css/suggest.css?v=314384f7">
   <link rel="stylesheet" href="assets/css/footer.css?v=ca45fd6e">
   <!-- /partial: styles -->
-  <link rel="stylesheet" href="assets/css/pages/home.css?v=b950cd5a">
+  <script>
+    /* Motion: follow the device setting. Decided before first paint so nothing flashes (Home only).
+       html.rm = reduced motion (everything shows its finished state), html.intro-on = the preloader plays (first visit per session, never under reduced motion).
+       sessionStorage "kayaa-motion" = "on" or "off" forces the motion setting for this tab (used by the tests). */
+    (function () {
+      var d = document.documentElement, rm = false, ov = null, seen = null;
+      try { ov = sessionStorage.getItem('kayaa-motion'); seen = sessionStorage.getItem('kayaa-intro'); } catch (e) { /* storage blocked */ }
+      rm = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+      d.classList.add('js');
+      if (rm) d.classList.add('rm-device');
+      if (ov === 'on') rm = false;
+      if (ov === 'off') rm = true;
+      if (rm) d.classList.add('rm');
+      if (!rm && !seen) d.classList.add('intro-on');
+      window.KAYAA_RM = rm;
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/css/pages/home.css?v=57a27f0f">
 </head>
 <body data-page="home">
   <!-- partial: sprite -->
@@ -385,155 +402,185 @@
 
   <main id="main" tabindex="-1">
 
-    <!-- Hero -->
+    <!-- Preloader: first visit per session only (html.intro-on is set by the head script, never under reduced motion). Decorative: aria-hidden,
+         the page underneath is fully rendered. A click skips it. -->
+    <div class="intro" id="intro" aria-hidden="true">
+      <svg viewBox="0 0 560 170"><path class="i-line" pathLength="1" d="M10 30 Q 280 70 550 30"/><g id="introGs"></g></svg>
+      <div class="i-word"><span>k</span><span>a</span><span>y</span><span>a</span><span>a</span></div>
+      <small>Soft cottons for the first two years</small>
+    </div>
+
+    <!-- Hero: the words rise in turn (CSS, delayed by the preloader), an accent underline draws under the last word, and a washing line sways in an arch
+         (assets/js/home/home-hero.js). The hero image slot (photo: hero) is retired: the arch replaces it. -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="container hero__grid">
         <div class="hero__copy">
-          <p class="eyebrow">New arrivals</p>
-          <h1 class="display" id="hero-title">Soft cottons for the first two years.</h1>
+          <p class="eyebrow hero__in" style="--d: 0">New arrivals</p>
+          <h1 class="hero__title" id="hero-title"><span class="w"><span style="--wi: 0">Soft</span></span> <span class="w"><span style="--wi: 1">cottons</span></span> <span class="w"><span style="--wi: 2">for</span></span> <span class="w"><span style="--wi: 3">the</span></span> <span class="hl"><span class="w"><span style="--wi: 4">first</span></span> <span class="w"><span style="--wi: 5">two</span></span> <span class="ul"><span class="w"><span style="--wi: 6">years.</span></span><svg class="hl-line" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 14 C 50 4, 120 4, 197 11"/></svg></span></span></h1>
           <!-- TODO: confirm with client (fabric claims: breathable cotton and bamboo, cut for Sri Lankan weather) -->
-          <p class="hero__lede">Breathable cotton and bamboo, cut for Sri Lankan weather. Sized by age, so you order once and it fits.</p>
-          <div class="hero__actions">
+          <p class="hero__lede hero__in" style="--d: 380">Breathable cotton and bamboo, cut for Sri Lankan weather. Sized by age, so you order once and it fits.</p>
+          <div class="hero__actions hero__in" style="--d: 480">
             <a class="btn btn--primary btn--lg" href="shop.html?sort=new">Shop new arrivals</a>
             <a class="link-arrow" href="size-guide.html">Find your baby's size <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
           </div>
         </div>
-        <div class="hero__visual">
-          <!-- img (above the fold, LCP): <img src alt="Baby wearing a lilac ribbed bodysuit" width height fetchpriority="high" decoding="async"> (no lazy loading) replaces the placeholder when photography exists -->
-          <!-- photo: hero -->
-          <div class="media media--round hero__media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-          <!-- /photo: hero -->
-          <div class="hero__tag">
-            <span class="hero__tag-icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-ruler"></use></svg></span>
-            <p class="hero__tag-text">Sized by age,<br>order once</p>
-          </div>
+        <div class="hero__visual" id="heroVisual">
+          <span class="hero__blob hero__blob--1" aria-hidden="true"></span><span class="hero__blob hero__blob--2" aria-hidden="true"></span>
+          <div class="hero__arch" id="arch" aria-hidden="true"><svg class="hero__line" id="heroLine" preserveAspectRatio="none" focusable="false"><path id="heroLinePath" d=""/></svg></div>
+          <p class="hero-tag hero-tag--sized" style="--d: 800" aria-hidden="true"><b>Sized by age</b><span>
+            <!-- gen: home-size-range -->
+            Newborn, 0–3m … 3Y
+            <!-- /gen: home-size-range -->
+          </span></p>
+          <p class="hero-tag hero-tag--delivery" style="--d: 950" aria-hidden="true"><b><span data-cfg="free_shipping_over">Rs. 7,500</span>+</b><span>Free delivery</span></p>
+          <!-- the fabrics section arrives later: #fabrics does not exist yet -->
+          <a class="hero-tag hero-tag--fabrics" href="#fabrics" style="--d: 1100"><span class="swatches-stack" id="heroSw" aria-hidden="true"><i></i><i></i><i></i></span><span><b>Feel the fabrics</b><span>Muslin, bamboo, rib, waffle</span></span></a>
         </div>
       </div>
     </section>
 
-    <!-- Trust strip -->
+    <!-- Trust strip: the icons draw in once (pathLength 1), staggered and offset by the preloader -->
     <section class="trust" aria-label="Why shop with Kayaa">
       <div class="container">
         <ul class="trust__list">
           <!-- TODO: confirm each claim with the client -->
           <li class="trust__item">
-            <span class="trust__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-rotate-ccw"></use></svg></span>
+            <span class="trust__icon" style="--d: 700"><svg class="icon icon--24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path pathLength="1" d="M21 3v5h-5"/><path pathLength="1" d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path pathLength="1" d="M3 21v-5h5"/></svg></span>
             <div><p class="trust__title">Swap sizes free</p><p class="trust__text">Exchange within <span data-cfg="return_window_days">14</span> days, unworn</p></div>
           </li>
           <li class="trust__item">
-            <span class="trust__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-shield-check"></use></svg></span>
+            <span class="trust__icon" style="--d: 820"><svg class="icon icon--24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3Z"/><polyline pathLength="1" points="9 12 11 14 15 9.5"/></svg></span>
             <!-- TODO: OEKO-TEX certification needs certificate evidence before launch; do not present it as verified until the client supplies it -->
             <div><p class="trust__title">Tested for sensitive skin</p><p class="trust__text">OEKO-TEX certified cotton</p></div>
           </li>
           <li class="trust__item">
-            <span class="trust__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-truck"></use></svg></span>
+            <span class="trust__icon" style="--d: 940"><svg class="icon icon--24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect pathLength="1" x="1.5" y="7" width="13" height="8" rx="1"/><path pathLength="1" d="M14.5 10h4l3 3v2h-7z"/><circle pathLength="1" cx="6" cy="17.5" r="1.6"/><circle pathLength="1" cx="17" cy="17.5" r="1.6"/></svg></span>
             <div><p class="trust__title">Free delivery over <span data-cfg="free_shipping_over">Rs. 7,500</span></p><p class="trust__text">Island-wide by courier</p></div>
           </li>
           <li class="trust__item">
-            <span class="trust__icon"><svg class="icon icon--24" aria-hidden="true" focusable="false"><use href="#i-credit-card"></use></svg></span>
+            <span class="trust__icon" style="--d: 1060"><svg class="icon icon--24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect pathLength="1" x="3" y="6" width="18" height="13" rx="2"/><path pathLength="1" d="M3 10h18"/><path pathLength="1" d="M7 15h3"/></svg></span>
             <div><p class="trust__title">Secure card payment</p><p class="trust__text">Visa &amp; Mastercard accepted</p></div>
           </li>
         </ul>
       </div>
     </section>
 
-    <!-- Shop by age -->
-    <section class="section" aria-labelledby="age-title">
+    <!-- Shop by age: nine chips; the panel shows the size, height and weight (counting up), the Shop button and a growing outfit on a peg line.
+         The ages, URLs, heights and weights are written by tools/sync-shell.mjs from the catalogue and the size chart (docs/content/size-guide.md). -->
+    <section class="section age" aria-labelledby="age-title">
       <div class="container">
         <div class="section__head">
           <div>
-            <h2 id="age-title">Shop by age</h2>
-            <p class="section__intro">Choose your baby's age band. Height and weight are the better guide, so check the size guide if you are between sizes.</p>
+            <p class="eyebrow">Shop by age</p>
+            <h2 class="split age__title" id="age-title">How old is your little one?</h2>
+            <p class="section__intro" data-reveal>Pick an age and watch the size grow. Height and weight are the better guide if your baby is between sizes.</p>
           </div>
         </div>
-        <div class="age-steps">
-        <div class="age-steps__row">
-        <ul class="scroller scroller--age" role="list">
-          <!-- gen: size-tiles-home -->
-          <li style="--step: 0"><a class="age-tile" href="shop.html?size=newborn"><span class="age-tile__label">Newborn</span><span class="age-tile__meta"><span>Up to 50 cm</span><span>Up to 3.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 1"><a class="age-tile" href="shop.html?size=0-3m"><span class="age-tile__label">0–3m</span><span class="age-tile__meta"><span>50–58 cm</span><span>3.5–5.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 2"><a class="age-tile" href="shop.html?size=3-6m"><span class="age-tile__label">3–6m</span><span class="age-tile__meta"><span>58–66 cm</span><span>5.5–7.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 3"><a class="age-tile" href="shop.html?size=6-9m"><span class="age-tile__label">6–9m</span><span class="age-tile__meta"><span>66–72 cm</span><span>7.5–9 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 4"><a class="age-tile" href="shop.html?size=9-12m"><span class="age-tile__label">9–12m</span><span class="age-tile__meta"><span>72–78 cm</span><span>9–10.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 5"><a class="age-tile" href="shop.html?size=12-18m"><span class="age-tile__label">12–18m</span><span class="age-tile__meta"><span>78–86 cm</span><span>10.5–12 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 6"><a class="age-tile" href="shop.html?size=18-24m"><span class="age-tile__label">18–24m</span><span class="age-tile__meta"><span>86–92 cm</span><span>12–13.5 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 7"><a class="age-tile" href="shop.html?size=2y"><span class="age-tile__label">2Y</span><span class="age-tile__meta"><span>92–98 cm</span><span>13.5–15 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <li style="--step: 8"><a class="age-tile" href="shop.html?size=3y"><span class="age-tile__label">3Y</span><span class="age-tile__meta"><span>98–104 cm</span><span>15–17 kg</span></span><span class="age-tile__go">Shop <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span></a></li>
-          <!-- /gen: size-tiles-home -->
-        </ul>
+        <div class="age-chips" id="ageChips" role="group" aria-label="Choose an age">
+          <!-- gen: home-age-chips -->
+          <button class="age-chip" type="button" aria-pressed="false" data-i="0">Newborn</button>
+          <button class="age-chip" type="button" aria-pressed="true" data-i="1">0–3m</button>
+          <button class="age-chip" type="button" aria-pressed="false" data-i="2">3–6m</button>
+          <button class="age-chip" type="button" aria-pressed="false" data-i="3">6–9m</button>
+          <button class="age-chip" type="button" aria-pressed="false" data-i="4">9–12m</button>
+          <button class="age-chip" type="button" aria-pressed="false" data-i="5">12–18m</button>
+          <button class="age-chip" type="button" aria-pressed="false" data-i="6">18–24m</button>
+          <button class="age-chip" type="button" aria-pressed="false" data-i="7">2Y</button>
+          <button class="age-chip" type="button" aria-pressed="false" data-i="8">3Y</button>
+          <!-- /gen: home-age-chips -->
         </div>
-        <p class="age-steps__more"><a class="link-arrow" href="shop.html">See all sizes <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a></p>
+        <div class="age-panel" data-reveal>
+          <div class="age-swap" id="ageText" aria-live="polite">
+            <!-- gen: home-age-text -->
+            <p class="age-name" id="ageName">0–3 months</p>
+            <p class="age-meta" id="ageMeta">Height <b>50–58 cm</b> · Weight <b>3.5–5.5 kg</b></p>
+            <div class="age-actions">
+              <a class="btn btn--primary" id="ageShop" href="shop.html?size=0-3m">Shop 0–3m</a>
+              <a class="link-arrow" href="size-guide.html">Size guide <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+            </div>
+            <!-- /gen: home-age-text -->
+          </div>
+          <div class="age-grow" aria-hidden="true"><span class="age-grow__line"></span><div class="age-grow__g" id="growG"></div><span class="age-grow__mark" id="growMark"></span></div>
+          <div class="age-ruler" aria-hidden="true">
+            <div class="age-ruler__row">
+              <label>Height <output id="hOut"></output></label>
+              <div class="age-track"><span class="age-track__band" id="hBand"></span></div>
+              <div class="age-ticks"><span>45</span><span>60</span><span>75</span><span>90</span><span>105 cm</span></div>
+            </div>
+            <div class="age-ruler__row">
+              <label>Weight <output id="wOut"></output></label>
+              <div class="age-track"><span class="age-track__band" id="wBand"></span></div>
+              <div class="age-ticks"><span>2</span><span>6</span><span>10</span><span>14</span><span>18 kg</span></div>
+            </div>
+          </div>
         </div>
+        <!-- gen: home-age-data -->
+        <script type="application/json" id="age-data">[{"slug":"newborn","label":"Newborn","name":"Newborn","href":"shop.html?size=newborn","height":"Up to 50 cm","weight":"Up to 3.5 kg","h":[45,50],"w":[2,3.5],"g":"newborn"},{"slug":"0-3m","label":"0–3m","name":"0–3 months","href":"shop.html?size=0-3m","height":"50–58 cm","weight":"3.5–5.5 kg","h":[50,58],"w":[3.5,5.5],"g":"newborn"},{"slug":"3-6m","label":"3–6m","name":"3–6 months","href":"shop.html?size=3-6m","height":"58–66 cm","weight":"5.5–7.5 kg","h":[58,66],"w":[5.5,7.5],"g":"bodysuit"},{"slug":"6-9m","label":"6–9m","name":"6–9 months","href":"shop.html?size=6-9m","height":"66–72 cm","weight":"7.5–9 kg","h":[66,72],"w":[7.5,9],"g":"bodysuit"},{"slug":"9-12m","label":"9–12m","name":"9–12 months","href":"shop.html?size=9-12m","height":"72–78 cm","weight":"9–10.5 kg","h":[72,78],"w":[9,10.5],"g":"bodysuit"},{"slug":"12-18m","label":"12–18m","name":"12–18 months","href":"shop.html?size=12-18m","height":"78–86 cm","weight":"10.5–12 kg","h":[78,86],"w":[10.5,12],"g":"set"},{"slug":"18-24m","label":"18–24m","name":"18–24 months","href":"shop.html?size=18-24m","height":"86–92 cm","weight":"12–13.5 kg","h":[86,92],"w":[12,13.5],"g":"set"},{"slug":"2y","label":"2Y","name":"2 years","href":"shop.html?size=2y","height":"92–98 cm","weight":"13.5–15 kg","h":[92,98],"w":[13.5,15],"g":"set"},{"slug":"3y","label":"3Y","name":"3 years","href":"shop.html?size=3y","height":"98–104 cm","weight":"15–17 kg","h":[98,104],"w":[15,17],"g":"set"}]</script>
+        <!-- /gen: home-age-data -->
       </div>
     </section>
 
-    <!-- Shop by category -->
-    <section class="section section--surface" aria-labelledby="cat-title">
+    <!-- Shop by category: the rail. Seven real links (written by sync-shell, "home-rail"), drawn and moved by assets/js/home/home-rail.js.
+         Without scripts the links show as a plain list (.rail-fallback). The old category tiles are retired. -->
+    <section class="section section--rail" id="rail" aria-labelledby="rail-title">
       <div class="container">
         <div class="section__head">
-          <h2 id="cat-title">Shop by category</h2>
+          <div>
+            <p class="eyebrow">Shop by category</p>
+            <h2 class="split rail__title" id="rail-title">Pick something off the rail</h2>
+            <p class="section__intro" data-reveal id="railSub">Hover a hanger to turn it around. Brush along the rail to make them swing, or drag one along.</p>
+          </div>
+          <div class="rail-head-actions" data-reveal>
+            <button class="rail-replay" type="button" id="replay"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-rotate-ccw"></use></svg><span>Close the doors</span></button>
+            <a class="link-arrow" href="categories.html">All categories <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+          </div>
         </div>
-        <ul class="cat-grid" role="list">
-          <!-- img (below the fold): <img src alt="{{ name }}" width height loading="lazy" decoding="async"> replaces the .media placeholder; keep the aspect-ratio box so nothing shifts -->
-          <!-- gen: cat-tiles-home -->
-          <li>
-            <a class="cat-tile" href="category.html?c=newborn">
-              <!-- photo: cat-newborn -->
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: cat-newborn -->
-              <span class="cat-tile__label">Newborn <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=bodysuits">
-              <!-- photo: cat-bodysuits -->
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: cat-bodysuits -->
-              <span class="cat-tile__label">Bodysuits <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=sleepwear">
-              <!-- photo: cat-sleepwear -->
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: cat-sleepwear -->
-              <span class="cat-tile__label">Sleepwear <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=sets">
-              <!-- photo: cat-sets -->
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: cat-sets -->
-              <span class="cat-tile__label">Sets <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=outerwear">
-              <!-- photo: cat-outerwear -->
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: cat-outerwear -->
-              <span class="cat-tile__label">Outerwear <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=napkins">
-              <!-- photo: cat-napkins -->
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: cat-napkins -->
-              <span class="cat-tile__label">Napkins <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="cat-tile" href="category.html?c=accessories">
-              <!-- photo: cat-accessories -->
-              <div class="media" data-placeholder style="--ratio: 4 / 3; --tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-              <!-- /photo: cat-accessories -->
-              <span class="cat-tile__label">Accessories <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></span>
-            </a>
-          </li>
-          <!-- /gen: cat-tiles-home -->
-        </ul>
+        <div class="rail-wrap">
+          <div class="rail-stage" id="railStage">
+            <div class="rail-floor" id="railFloor" aria-hidden="true"></div>
+            <div class="rail-scroller" id="railScroller">
+              <div class="rail-inner" id="railInner">
+                <div class="rail-layer back" id="railBack" aria-hidden="true"></div>
+                <div class="rail-rod" id="railRod" aria-hidden="true"><span class="cap l"></span><span class="cap r"></span></div>
+                <nav class="rail-layer front" id="railFront" aria-label="Categories on the rail">
+                  <!-- gen: home-rail -->
+                  <a class="hanger" href="category.html?c=newborn" draggable="false" data-i="0" data-name="Newborn" data-count="3" data-range="NB–3m" data-type="newborn" data-c="white" aria-label="Newborn, 3 styles, sizes NB–3m"><span class="turn"></span><span class="hit"></span></a>
+                  <a class="hanger" href="category.html?c=bodysuits" draggable="false" data-i="1" data-name="Bodysuits" data-count="5" data-range="NB–3Y" data-type="bodysuit" data-c="peri" aria-label="Bodysuits, 5 styles, sizes NB–3Y"><span class="turn"></span><span class="hit"></span></a>
+                  <a class="hanger" href="category.html?c=sleepwear" draggable="false" data-i="2" data-name="Sleepwear" data-count="3" data-range="NB–3Y" data-type="sleepsuit" data-c="lilac" aria-label="Sleepwear, 3 styles, sizes NB–3Y"><span class="turn"></span><span class="hit"></span></a>
+                  <a class="hanger" href="category.html?c=sets" draggable="false" data-i="3" data-name="Sets" data-count="4" data-range="6m–3Y" data-type="set" data-c="mist" data-c2="lilac" aria-label="Sets, 4 styles, sizes 6m–3Y"><span class="turn"></span><span class="hit"></span></a>
+                  <a class="hanger" href="category.html?c=outerwear" draggable="false" data-i="4" data-name="Outerwear" data-count="4" data-range="3m–3Y" data-type="cardigan" data-c="plum" aria-label="Outerwear, 4 styles, sizes 3m–3Y"><span class="turn"></span><span class="hit"></span></a>
+                  <a class="hanger" href="category.html?c=napkins" draggable="false" data-i="5" data-name="Napkins" data-count="3" data-range="NB–3Y" data-type="napkins" data-c="white" data-c2="mist" aria-label="Napkins, 3 styles, sizes NB–3Y"><span class="turn"></span><span class="hit"></span></a>
+                  <a class="hanger" href="category.html?c=accessories" draggable="false" data-i="6" data-name="Accessories" data-count="3" data-range="NB–3Y" data-type="accessories" data-c="rose" data-c2="peri" aria-label="Accessories, 3 styles, sizes NB–3Y"><span class="turn"></span><span class="hit"></span></a>
+                  <!-- /gen: home-rail -->
+                </nav>
+              </div>
+            </div>
+            <div class="rail-caption" id="railCaption"><div class="cap-body" id="capBody"></div></div>
+            <div class="rail-arrows">
+              <button class="rail-arrow" type="button" id="railPrev" aria-label="Previous hangers"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg></button>
+              <button class="rail-arrow" type="button" id="railNext" aria-label="Next hangers"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></button>
+            </div>
+            <div class="doors" id="doors">
+              <div class="door l" aria-hidden="true"></div><div class="door r" aria-hidden="true"></div>
+              <button class="door-open-btn" type="button" id="doorBtn"><span class="knob">k</span>Open the wardrobe</button>
+            </div>
+          </div>
+          <ul class="rail-fallback" role="list">
+            <!-- gen: home-rail-links -->
+            <li><a href="category.html?c=newborn">Newborn <span>3 styles · NB–3m</span></a></li>
+            <li><a href="category.html?c=bodysuits">Bodysuits <span>5 styles · NB–3Y</span></a></li>
+            <li><a href="category.html?c=sleepwear">Sleepwear <span>3 styles · NB–3Y</span></a></li>
+            <li><a href="category.html?c=sets">Sets <span>4 styles · 6m–3Y</span></a></li>
+            <li><a href="category.html?c=outerwear">Outerwear <span>4 styles · 3m–3Y</span></a></li>
+            <li><a href="category.html?c=napkins">Napkins <span>3 styles · NB–3Y</span></a></li>
+            <li><a href="category.html?c=accessories">Accessories <span>3 styles · NB–3Y</span></a></li>
+            <!-- /gen: home-rail-links -->
+          </ul>
+          <div class="rail-foot">
+            <p>Seven categories, from the first bodysuit to the first cardigan.</p>
+            <span class="rail-progress" aria-hidden="true"><i id="railBar"></i></span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1111,5 +1158,10 @@
   <script src="assets/js/proto-search.js?v=5cdf6905" defer></script> <!-- PROTOTYPE ONLY: answers the suggestion requests from catalogue-data.js; production calls GET /search/suggest?q= -->
   <script src="assets/js/app.js?v=ad3e672a" defer></script>
   <!-- /partial: scripts -->
+  <script src="assets/js/home/garments.js?v=eadb3134" defer></script> <!-- the garment drawings, fabric textures and hanger: window.KayaaGarments -->
+  <script src="assets/js/home/home-core.js?v=7adbc483" defer></script> <!-- helpers, the preloader, word-rise headings, scroll reveal -->
+  <script src="assets/js/home/home-hero.js?v=053cd7bb" defer></script> <!-- the washing line in the hero -->
+  <script src="assets/js/home/home-age.js?v=ff07453a" defer></script> <!-- Shop by age -->
+  <script src="assets/js/home/home-rail.js?v=87caa885" defer></script> <!-- the category rail -->
 </body>
 </html>

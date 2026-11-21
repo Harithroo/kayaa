@@ -7,7 +7,7 @@ Static prototype of the Kayaa storefront. Backend (Laravel 12 + Filament 4) is o
 - Source of truth for design: design/kayaa-final-design-system.html. Light mode only. No green. No pure black. Accent (Periwinkle Sky) used sparingly. No dark sections, including the footer.
 - Mobile-first. Breakpoints: 600, 900, 1200. At 900 the nav switches: below 900 = hamburger drawer + 5-tab bottom bar; 900+ = full header nav + desktop category row.
 - Never use emoji as UI. Icons come from assets/icons/sprite.svg. Chrome blocks external <use> over file://, so each page inlines the sprite once (<!-- partial: sprite -->) and references icons as <use href="#i-search">. assets/icons/sprite.svg stays the source; `node tools/sync-shell.mjs` refreshes every page.
-- Mock-ups live in html/mockups/ (own .html, .css and .js, variant `none` in shell-map.json, noindex, listed on review.html under "Experiments"): PROTOTYPE ONLY, never linked from a real page, and the whole folder is deleted before launch unless the client approves one. Today: mockups/wardrobe.html (the wardrobe category carousel; its drawing symbols and `gen: wardrobe-items` region go with it).
+- Mock-ups live in html/mockups/ (own .html, .css and .js, variant `none` in shell-map.json, noindex, listed on review.html under "Experiments"): PROTOTYPE ONLY, never linked from a real page, and the whole folder is deleted before launch unless the client approves one. Today: mockups/wardrobe.html (the wardrobe category carousel, SUPERSEDED by the Home rail: kept for reference, never linked; its drawing symbols and `gen: wardrobe-items` region go with it).
 - Prototype-only JS lives in assets/js/proto-*.js and is deleted at Blade conversion. Production behaviour (for example product.js) stays and must not depend on the prototype files.
 - Scripts: the `scripts` partial (tools/partials/scripts.html, markers in every page) loads proto-cart.js then app.js; page scripts follow it (production first, then the proto-* file that fakes the server).
 - CSS: there is no app.css and no @import. The `styles` partial (tools/partials/styles.html, markers in every page head) holds direct <link> tags for tokens, base, components and layout; page CSS is a separate <link> after it. `node tools/sync-shell.mjs` also sets ?v=<first 8 hex of the file's sha1> on every local .css and .js reference, so re-run it after editing any CSS or JS.
@@ -147,6 +147,14 @@ Every page uses the FULL shell (announcement bar, header with the category row, 
 - The slider is generated (`renderSizeGuideSlider` in `tools/content.mjs`, `<!-- gen: size-guide-slider panel -->` in the product page) and driven by `assets/js/size-guide.js`; captions are HTML text, never part of an image; alt text lives in `ILLUSTRATIONS` in `tools/process-images.mjs` and must describe what the image shows.
 - The size chart is FINAL (client supplied, docs/content/size-guide.md). The size guide shows "Last updated 4 October 2026" as a `<time>`; the other content pages keep their TODO dates.
 
+## Home page (design/home-v2-concept.html is the client-approved reference)
+
+- The Home page content (preloader, hero, trust strip, Shop by age, the category rail) follows design/home-v2-concept.html; the header and footer of that file are stand-ins and are ignored. Prompt B adds the rest (fabrics, marquee, products, promos, reviews, size help).
+- Scripts live in assets/js/home/: garments.js (ALL garment drawings, fabric textures, the hanger and hook, on one namespace window.KayaaGarments; the SVG pattern defs are written once per page), home-core.js (helpers, preloader, word-rise headings, scroll reveal), home-hero.js, home-age.js, home-rail.js. Classic deferred scripts, no modules (they must work over file://). index.html only.
+- Data is never hard-coded in those scripts: the rail's links, counts and size ranges, the nine ages with their URLs, heights and weights, and the hero tag text are written into index.html by `gen: home-rail`, `home-rail-links`, `home-age-chips`, `home-age-text`, `home-age-data` and `home-size-range` (tools/catalogue.mjs); the free-delivery threshold is a `data-cfg` value. The drawing of a category (garment type and colours) is its `rail` object in tools/catalogue.json.
+- Motion: the head script of index.html (and ONLY index.html) sets html.js, html.rm (reduced motion), html.rm-device and html.intro-on before first paint; every animation has a finished state under html.rm; only elements below the fold at load may start hidden (.pre); loops sleep off-screen and while the tab is hidden; CLS stays 0 (the rail stage height has a CSS default equal to the script's formula). The preloader plays once per session and is hidden with a class (html.intro-on stays).
+- A rail hanger is a real link. A photo at html/assets/img/rail/{slug}.webp replaces its drawing (docs/rail-photo-guide.md). No toasts and no "#" links.
+
 ## Release gate
 
 **Before every push** (all from the repository root; every one must be clean):
@@ -160,6 +168,7 @@ node tools/check-seo.mjs             # exit 0, 0 warnings
 node tools/check-copy.mjs            # exit 0 (the cash payment wording rule)
 node tools/check-shell.mjs           # exit 0 (every page has the shell its variant allows; sync --check runs it too)
 node tools/check-budget.mjs          # exit 0 (CSS 70 KB, JS 60 KB, fonts 120 KB, gzip)
+node tools/qa/home.mjs               # browser: the Home behaviour tests (preloader, hero, age, rail: doors, turning, drag, touch, keyboard, reduced motion)
 node tools/check-footer-seam.mjs      # browser (see tools/qa/README.md): exit 0, the footer is clearly separate from the page on every page
 node tools/list-todos.mjs            # report the counts; markers stay open until the client approves the text
 ```

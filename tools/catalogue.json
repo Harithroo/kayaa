@@ -1,13 +1,13 @@
 {
   "_note": "Single source for the prototype catalogue: department Baby (route /baby/{slug}), the seven categories, the nine size slugs and the sample products. node tools/sync-shell.mjs fills every <!-- gen: NAME --> region from this file. Blade renders the same data from the database. Names and categories match the staging site; everything else is placeholder (TODO: confirm with client). The size chart (height and weight) comes from docs/content/size-guide.md.",
   "categories": [
-    { "slug": "newborn", "label": "Newborn", "tone": 1, "blurb": "Soft first pieces for the newborn weeks." },
-    { "slug": "bodysuits", "label": "Bodysuits", "tone": 2, "blurb": "Everyday bodysuits in soft cotton." },
-    { "slug": "sleepwear", "label": "Sleepwear", "tone": 3, "blurb": "Gowns, sleep bags and bamboo pieces for calm nights." },
-    { "slug": "sets", "label": "Sets", "tone": 4, "blurb": "Matching pieces, ready to wear together." },
-    { "slug": "outerwear", "label": "Outerwear", "tone": 1, "blurb": "Cardigans, jackets and layers for cooler days." },
-    { "slug": "napkins", "label": "Napkins", "tone": 2, "blurb": "Soft napkins and cloths for every day." },
-    { "slug": "accessories", "label": "Accessories", "tone": 3, "blurb": "Mittens, booties, bibs and hats." }
+    { "slug": "newborn", "label": "Newborn", "tone": 1, "blurb": "Soft first pieces for the newborn weeks.", "rail": { "type": "newborn", "c": "white" } },
+    { "slug": "bodysuits", "label": "Bodysuits", "tone": 2, "blurb": "Everyday bodysuits in soft cotton.", "rail": { "type": "bodysuit", "c": "peri" } },
+    { "slug": "sleepwear", "label": "Sleepwear", "tone": 3, "blurb": "Gowns, sleep bags and bamboo pieces for calm nights.", "rail": { "type": "sleepsuit", "c": "lilac" } },
+    { "slug": "sets", "label": "Sets", "tone": 4, "blurb": "Matching pieces, ready to wear together.", "rail": { "type": "set", "c": "mist", "c2": "lilac" } },
+    { "slug": "outerwear", "label": "Outerwear", "tone": 1, "blurb": "Cardigans, jackets and layers for cooler days.", "rail": { "type": "cardigan", "c": "plum" } },
+    { "slug": "napkins", "label": "Napkins", "tone": 2, "blurb": "Soft napkins and cloths for every day.", "rail": { "type": "napkins", "c": "white", "c2": "mist" } },
+    { "slug": "accessories", "label": "Accessories", "tone": 3, "blurb": "Mittens, booties, bibs and hats.", "rail": { "type": "accessories", "c": "rose", "c2": "peri" } }
   ],
   "tags": [
     { "slug": "newborn-essentials", "label": "Newborn essentials" },
