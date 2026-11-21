@@ -424,3 +424,27 @@ Built from design/home-v2-concept.html (the client-approved reference); the head
 - Data wins over the concept's numbers: style counts, size ranges (Napkins 3 styles) and the height/weight of each age come from catalogue.json and the size chart.
 - Hero and category photo slots on Home are retired (the hero is the arch; the rail has its own slot).
 - The hero tag links to `#fabrics`, which arrives with Part B.
+
+## Home page, part B (band, fabrics, products, promos, reviews, size help)
+
+Order after the rail: scrolling band, fabrics, New this week / Bestsellers, promos, reviews, size help. Nothing else on Home; the old "New this week" scroller, the separate Featured section and the old promo styles are removed. Breakpoints in em (30, 48, 56.25), tokens only (no new colours except the two promo tints #EFE6F7 and #E3ECF7 and the cloth gradient from the concept).
+
+| Part | Where | Tokens, sizes, timings |
+|---|---|---|
+| Scrolling band (`.marquee`) | home-marquee.js, `gen: home-marquee` (messages: tools/site-config.json "marquee") | Base 42px/s; page scroll adds 6x the scroll distance (cap 600) and sets the direction; the boost decays by 0.08 per second. Alternates solid (--primary-deep) and outlined words (stroke 1.3px, --primary-deep: the concept's lighter --primary was 2:1 on white) with the periwinkle flower (--accent). Pause / Play button 44px, aria-pressed, label swaps; second copy aria-hidden. Reduced motion or no script: one static wrapped line, no button. |
+| Fabrics (`.fabrics`, #fabrics) | home-fabrics.js, `gen: home-fabric-tabs` / `home-fabric-panels`, docs/content/fabrics.md | Cloth: 17 x 18 verlet grid (13 x 14 under 520px wide) pinned at three pegs; structural, shear (0.5) and bend (0.15) links; solver iterations 4 x stiffness; gravity 900, damping 0.986; breeze scaled by the fabric's flutter; pointer brush radius 60px; grab radius 40px. Affine-mapped texture triangles (seams grown 0.8px, source rect +2px), light and shade on an offscreen layer blurred 5 x DPR and clipped to the outline, drop shadow, pegs. DPR capped at 2, touch-action: pan-y, role="img" with a label that follows the fabric. Loop only while visible. Reduced motion: settled static drape; a grab re-settles it. Tabs: ARIA tablist (arrows with wrap, Home, End), card crossfade 200ms, a small ripple through the cloth. Cloth frame cost in headless Chromium: 5.9 ms average, 12 ms maximum at 1280 and 3.4 / 7.4 ms at 390 (software rendering). |
+| Fabric card | home.css | --surface card, radius 24px, three facts (Feels / Best for / Care), "Found in" links to real products (search link if none). Marked "Proposed" (mark.proposed, list-todos counts it). |
+| Product tabs (`.tabs`, `.tab-pill`) | home-products.js, home.css | Pill spring 0.4s (--spring), width 0.35s; tabs 44px; arrows, Home, End. Two panels of the real `.product-card` list (components.css) and the real quick-add sheet. |
+| Card entrance and tilt | home.css, home-products.js | `.enter`: 0.6s --ease-out, 70ms stagger, starts when the grid is 15% in view and again after a tab switch; removed on animationend. Tilt: perspective 900px, up to 8deg, fine pointers only, composed with the card's own hover lift (--lift-card). |
+| Promo banners (`.promo`) | home.css, home-extras.js (drawing, parallax) | Tint panels (#EFE6F7, #E3ECF7), radius 26px, morphing white blob (0.7s), a drawn garment that swings -6deg on hover (spring), parallax speed 0.06, the button lifts on card hover. One real link per card (the button, stretched over the card). A photo from process-images (banner-*) replaces the drawing. |
+| Reviews (`.reviews`, `.review`) | home.css | Three cards in a row from 56.25em; below that a snap scroller (82% cards, a peek of the next, focusable when it overflows). Stars role="img" with a label; name, baby age, size bought, "Verified purchase" pill. SAMPLE data, marked. |
+| Size help (`.help`) | home.css | --primary-deep band, radius 26px, a tape icon spinning 9s only while on screen (static under reduced motion), "Chat on WhatsApp" (white button). |
+| Motion pill (`.motion-pill`) | home-extras.js, home.css | PROTOTYPE ONLY. Shown only when the device asks for reduced motion; "Show animations" sets sessionStorage kayaa-motion=on and reloads; then it says "Animations are on for this visit" with "Turn off". |
+| CSS loops that sleep | home-extras.js | The hero blobs and the tape icon carry data-live; the script toggles .is-live while they are on screen and the CSS pauses them otherwise. |
+
+### Changes from the concept (part B)
+- The outlined band words use --primary-deep (contrast); the proposed-copy marks use the site's existing mark.proposed instead of the concept's dashed pill; headings use the repo's section heading scale.
+- The product cards are the real shared card (photo placeholder tone, "Quick add" pill, real badge and price), not the concept's drawn garment cards with colour dots; the colour dots are not used (see backend-contract.md).
+- "New this week" lists the four newest new-flagged products and "Bestsellers" the four lowest featured ranks (the concept shows fixed samples).
+- The fabric card panels are four server-written tabpanels (the concept swapped one panel's HTML); the live region on the card is dropped because the tab change is announced by the tab.
+- The review cards carry no hover tilt below 56.25em; the list is a real list (`ul`) with a focusable scroller on phones.

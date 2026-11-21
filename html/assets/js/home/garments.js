@@ -9,10 +9,11 @@
 
   /* ---------- fabric textures: 48px tiles drawn on canvas (dark threads, light highlights, seamless) ---------- */
   var TEX = {};
+  /* software canvases (willReadFrequently): these are only drawn once and read back (toDataURL, getImageData); the GPU path costs ~0.7s of blocking time on a phone-class device */
   function mk(w, h) { var c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
   function rnd(seed) { var s = seed || 1; return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
   function tile(kind) {
-    var c = mk(48, 48), x = c.getContext('2d'), r = rnd(kind.length * 977), i, j;
+    var c = mk(48, 48), x = c.getContext('2d', { willReadFrequently: true }), r = rnd(kind.length * 977), i, j;
     x.lineCap = 'round';
     if (kind === 'rib') {
       for (i = 0; i < 48; i += 8) {
@@ -64,7 +65,7 @@
 
   /* A larger texture with colour, for the swatch dots (and, later, the cloth swatch) */
   function clothTexture(kind, base, size) {
-    size = size || 512; var c = mk(size, size), x = c.getContext('2d');
+    size = size || 512; var c = mk(size, size), x = c.getContext('2d', { willReadFrequently: true });
     x.fillStyle = base; x.fillRect(0, 0, size, size);
     var sc = kind === 'waffle' ? 2.6 : kind === 'rib' ? 2.2 : 2, t = TEX[kind];
     x.save(); x.scale(sc, sc); x.fillStyle = x.createPattern(t, 'repeat'); x.fillRect(0, 0, size / sc, size / sc); x.restore();

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Smoke test in Chromium, Firefox and WebKit (WebKit is a proxy for iOS Safari, not the same thing), at 390x844 (touch) and 1280x800.
 //   node tools/qa/engines.mjs        writes screenshots to out/engines/<engine>-<viewport>-<step>.png and prints checks and metric differences
-// Flows: Home (growth steps and the phone row), Shop with filters, a product (colour, size, add to cart), the cart, checkout (card and the
+// Flows: Home (age chips, rail, cloth swatch, tabs, reviews), Shop with filters, a product (colour, size, add to cart), the cart, checkout (card and the
 // second payment option), track, sign-in, contact. Each step asserts something real; geometry of a few key elements is compared across engines.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,18 +31,41 @@ for (const engineName of ENGINES) {
     const step = async (name, fn) => { try { await fn(); } catch (e) { ok(name, false, 'threw: ' + String(e).slice(0, 160)); } };
 
     await step('home', async () => {
+      // the preloader has its own test (tools/qa/home.mjs): mark it seen so the page is ready at once
+      await page.addInitScript(() => { try { sessionStorage.setItem('kayaa-intro', '1'); } catch (e) { /* storage blocked */ } });
+      const errs = [];
+      page.on('pageerror', (e) => errs.push(e.message));
       await page.goto(BASE + 'index.html', { waitUntil: 'networkidle' });
-      const m = await page.evaluate(() => {
-        const tiles = [...document.querySelectorAll('.scroller--age .age-tile')];
-        const ul = document.querySelector('.scroller--age');
-        return { n: tiles.length, h: tiles.map((t) => Math.round(t.getBoundingClientRect().height)), w: Math.round(tiles[1].getBoundingClientRect().width), scrolls: ul.scrollWidth > ul.clientWidth + 1, sw: document.documentElement.scrollWidth, sb: getComputedStyle(ul).scrollbarWidth };
-      });
-      ok('home: nine growth tiles, no page overflow', m.n === 9 && m.sw <= vp.width, JSON.stringify(m));
-      ok(vpName === 'desktop' ? 'home: steps rise 150 to 230px and the row does not scroll' : 'home: phone row scrolls sideways', vpName === 'desktop' ? (m.h[0] === 150 && m.h[8] === 230 && !m.scrolls) : m.scrolls);
-      metric('home tile heights', m.h.join(','));
-      metric('home tile width', m.w);
-      await page.evaluate(() => document.getElementById('age-title').scrollIntoView());
-      await snap('home-steps');
+      await page.waitForTimeout(1500);
+      const m = await page.evaluate(() => ({
+        chips: document.querySelectorAll('.age-chip').length, hangers: document.querySelectorAll('.hanger').length, sw: document.documentElement.scrollWidth,
+        hero: document.querySelectorAll('.hero__title .w').length, garments: document.querySelectorAll('.pegged svg').length
+      }));
+      ok('home: nine age chips, seven hangers, the hero washing line, no page overflow', m.chips === 9 && m.hangers === 7 && m.garments === 3 && m.sw <= vp.width, JSON.stringify(m));
+      await page.locator('.age-chip').nth(4).click(); await page.waitForTimeout(700);
+      ok('home: an age chip changes the panel', (await page.locator('#ageName').textContent()).trim() === '9–12 months', await page.locator('#ageName').textContent());
+      await page.evaluate(() => document.getElementById('rail').scrollIntoView()); await page.waitForTimeout(4200);
+      const r = await page.evaluate(() => { const s = document.getElementById('railStage').getBoundingClientRect(); const h = [...document.querySelectorAll('.hanger')].map((e) => Math.round(e.getBoundingClientRect().width)); return { stage: Math.round(s.height), doorsGone: document.getElementById('doors').classList.contains('gone'), w: h[0], scroller: document.getElementById('railScroller').scrollWidth > document.getElementById('railScroller').clientWidth + 1 }; });
+      ok(vpName === 'desktop' ? 'home: the rail fits (no scrolling) and the doors have opened' : 'home: the rail scrolls sideways on a phone and the doors have opened', r.doorsGone && (vpName === 'desktop' ? !r.scroller : r.scroller), JSON.stringify(r));
+      metric('home rail stage height', r.stage);
+      metric('home rail hanger width', r.w);
+      await snap('home-rail');
+      await page.evaluate(() => document.getElementById('clothWrap').scrollIntoView({ block: 'center' })); await page.waitForTimeout(1500);
+      const px = async () => page.evaluate(() => { const cv = document.getElementById('cloth'); const x = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; let n = 0; for (let i = 3; i < x.length; i += 4 * 97) if (x[i] > 0) n++; return n; });
+      const painted = await px();
+      ok('home: the cloth swatch is drawn on the canvas', painted > 200, painted + ' sampled pixels');
+      await page.locator('#fab-waffle').click(); await page.waitForTimeout(700);
+      ok('home: a fabric tab changes the label and the card', await page.evaluate(() => document.getElementById('clothLabel').textContent === 'Waffle knit' && !document.getElementById('fab-panel-waffle').hidden));
+      metric('home cloth canvas', await page.evaluate(() => document.getElementById('cloth').width + 'x' + document.getElementById('cloth').height));
+      await snap('home-fabrics');
+      await page.evaluate(() => document.getElementById('products').scrollIntoView()); await page.waitForTimeout(1200);
+      await page.locator('#tab-best').click(); await page.waitForTimeout(1400);
+      ok('home: the Bestsellers tab shows four cards', await page.evaluate(() => document.getElementById('prod-title').textContent === 'Bestsellers' && document.querySelectorAll('#panel-best .product-card').length === 4 && document.documentElement.scrollWidth <= innerWidth));
+      await snap('home-products');
+      await page.evaluate(() => document.querySelector('.reviews-sec').scrollIntoView({ block: 'center' })); await page.waitForTimeout(1200);
+      const rv = await page.evaluate(() => { const l = document.getElementById('reviews'); return { scrolls: l.scrollWidth > l.clientWidth + 1, sw: document.documentElement.scrollWidth }; });
+      ok(vpName === 'desktop' ? 'home: three reviews side by side' : 'home: the reviews scroll sideways on a phone, the page does not', rv.sw <= vp.width && (vpName === 'desktop' ? !rv.scrolls : rv.scrolls), JSON.stringify(rv));
+      ok('home: no script errors', errs.length === 0, errs.join('|'));
     });
 
     await step('shop', async () => {

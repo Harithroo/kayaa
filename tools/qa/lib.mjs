@@ -61,6 +61,15 @@ export function states() {
     if ((await pg.viewportSize()).width < 900) await hit.tap(); else await hit.hover();
     await pg.waitForTimeout(1600);
   });
+  add('home fabrics: waffle knit selected', 'index.html', async (pg) => {
+    await pg.locator('#fab-waffle').scrollIntoViewIfNeeded(); await pg.locator('#fab-waffle').click(); await pg.waitForTimeout(1200);
+  });
+  add('home products: Bestsellers tab', 'index.html', async (pg) => {
+    await pg.locator('#tab-best').scrollIntoViewIfNeeded(); await pg.locator('#tab-best').click(); await pg.waitForTimeout(1800);
+  });
+  add('home: reduced motion', 'index.html', async (pg) => {
+    await pg.emulateMedia({ reducedMotion: 'reduce' }); await pg.reload({ waitUntil: 'networkidle' }); await pg.waitForTimeout(800);
+  });
   add('track result (cash, paid)', 'track.html?ref=KY-260930-C0D2', async (pg) => { await pg.fill('#phone', '071 234 5678'); await pg.locator('[data-track-form] button[type=submit]').click(); await pg.waitForSelector('[data-track-result]:not([hidden])'); });
   return s;
 }

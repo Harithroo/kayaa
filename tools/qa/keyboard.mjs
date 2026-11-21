@@ -24,6 +24,7 @@ function describe() {
     const lab = el.closest('label');
     if (!indicator && lab && [...lab.children].some((c) => ring(getComputedStyle(c)))) { indicator = true; via = 'label child'; }
   }
+  if (!indicator && el.matches('a.hanger')) { const hit = el.querySelector('.hit'); if (hit && ring(getComputedStyle(hit))) { indicator = true; via = 'hit area child'; } }   // the Home rail draws the ring around the garment's hit area
   if (!indicator) {   // a border or background change on the element itself is also accepted: compare with the not-focused look is not possible here, so flag it
     indicator = false;
   }

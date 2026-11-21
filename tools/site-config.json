@@ -15,6 +15,14 @@
   "faulty_report_days": 7,
   "support_hours": "Mon–Sat 9am–6pm",
   "whatsapp_display": "077 000 0000",
+  "marquee": [
+    "Breathable cotton",
+    "Sized by age",
+    "Free size swaps",
+    "Island-wide delivery",
+    "Soft on sensitive skin",
+    "Made for Sri Lankan weather"
+  ],
   "currency_prefix": "Rs.",
   "popular_searches": [
     {

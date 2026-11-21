@@ -78,7 +78,7 @@
       window.KAYAA_RM = rm;
     })();
   </script>
-  <link rel="stylesheet" href="assets/css/pages/home.css?v=57a27f0f">
+  <link rel="stylesheet" href="assets/css/pages/home.css?v=eedbd77a">
 </head>
 <body data-page="home">
   <!-- partial: sprite -->
@@ -412,7 +412,7 @@
 
     <!-- Hero: the words rise in turn (CSS, delayed by the preloader), an accent underline draws under the last word, and a washing line sways in an arch
          (assets/js/home/home-hero.js). The hero image slot (photo: hero) is retired: the arch replaces it. -->
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero" aria-labelledby="hero-title" data-live>
       <div class="container hero__grid">
         <div class="hero__copy">
           <p class="eyebrow hero__in" style="--d: 0">New arrivals</p>
@@ -584,268 +584,349 @@
       </div>
     </section>
 
-    <!-- New this week -->
-    <section class="section" aria-labelledby="new-title">
+    <!-- Scrolling band: the messages are tools/site-config.json "marquee" (written by tools/sync-shell.mjs); the second list is a visual copy (aria-hidden).
+         Moves at 42px/s, speeds up with the page scroll, has a Pause button (WCAG 2.2.2); under reduced motion it is one static wrapped line. -->
+    <div class="marquee">
+      <div class="marquee__track" id="mqTrack">
+        <!-- gen: home-marquee -->
+        <ul class="marquee__set" role="list"><li><span class="marquee__word">Breathable cotton</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word marquee__word--o">Sized by age</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word">Free size swaps</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word marquee__word--o">Island-wide delivery</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word">Soft on sensitive skin</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word marquee__word--o">Made for Sri Lankan weather</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li></ul>
+        <ul class="marquee__set" role="list" aria-hidden="true"><li><span class="marquee__word">Breathable cotton</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word marquee__word--o">Sized by age</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word">Free size swaps</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word marquee__word--o">Island-wide delivery</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word">Soft on sensitive skin</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li><li><span class="marquee__word marquee__word--o">Made for Sri Lankan weather</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg></li></ul>
+        <!-- /gen: home-marquee -->
+      </div>
+      <button class="marquee__pause" type="button" id="mqPause" aria-label="Pause the moving text" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="9" y1="6" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="18"/></svg></button>
+    </div>
+
+    <!-- Fabrics: a cloth swatch on pegs (canvas; assets/js/home/home-fabrics.js). The tab text and cards are docs/content/fabrics.md (PROPOSED copy, confirm with
+         the client), written by tools/sync-shell.mjs; "Found in" links the real products that match. Without scripts the four cards are shown one after the other. -->
+    <section class="section fabrics" id="fabrics" aria-labelledby="fab-title">
+      <div class="container fabrics__grid">
+        <div>
+          <p class="eyebrow">Our fabrics <mark class="proposed"><span class="marker-label">Proposed</span> Fabric copy, confirm with the client</mark></p>
+          <h2 class="split" id="fab-title">Feel it before you buy it</h2>
+          <p class="section__intro" data-reveal>Everything that touches your baby's skin is picked for Sri Lankan heat: breathable, soft and gentle. Grab the swatch and give it a tug.</p>
+          <div class="fab-tabs" role="tablist" aria-label="Fabrics" id="fabTabs" data-reveal>
+            <!-- gen: home-fabric-tabs -->
+            <button class="fab-tab" role="tab" type="button" id="fab-muslin" aria-selected="true" aria-controls="fab-panel-muslin" data-key="muslin" data-name="Muslin" data-col="#FFFFFF" data-stiff="0.8" data-flutter="1.25"><i aria-hidden="true"></i>Muslin</button>
+            <button class="fab-tab" role="tab" type="button" id="fab-jersey" aria-selected="false" aria-controls="fab-panel-jersey" tabindex="-1" data-key="jersey" data-name="Bamboo jersey" data-col="#DCCDED" data-stiff="0.9" data-flutter="1"><i aria-hidden="true"></i>Bamboo jersey</button>
+            <button class="fab-tab" role="tab" type="button" id="fab-rib" aria-selected="false" aria-controls="fab-panel-rib" tabindex="-1" data-key="rib" data-name="Ribbed cotton" data-col="#C6D6EC" data-stiff="1" data-flutter="0.85"><i aria-hidden="true"></i>Ribbed cotton</button>
+            <button class="fab-tab" role="tab" type="button" id="fab-waffle" aria-selected="false" aria-controls="fab-panel-waffle" tabindex="-1" data-key="waffle" data-name="Waffle knit" data-col="#C9B6DE" data-stiff="1.15" data-flutter="0.65"><i aria-hidden="true"></i>Waffle knit</button>
+            <!-- /gen: home-fabric-tabs -->
+          </div>
+          <div class="fab-card" data-reveal>
+            <div class="fab-swap" id="fabSwap">
+              <!-- gen: home-fabric-panels -->
+              <div class="fab-panel" role="tabpanel" id="fab-panel-muslin" aria-labelledby="fab-muslin">
+                <h3 class="fab-panel__name">Muslin</h3>
+                <p class="fab-panel__line">Open, airy cotton gauze that gets softer with every wash.</p>
+                <dl class="fab-facts">
+                  <div><dt>Feels</dt><dd>Light and gently crinkled</dd></div>
+                  <div><dt>Best for</dt><dd>Swaddles, sleep bags, burp cloths</dd></div>
+                  <div><dt>Care</dt><dd>Machine wash cool, line dry</dd></div>
+                </dl>
+                <p class="fab-found">Found in: <a href="product.html">Muslin Sleep Bag 0.5 TOG</a>, <a href="product.html">Muslin Swaddle Wrap</a>, <a href="product.html">Muslin Napkins 6-Pack</a>, <a href="product.html">Burp Cloth &amp; Napkin Duo</a></p>
+              </div>
+              <div class="fab-panel" role="tabpanel" id="fab-panel-jersey" aria-labelledby="fab-jersey" hidden>
+                <h3 class="fab-panel__name">Bamboo jersey</h3>
+                <p class="fab-panel__line">Smooth and cool against the skin, with a soft stretch.</p>
+                <dl class="fab-facts">
+                  <div><dt>Feels</dt><dd>Silky, cool, stretchy</dd></div>
+                  <div><dt>Best for</dt><dd>Sleepsuits for warm nights</dd></div>
+                  <div><dt>Care</dt><dd>Gentle wash, no tumble dry</dd></div>
+                </dl>
+                <p class="fab-found">Found in: <a href="product.html">Bamboo Sleepsuit</a>, <a href="product.html">Bamboo Napkin Set</a></p>
+              </div>
+              <div class="fab-panel" role="tabpanel" id="fab-panel-rib" aria-labelledby="fab-rib" hidden>
+                <h3 class="fab-panel__name">Ribbed cotton</h3>
+                <p class="fab-panel__line">Stretchy ribs that move with every kick and keep their shape.</p>
+                <dl class="fab-facts">
+                  <div><dt>Feels</dt><dd>Springy and snug</dd></div>
+                  <div><dt>Best for</dt><dd>Everyday bodysuits</dd></div>
+                  <div><dt>Care</dt><dd>Machine wash warm</dd></div>
+                </dl>
+                <p class="fab-found">Found in: <a href="product.html">Ribbed Cotton Bodysuit</a></p>
+              </div>
+              <div class="fab-panel" role="tabpanel" id="fab-panel-waffle" aria-labelledby="fab-waffle" hidden>
+                <h3 class="fab-panel__name">Waffle knit</h3>
+                <p class="fab-panel__line">Little raised squares that hold a touch of warmth for rainy evenings.</p>
+                <dl class="fab-facts">
+                  <div><dt>Feels</dt><dd>Textured and cosy</dd></div>
+                  <div><dt>Best for</dt><dd>Cardigans and layers</dd></div>
+                  <div><dt>Care</dt><dd>Wash inside out, dry flat</dd></div>
+                </dl>
+                <p class="fab-found">Found in: <a href="product.html">Waffle Knit Cardigan</a></p>
+              </div>
+              <!-- /gen: home-fabric-panels -->
+            </div>
+          </div>
+        </div>
+        <div class="cloth-wrap" id="clothWrap" data-reveal>
+          <span class="cloth-label" id="clothLabel">Muslin</span>
+          <canvas id="cloth" role="img" aria-label="A muslin swatch hanging from pegs, moving in a breeze"></canvas>
+          <span class="cloth-hint" id="clothHint"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 11V6a2 2 0 0 1 4 0v5"/><path d="M13 10.5V9a2 2 0 0 1 4 0v3"/><path d="M17 11.5a2 2 0 0 1 4 0V15a6 6 0 0 1-6 6h-2.2a6 6 0 0 1-4.3-1.8L5 16.6a2 2 0 0 1 2.8-2.9L9 15"/></svg>Drag the fabric</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- New this week / Bestsellers: one tab list, two lists of the real product cards (the same card and quick-add sheet as Shop and Category).
+         New = products flagged new; Bestsellers = the lowest "featured" ranks (the admin Featured toggle: see docs/backend-contract.md 3.1). -->
+    <section class="section products" id="products" aria-labelledby="prod-title">
       <div class="container">
         <div class="section__head">
-          <h2 id="new-title">New this week</h2>
-          <a class="link-arrow" href="shop.html?sort=new">View all <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+          <div>
+            <p class="eyebrow">Fresh on the shelf</p>
+            <h2 id="prod-title">New this week</h2>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Product lists" id="prodTabs" data-reveal>
+            <span class="tab-pill" id="tabPill" aria-hidden="true"></span>
+            <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="panel-new" id="tab-new" data-list="new" data-title="New this week">New this week</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-best" id="tab-best" data-list="best" data-title="Bestsellers" tabindex="-1">Bestsellers</button>
+          </div>
         </div>
         <!-- img (below the fold): <img src alt="{{ name }}" width height loading="lazy" decoding="async"> replaces the .media placeholder; keep the aspect-ratio box so nothing shifts -->
-        <ul class="scroller scroller--products" role="list">
-          <!-- blade: badge priority @if out_of_stock Out of stock @elseif sale Sale (accent) @elseif new New (lilac); @if out_of_stock hide quick-add -->
-          <!-- gen: product-grid new -->
-          <li data-product data-slug="linen-shirt-and-shorts-set" data-name="Linen Shirt &amp; Shorts Set" data-price="4450" data-size="12-18m 18-24m 2y 3y" data-category="sets" data-new="1" data-sale="0" data-featured="18" data-added="99" data-tags="lightweight festive-wear breathable-cotton">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-slug="linen-shirt-and-shorts-set" data-name="Linen Shirt &amp; Shorts Set" data-price="4450" data-tone="4" data-sizes="12-18m 18-24m 2y 3y" data-colours="cream sky" aria-haspopup="dialog" aria-label="Quick add, Linen Shirt &amp; Shorts Set">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Linen Shirt &amp; Shorts Set</a></h3>
-                <p class="product-card__meta">2 colours · 12m–3Y</p>
-                <p class="price"><span class="price__now">Rs. 4,450</span></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-size="9-12m 12-18m 18-24m" data-category="sets" data-new="1" data-sale="0" data-featured="2" data-added="98" data-tags="festive-wear gift-idea breathable-cotton">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-tone="4" data-sizes="9-12m 12-18m 18-24m" data-colours="cream sky lilac" aria-haspopup="dialog" aria-label="Quick add, Cotton Kurta Set">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Cotton Kurta Set</a></h3>
-                <p class="product-card__meta">3 colours · 9m–24m</p>
-                <p class="price"><span class="price__now">Rs. 4,950</span></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="newborn-hospital-set" data-name="Newborn Hospital Set" data-price="3450" data-size="newborn 0-3m" data-category="newborn" data-new="1" data-sale="0" data-featured="7" data-added="97" data-tags="newborn-essentials gift-idea breathable-cotton">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-slug="newborn-hospital-set" data-name="Newborn Hospital Set" data-price="3450" data-tone="2" data-sizes="newborn 0-3m" data-colours="cream sky blush" aria-haspopup="dialog" aria-label="Quick add, Newborn Hospital Set">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Newborn Hospital Set</a></h3>
-                <p class="product-card__meta">3 colours · NB–3m</p>
-                <p class="price"><span class="price__now">Rs. 3,450</span></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="burp-cloth-and-napkin-duo" data-name="Burp Cloth &amp; Napkin Duo" data-price="1450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="napkins" data-new="1" data-sale="0" data-featured="15" data-added="96" data-tags="muslin newborn-essentials travel">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-slug="burp-cloth-and-napkin-duo" data-name="Burp Cloth &amp; Napkin Duo" data-price="1450" data-tone="4" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-colours="sky lilac" aria-haspopup="dialog" aria-label="Quick add, Burp Cloth &amp; Napkin Duo">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Burp Cloth &amp; Napkin Duo</a></h3>
-                <p class="product-card__meta">2 colours · NB–3Y</p>
-                <p class="price"><span class="price__now">Rs. 1,450</span></p>
-              </div>
-            </article>
-          </li>
-          <!-- /gen: product-grid -->
-        </ul>
-      </div>
-    </section>
-
-    <!-- Promo banners (admin: home_promo) -->
-    <section class="section" aria-label="Promotions">
-      <div class="container promos__grid">
-        <!-- loop: home_promo -->
-        <!-- blade: class promo--{style} (lilac | sky) -->
-        <!-- TODO: placeholder copy, confirm with client -->
-        <article class="promo promo--lilac">
-          <!-- photo: banner-newborn -->
-          <!-- /photo: banner-newborn -->
-          <p class="eyebrow">Newborn essentials</p>
-          <h2 class="promo__title">Everything for the first weeks</h2>
-          <p class="promo__text">Placeholder text about a soft, simple starter wardrobe for new arrivals.</p>
-          <a class="btn btn--primary" href="category.html?c=newborn">Shop newborn</a>
-        </article>
-        <article class="promo promo--sky">
-          <!-- photo: banner-sale -->
-          <!-- /photo: banner-sale -->
-          <p class="eyebrow">Sale</p>
-          <h2 class="promo__title">Selected styles, lower prices</h2>
-          <p class="promo__text">Placeholder text about a limited selection of reduced items.</p>
-          <a class="btn btn--secondary" href="shop.html?sale=1">Shop the sale</a>
-        </article>
-        <!-- /loop -->
-      </div>
-    </section>
-
-    <!-- Featured products -->
-    <section class="section" aria-labelledby="featured-title">
-      <div class="container">
-        <div class="section__head">
-          <h2 id="featured-title">Featured products</h2>
+        <div class="products__panel" role="tabpanel" id="panel-new" aria-labelledby="tab-new">
+          <ul class="product-grid" role="list">
+            <!-- blade: badge priority @if out_of_stock Out of stock @elseif sale Sale (accent) @elseif new New (lilac); @if out_of_stock hide quick-add -->
+            <!-- gen: product-grid new -->
+            <li data-product data-slug="linen-shirt-and-shorts-set" data-name="Linen Shirt &amp; Shorts Set" data-price="4450" data-size="12-18m 18-24m 2y 3y" data-category="sets" data-new="1" data-sale="0" data-featured="18" data-added="99" data-tags="lightweight festive-wear breathable-cotton">
+              <article class="product-card">
+                <div class="product-card__media">
+                  <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  <span class="badge badge--lilac product-card__badge">New</span>
+                  <button type="button" class="product-card__quick" data-quick-add data-slug="linen-shirt-and-shorts-set" data-name="Linen Shirt &amp; Shorts Set" data-price="4450" data-tone="4" data-sizes="12-18m 18-24m 2y 3y" data-colours="cream sky" aria-haspopup="dialog" aria-label="Quick add, Linen Shirt &amp; Shorts Set">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                    <span class="product-card__quick-label">Quick add</span>
+                  </button>
+                </div>
+                <div class="product-card__info">
+                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Linen Shirt &amp; Shorts Set</a></h3>
+                  <p class="product-card__meta">2 colours · 12m–3Y</p>
+                  <p class="price"><span class="price__now">Rs. 4,450</span></p>
+                </div>
+              </article>
+            </li>
+            <li data-product data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-size="9-12m 12-18m 18-24m" data-category="sets" data-new="1" data-sale="0" data-featured="2" data-added="98" data-tags="festive-wear gift-idea breathable-cotton">
+              <article class="product-card">
+                <div class="product-card__media">
+                  <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  <span class="badge badge--lilac product-card__badge">New</span>
+                  <button type="button" class="product-card__quick" data-quick-add data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-tone="4" data-sizes="9-12m 12-18m 18-24m" data-colours="cream sky lilac" aria-haspopup="dialog" aria-label="Quick add, Cotton Kurta Set">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                    <span class="product-card__quick-label">Quick add</span>
+                  </button>
+                </div>
+                <div class="product-card__info">
+                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Cotton Kurta Set</a></h3>
+                  <p class="product-card__meta">3 colours · 9m–24m</p>
+                  <p class="price"><span class="price__now">Rs. 4,950</span></p>
+                </div>
+              </article>
+            </li>
+            <li data-product data-slug="newborn-hospital-set" data-name="Newborn Hospital Set" data-price="3450" data-size="newborn 0-3m" data-category="newborn" data-new="1" data-sale="0" data-featured="7" data-added="97" data-tags="newborn-essentials gift-idea breathable-cotton">
+              <article class="product-card">
+                <div class="product-card__media">
+                  <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  <span class="badge badge--lilac product-card__badge">New</span>
+                  <button type="button" class="product-card__quick" data-quick-add data-slug="newborn-hospital-set" data-name="Newborn Hospital Set" data-price="3450" data-tone="2" data-sizes="newborn 0-3m" data-colours="cream sky blush" aria-haspopup="dialog" aria-label="Quick add, Newborn Hospital Set">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                    <span class="product-card__quick-label">Quick add</span>
+                  </button>
+                </div>
+                <div class="product-card__info">
+                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Newborn Hospital Set</a></h3>
+                  <p class="product-card__meta">3 colours · NB–3m</p>
+                  <p class="price"><span class="price__now">Rs. 3,450</span></p>
+                </div>
+              </article>
+            </li>
+            <li data-product data-slug="burp-cloth-and-napkin-duo" data-name="Burp Cloth &amp; Napkin Duo" data-price="1450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-category="napkins" data-new="1" data-sale="0" data-featured="15" data-added="96" data-tags="muslin newborn-essentials travel">
+              <article class="product-card">
+                <div class="product-card__media">
+                  <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  <span class="badge badge--lilac product-card__badge">New</span>
+                  <button type="button" class="product-card__quick" data-quick-add data-slug="burp-cloth-and-napkin-duo" data-name="Burp Cloth &amp; Napkin Duo" data-price="1450" data-tone="4" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m 12-18m 18-24m 2y 3y" data-colours="sky lilac" aria-haspopup="dialog" aria-label="Quick add, Burp Cloth &amp; Napkin Duo">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                    <span class="product-card__quick-label">Quick add</span>
+                  </button>
+                </div>
+                <div class="product-card__info">
+                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Burp Cloth &amp; Napkin Duo</a></h3>
+                  <p class="product-card__meta">2 colours · NB–3Y</p>
+                  <p class="price"><span class="price__now">Rs. 1,450</span></p>
+                </div>
+              </article>
+            </li>
+            <!-- /gen: product-grid -->
+          </ul>
         </div>
-        <ul class="product-grid" role="list">
-          <!-- blade: badge priority @if out_of_stock Out of stock @elseif sale Sale (accent) @elseif new New (lilac) -->
-          <!-- gen: product-grid featured -->
-          <li data-product data-slug="ribbed-cotton-bodysuit" data-name="Ribbed Cotton Bodysuit" data-price="2450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m" data-category="bodysuits" data-new="0" data-sale="1" data-featured="1" data-added="90" data-tags="everyday-basics breathable-cotton layering">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--accent product-card__badge">Sale</span>
-                <button type="button" class="product-card__quick" data-quick-add data-slug="ribbed-cotton-bodysuit" data-name="Ribbed Cotton Bodysuit" data-price="2450" data-was="2950" data-tone="2" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m 12-18m" data-colours="cream lilac sky blush" aria-haspopup="dialog" aria-label="Quick add, Ribbed Cotton Bodysuit">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Ribbed Cotton Bodysuit</a></h3>
-                <p class="product-card__meta">4 colours · NB–18m</p>
-                <p class="price price--sale"><span class="visually-hidden">Sale price </span><span class="price__now">Rs. 2,450</span> <s class="price__was"><span class="visually-hidden">Was </span>Rs. 2,950</s></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-size="9-12m 12-18m 18-24m" data-category="sets" data-new="1" data-sale="0" data-featured="2" data-added="98" data-tags="festive-wear gift-idea breathable-cotton">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-tone="4" data-sizes="9-12m 12-18m 18-24m" data-colours="cream sky lilac" aria-haspopup="dialog" aria-label="Quick add, Cotton Kurta Set">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Cotton Kurta Set</a></h3>
-                <p class="product-card__meta">3 colours · 9m–24m</p>
-                <p class="price"><span class="price__now">Rs. 4,950</span></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="muslin-sleep-bag-05-tog" data-name="Muslin Sleep Bag 0.5 TOG" data-price="4200" data-size="3-6m 6-9m 9-12m 12-18m 18-24m" data-category="sleepwear" data-new="0" data-sale="0" data-featured="3" data-added="80" data-tags="sleep muslin lightweight">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                
-                <button type="button" class="product-card__quick" data-quick-add data-slug="muslin-sleep-bag-05-tog" data-name="Muslin Sleep Bag 0.5 TOG" data-price="4200" data-tone="3" data-sizes="3-6m 6-9m 9-12m 12-18m 18-24m" data-colours="cream sky dove" aria-haspopup="dialog" aria-label="Quick add, Muslin Sleep Bag 0.5 TOG">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Muslin Sleep Bag 0.5 TOG</a></h3>
-                <p class="product-card__meta">3 colours · 3m–24m</p>
-                <p class="price"><span class="price__now">Rs. 4,200</span></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="bamboo-sleepsuit" data-name="Bamboo Sleepsuit" data-price="3650" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="sleepwear" data-new="0" data-sale="0" data-featured="4" data-added="85" data-tags="sleep bamboo lightweight">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                
-                <button type="button" class="product-card__quick" data-quick-add data-slug="bamboo-sleepsuit" data-name="Bamboo Sleepsuit" data-price="3650" data-tone="1" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m" data-colours="lilac cream sky dove" aria-haspopup="dialog" aria-label="Quick add, Bamboo Sleepsuit">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Bamboo Sleepsuit</a></h3>
-                <p class="product-card__meta">4 colours · NB–12m</p>
-                <p class="price"><span class="price__now">Rs. 3,650</span></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="pointelle-romper" data-name="Pointelle Romper" data-price="3200" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="bodysuits" data-new="0" data-sale="0" data-featured="5" data-added="88" data-tags="lightweight breathable-cotton festive-wear">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                
-                <button type="button" class="product-card__quick" data-quick-add data-slug="pointelle-romper" data-name="Pointelle Romper" data-price="3200" data-tone="4" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m" data-colours="blush cream lilac" aria-haspopup="dialog" aria-label="Quick add, Pointelle Romper">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Pointelle Romper</a></h3>
-                <p class="product-card__meta">3 colours · NB–12m</p>
-                <p class="price"><span class="price__now">Rs. 3,200</span></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="waffle-knit-cardigan" data-name="Waffle Knit Cardigan" data-price="3900" data-size="6-9m 9-12m 12-18m 18-24m" data-category="outerwear" data-new="0" data-sale="0" data-featured="6" data-added="75" data-tags="layering rainy-day">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                
-                <button type="button" class="product-card__quick" data-quick-add data-slug="waffle-knit-cardigan" data-name="Waffle Knit Cardigan" data-price="3900" data-tone="1" data-sizes="6-9m 9-12m 12-18m 18-24m" data-colours="cream dove lilac" aria-haspopup="dialog" aria-label="Quick add, Waffle Knit Cardigan">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Waffle Knit Cardigan</a></h3>
-                <p class="product-card__meta">3 colours · 6m–24m</p>
-                <p class="price"><span class="price__now">Rs. 3,900</span></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="newborn-hospital-set" data-name="Newborn Hospital Set" data-price="3450" data-size="newborn 0-3m" data-category="newborn" data-new="1" data-sale="0" data-featured="7" data-added="97" data-tags="newborn-essentials gift-idea breathable-cotton">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <span class="badge badge--lilac product-card__badge">New</span>
-                <button type="button" class="product-card__quick" data-quick-add data-slug="newborn-hospital-set" data-name="Newborn Hospital Set" data-price="3450" data-tone="2" data-sizes="newborn 0-3m" data-colours="cream sky blush" aria-haspopup="dialog" aria-label="Quick add, Newborn Hospital Set">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Newborn Hospital Set</a></h3>
-                <p class="product-card__meta">3 colours · NB–3m</p>
-                <p class="price"><span class="price__now">Rs. 3,450</span></p>
-              </div>
-            </article>
-          </li>
-          <li data-product data-slug="muslin-swaddle-wrap" data-name="Muslin Swaddle Wrap" data-price="2250" data-size="newborn 0-3m" data-category="newborn" data-new="0" data-sale="0" data-featured="8" data-added="78" data-tags="newborn-essentials muslin travel lightweight">
-            <article class="product-card">
-              <div class="product-card__media">
-                <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                
-                <button type="button" class="product-card__quick" data-quick-add data-slug="muslin-swaddle-wrap" data-name="Muslin Swaddle Wrap" data-price="2250" data-tone="1" data-sizes="newborn 0-3m" data-colours="sky cream" aria-haspopup="dialog" aria-label="Quick add, Muslin Swaddle Wrap">
-                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
-                  <span class="product-card__quick-label">Quick add</span>
-                </button>
-              </div>
-              <div class="product-card__info">
-                <h3 class="product-card__name"><a class="product-card__link" href="product.html">Muslin Swaddle Wrap</a></h3>
-                <p class="product-card__meta">2 colours · NB–3m</p>
-                <p class="price"><span class="price__now">Rs. 2,250</span></p>
-              </div>
-            </article>
-          </li>
-          <!-- /gen: product-grid -->
-        </ul>
+        <div class="products__panel" role="tabpanel" id="panel-best" aria-labelledby="tab-best" hidden>
+          <h3 class="products__panel-title">Bestsellers</h3>
+          <ul class="product-grid" role="list">
+            <!-- blade: the products with the admin Featured toggle on, lowest featured rank first (the Bestsellers tab) -->
+            <!-- gen: product-grid featured:4 -->
+            <li data-product data-slug="ribbed-cotton-bodysuit" data-name="Ribbed Cotton Bodysuit" data-price="2450" data-size="newborn 0-3m 3-6m 6-9m 9-12m 12-18m" data-category="bodysuits" data-new="0" data-sale="1" data-featured="1" data-added="90" data-tags="everyday-basics breathable-cotton layering">
+              <article class="product-card">
+                <div class="product-card__media">
+                  <div class="media" data-placeholder style="--tone: var(--tone-2)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  <span class="badge badge--accent product-card__badge">Sale</span>
+                  <button type="button" class="product-card__quick" data-quick-add data-slug="ribbed-cotton-bodysuit" data-name="Ribbed Cotton Bodysuit" data-price="2450" data-was="2950" data-tone="2" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m 12-18m" data-colours="cream lilac sky blush" aria-haspopup="dialog" aria-label="Quick add, Ribbed Cotton Bodysuit">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                    <span class="product-card__quick-label">Quick add</span>
+                  </button>
+                </div>
+                <div class="product-card__info">
+                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Ribbed Cotton Bodysuit</a></h3>
+                  <p class="product-card__meta">4 colours · NB–18m</p>
+                  <p class="price price--sale"><span class="visually-hidden">Sale price </span><span class="price__now">Rs. 2,450</span> <s class="price__was"><span class="visually-hidden">Was </span>Rs. 2,950</s></p>
+                </div>
+              </article>
+            </li>
+            <li data-product data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-size="9-12m 12-18m 18-24m" data-category="sets" data-new="1" data-sale="0" data-featured="2" data-added="98" data-tags="festive-wear gift-idea breathable-cotton">
+              <article class="product-card">
+                <div class="product-card__media">
+                  <div class="media" data-placeholder style="--tone: var(--tone-4)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  <span class="badge badge--lilac product-card__badge">New</span>
+                  <button type="button" class="product-card__quick" data-quick-add data-slug="cotton-kurta-set" data-name="Cotton Kurta Set" data-price="4950" data-tone="4" data-sizes="9-12m 12-18m 18-24m" data-colours="cream sky lilac" aria-haspopup="dialog" aria-label="Quick add, Cotton Kurta Set">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                    <span class="product-card__quick-label">Quick add</span>
+                  </button>
+                </div>
+                <div class="product-card__info">
+                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Cotton Kurta Set</a></h3>
+                  <p class="product-card__meta">3 colours · 9m–24m</p>
+                  <p class="price"><span class="price__now">Rs. 4,950</span></p>
+                </div>
+              </article>
+            </li>
+            <li data-product data-slug="muslin-sleep-bag-05-tog" data-name="Muslin Sleep Bag 0.5 TOG" data-price="4200" data-size="3-6m 6-9m 9-12m 12-18m 18-24m" data-category="sleepwear" data-new="0" data-sale="0" data-featured="3" data-added="80" data-tags="sleep muslin lightweight">
+              <article class="product-card">
+                <div class="product-card__media">
+                  <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  
+                  <button type="button" class="product-card__quick" data-quick-add data-slug="muslin-sleep-bag-05-tog" data-name="Muslin Sleep Bag 0.5 TOG" data-price="4200" data-tone="3" data-sizes="3-6m 6-9m 9-12m 12-18m 18-24m" data-colours="cream sky dove" aria-haspopup="dialog" aria-label="Quick add, Muslin Sleep Bag 0.5 TOG">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                    <span class="product-card__quick-label">Quick add</span>
+                  </button>
+                </div>
+                <div class="product-card__info">
+                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Muslin Sleep Bag 0.5 TOG</a></h3>
+                  <p class="product-card__meta">3 colours · 3m–24m</p>
+                  <p class="price"><span class="price__now">Rs. 4,200</span></p>
+                </div>
+              </article>
+            </li>
+            <li data-product data-slug="bamboo-sleepsuit" data-name="Bamboo Sleepsuit" data-price="3650" data-size="newborn 0-3m 3-6m 6-9m 9-12m" data-category="sleepwear" data-new="0" data-sale="0" data-featured="4" data-added="85" data-tags="sleep bamboo lightweight">
+              <article class="product-card">
+                <div class="product-card__media">
+                  <div class="media" data-placeholder style="--tone: var(--tone-1)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                  
+                  <button type="button" class="product-card__quick" data-quick-add data-slug="bamboo-sleepsuit" data-name="Bamboo Sleepsuit" data-price="3650" data-tone="1" data-sizes="newborn 0-3m 3-6m 6-9m 9-12m" data-colours="lilac cream sky dove" aria-haspopup="dialog" aria-label="Quick add, Bamboo Sleepsuit">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+                    <span class="product-card__quick-label">Quick add</span>
+                  </button>
+                </div>
+                <div class="product-card__info">
+                  <h3 class="product-card__name"><a class="product-card__link" href="product.html">Bamboo Sleepsuit</a></h3>
+                  <p class="product-card__meta">4 colours · NB–12m</p>
+                  <p class="price"><span class="price__now">Rs. 3,650</span></p>
+                </div>
+              </article>
+            </li>
+            <!-- /gen: product-grid -->
+          </ul>
+        </div>
         <div class="section__foot">
           <a class="btn btn--secondary btn--lg" href="shop.html">Shop all</a>
         </div>
       </div>
     </section>
+
+    <!-- Promo banners (admin: home_promo). Each banner is one card with one real link (the button); a photo (process-images, banner-*) replaces the drawn garment. -->
+    <section class="section section--flush" aria-label="Promotions">
+      <div class="container promos__grid">
+        <!-- loop: home_promo -->
+        <!-- blade: class promo--{style} (lilac | sky) -->
+        <!-- TODO: placeholder copy, confirm with client -->
+        <article class="promo promo--lilac" data-reveal>
+          <!-- photo: banner-newborn -->
+          <!-- /photo: banner-newborn -->
+          <div class="promo__body">
+            <p class="eyebrow">Newborn essentials</p>
+            <h2 class="promo__title">Everything for the first weeks</h2>
+            <p class="promo__text">Bodysuits, sleepsuits and swaddles for the hospital bag and the weeks after.</p>
+            <a class="btn btn--primary btn--sm promo__link" href="category.html?c=newborn">Shop newborn</a>
+          </div>
+          <div class="promo__art" data-art="newborn" data-c="white" data-speed=".06" aria-hidden="true"></div>
+        </article>
+        <article class="promo promo--sky" data-reveal style="--i: 1">
+          <!-- photo: banner-sale -->
+          <!-- /photo: banner-sale -->
+          <div class="promo__body">
+            <p class="eyebrow">Sale</p>
+            <h2 class="promo__title">Selected styles, lower prices</h2>
+            <p class="promo__text">Last sizes of the season's favourites, while they last.</p>
+            <a class="btn btn--primary btn--sm promo__link" href="shop.html?sale=1">Shop the sale</a>
+          </div>
+          <div class="promo__art" data-art="cardigan" data-c="peri" data-speed=".06" aria-hidden="true"></div>
+        </article>
+        <!-- /loop -->
+      </div>
+    </section>
+
+    <!-- Reviews. SAMPLE reviews (marked): the real section is the "Home reviews feed" (docs/backend-contract.md 3.1): approved, verified-purchase
+         reviews rated 4 or more, the latest 3 to 6. blade: @if the feed is empty, leave the whole section out. On phones the list is a snap scroller with a peek. -->
+    <section class="section section--flush reviews-sec" aria-labelledby="rev-title">
+      <div class="container">
+        <div class="section__head">
+          <div>
+            <p class="eyebrow">From parents <mark class="proposed"><span class="marker-label">Proposed</span> Sample reviews, replace with approved ones</mark></p>
+            <h2 class="split" id="rev-title">Loved in Sri Lankan homes</h2>
+          </div>
+          <a class="link-arrow" href="product.html#reviews" data-reveal>Read reviews <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
+        </div>
+        <!-- loop: home_review (rating, quote, first name, baby age, size bought; verified purchase only) -->
+        <ul class="reviews" role="list" id="reviews" aria-label="Customer reviews">
+          <li>
+            <figure class="review" data-reveal>
+              <div class="stars" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg></div>
+              <blockquote>The 3–6m bodysuits fit exactly as the guide said. Soft enough that she sleeps in them all afternoon.</blockquote>
+              <figcaption><div class="who"><span class="av" aria-hidden="true">N</span><span><b>Nadeesha</b>Baby 4 months · <span class="who__size">Bought 3–6m</span></span></div><span class="vp"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg> Verified purchase</span></figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure class="review" data-reveal style="--i: 1">
+              <div class="stars" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg></div>
+              <blockquote>Ordered one size up by mistake and the swap was sorted on WhatsApp in a day. Delivered to Kandy in three days.</blockquote>
+              <figcaption><div class="who"><span class="av" aria-hidden="true">I</span><span><b>Ishara</b>Baby 9 months · <span class="who__size">Bought 12–18m</span></span></div><span class="vp"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg> Verified purchase</span></figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure class="review" data-reveal style="--i: 2">
+              <div class="stars" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 3 14.9 9.3 21.8 9.9 16.6 14.5 18.1 21.3 12 17.8 5.9 21.3 7.4 14.5 2.2 9.9 9.1 9.3"/></svg></div>
+              <blockquote>The hospital set was the nicest thing in our bag. Breathable cotton, no scratchy labels.</blockquote>
+              <figcaption><div class="who"><span class="av" aria-hidden="true">F</span><span><b>Fathima</b>Newborn · <span class="who__size">Bought Newborn</span></span></div><span class="vp"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg> Verified purchase</span></figcaption>
+            </figure>
+          </li>
+        </ul>
+        <!-- /loop -->
+      </div>
+    </section>
+
+    <!-- Size help: the WhatsApp link is the same placeholder as the footer and the delivery page (the number comes from the admin settings) -->
+    <section class="section section--flush" aria-labelledby="help-title">
+      <div class="container">
+        <div class="help" data-reveal data-live>
+          <div class="help__tape" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" focusable="false"><circle cx="10" cy="11" r="7"/><circle cx="10" cy="11" r="2"/><path d="M17 11h4v6h-9"/><path d="M14 17v-2M17 17v-2"/></svg></div>
+          <div>
+            <h2 id="help-title">Not sure which size?</h2>
+            <p>Send us your baby's age and weight on WhatsApp and we'll suggest a size. If it doesn't fit, swap it free within <span data-cfg="return_window_days">14</span> days.</p>
+          </div>
+          <a class="btn btn--white btn--lg" href="https://wa.me/" target="_blank" rel="noopener"><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-whatsapp"></use></svg> Chat on WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROTOTYPE ONLY (review aid, remove before launch): shown only on devices that ask for reduced motion; lets a reviewer see the animations. -->
+    <div class="motion-pill" id="motionPill"><span id="motionText">Your device asks for less motion</span><button type="button" id="motionBtn">Show animations</button></div>
 
   </main>
 
@@ -1158,10 +1239,14 @@
   <script src="assets/js/proto-search.js?v=5cdf6905" defer></script> <!-- PROTOTYPE ONLY: answers the suggestion requests from catalogue-data.js; production calls GET /search/suggest?q= -->
   <script src="assets/js/app.js?v=ad3e672a" defer></script>
   <!-- /partial: scripts -->
-  <script src="assets/js/home/garments.js?v=eadb3134" defer></script> <!-- the garment drawings, fabric textures and hanger: window.KayaaGarments -->
+  <script src="assets/js/home/garments.js?v=4c28553e" defer></script> <!-- the garment drawings, fabric textures and hanger: window.KayaaGarments -->
   <script src="assets/js/home/home-core.js?v=7adbc483" defer></script> <!-- helpers, the preloader, word-rise headings, scroll reveal -->
   <script src="assets/js/home/home-hero.js?v=053cd7bb" defer></script> <!-- the washing line in the hero -->
   <script src="assets/js/home/home-age.js?v=ff07453a" defer></script> <!-- Shop by age -->
   <script src="assets/js/home/home-rail.js?v=87caa885" defer></script> <!-- the category rail -->
+  <script src="assets/js/home/home-marquee.js?v=2c04f224" defer></script> <!-- the scrolling band -->
+  <script src="assets/js/home/home-fabrics.js?v=18d05ba6" defer></script> <!-- the cloth swatch and the fabric tabs -->
+  <script src="assets/js/home/home-products.js?v=de4038ee" defer></script> <!-- New this week / Bestsellers tabs, card entrance and tilt -->
+  <script src="assets/js/home/home-extras.js?v=9eed7948" defer></script> <!-- promo drawings, light parallax, reviews scroller, the motion pill (prototype only) -->
 </body>
 </html>

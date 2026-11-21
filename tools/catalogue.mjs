@@ -14,11 +14,12 @@
 //   product-tags SLUG                         the "Tags" chip row of the product page (links to shop.html?tag=)
 //   size-guide-slider [panel]                 the three-step "How to find your size" slider (tools/content.mjs; used in the product page panel)
 //   home-rail | home-rail-links | home-size-range | home-age-chips | home-age-text | home-age-data   the Home rail, the size range in the hero tag and the shop-by-age explorer
+//   home-marquee | home-fabric-tabs | home-fabric-panels   the Home scrolling band (messages from tools/site-config.json "marquee") and the fabric swatch tabs and cards (docs/content/fabrics.md, PROPOSED copy)
 //   wardrobe-items | wardrobe-ticker          the seven hanging garments and the optional message strip of html/mockups/wardrobe.html (prototype only)
 //   footer-clothesline                        the footer's clothesline art (html/assets/img/footer/footer-clothesline.svg, inlined)
 //   decisions                                 the open-decisions table for html/review-decisions.html (tools/build-decisions.mjs)
 //   content NAME | faqs PLACEMENT | district-eta | todo-counts | listing-intro KIND/SLUG   built from docs/content (see tools/content.mjs)
-//   product-grid SCOPE                        <li> cards: all | new | featured | related:SLUG
+//   product-grid SCOPE                        <li> cards: all | new | featured | featured:N (the N lowest featured ranks) | related:SLUG
 import fs from 'node:fs';
 import path from 'node:path';
 import { renderDecisions } from './build-decisions.mjs';
@@ -87,6 +88,28 @@ function homeAges(cat, repo) {
     const name = m ? `${m[1]}–${m[2]} months` : y ? `${y[1]} ${y[1] === '1' ? 'year' : 'years'}` : s.label;
     return { name, height: row.height, weight: row.weight, h: range(row.height, 45), w: range(row.weight, 2), g: garment[i] || 'set' };
   });
+}
+
+// docs/content/fabrics.md: one "## Name" block per fabric with "- key: value" lines (PROPOSED copy, see that file)
+function loadFabrics(repo) {
+  const lines = fs.readFileSync(path.join(repo, 'docs', 'content', 'fabrics.md'), 'utf8').replace(/\r\n/g, '\n').split('\n');
+  const out = []; let cur = null;
+  for (const line of lines) {
+    const h = line.match(/^## (.+)$/);
+    if (h) { cur = { name: h[1].trim() }; out.push(cur); continue; }
+    const kv = cur && line.match(/^- (\w+): (.*)$/);
+    if (kv) cur[kv[1]] = kv[2].trim();
+  }
+  for (const f of out) for (const k of ['key', 'colour', 'line', 'feel', 'best', 'care', 'stiff', 'flutter', 'match']) if (!f[k]) throw new Error('fabrics.md: "' + f.name + '" has no ' + k);
+  return out;
+}
+// the real products a fabric appears in: "tag:<slug>" matches a product tag, "name:<word>" a word of the name
+function fabricProducts(cat, f) {
+  const rules = f.match.split(',').map((s) => s.trim()).filter(Boolean);
+  return cat.products.filter((p) => rules.some((r) => {
+    const [kind, val] = r.split(':');
+    return kind === 'tag' ? (p.tags || []).includes(val) : p.name.toLowerCase().includes(val.toLowerCase());
+  })).sort((a, b) => a.featured - b.featured).slice(0, 4);
 }
 
 function card(cat, cfg, p, root) {
@@ -193,6 +216,31 @@ export function generate(name, args, ctx) {
       const data = homeAges(cat, ctx.repo).map((a, i) => ({ slug: S[i].slug, label: S[i].label, name: a.name, href: sizeHref(S[i]), height: a.height, weight: a.weight, h: a.h, w: a.w, g: a.g }));
       return `<script type="application/json" id="age-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
     }
+    // ---- Home, part B (html/index.html): the scrolling band and the fabric swatch ----
+    case 'home-marquee': {
+      // the second list is a visual copy for the seamless loop, so it is hidden from screen readers
+      const flower = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8Zm0 12c1.6 3 1.6 5 0 8-1.6-3-1.6-5 0-8ZM2 12c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Zm12 0c3-1.6 5-1.6 8 0-3 1.6-5 1.6-8 0Z"/></svg>';
+      const items = (cfg.marquee || []).map((m, i) => `<li><span class="marquee__word${i % 2 ? ' marquee__word--o' : ''}">${esc(m)}</span>${flower}</li>`).join('');
+      return `<ul class="marquee__set" role="list">${items}</ul>
+<ul class="marquee__set" role="list" aria-hidden="true">${items}</ul>`;
+    }
+    case 'home-fabric-tabs':
+      return loadFabrics(ctx.repo).map((f, i) => `<button class="fab-tab" role="tab" type="button" id="fab-${f.key}" aria-selected="${i === 0}" aria-controls="fab-panel-${f.key}"${i ? ' tabindex="-1"' : ''} data-key="${esc(f.key)}" data-name="${esc(f.name)}" data-col="${esc(f.colour)}" data-stiff="${esc(f.stiff)}" data-flutter="${esc(f.flutter)}"><i aria-hidden="true"></i>${esc(f.name)}</button>`).join('\n');
+    case 'home-fabric-panels':
+      return loadFabrics(ctx.repo).map((f, i) => {
+        const found = fabricProducts(cat, f);
+        const links = found.length ? found.map((p) => `<a href="${root}product.html">${esc(p.name)}</a>`).join(', ') : `<a href="${root}search.html?q=${encodeURIComponent(f.name)}">Search for ${esc(f.name.toLowerCase())}</a>`;
+        return `<div class="fab-panel" role="tabpanel" id="fab-panel-${f.key}" aria-labelledby="fab-${f.key}"${i ? ' hidden' : ''}>
+  <h3 class="fab-panel__name">${esc(f.name)}</h3>
+  <p class="fab-panel__line">${esc(f.line)}</p>
+  <dl class="fab-facts">
+    <div><dt>Feels</dt><dd>${esc(f.feel)}</dd></div>
+    <div><dt>Best for</dt><dd>${esc(f.best)}</dd></div>
+    <div><dt>Care</dt><dd>${esc(f.care)}</dd></div>
+  </dl>
+  <p class="fab-found">Found in: ${links}</p>
+</div>`;
+      }).join('\n');
     case 'wardrobe-items': {
       // html/mockups/wardrobe.html (prototype only): one hanging garment per category; the counts and the size range come from the products.
       // Each item has two layers that share the hook ring's centre as their pivot: the back half of the ring (behind the rod) and the front
@@ -289,6 +337,7 @@ ${p.tagList.map((t) => `      <li><a class="chip" href="${root}shop.html?tag=${t
       let list = cat.products.slice();
       if (scope === 'new') list = list.filter((p) => p.new).sort((a, b) => b.added - a.added).slice(0, 4);
       else if (scope === 'featured') list = list.sort((a, b) => a.featured - b.featured).slice(0, 8);
+      else if (/^featured:\d+$/.test(scope)) list = list.sort((a, b) => a.featured - b.featured).slice(0, parseInt(scope.slice(9), 10));
       else if (scope.startsWith('related:')) {
         const slug = scope.slice(8);
         const me = cat.products.find((p) => p.slug === slug);

@@ -249,19 +249,24 @@ const hit = async (p, i) => { const b = await p.locator('.hanger .hit').nth(i).b
 }
 
 // ---------------------------------------------------------------- layout: widths, text size, console over file://
-for (const w of [320, 360, 375, 390, 412, 768, 1024, 1280, 1920]) {
-  const { ctx, p } = await page({ viewport: { width: w, height: 800 }, isMobile: w < 900, hasTouch: w < 900 });
+for (const [w, vh] of [[320, 800], [360, 800], [375, 800], [390, 800], [412, 800], [430, 800], [667, 375], [768, 800], [820, 800], [1024, 800], [1280, 800], [1920, 800]]) {
+  const { ctx, p } = await page({ viewport: { width: w, height: vh }, isMobile: w < 900, hasTouch: w < 900 });
   await p.waitForTimeout(1200);
   await p.evaluate(() => document.getElementById('rail').scrollIntoView()); await p.waitForTimeout(3800);
   const m = await p.evaluate(() => ({ sw: document.documentElement.scrollWidth, stage: document.getElementById('railStage').getBoundingClientRect().height, css: parseFloat(getComputedStyle(document.getElementById('railStage')).height) }));
-  ok(`layout ${w}: no horizontal page scroll`, m.sw <= w, `scrollWidth ${m.sw}`);
+  ok(`layout ${w}${vh === 375 ? 'x375' : ''}: no horizontal page scroll`, m.sw <= w, `scrollWidth ${m.sw}`);
+  if (w < 900) {   // 44px tap targets in the new sections (inline links inside a sentence are exempt)
+    await p.evaluate(() => document.querySelector('#products').scrollIntoView()); await p.waitForTimeout(1500);
+    const small = await p.evaluate(() => [...document.querySelectorAll('.marquee__pause, .fab-tab, .tab, .product-card__quick, .promo__link, .help .btn, .motion-pill button, .products .section__foot .btn, .reviews-sec .link-arrow')].filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && getComputedStyle(e).visibility !== 'hidden' && (r.height < 43.5 || r.width < 43.5); }).map((e) => e.className + ' ' + Math.round(e.getBoundingClientRect().width) + 'x' + Math.round(e.getBoundingClientRect().height)));
+    ok(`tap targets ${w}: the new buttons and tabs are at least 44px`, small.length === 0, small.join(', '));
+  }
   await ctx.close();
 }
 for (const w of [375, 1280]) {
   const { ctx, p } = await page({ viewport: { width: w, height: 800 }, isMobile: w < 900, hasTouch: w < 900 });
   await p.evaluate(() => { const els = [...document.querySelectorAll('main *')]; const sizes = els.map((e) => parseFloat(getComputedStyle(e).fontSize)); els.forEach((e, i) => e.style.setProperty('font-size', sizes[i] * 2 + 'px', 'important')); });
   await p.waitForTimeout(600);
-  const m = await p.evaluate(() => ({ sw: document.documentElement.scrollWidth, over: [...document.querySelectorAll('.hero__copy *, .age-panel *, .section__head *')].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).length }));
+  const m = await p.evaluate(() => ({ sw: document.documentElement.scrollWidth, over: [...document.querySelectorAll('.hero__copy *, .age-panel *, .section__head *, .fab-card *, .promo *, .review *, .help *')].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).length }));
   ok(`text size 200% @${w}: no horizontal page scroll`, m.sw <= w, JSON.stringify(m));
   await ctx.close();
 }
@@ -281,6 +286,265 @@ for (const w of [375, 1280]) {
   await p2.goto(pathToFileURL(path.join(repo, 'html', 'index.html')).href, { waitUntil: 'load' }); await p2.waitForTimeout(2800);
   ok('console: no errors over file:// with the preloader playing', errs2.length === 0, errs2.join('|'));
   await c2.close();
+}
+
+// ---------------------------------------------------------------- part B: the scrolling band
+const tx = (p) => p.evaluate(() => { const m = (document.getElementById('mqTrack').style.transform || '').match(/translate3d\(([-0-9.]+)px/); return m ? parseFloat(m[1]) : 0; });
+const toBand = async (p) => { await p.evaluate(() => document.querySelector('.marquee').scrollIntoView({ block: 'center' })); await p.waitForTimeout(500); };
+{
+  const { ctx, p, errs } = await page();
+  await toBand(p);
+  await p.waitForTimeout(2200);
+  const a = await tx(p); await p.waitForTimeout(500); const b = await tx(p);
+  ok('band: it moves on its own (base speed about 42px/s)', Math.abs(b - a) > 8 && Math.abs(b - a) < 60, `moved ${(b - a).toFixed(1)}px in 0.5s`);
+  const hid = await p.evaluate(() => { const sets = document.querySelectorAll('.marquee__set'); return { n: sets.length, second: sets[1].getAttribute('aria-hidden'), first: sets[0].getAttribute('aria-hidden'), words: [...sets[0].querySelectorAll('.marquee__word')].map((e) => e.textContent), outlined: sets[0].querySelectorAll('.marquee__word--o').length }; });
+  ok('band: the second copy is aria-hidden; the six messages come from the site config; solid and outlined words alternate', hid.n === 2 && hid.second === 'true' && !hid.first && hid.words.length === 6 && hid.outlined === 3, JSON.stringify(hid.words));
+  const btn = p.locator('#mqPause');
+  const bb = await btn.boundingBox();
+  ok('band: a visible Pause button, aria-pressed false, 44px', (await btn.getAttribute('aria-pressed')) === 'false' && bb.width >= 44 && bb.height >= 44, `${bb.width}x${bb.height}`);
+  await btn.click();
+  const s1 = await tx(p); await p.waitForTimeout(500); const s2 = await tx(p);
+  ok('band: Pause stops it (aria-pressed true, label "Play the moving text")', s1 === s2 && (await btn.getAttribute('aria-pressed')) === 'true' && /Play/.test(await btn.getAttribute('aria-label')), `${s1} ${s2}`);
+  await btn.click(); await p.waitForTimeout(150);
+  const r1 = await tx(p); await p.waitForTimeout(500); const r2 = await tx(p);
+  ok('band: Play starts it again', Math.abs(r2 - r1) > 8 && (await btn.getAttribute('aria-pressed')) === 'false', `${(r2 - r1).toFixed(1)}px`);
+  // scrolling boosts the speed and sets the direction
+  await p.waitForTimeout(1500);
+  const q1 = await tx(p); await p.waitForTimeout(250); const q2 = await tx(p); const base = Math.abs(q2 - q1);
+  await p.mouse.move(640, 400);
+  for (let i = 0; i < 4; i++) { await p.mouse.wheel(0, -30); await p.waitForTimeout(20); }   // scroll up: reverses and speeds up
+  const w1 = await tx(p); await p.waitForTimeout(250); const w2 = await tx(p);
+  ok('band: scrolling the page speeds it up and sets the direction', Math.abs(w2 - w1) > base * 1.8 && Math.sign(w2 - w1) !== Math.sign(q2 - q1), `base ${base.toFixed(1)}px/250ms, after scroll ${(w2 - w1).toFixed(1)}px`);
+  // off-screen: the loop sleeps
+  await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(600);
+  const o1 = await tx(p); await p.waitForTimeout(500); const o2 = await tx(p);
+  ok('band: the loop sleeps while the band is off-screen', o1 === o2, `${o1} ${o2}`);
+  ok('band: no console errors', errs.length === 0, errs.join('|'));
+  await ctx.close();
+  const r = await page({ reducedMotion: 'reduce' });
+  await toBand(r.p);
+  const rm = await r.p.evaluate(() => { const t = document.getElementById('mqTrack'), sets = document.querySelectorAll('.marquee__set'); return { btn: getComputedStyle(document.getElementById('mqPause')).display, second: getComputedStyle(sets[1]).display, wrap: getComputedStyle(sets[0]).whiteSpace, flexWrap: getComputedStyle(sets[0]).flexWrap, tr: t.style.transform, sw: document.documentElement.scrollWidth }; });
+  await r.p.waitForTimeout(500);
+  const rm2 = await r.p.evaluate(() => document.getElementById('mqTrack').style.transform);
+  ok('band: reduced motion shows one static wrapped line and no button', rm.btn === 'none' && rm.second === 'none' && rm.wrap === 'normal' && rm.flexWrap === 'wrap' && !rm.tr && !rm2 && rm.sw <= 1280, JSON.stringify(rm));
+  await r.ctx.close();
+}
+
+// ---------------------------------------------------------------- part B: fabrics (the cloth)
+const toFab = async (p) => { await p.evaluate(() => document.querySelector('#clothWrap').scrollIntoView({ block: 'center' })); await p.waitForTimeout(1200); };
+const canvasHash = (p) => p.evaluate(() => { const s = document.getElementById('cloth').toDataURL(); let h = 0; for (let i = 0; i < s.length; i += 37) h = (h * 31 + s.charCodeAt(i)) | 0; return h; });
+const clothPoint = async (p, fx, fy) => { const b = await p.locator('#cloth').boundingBox(); return { x: b.x + b.width * fx, y: b.y + b.height * fy, b }; };
+{
+  const { ctx, p, errs } = await page();
+  await toFab(p);
+  const h1 = await canvasHash(p); await p.waitForTimeout(700); const h2 = await canvasHash(p);
+  ok('fabrics: the cloth moves in the breeze (the canvas changes)', h1 !== h2);
+  const meta = await p.evaluate(() => { const c = document.getElementById('cloth'); return { role: c.getAttribute('role'), label: c.getAttribute('aria-label'), ta: getComputedStyle(c).touchAction, w: c.width, cssw: c.getBoundingClientRect().width, tabs: [...document.querySelectorAll('.fab-tab')].map((t) => t.textContent.trim()), tl: document.getElementById('fabTabs').getAttribute('role') }; });
+  ok('fabrics: canvas role="img" with a label, touch-action pan-y, device pixel ratio capped at 2', meta.role === 'img' && /swatch/.test(meta.label) && meta.ta === 'pan-y' && meta.w <= Math.ceil(meta.cssw * 2) + 1, JSON.stringify(meta));
+  ok('fabrics: four tabs in an ARIA tablist', meta.tl === 'tablist' && meta.tabs.join('|') === 'Muslin|Bamboo jersey|Ribbed cotton|Waffle knit', meta.tabs.join('|'));
+  // a grab moves the cloth
+  const start = await clothPoint(p, 0.5, 0.55);
+  const hintBefore = await p.evaluate(() => document.getElementById('clothHint').classList.contains('hide'));
+  await p.mouse.move(start.x, start.y); await p.mouse.down();
+  await p.mouse.move(start.x + 90, start.y + 70, { steps: 8 }); await p.waitForTimeout(200);
+  const g1 = await canvasHash(p);
+  await p.mouse.move(start.x - 90, start.y + 40, { steps: 8 }); await p.waitForTimeout(200);
+  const g2 = await canvasHash(p);
+  ok('fabrics: press and drag grabs the cloth and tugs it', g1 !== g2 && g1 !== h2);
+  await p.mouse.up();
+  ok('fabrics: the "Drag the fabric" hint hides after the first grab', !hintBefore && (await p.evaluate(() => document.getElementById('clothHint').classList.contains('hide'))));
+  // tabs: the label, the card and the texture change
+  const imgBefore = await canvasHash(p);
+  await p.locator('#fab-waffle').click(); await p.waitForTimeout(700);
+  const t = await p.evaluate(() => ({ label: document.getElementById('clothLabel').textContent, sel: document.getElementById('fab-waffle').getAttribute('aria-selected'), tabindex: document.getElementById('fab-muslin').tabIndex, shown: [...document.querySelectorAll('.fab-panel')].filter((e) => !e.hidden).map((e) => e.id), name: document.querySelector('.fab-panel:not([hidden]) .fab-panel__name').textContent, aria: document.getElementById('cloth').getAttribute('aria-label'), facts: [...document.querySelectorAll('.fab-panel:not([hidden]) dt')].map((e) => e.textContent).join('/') }));
+  ok('fabrics: a tab switch changes the label, the card and the canvas', t.label === 'Waffle knit' && t.sel === 'true' && t.tabindex === -1 && t.shown.join() === 'fab-panel-waffle' && t.name === 'Waffle knit' && /waffle knit/.test(t.aria) && t.facts === 'Feels/Best for/Care' && (await canvasHash(p)) !== imgBefore, JSON.stringify(t));
+  // keyboard
+  await p.locator('#fab-waffle').focus(); await p.keyboard.press('ArrowRight'); await p.waitForTimeout(350);
+  const k1 = await p.evaluate(() => ({ cur: document.querySelector('.fab-tab[aria-selected="true"]').id, focus: document.activeElement.id }));
+  await p.keyboard.press('ArrowLeft'); await p.waitForTimeout(350); await p.keyboard.press('ArrowLeft'); await p.waitForTimeout(350);
+  const k2 = await p.evaluate(() => ({ cur: document.querySelector('.fab-tab[aria-selected="true"]').id, focus: document.activeElement.id }));
+  await p.keyboard.press('Home'); await p.waitForTimeout(350); const k3 = await p.evaluate(() => document.querySelector('.fab-tab[aria-selected="true"]').id);
+  await p.keyboard.press('End'); await p.waitForTimeout(350); const k4 = await p.evaluate(() => document.querySelector('.fab-tab[aria-selected="true"]').id);
+  ok('fabrics: arrow keys (with wrap), Home and End move the tab and the focus', k1.cur === 'fab-muslin' && k1.focus === 'fab-muslin' && k2.cur === 'fab-rib' && k2.focus === 'fab-rib' && k3 === 'fab-muslin' && k4 === 'fab-waffle', JSON.stringify([k1, k2, k3, k4]));
+  // "Found in": real products with links; none is a "#"
+  const found = await p.evaluate(() => [...document.querySelectorAll('.fab-found')].map((e) => ({ n: e.querySelectorAll('a').length, bad: [...e.querySelectorAll('a')].filter((a) => !a.getAttribute('href') || a.getAttribute('href') === '#').length })));
+  ok('fabrics: "Found in" lists real products with real links (or a search link) for every fabric', found.length === 4 && found.every((f) => f.n >= 1 && f.bad === 0), JSON.stringify(found));
+  // the loop runs on screen and sleeps off-screen
+  await p.evaluate(() => { window.KAYAA_CLOTH_STATS = []; }); await p.waitForTimeout(800);
+  const on = await p.evaluate(() => window.KAYAA_CLOTH_STATS.length);
+  await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(500);
+  await p.evaluate(() => { window.KAYAA_CLOTH_STATS = []; }); await p.waitForTimeout(700);
+  const off = await p.evaluate(() => window.KAYAA_CLOTH_STATS.length);
+  ok('fabrics: the loop runs while on screen and stops off-screen', on > 20 && off === 0, `${on} frames in 0.8s on screen, ${off} in 0.7s off-screen`);
+  ok('fabrics: no console errors', errs.length === 0, errs.join('|'));
+  await ctx.close();
+}
+for (const [w, h, touch] of [[1280, 800, false], [390, 844, true]]) {
+  const { ctx, p } = await page({ viewport: { width: w, height: h }, isMobile: touch, hasTouch: touch });
+  await toFab(p);
+  await p.evaluate(() => { window.KAYAA_CLOTH_STATS = []; });
+  await p.waitForFunction(() => window.KAYAA_CLOTH_STATS.length >= 60, null, { timeout: 8000 }).catch(() => {});
+  const st = await p.evaluate(() => { const a = window.KAYAA_CLOTH_STATS.slice(0, 60); const s = a.reduce((x, y) => x + y, 0); return { n: a.length, avg: s / a.length, max: Math.max(...a), grid: document.getElementById('cloth').width + 'x' + document.getElementById('cloth').height }; });
+  console.log(`INFO cloth frame cost @${w} (sim + draw, 60 frames, headless Chromium, software rendering): average ${st.avg.toFixed(2)} ms, maximum ${st.max.toFixed(2)} ms, canvas ${st.grid}`);
+  ok(`fabrics: the cloth frame stays inside a 60 fps budget on average @${w}`, st.n >= 60 && st.avg < 16.6, `avg ${st.avg.toFixed(2)} ms, max ${st.max.toFixed(2)} ms`);
+  await ctx.close();
+}
+{
+  // reduced motion: a settled static drape, no loop; a grab re-settles it
+  const { ctx, p } = await page({ reducedMotion: 'reduce' });
+  await p.evaluate(() => { window.KAYAA_CLOTH_STATS = []; });
+  await toFab(p);
+  const a = await canvasHash(p); await p.waitForTimeout(800); const b = await canvasHash(p);
+  const frames = await p.evaluate(() => window.KAYAA_CLOTH_STATS.length);
+  ok('fabrics: reduced motion shows a settled static drape (no loop)', a === b && frames === 0, `${frames} frames`);
+  const st = await clothPoint(p, 0.5, 0.55);
+  await p.mouse.move(st.x, st.y); await p.mouse.down(); await p.mouse.move(st.x + 80, st.y + 60, { steps: 6 }); await p.waitForTimeout(150);
+  const c = await canvasHash(p); await p.mouse.up(); await p.waitForTimeout(300);
+  const d = await canvasHash(p);
+  ok('fabrics: reduced motion, a grab moves the cloth and releasing re-settles it', c !== a && d !== c, '');
+  await p.locator('#fab-rib').click(); await p.waitForTimeout(300);
+  ok('fabrics: reduced motion, a tab switch is instant', await p.evaluate(() => document.getElementById('clothLabel').textContent === 'Ribbed cotton' && !document.getElementById('fab-panel-rib').hidden));
+  await ctx.close();
+}
+
+// ---------------------------------------------------------------- part B: New this week / Bestsellers
+{
+  const { ctx, p, errs } = await page();
+  await p.evaluate(() => document.querySelector('#products').scrollIntoView()); await p.waitForTimeout(2400);
+  const a = await p.evaluate(() => ({ cards: document.querySelectorAll('#panel-new .product-card').length, entering: document.querySelectorAll('.product-card.enter').length, best: document.getElementById('panel-best').hidden, list: document.querySelector('#panel-new ul').getAttribute('role'), quick: document.querySelectorAll('#panel-new [data-quick-add]').length }));
+  ok('products: New this week shows the four real product cards (the shared card, with quick add)', a.cards === 4 && a.quick === 4 && a.best === true, JSON.stringify(a));
+  ok('products: the entrance class is removed on animationend (hover lift and tilt keep working)', a.entering === 0, `${a.entering} still entering`);
+  await p.locator('#tab-best').click(); await p.waitForTimeout(250);
+  const mid = await p.evaluate(() => document.querySelectorAll('#panel-best .product-card.enter').length);
+  await p.waitForTimeout(1600);
+  const b = await p.evaluate(() => ({ title: document.getElementById('prod-title').textContent, newHidden: document.getElementById('panel-new').hidden, bestHidden: document.getElementById('panel-best').hidden, sel: document.getElementById('tab-best').getAttribute('aria-selected'), tabindex: document.getElementById('tab-new').tabIndex, ranks: [...document.querySelectorAll('#panel-best li[data-product]')].map((e) => +e.dataset.featured), entering: document.querySelectorAll('.product-card.enter').length, pill: document.getElementById('tabPill').style.transform }));
+  ok('products: Bestsellers shows the four lowest featured ranks, the heading follows, the pill slides, the cards enter and then settle', b.title === 'Bestsellers' && b.newHidden && !b.bestHidden && b.sel === 'true' && b.tabindex === -1 && b.ranks.join() === '1,2,3,4' && mid === 4 && b.entering === 0 && /translateX\((?!0px)/.test(b.pill), JSON.stringify({ ...b, mid }));
+  await p.locator('#tab-best').focus(); await p.keyboard.press('ArrowRight'); await p.waitForTimeout(300);
+  const k1 = await p.evaluate(() => ({ cur: document.querySelector('.tab[aria-selected="true"]').id, focus: document.activeElement.id, title: document.getElementById('prod-title').textContent }));
+  await p.keyboard.press('End'); await p.waitForTimeout(200); const k2 = await p.evaluate(() => document.querySelector('.tab[aria-selected="true"]').id);
+  await p.keyboard.press('Home'); await p.waitForTimeout(200); const k3 = await p.evaluate(() => document.querySelector('.tab[aria-selected="true"]').id);
+  ok('products: arrow keys (with wrap), Home and End switch the tab and move the focus', k1.cur === 'tab-new' && k1.focus === 'tab-new' && k1.title === 'New this week' && k2 === 'tab-best' && k3 === 'tab-new', JSON.stringify([k1, k2, k3]));
+  await p.waitForTimeout(1500);
+  // the pointer tilt and its reset
+  const card = p.locator('#panel-new .product-card').nth(1); const bx = await card.boundingBox();
+  await p.mouse.move(bx.x + bx.width * 0.8, bx.y + bx.height * 0.2, { steps: 4 }); await p.waitForTimeout(400);
+  const tilt = await card.evaluate((e) => ({ ry: e.style.getPropertyValue('--ry'), rx: e.style.getPropertyValue('--rx'), tf: getComputedStyle(e).transform }));
+  await p.mouse.move(bx.x + bx.width * 0.5, bx.y - 60, { steps: 4 }); await p.waitForTimeout(500);
+  const back = await card.evaluate((e) => ({ ry: e.style.getPropertyValue('--ry'), rx: e.style.getPropertyValue('--rx') }));
+  ok('products: the tilt follows the pointer (up to 8deg, with the hover lift) and resets on leave', parseFloat(tilt.ry) > 1 && Math.abs(parseFloat(tilt.ry)) <= 8 && parseFloat(tilt.rx) > 1 && tilt.tf !== 'none' && back.ry === '0deg' && back.rx === '0deg', JSON.stringify({ tilt, back }));
+  // quick add opens the real sheet
+  await p.mouse.move(bx.x + bx.width / 2, bx.y + bx.height / 2, { steps: 3 }); await p.waitForTimeout(400);
+  await card.locator('[data-quick-add]').click(); await p.waitForTimeout(500);
+  const q = await p.evaluate(() => { const s = document.querySelector('[data-quick-add-sheet]'); return { open: s.classList.contains('is-open'), hidden: s.getAttribute('aria-hidden'), name: s.querySelector('[data-qa-name]').textContent, sizes: s.querySelectorAll('[data-qa-sizes] input').length, card: document.querySelectorAll('#panel-new .product-card h3')[1].textContent }; });
+  ok('products: quick add opens the real quick-add sheet for that product', q.open && q.hidden === 'false' && q.name === q.card && q.sizes >= 1, JSON.stringify(q));
+  await p.keyboard.press('Escape'); await p.waitForTimeout(400);
+  const links = await p.evaluate(() => ({ shop: document.querySelector('.products .section__foot a').getAttribute('href'), cards: [...document.querySelectorAll('#products .product-card__link')].filter((a) => !a.getAttribute('href') || a.getAttribute('href') === '#').length }));
+  ok('products: "Shop all" links to the shop page and every card has a real link', links.shop === 'shop.html' && links.cards === 0, JSON.stringify(links));
+  ok('products: no console errors', errs.length === 0, errs.join('|'));
+  await ctx.close();
+  // touch: no tilt
+  const t = await page({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await t.p.evaluate(() => document.querySelector('#products').scrollIntoView()); await t.p.waitForTimeout(1800);
+  const touchTilt = await t.p.evaluate(() => [...document.querySelectorAll('#panel-new .product-card')].some((c) => c.style.getPropertyValue('--ry')));
+  const cols = await t.p.evaluate(() => getComputedStyle(document.querySelector('#panel-new .product-grid')).gridTemplateColumns.split(' ').length);
+  ok('products: on touch there is no tilt, and the grid is two columns at 390', !touchTilt && cols === 2, `cols ${cols}`);
+  await t.ctx.close();
+  // reduced motion: no entrance, no tilt
+  const r = await page({ reducedMotion: 'reduce' });
+  await r.p.evaluate(() => document.querySelector('#products').scrollIntoView()); await r.p.waitForTimeout(500);
+  const rm = await r.p.evaluate(() => ({ enter: document.querySelectorAll('.product-card.enter').length, op: getComputedStyle(document.querySelector('#panel-new .product-card')).opacity }));
+  await r.p.locator('#tab-best').click(); await r.p.waitForTimeout(150);
+  const rm2 = await r.p.evaluate(() => ({ enter: document.querySelectorAll('.product-card.enter').length, shown: !document.getElementById('panel-best').hidden, op: getComputedStyle(document.querySelector('#panel-best .product-card')).opacity }));
+  ok('products: reduced motion, the cards are simply there (no entrance class) and the tab switch is instant', rm.enter === 0 && rm.op === '1' && rm2.enter === 0 && rm2.shown && rm2.op === '1', JSON.stringify([rm, rm2]));
+  await r.ctx.close();
+}
+
+// ---------------------------------------------------------------- part B: promos, reviews, size help
+{
+  const { ctx, p } = await page();
+  const pr = await p.evaluate(() => [...document.querySelectorAll('.promo')].map((e) => ({ href: e.querySelector('a').getAttribute('href'), svg: !!e.querySelector('.promo__art svg'), btn: e.querySelector('.promo__link').textContent.trim() })));
+  ok('promos: two banners with real links and a drawn garment each', pr.length === 2 && pr.every((x) => x.svg && x.href && x.href !== '#'), JSON.stringify(pr));
+  await p.evaluate(() => document.querySelector('.promos__grid').scrollIntoView({ block: 'center' })); await p.waitForTimeout(1500);
+  const g0 = await p.evaluate(() => getComputedStyle(document.querySelector('.promo__art .g')).transform);
+  const bb = await p.locator('.promo').first().boundingBox(); await p.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2); await p.waitForTimeout(1000);
+  const g1 = await p.evaluate(() => ({ tf: getComputedStyle(document.querySelector('.promo__art .g')).transform, btn: getComputedStyle(document.querySelector('.promo__link')).transform }));
+  ok('promos: hovering a banner swings the garment and lifts the button', g0 === 'none' && g1.tf !== 'none' && g1.btn !== 'none', JSON.stringify({ g0, ...g1 }));
+  const par = await p.evaluate(() => document.querySelector('.promo__art').style.transform);
+  ok('promos: the art has a light scroll parallax', /translateY/.test(par), par);
+  const rows = await p.evaluate(() => { const c = [...document.querySelectorAll('.reviews .review')].map((e) => Math.round(e.getBoundingClientRect().top)); return { n: c.length, same: new Set(c).size === 1, stars: document.querySelector('.stars').getAttribute('role') + ':' + document.querySelector('.stars').getAttribute('aria-label'), vp: document.querySelectorAll('.vp').length, mark: !!document.querySelector('.reviews-sec mark.proposed') }; });
+  ok('reviews: three cards in one row at 1280, stars with a label, a Verified purchase pill each, the sample marker', rows.n === 3 && rows.same && rows.stars === 'img:5 out of 5 stars' && rows.vp === 3 && rows.mark, JSON.stringify(rows));
+  const help = await p.evaluate(() => { const a = document.querySelector('.help .btn'); return { href: a.getAttribute('href'), t: a.textContent.trim(), cfg: document.querySelector('.help [data-cfg]').textContent }; });
+  ok('size help: "Chat on WhatsApp" is the same WhatsApp link as the footer, the swap days come from the config', help.href === 'https://wa.me/' && /Chat on WhatsApp/.test(help.t) && help.cfg === '14', JSON.stringify(help));
+  await p.evaluate(() => document.querySelector('.help').scrollIntoView({ block: 'center' })); await p.waitForTimeout(900);
+  const tape = await p.evaluate(() => ({ live: document.querySelector('.help').classList.contains('is-live'), st: getComputedStyle(document.querySelector('.help__tape .icon')).animationPlayState, blob: getComputedStyle(document.querySelector('.hero__blob--1')).animationPlayState }));
+  await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(500);
+  const tape2 = await p.evaluate(() => ({ live: document.querySelector('.help').classList.contains('is-live'), st: getComputedStyle(document.querySelector('.help__tape .icon')).animationPlayState, blob: getComputedStyle(document.querySelector('.hero__blob--1')).animationPlayState }));
+  ok('size help: the tape icon spins only while on screen', tape.live && tape.st === 'running' && !tape2.live && tape2.st === 'paused', JSON.stringify([tape, tape2]));
+  const blobTop = await p.evaluate(() => { window.scrollTo(0, 0); return new Promise((r) => setTimeout(() => r(getComputedStyle(document.querySelector('.hero__blob--1')).animationPlayState), 400)); });
+  ok('hero blobs: the drift runs while the hero is on screen and sleeps while it is off-screen', blobTop === 'running' && tape.blob === 'paused', blobTop + ' / ' + tape.blob);
+  await ctx.close();
+  const rm = await page({ reducedMotion: 'reduce' });
+  const rmv = await rm.p.evaluate(() => ({ tape: getComputedStyle(document.querySelector('.help__tape .icon')).animationName, par: document.querySelector('.promo__art').style.transform, pre: document.querySelectorAll('.pre').length }));
+  ok('size help and promos: reduced motion, the tape is static, no parallax, nothing hidden', rmv.tape === 'none' && !rmv.par && rmv.pre === 0, JSON.stringify(rmv));
+  await rm.ctx.close();
+  // phones: the reviews are a snap scroller with a peek
+  const ph = await page({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await ph.p.evaluate(() => document.querySelector('.reviews-sec').scrollIntoView({ block: 'center' })); await ph.p.waitForTimeout(1500);
+  const r1 = await ph.p.evaluate(() => { const l = document.getElementById('reviews'); const cs = [...l.querySelectorAll('.review')].map((e) => e.getBoundingClientRect()); return { scrolls: l.scrollWidth > l.clientWidth + 2, tabindex: l.getAttribute('tabindex'), snap: getComputedStyle(l).scrollSnapType, left: l.scrollLeft, peek: cs[1].left < innerWidth - 8 && cs[1].left > innerWidth * 0.8, firstFits: cs[0].right <= innerWidth, sw: document.documentElement.scrollWidth }; });
+  await ph.p.evaluate(() => document.getElementById('reviews').scrollBy({ left: 280, behavior: 'instant' })); await ph.p.waitForTimeout(400);
+  const r2 = await ph.p.evaluate(() => document.getElementById('reviews').scrollLeft);
+  ok('reviews: on a phone the list scrolls sideways (snap, a peek of the next card, keyboard-focusable)', r1.scrolls && r1.tabindex === '0' && /x/.test(r1.snap) && r1.peek && r2 > r1.left + 100 && r1.sw <= 390, JSON.stringify({ ...r1, r2 }));
+  await ph.ctx.close();
+}
+
+// ---------------------------------------------------------------- part B: the motion pill (prototype only)
+{
+  const a = await page();
+  ok('motion pill: hidden when the device does not ask for less motion', await a.p.evaluate(() => getComputedStyle(document.getElementById('motionPill')).display === 'none'));
+  await a.ctx.close();
+  const r = await page({ reducedMotion: 'reduce' });
+  const v = await r.p.evaluate(() => ({ disp: getComputedStyle(document.getElementById('motionPill')).display, text: document.getElementById('motionText').textContent, btn: document.getElementById('motionBtn').textContent, rm: document.documentElement.classList.contains('rm') }));
+  ok('motion pill: shown under reduced motion with "Your device asks for less motion" and "Show animations"', v.disp !== 'none' && v.text === 'Your device asks for less motion' && v.btn === 'Show animations' && v.rm, JSON.stringify(v));
+  await r.p.click('#motionBtn'); await r.p.waitForLoadState('networkidle'); await r.p.waitForTimeout(700);
+  const on = await r.p.evaluate(() => ({ rm: document.documentElement.classList.contains('rm'), dev: document.documentElement.classList.contains('rm-device'), ov: sessionStorage.getItem('kayaa-motion'), btn: document.getElementById('motionBtn').textContent, text: document.getElementById('motionText').textContent, band: getComputedStyle(document.getElementById('mqPause')).display, intro: document.documentElement.classList.contains('intro-on') }));
+  ok('motion pill: "Show animations" sets the override and reloads with animations on (no preloader), and the pill offers "Turn off"', !on.rm && on.dev && on.ov === 'on' && on.btn === 'Turn off' && on.band !== 'none' && !on.intro, JSON.stringify(on));
+  await r.p.click('#motionBtn'); await r.p.waitForLoadState('networkidle'); await r.p.waitForTimeout(500);
+  const off = await r.p.evaluate(() => ({ rm: document.documentElement.classList.contains('rm'), ov: sessionStorage.getItem('kayaa-motion'), btn: document.getElementById('motionBtn').textContent }));
+  ok('motion pill: "Turn off" goes back to reduced motion', off.rm && off.ov === 'off' && off.btn === 'Show animations', JSON.stringify(off));
+  await r.ctx.close();
+}
+
+// ---------------------------------------------------------------- part B: no "#" links, the keyboard path, the whole page over file://
+{
+  const { ctx, p } = await page();
+  const bad = await p.evaluate(() => [...document.querySelectorAll('main a')].filter((a) => !a.getAttribute('href') || a.getAttribute('href') === '#').length);
+  ok('links: no "#" or empty link anywhere in the Home main', bad === 0, `${bad}`);
+  await p.evaluate(() => { window.scrollTo(0, 0); document.getElementById('mqPause').scrollIntoView({ block: 'center' }); });
+  await p.locator('#mqPause').focus();
+  const seen = [{ id: 'mqPause', cls: '', inHelp: false }]; let ringsMissing = [];
+  for (let i = 0; i < 70; i++) {
+    await p.keyboard.press('Tab');
+    const f = await p.evaluate(() => { const e = document.activeElement; if (!e || e === document.body) return null; const cs = getComputedStyle(e); const r = e.getBoundingClientRect(); return { id: e.id, cls: e.className && e.className.baseVal === undefined ? e.className : '', ring: (cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0) || cs.boxShadow !== 'none', visible: r.width > 0 && r.height > 0, inHelp: !!e.closest('.help'), inMain: !!e.closest('main') }; });
+    if (!f) continue;
+    seen.push(f);
+    if (f.visible && f.inMain && !f.ring && !/product-card__link|promo__link/.test(f.cls)) ringsMissing.push(f.id || f.cls);
+    if (f.inHelp) break;
+  }
+  const has = (re) => seen.some((f) => re.test(f.id) || re.test(f.cls));
+  ok('keyboard: Tab reaches the band button, the fabric tab, the product tab, a card link, quick add, a promo button and the WhatsApp button, in order', has(/mqPause/) && has(/fab-tab/) && has(/^tab$|tab-new/) && has(/product-card__link/) && has(/product-card__quick/) && has(/promo__link/) && seen[seen.length - 1].inHelp, seen.length + ' stops');
+  ok('keyboard: every stop in the new sections shows a focus indicator', ringsMissing.length === 0, ringsMissing.join(','));
+  await ctx.close();
+}
+{
+  const errs = [];
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } }); const p = await ctx.newPage();
+  p.on('console', (m) => m.type() === 'error' && !/favicon/.test(m.text()) && errs.push(m.text())); p.on('pageerror', (e) => errs.push(e.message));
+  await p.addInitScript(seen);
+  await p.goto(pathToFileURL(path.join(repo, 'html', 'index.html')).href, { waitUntil: 'load' }); await p.waitForTimeout(1200);
+  for (const s of ['.marquee', '#clothWrap', '#products', '.promos__grid', '.reviews-sec', '.help']) { await p.evaluate((x) => document.querySelector(x).scrollIntoView({ block: 'center' }), s); await p.waitForTimeout(700); }
+  await p.locator('#fab-jersey').click(); await p.locator('#tab-best').scrollIntoViewIfNeeded(); await p.locator('#tab-best').click(); await p.waitForTimeout(400);
+  ok('console: no errors over file:// across the whole page (band, cloth, tabs, promos, reviews, size help)', errs.length === 0, errs.join('|'));
+  await ctx.close();
 }
 
 await browser.close(); server.close();
