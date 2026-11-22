@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(NoIndex::class);
         // Coming-soon / under-maintenance notice. It goes in the web group, not the
         // global stack, because it has to run after the session has started: the
-        // admin bypass asks who is signed in. /admin runs its own middleware stack,
+        // admin bypass asks who is signed in. The admin panel runs its own middleware stack,
         // so the owner can always get back in and switch the notice off.
         $middleware->appendToGroup('web', SiteAvailability::class);
 

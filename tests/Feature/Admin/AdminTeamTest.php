@@ -134,8 +134,8 @@ class AdminTeamTest extends TestCase
     {
         $this->actingAsAdmin();
 
-        $this->get('/admin/admin-users')->assertOk()->assertSee('Admin team');
-        $this->get('/admin/admin-users/create')->assertOk();
+        $this->get($this->adminPath('admin-users'))->assertOk()->assertSee('Admin team');
+        $this->get($this->adminPath('admin-users/create'))->assertOk();
     }
 
     private function makeAdmin(): User

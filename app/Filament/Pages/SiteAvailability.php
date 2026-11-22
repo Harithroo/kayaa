@@ -25,7 +25,7 @@ use Filament\Support\Icons\Heroicon;
 /**
  * Open the shop, or put a coming-soon or under-maintenance notice in front of
  * the whole storefront. The notice is served by
- * App\Http\Middleware\SiteAvailability; /admin always stays reachable.
+ * App\Http\Middleware\SiteAvailability; the admin panel always stays reachable.
  *
  * @property-read Schema $form
  */

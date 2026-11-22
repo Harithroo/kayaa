@@ -39,7 +39,7 @@ class AuditImageAltText extends Command
             $missing->map(fn (ProductImage $image) => [
                 $image->product?->name ?? '(deleted product)',
                 $image->path,
-                $image->product ? url('/admin/products/'.$image->product->id.'/edit') : '—',
+                $image->product ? url(config('kayaa.admin_path').'/products/'.$image->product->id.'/edit') : '—',
             ])->all()
         );
 

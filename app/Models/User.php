@@ -30,7 +30,7 @@ class User extends Authenticatable implements FilamentUser
     protected static function booted(): void
     {
         // The last-admin rule lives here, not in the UI, so no screen, command or
-        // script can lock everyone out of /admin. A refused delete or demotion
+        // script can lock everyone out of the admin panel. A refused delete or demotion
         // returns false and changes nothing.
         static::deleting(fn (User $user) => $user->canBeDeleted());
 

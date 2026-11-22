@@ -30,6 +30,12 @@ return [
         'back_at' => null,
     ],
     // Staging: keep the site out of search engines. Set to false (or remove) in production.
+    // Where the admin panel lives: https://<domain>/<admin_path>/login, with the
+    // dashboard at /<admin_path>/overview. Kept off the obvious /admin so the login
+    // page is not the first thing a scanner finds; /admin answers 404. Never list
+    // this path in robots.txt (that would publish it): every admin response sends
+    // X-Robots-Tag: noindex instead (App\Providers\Filament\AdminPanelProvider).
+    'admin_path' => trim((string) env('ADMIN_PATH', 'kdash'), '/') ?: 'kdash',
     // Shared secret for POST /deploy/migrate. Empty disables the route.
     'deploy_token' => env('DEPLOY_TOKEN', ''),
     'noindex' => (bool) env('APP_NOINDEX', false),
