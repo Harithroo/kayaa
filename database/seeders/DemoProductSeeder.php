@@ -40,10 +40,18 @@ class DemoProductSeeder extends Seeder
                 '100% cotton pointelle knit — tiny breathing holes keep it airy.'],
             ['Waffle Knit Cardigan', 'outerwear', 3900, null, ['Oat', 'Moss'], ['3–6m', '6–9m', '9–12m', '12–18m', '18–24m'], false,
                 '100% cotton waffle knit for air-conditioned rooms and hill-country mornings.'],
+            // Napkins, as in the prototype's catalogue: one size band per age, newborn to 3Y.
+            ['Muslin Napkins 6-Pack', 'napkins', 1950, null, ['White', 'Cloud'], ['Newborn', '0–3m', '3–6m', '6–9m', '9–12m', '12–18m', '18–24m', '2Y', '3Y'], false,
+                'Six double-layer cotton muslin squares. Wipes, bibs and burp cloths in one.'],
+            ['Bamboo Napkin Set', 'napkins', 2450, null, ['White', 'Oat', 'Blush'], ['Newborn', '0–3m', '3–6m', '6–9m', '9–12m', '12–18m', '18–24m', '2Y', '3Y'], false,
+                '70% bamboo viscose, 30% cotton. Soft, absorbent and quick to dry.'],
+            ['Burp Cloth & Napkin Duo', 'napkins', 1450, null, ['Cloud', 'Blush'], ['Newborn', '0–3m', '3–6m', '6–9m', '9–12m', '12–18m', '18–24m', '2Y', '3Y'], true,
+                'One cotton muslin burp cloth and one napkin, for the changing bag.'],
         ];
 
         $care = "Machine wash cold, gentle cycle\nTumble dry low or line dry in shade\nDo not bleach — softens further after the first wash";
 
+        $prefixes = [];
         foreach ($demo as $i => [$name, $catSlug, $price, $was, $colorNames, $sizeLabels, $isNew, $fabric]) {
             $product = Product::updateOrCreate(['slug' => str($name)->slug()], [
                 'name' => $name,
@@ -57,7 +65,11 @@ class DemoProductSeeder extends Seeder
                 'is_featured' => $i < 4,
             ]);
 
+            // Four letters of the name; a product whose four letters are taken already
+            // ("Muslin Napkins" after "Muslin Sleep Bag") gets its position added.
             $sku = strtoupper(substr(preg_replace('/[^A-Z]/i', '', $name), 0, 4));
+            $sku = isset($prefixes[$sku]) ? $sku.($i + 1) : $sku;
+            $prefixes[$sku] = true;
             foreach ($colorNames as $ci => $colorName) {
                 foreach ($sizeLabels as $si => $label) {
                     /** @var SizeOption $size */

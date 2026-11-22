@@ -72,19 +72,30 @@ class HomePageTest extends TestCase
         $this->assertStringContainsString('<span>Newborn, 0–3m … 3Y</span>', $html);
     }
 
-    public function test_the_rail_has_one_link_per_category_with_products(): void
+    public function test_the_rail_has_one_link_per_category(): void
     {
         $html = $this->get('/')->assertOk()->getContent();
 
-        // Napkins has no demo products, so six hangers.
-        $this->assertSame(6, substr_count($html, 'class="hanger"'));
-        $this->assertStringContainsString('style="--rail-n: 6"', $html);
-        $this->assertStringNotContainsString('data-name="Napkins"', $html);
-        $this->assertStringContainsString('data-name="Bodysuits" data-count="2" data-range="NB–18m" data-type="bodysuit" data-c="peri"', $html);
+        $this->assertSame(7, substr_count($html, 'class="hanger"'));
+        $this->assertStringContainsString('style="--rail-n: 7"', $html);
+        $this->assertStringContainsString('data-name="Bodysuits" data-count="2" data-range="NB–18m" data-meta="2 styles · NB–18m" data-type="bodysuit" data-c="peri"', $html);
         $this->assertStringContainsString('aria-label="Sleepwear, 2 styles, sizes NB–24m"', $html);
-        $this->assertStringContainsString('data-name="Sets" data-count="1" data-range="6m–24m" data-type="set" data-c="mist" data-c2="lilac" aria-label="Sets, 1 style, sizes 6m–24m"', $html);
+        $this->assertStringContainsString('data-name="Sets" data-count="1" data-range="6m–24m" data-meta="1 style · 6m–24m" data-type="set" data-c="mist" data-c2="lilac" aria-label="Sets, 1 style, sizes 6m–24m"', $html);
+        $this->assertStringContainsString('data-name="Napkins" data-count="3" data-range="NB–3Y"', $html);
         $this->assertStringContainsString('Sets <span>1 style · 6m–24m</span>', $html);
-        $this->assertStringContainsString('Six categories, from the first bodysuit', $html);
+        $this->assertStringContainsString('Seven categories, from the first bodysuit', $html);
+    }
+
+    public function test_a_category_with_nothing_in_it_stays_on_the_rail_as_coming_soon(): void
+    {
+        Product::whereHas('category', fn ($q) => $q->where('slug', 'napkins'))->update(['status' => 'draft']);
+
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $this->assertSame(7, substr_count($html, 'class="hanger"'));
+        $this->assertStringContainsString('data-name="Napkins" data-count="0" data-range="" data-meta="Coming soon"', $html);
+        $this->assertStringContainsString('aria-label="Napkins, coming soon"', $html);
+        $this->assertStringContainsString('Napkins <span>Coming soon</span>', $html);
     }
 
     public function test_the_fabric_cards_link_the_products_made_of_them(): void

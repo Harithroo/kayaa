@@ -29,7 +29,7 @@
     var turn = $('.turn', a);
     turn.innerHTML = photo ? '<img class="rail-photo" src="' + d.photo + '" alt="" width="140" height="230" decoding="async">' : G.railSVG(item);
     var side = SIDE + (i % 3 - 1) * 4;
-    S.push({ el: a, bk: b, tf: turn, tb: b.firstChild, x: 0, vx: 0, tx: 0, y: 0, vy: 0, s: 1, ts: 1, ry: side, vr: 0, tr: side, side: side, p: { a: 0, va: 0, G: 2400, L: 95, c: 3, max: 0.42 }, delay: 0, drop: false, name: d.name, count: +d.count, range: d.range, href: a.getAttribute('href') });
+    S.push({ el: a, bk: b, tf: turn, tb: b.firstChild, x: 0, vx: 0, tx: 0, y: 0, vy: 0, s: 1, ts: 1, ry: side, vr: 0, tr: side, side: side, p: { a: 0, va: 0, G: 2400, L: 95, c: 3, max: 0.42 }, delay: 0, drop: false, name: d.name, count: +d.count, range: d.range, meta: d.meta, href: a.getAttribute('href') });
   });
 
   /* The stage height is also set in CSS (home.css, from the stage width) so nothing shifts when this script runs; the numbers here are the same formula. */
@@ -56,7 +56,8 @@
   function capHTML(i) {
     if (i < 0) return '<span class="cap-hint"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>' + (mode === 'scroll' || COARSE ? 'Swipe the rail, tap a hanger' : 'Hover a hanger to turn it around') + '</span>';
     var s = S[i];
-    return '<p class="cap-name">' + s.name + '</p><p class="cap-meta">' + plural(s.count) + ' · ' + s.range + '</p><a class="btn btn--primary btn--sm" href="' + s.href + '">Shop ' + s.name + ' <span aria-hidden="true">→</span></a>';
+    /* Laravel: the server writes the meta line (data-meta), so an empty category reads "Coming soon" and a category without sizes drops the range */
+    return '<p class="cap-name">' + s.name + '</p><p class="cap-meta">' + (s.meta || plural(s.count) + ' · ' + s.range) + '</p><a class="btn btn--primary btn--sm" href="' + s.href + '">Shop ' + s.name + ' <span aria-hidden="true">→</span></a>';
   }
   function setCaption(i) {
     if (shown === i) return; shown = i;

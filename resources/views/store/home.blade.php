@@ -170,7 +170,7 @@
                 <div class="rail-rod" id="railRod" aria-hidden="true"><span class="cap l"></span><span class="cap r"></span></div>
                 <nav class="rail-layer front" id="railFront" aria-label="Categories on the rail">
                   @foreach($rail as $i => $c)
-                    <a class="hanger" href="{{ $c->url }}" draggable="false" data-i="{{ $i }}" data-name="{{ $c->name }}" data-count="{{ $c->count }}" data-range="{{ $c->range ?? '' }}" data-type="{{ $c->type }}" data-c="{{ $c->c }}"{!! $c->c2 ? ' data-c2="'.e($c->c2).'"' : '' !!}{!! $c->photo ? ' data-photo="'.e($c->photo).'"' : '' !!} aria-label="{{ $c->label }}"><span class="turn"></span><span class="hit"></span></a>
+                    <a class="hanger" href="{{ $c->url }}" draggable="false" data-i="{{ $i }}" data-name="{{ $c->name }}" data-count="{{ $c->count }}" data-range="{{ $c->range ?? '' }}" data-meta="{{ $c->meta }}" data-type="{{ $c->type }}" data-c="{{ $c->c }}"{!! $c->c2 ? ' data-c2="'.e($c->c2).'"' : '' !!}{!! $c->photo ? ' data-photo="'.e($c->photo).'"' : '' !!} aria-label="{{ $c->label }}"><span class="turn"></span><span class="hit"></span></a>
                   @endforeach
                 </nav>
               </div>

@@ -86,9 +86,10 @@ class HomeController extends Controller
     }
 
     /**
-     * The category rail: one hanger per top-level category that has something in it,
-     * with the number of styles and the size range across them ("NB–3Y"), counting the
-     * products of its subcategories as the category page does.
+     * The category rail: one hanger per active top-level category (the same list as the
+     * header's category row), with the number of styles and the size range across them
+     * ("NB–3Y"), counting the products of its subcategories as the category page does.
+     * A category with nothing in it yet still hangs on the rail, as "Coming soon".
      */
     private function rail(): Collection
     {
@@ -107,17 +108,13 @@ class HomeController extends Controller
         return $categories->map(function (Category $c) use ($products, $drawings) {
             $own = [$c->id, ...$c->children->pluck('id')];
             $items = $products->whereIn('category_id', $own);
-            if ($items->isEmpty()) {
-                return null;
-            }
-
             $sizes = $items->flatMap(fn (Product $p) => $p->sizeOptions())->sortBy('position')->values();
             $from = $sizes->first()?->shortFrom();
             $to = $sizes->last()?->shortTo();
             $range = $from === null ? null : ($from === $to ? $from : "{$from}–{$to}");
 
             $count = $items->count();
-            $styles = $count.' '.($count === 1 ? 'style' : 'styles');
+            $styles = $count === 0 ? 'Coming soon' : $count.' '.($count === 1 ? 'style' : 'styles');
             $drawing = $drawings[$c->slug] ?? [];
             $photo = 'assets/img/rail/'.$c->slug.'.webp';
 
@@ -127,14 +124,14 @@ class HomeController extends Controller
                 'count' => $count,
                 'range' => $range,
                 'styles' => $styles,
-                'label' => $c->name.', '.$styles.($range ? ', sizes '.$range : ''),
+                'label' => $c->name.', '.($count === 0 ? 'coming soon' : $styles).($range ? ', sizes '.$range : ''),
                 'meta' => $styles.($range ? ' · '.$range : ''),
                 'type' => $drawing['type'] ?? 'bodysuit',
                 'c' => $drawing['c'] ?? 'white',
                 'c2' => $drawing['c2'] ?? null,
                 'photo' => is_file(public_path($photo)) ? asset($photo) : null,
             ];
-        })->filter()->values();
+        })->values();
     }
 
     /**
