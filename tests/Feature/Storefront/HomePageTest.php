@@ -92,8 +92,9 @@ class HomePageTest extends TestCase
         $html = $this->get('/')->assertOk()->getContent();
 
         $this->assertSame(4, substr_count($html, 'class="fab-tab"'));
-        foreach (['muslin-sleep-bag-0-5-tog' => 'Muslin Sleep Bag 0.5 TOG', 'bamboo-sleepsuit' => 'Bamboo Sleepsuit', 'ribbed-cotton-bodysuit' => 'Ribbed Cotton Bodysuit', 'waffle-knit-cardigan' => 'Waffle Knit Cardigan'] as $slug => $name) {
-            $this->assertStringContainsString('<a href="'.route('products.show', $slug).'">'.e($name).'</a>', $html);
+        foreach (['Muslin Sleep Bag 0.5 TOG', 'Bamboo Sleepsuit', 'Ribbed Cotton Bodysuit', 'Waffle Knit Cardigan'] as $name) {
+            $product = Product::where('name', $name)->firstOrFail();
+            $this->assertStringContainsString('<a href="'.route('products.show', $product).'">'.e($name).'</a>', $html);
         }
 
         // No product left for a fabric: the card searches for it instead.
