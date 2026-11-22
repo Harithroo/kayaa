@@ -3,6 +3,6 @@
      would only lead back here: the copyright line is all that is left. --}}
 <footer class="site-footer site-footer--minimal">
   <div class="container footer-min footer-min--bare">
-    <p class="footer-min__copy">&copy; {{ date('Y') }} Kayaa</p>
+    <p class="footer-min__copy">&copy; {{ date('Y') }} Kayaa. All rights reserved</p>
   </div>
 </footer>

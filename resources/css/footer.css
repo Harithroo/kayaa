@@ -1,7 +1,8 @@
 /* Kayaa footer (full shell). The minimal footer (checkout, 500, 503) keeps its own rules in layout.css.
-   Light only, never a dark footer: a vertical lilac gradient (tokens --footer-g1..g4) that starts from the colour of the section above
-   (<body data-footer-from="white|secondary">, set per page in tools/shell-map.json) so there is no seam. All text is Ink: the lower stops are
-   too dark for Ink Soft or Primary Deep (see docs/qa/design-audit.md, footer contrast table). */
+   Light only, never a dark footer: a vertical lilac gradient (tokens --footer-g1..g4). Its first stop is already a visible step darker than the
+   page, and the top edge is a soft wave (a mask), so the footer reads as its own block, not as one more section. (<body data-footer-from>
+   can still override the first stop, see tools/shell-map.json; no page does.) All text is Ink: the lower stops are too dark for Ink Soft or
+   Primary Deep (see docs/qa/design-audit.md, footer contrast table). */
 .site-footer:not(.site-footer--minimal) {
   --footer-from: var(--footer-g1);
   position: relative;
@@ -10,6 +11,10 @@
   padding-bottom: 0;
   color: var(--ink);
   background: linear-gradient(180deg, var(--footer-from, var(--bg)) 0%, var(--footer-g2) 28%, var(--footer-g3) 62%, var(--footer-g4) 100%);
+  /* the wave: the top 36px are cut to a smooth, repeating curve (the page shows through above it); everything below is solid */
+  --footer-wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 36' preserveAspectRatio='none'%3E%3Cpath d='M0,20 C240,0 480,40 720,20 C960,0 1200,40 1440,20 L1440,36 L0,36 Z'/%3E%3C/svg%3E");
+  -webkit-mask: var(--footer-wave) top center / clamp(640px, 100%, 1600px) 36px repeat-x, linear-gradient(#000, #000) 0 35px / 100% calc(100% - 35px) no-repeat;
+  mask: var(--footer-wave) top center / clamp(640px, 100%, 1600px) 36px repeat-x, linear-gradient(#000, #000) 0 35px / 100% calc(100% - 35px) no-repeat;
 }
 body[data-footer-from="white"] .site-footer:not(.site-footer--minimal) { --footer-from: var(--surface); }
 body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --footer-from: var(--secondary); }
@@ -26,7 +31,8 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 .footer__title {
   display: flex;
   align-items: center;
-  min-height: var(--tap);   /* same row height as the wordmark so every column starts on one line */
+  padding-block: 8px;
+  line-height: 1.4;
   margin-bottom: var(--space-1);
   font-family: var(--font-body);
   font-size: var(--fs-caption);
@@ -38,14 +44,11 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 .footer__list,
 .footer__contact,
 .footer__social { list-style: none; }
-.footer__list { display: flex; flex-direction: column; gap: var(--space-2); }   /* 8px between tap targets */
-/* nine sizes: two columns so the column is not three times taller than its neighbours */
-.footer__list--cols { display: grid; grid-template-columns: repeat(2, minmax(min-content, max-content)); column-gap: var(--space-5); }
+.footer__list { display: flex; flex-direction: column; }   /* rows are as tall as their text needs: line-height 1.5 plus 8px above and below, no gap */
 .footer__contact {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-2);
   margin-top: var(--space-2);
 }
 .footer__contact a,
@@ -53,13 +56,13 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: var(--tap);
+  padding-block: 8px;
   font-size: var(--fs-dense);
   font-weight: 500;
+  line-height: 1.5;
   color: var(--ink);
   text-decoration: none;
 }
-.footer__list--cols a { min-width: var(--tap); }   /* the short size links ("2Y", "3Y") keep a 44px-wide tap target */
 .footer__contact a { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 @media (hover: hover) and (pointer: fine) {
   .footer__list a:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -101,14 +104,14 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 
 /* Art zone: decorative, aria-hidden. The waves reach the bottom edge of the footer, so the zone carries the footer's bottom padding. */
 .footer__art {
-  --line-h: clamp(150px, 16vw, max(230px, 12.15vw));   /* height of the clothesline: 150-230px, and from about 1900px up it keeps growing with the width so the slice never cuts a hem off */
+  --line-h: max(110px, 12.4vw);   /* height of the clothesline: just enough that the slice never cuts a hem off (the garments are 175 of the canvas's 200 units deep) */
   position: relative;
   isolation: isolate;
   overflow: hidden;
   padding-bottom: calc(var(--bottom-bar-h) + var(--space-4) + env(safe-area-inset-bottom, 0px));
   pointer-events: none;
   content-visibility: auto;   /* off screen it costs no layout or paint; the estimate below is close to its real height */
-  contain-intrinsic-block-size: auto calc(clamp(150px, 16vw, 230px) + (min(100vw - 40px, 1200px) + 2vw) * 0.364 + 56px);   /* an estimate of its height until it has been drawn once */
+  contain-intrinsic-block-size: auto calc(0.55 * var(--line-h) + (min(100vw - 40px, 1200px) + 2vw) * 0.364 + 56px);   /* an estimate of its height until it has been drawn once */
 }
 .footer__waves {
   position: absolute;
@@ -117,16 +120,17 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
   width: 100%;
   height: 62%;
 }
-.footer__line { height: var(--line-h); }
+.footer__line { position: relative; z-index: 1; height: var(--line-h); }   /* in front of the wordmark: the garments hang over the top of the letters */
 .footer__line-svg { display: block; width: 100%; height: 100%; }
 .footer__wordmark {
   display: block;
   width: calc(100% + 2vw);
   max-width: none;
   height: auto;
-  /* The wordmark starts 18px below the lowest garment. The garments are drawn on a 1440x200 canvas scaled with "slice" (scale = the larger of
-     width/1440 and height/200); their lowest edge is at 175 canvas units, and the line's box clips whatever is below it. */
-  margin: calc(min(var(--line-h), max(12.15vw, 0.875 * var(--line-h))) + 18px - var(--line-h)) -1vw 0;
+  /* The wordmark is tucked behind the clothesline: its top sits 45% of the way down the garments. The garments are drawn on a 1440x200 canvas
+     scaled with "slice" (scale = the larger of width/1440 and height/200); their lowest edge is at 175 canvas units. */
+  position: relative;
+  margin: calc(0.45 * min(var(--line-h), max(12.15vw, 0.875 * var(--line-h))) - var(--line-h)) -1vw 0;
 }
 @media (min-width: 56.25em) {   /* 900px at the normal text size; em so a larger text size moves the break with it */
   .footer__grid { grid-template-columns: 1.5fr 1.2fr 1fr 1fr; gap: var(--space-7); }
@@ -135,10 +139,12 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 }
 /* The tab bar (layout.css) shows below 900px in px, so the room kept for it follows the same px break */
 @media (min-width: 900px) { .footer__art { padding-bottom: 0; } }
-/* Footer links: compact (about 8px between links) with a mouse on desktop; 44px tap rows everywhere else */
+/* Footer links: tighter again with a mouse on desktop (2px above and below, 6px between links) */
 @media (min-width: 56.25em) and (hover: hover) and (pointer: fine) {
+  .footer__list,
+  .footer__contact { gap: 6px; }
   .footer__list a,
-  .footer__contact a { min-height: 0; padding-block: 2px; }
+  .footer__contact a { padding-block: 2px; }
   .footer__title { margin-bottom: var(--space-2); }
 }
 /* The footer carries the room for the tab bar (inside .footer__art), so the page needs none of its own */
@@ -155,10 +161,10 @@ body[data-footer-from="secondary"] .site-footer:not(.site-footer--minimal) { --f
 }
 
 @media print {
-  .site-footer:not(.site-footer--minimal) { background: #fff; }
+  .site-footer:not(.site-footer--minimal) { background: #fff; -webkit-mask: none; mask: none; }
   .footer__art { display: none; }
 }
 @media (forced-colors: active) {
   .footer__art { display: none; }
-  .site-footer:not(.site-footer--minimal) { background: Canvas; }
+  .site-footer:not(.site-footer--minimal) { background: Canvas; border-top: 1px solid CanvasText; -webkit-mask: none; mask: none; }
 }

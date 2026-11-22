@@ -60,6 +60,7 @@ class AppServiceProvider extends ServiceProvider
             // The shell's "Shop by size" chips (header mega menu, menu drawer, footer),
             // and the size and colour labels the quick-add sheet fills itself from.
             $view->with('navSizes', SizeOption::query()
+                ->with('scale')
                 ->orderBy('size_scale_id')
                 ->orderBy('position')
                 ->get());

@@ -20,30 +20,31 @@
           <div class="mega" id="mega-shop" data-mega-panel inert>
             <div class="mega__panel">
               <div class="mega__main">
-                @if($sizeOptions->isNotEmpty())
-                  <p class="eyebrow">Shop by size</p>
-                  <ul class="chip-list mega__sizes" role="list">
-                    @foreach($sizeOptions as $size)
-                      <li><a class="chip" href="{{ route('shop.index', ['size' => $size->label]) }}">{{ $size->label }}</a></li>
+                <div class="mega__col">
+                  <p class="mega__title">Shop by category</p>
+                  <ul class="mega__list" role="list">
+                    @foreach($navCategories as $cat)
+                      <li><a href="{{ $cat->url() }}">{{ $cat->name }}</a></li>
                     @endforeach
                   </ul>
-                @endif
-                <p class="eyebrow mega__eyebrow">Browse by category</p>
-                <ul class="chip-list" role="list">
-                  @foreach($navCategories as $cat)
-                    <li><a class="chip" href="{{ $cat->url() }}">{{ $cat->name }}</a></li>
-                  @endforeach
-                </ul>
-              </div>
-              <aside class="mega__feature" aria-label="Featured">
-                <div class="media" data-placeholder style="--tone: var(--tone-3)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
-                <div class="mega__feature-body">
-                  <p class="eyebrow">New this week</p>
-                  <p class="mega__feature-title">Fresh styles just landed</p>
-                  <p class="mega__feature-text">New arrivals, sized by age from newborn upwards.</p>
-                  <a class="link-arrow" href="{{ route('shop.index', ['sort' => 'new']) }}">Shop new in <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg></a>
                 </div>
-              </aside>
+                @if($sizeOptions->isNotEmpty())
+                  <div class="mega__col">
+                    <p class="mega__title">Shop by age</p>
+                    <ul class="mega__list mega__list--sizes" role="list">
+                      @foreach($sizeOptions as $size)
+                        <li><a href="{{ route('shop.index', ['size' => $size->label]) }}">{{ $size->label }}</a></li>
+                      @endforeach
+                    </ul>
+                  </div>
+                @endif
+              </div>
+              {{-- An editorial image with a caption, not a card and not a button: the whole figure is one link. --}}
+              <a class="mega__feature" href="{{ route('shop.index', ['sort' => 'new']) }}">
+                <div class="media" data-placeholder style="--tone: var(--tone-3); --ratio: 4 / 3"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></div>
+                <span class="mega__feature-eyebrow">New this week</span>
+                <span class="mega__feature-title">Fresh styles just landed</span>
+              </a>
             </div>
           </div>
         </li>
