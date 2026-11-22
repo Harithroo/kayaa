@@ -27,6 +27,43 @@ class SizeOption extends Model
         };
     }
 
+    /** "0–3m" → "0–3 months", "2Y" → "2 years", anything else as it is ("Newborn"). */
+    public function longLabel(): string
+    {
+        if (preg_match('/^(\d+)–(\d+)m$/u', $this->label, $m)) {
+            return "{$m[1]}–{$m[2]} months";
+        }
+        if (preg_match('/^(\d+)Y$/i', $this->label, $m)) {
+            return $m[1].' '.($m[1] === '1' ? 'year' : 'years');
+        }
+
+        return $this->label;
+    }
+
+    /** The low end of the size in a range: "Newborn" → "NB", "6–9m" → "6m", "2Y" → "2Y". */
+    public function shortFrom(): string
+    {
+        return $this->shortEnd(1);
+    }
+
+    /** The high end of the size in a range: "Newborn" → "NB", "6–9m" → "9m", "2Y" → "2Y". */
+    public function shortTo(): string
+    {
+        return $this->shortEnd(2);
+    }
+
+    private function shortEnd(int $end): string
+    {
+        if (strcasecmp($this->label, 'Newborn') === 0) {
+            return 'NB';
+        }
+        if (preg_match('/^(\d+)–(\d+)m$/u', $this->label, $m)) {
+            return $m[$end].'m';
+        }
+
+        return $this->label;
+    }
+
     public function weightRange(): ?string
     {
         $min = $this->min_weight_kg ? rtrim(rtrim((string) $this->min_weight_kg, '0'), '.') : null;

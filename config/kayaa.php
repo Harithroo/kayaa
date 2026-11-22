@@ -72,4 +72,80 @@ return [
         'Vavuniya' => [4, 6],
         'Mullaitivu' => [4, 6],
     ],
+
+    // The home page (resources/views/store/home.blade.php, from the prototype's
+    // html/index.html and design/home-v2-concept.html). Copy and drawing settings only:
+    // the products, categories, sizes and reviews on that page are the real records.
+    'home' => [
+        // The scrolling band under the category rail, in order. Words alternate solid
+        // and outlined. The prototype keeps these in tools/site-config.json "marquee".
+        'marquee' => [
+            'Breathable cotton',
+            'Sized by age',
+            'Free size swaps',
+            'Island-wide delivery',
+            'Soft on sensitive skin',
+            'Made for Sri Lankan weather',
+        ],
+
+        // How each category is drawn on the rail, by category slug (the prototype's
+        // `rail` object per category in tools/catalogue.json). `type` is one of the
+        // drawings in resources/js/store/home/garments.js: newborn, bodysuit,
+        // sleepsuit, set, cardigan, napkins, accessories. `c` and `c2` are colours of
+        // its palette: white, peri, lilac, mist, plum, rose. A category not listed is
+        // drawn as a white bodysuit. A cut-out photo at
+        // public/assets/img/rail/{slug}.webp replaces the drawing.
+        'rail' => [
+            'newborn' => ['type' => 'newborn', 'c' => 'white'],
+            'bodysuits' => ['type' => 'bodysuit', 'c' => 'peri'],
+            'sleepwear' => ['type' => 'sleepsuit', 'c' => 'lilac'],
+            'sets' => ['type' => 'set', 'c' => 'mist', 'c2' => 'lilac'],
+            'outerwear' => ['type' => 'cardigan', 'c' => 'plum'],
+            'napkins' => ['type' => 'napkins', 'c' => 'white', 'c2' => 'mist'],
+            'accessories' => ['type' => 'accessories', 'c' => 'rose', 'c2' => 'peri'],
+        ],
+
+        // "Feel it before you buy it": one swatch tab per fabric, in order (the
+        // prototype's docs/content/fabrics.md). PROPOSED copy: confirm the feel, best
+        // for and care lines against the real garments' care labels before launch.
+        // `key` picks the drawn texture (muslin, jersey, rib, waffle); `colour` is the
+        // cloth; `stiff` and `flutter` tune how it hangs and moves (1 is the middle).
+        // `match` finds the real products listed under "Found in" (up to four):
+        // "tag:<slug>" is a product collection, "name:<word>" a word in the product
+        // name. With no match the card links to a search for the fabric instead.
+        'fabrics' => [
+            [
+                'key' => 'muslin', 'name' => 'Muslin', 'colour' => '#FFFFFF', 'stiff' => 0.8, 'flutter' => 1.25,
+                'line' => 'Open, airy cotton gauze that gets softer with every wash.',
+                'feel' => 'Light and gently crinkled',
+                'best' => 'Swaddles, sleep bags, burp cloths',
+                'care' => 'Machine wash cool, line dry',
+                'match' => ['tag:muslin', 'name:muslin'],
+            ],
+            [
+                'key' => 'jersey', 'name' => 'Bamboo jersey', 'colour' => '#DCCDED', 'stiff' => 0.9, 'flutter' => 1,
+                'line' => 'Smooth and cool against the skin, with a soft stretch.',
+                'feel' => 'Silky, cool, stretchy',
+                'best' => 'Sleepsuits for warm nights',
+                'care' => 'Gentle wash, no tumble dry',
+                'match' => ['tag:bamboo', 'name:bamboo'],
+            ],
+            [
+                'key' => 'rib', 'name' => 'Ribbed cotton', 'colour' => '#C6D6EC', 'stiff' => 1, 'flutter' => 0.85,
+                'line' => 'Stretchy ribs that move with every kick and keep their shape.',
+                'feel' => 'Springy and snug',
+                'best' => 'Everyday bodysuits',
+                'care' => 'Machine wash warm',
+                'match' => ['name:ribbed'],
+            ],
+            [
+                'key' => 'waffle', 'name' => 'Waffle knit', 'colour' => '#C9B6DE', 'stiff' => 1.15, 'flutter' => 0.65,
+                'line' => 'Little raised squares that hold a touch of warmth for rainy evenings.',
+                'feel' => 'Textured and cosy',
+                'best' => 'Cardigans and layers',
+                'care' => 'Wash inside out, dry flat',
+                'match' => ['name:waffle'],
+            ],
+        ],
+    ],
 ];

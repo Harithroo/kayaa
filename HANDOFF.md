@@ -49,7 +49,7 @@ Rules in the code:
 ## Storefront routes (`routes/web.php`)
 | Route | Notes |
 |---|---|
-| `/` | hero, shop by age, category tiles, new this week, promo banners, featured products, trust strip |
+| `/` | the prototype's Home v2 (see Home page below): preloader, hero, trust strip, shop by age, category rail, scrolling band, fabrics, New this week / Bestsellers tabs, promo banners, reviews feed, size help |
 | `/shop` | age chips, sort (featured / newest / price), sale filter, empty state |
 | `/{department}/{category}` e.g. `/baby/bodysuits` | category listing; declared last so static routes win |
 | `/products/{slug}` | colour × size picker, size guide toggle, stock note, approved reviews + rating breakdown, review form, FAQs |
@@ -66,6 +66,12 @@ Rules in the code:
 | `/up` | health check |
 
 Layout: `resources/views/components/layouts/store.blade.php` — hamburger drawer + 5-tab bottom bar under 900px; full header nav and category row on desktop.
+
+### Home page
+Ported from the `frontend` branch's `html/index.html` after its Home v2 work (`design/home-v2-concept.html` is the client-approved reference). View `resources/views/store/home.blade.php`, data `HomeController`.
+- **Assets are home-only.** `resources/css/home.css` (imports the prototype's `pages/home.css` byte-for-byte, plus two Laravel rules) and `resources/js/home.js` (imports the prototype's nine `resources/js/store/home/*.js` scripts verbatim, in its order) are separate Vite entries, pushed into the head by the home view. The home sheet's selectors are not namespaced (`.reviews`, `.stars`, `.age-chips`, `.tabs`, ...), so it must never join `app.css`. A motion script in the same push sets `html.js`, `html.rm` (reduced motion) and `html.intro-on` (the preloader, once per session) before first paint.
+- **Data:** Shop by age is the Baby age size scale (labels, heights, weights, `/shop?size=`). The rail is every top-level category with active products (count and size range include subcategories); how each is drawn is `config('kayaa.home.rail')` by slug, and a cut-out photo at `public/assets/img/rail/{slug}.webp` replaces the drawing. The scrolling band is `config('kayaa.home.marquee')`. The fabric tabs are `config('kayaa.home.fabrics')` (PROPOSED copy, to confirm with the client); "Found in" lists up to four active products matched by collection slug (`tag:`) or a word of the name (`name:`), else a search link. New this week = new-flagged products, newest first, topped up with the newest; Bestsellers = the Featured toggle (the tab is dropped when nothing is featured). Promos are Admin > Banners (`home_promo`); the tints and drawn garments alternate. Reviews = approved, verified-purchase, rating 4+, latest three, with the size bought from the reviewer's order; the section is hidden when there are none. The size help button is the WhatsApp number, or the contact page without one.
+- **Not ported on purpose** (the prototype marks them for removal before launch): the motion pill and its `kayaa-motion` sessionStorage override, the visible "Proposed" marks, and the three sample reviews. The trust strip keeps "Soft cotton, gentle on newborns" where the prototype claims OEKO-TEX certification, until the client supplies the certificate.
 
 ## Customer accounts (optional — guest checkout and /track still work)
 - Register, log in, log out, forgot/reset password (`/account/register|login|forgot-password|reset-password/{token}`), all rate-limited.

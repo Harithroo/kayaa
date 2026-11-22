@@ -54,6 +54,34 @@ class Review extends Model
         $this->forceFill(['is_approved' => false, 'approved_at' => null])->save();
     }
 
+    /** "Nimali" — the first name alone, as the home page's review cards show it. */
+    public function firstName(): string
+    {
+        return preg_split('/\s+/', trim($this->name))[0];
+    }
+
+    /**
+     * The size the reviewer bought ("3–6m"): the variant of this product on their
+     * latest confirmed, shipped or delivered order, the same orders that make a review
+     * a verified purchase (User::hasPurchased). Null for a guest review or when the
+     * order cannot be found.
+     */
+    public function sizeBought(): ?string
+    {
+        if (! $this->user) {
+            return null;
+        }
+
+        $item = OrderItem::query()
+            ->whereIn('order_id', $this->user->allOrders()->whereIn('status', ['confirmed', 'shipped', 'delivered'])->select('id'))
+            ->whereHas('variant', fn ($q) => $q->where('product_id', $this->product_id))
+            ->with('variant.sizeOption')
+            ->latest('id')
+            ->first();
+
+        return $item?->variant?->sizeOption?->label;
+    }
+
     /** "Nimali P." — surnames are trimmed to an initial on the storefront. */
     public function displayName(): string
     {
