@@ -29,6 +29,7 @@
 @import './pages/errors.css';
 @import './pages/stub.css';
 @import './pages/site-notice.css';
+@import './pages/shop-filters.css';   /* Laravel addition: the shop's filter panel */
 
 /* Laravel-only additions, last so they win. */
 @import './laravel.css';

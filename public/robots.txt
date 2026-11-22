@@ -7,6 +7,10 @@
 # what actually keeps them out of the index — these lines just save crawl
 # budget getting there.
 #
+# /admin is blocked as a decoy: the admin panel is not there (config/kayaa.php
+# admin_path) and its real path is deliberately not named here, since this file
+# is public. The panel sends X-Robots-Tag: noindex on every response instead.
+#
 # Deliberately not blocked: /search. It sends noindex,follow, so a crawler
 # should be allowed to read it and follow the product links it finds.
 #
@@ -22,13 +26,27 @@ Disallow: /track
 Disallow: /wishlist
 Disallow: /deploy/
 Disallow: /admin
-Disallow: /*?size=
+# [] in category[]/colour[]/size[] is percent-encoded in real URLs, so those
+# rules match on the parameter name alone.
+Disallow: /*?size
 Disallow: /*?sort=
 Disallow: /*?tag=
 Disallow: /*?sale=
-Disallow: /*&size=
+Disallow: /*&size
 Disallow: /*&sort=
 Disallow: /*&tag=
 Disallow: /*&sale=
+Disallow: /*?category
+Disallow: /*?colour
+Disallow: /*?min=
+Disallow: /*?max=
+Disallow: /*?stock=
+Disallow: /*?new=
+Disallow: /*&category
+Disallow: /*&colour
+Disallow: /*&min=
+Disallow: /*&max=
+Disallow: /*&stock=
+Disallow: /*&new=
 
 Sitemap: https://kayaa.lk/sitemap.xml

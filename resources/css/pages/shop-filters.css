@@ -1,0 +1,167 @@
+/* Shop filters (Laravel addition: the prototype's listing has a size chip row and a sale
+   switch only). A sidebar from 900px, a left drawer below it once shop-filters.js has
+   run (.is-enhanced); without scripts it sits above the results with its own button.
+   Built from the design system's checkbox, dot, chip, field and drawer tokens; no new
+   colours or sizes. */
+
+.shop-layout { margin-top: var(--space-3); }
+.shop-results { min-width: 0; }
+
+/* ---------- The panel ---------- */
+.filters {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.filters__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+.filters__title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-h4);
+}
+.filters__badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding-inline: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--primary-deep);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+.filters__body { padding: 0 var(--space-4); }
+.filters__foot {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+}
+.filters__foot .btn { flex: 1; }
+
+/* ---------- Groups (native <details>: open by default, fold with the chevron) ---------- */
+.filter-group + .filter-group { border-top: 1px solid var(--line); }
+.filter-group__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--tap);
+  font-size: var(--fs-ui);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+  cursor: pointer;
+  list-style: none;
+}
+.filter-group__title::-webkit-details-marker { display: none; }
+.filter-group__title .icon { transition: transform var(--dur-fast) var(--ease); }
+.filter-group[open] > .filter-group__title .icon { transform: rotate(180deg); }
+.filter-group__title:focus-visible { outline: var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-md); }
+.filter-group__body { margin: 0; padding: 0 0 var(--space-3); border: 0; min-width: 0; }
+.filter-group__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: var(--fs-ui);
+  font-weight: 700;
+}
+
+.filter-list { list-style: none; }
+.filter-list--cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-2); }
+.filter-option { display: flex; width: 100%; gap: var(--space-2); }
+.filter-option__label { flex: 1; min-width: 0; white-space: nowrap; }
+.filter-option__count { font-size: var(--fs-ui); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.filter-option__dot { width: 16px; height: 16px; }
+.filter-option:has(input:disabled) { cursor: default; opacity: 0.45; }
+
+.filter-price { display: flex; align-items: flex-end; gap: var(--space-2); }
+.filter-price .field { flex: 1; min-width: 0; }
+.filter-price .field > label { margin-bottom: 4px; font-size: var(--fs-ui); font-weight: 600; color: var(--ink-soft); }
+.filter-price input { padding-inline: 12px; }
+.filter-price__to { padding-bottom: 12px; color: var(--ink-soft); }
+
+/* ---------- The Filters button (phones) and the active-filter chips ---------- */
+.toolbar__filters { gap: var(--space-2); flex: none; }
+.toolbar__filters[hidden] { display: none; }
+.toolbar__filters .filters__badge { min-width: 20px; height: 20px; font-size: 11px; }
+
+.active-filters { margin-top: var(--space-2); }
+.active-filters__list { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); list-style: none; }
+.active-filters__chip { gap: 6px; padding-inline: 14px 12px; }
+.active-filters__clear {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding-inline: var(--space-2);
+  font-size: var(--fs-ui);
+  font-weight: 700;
+}
+
+/* ---------- Phones: a left drawer (app.js layer: .is-open, the overlay, the focus trap) ---------- */
+@media (max-width: 899px) {
+  .filters { margin-bottom: var(--space-4); }
+  .filters.is-enhanced {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: var(--z-drawer);
+    display: flex;
+    flex-direction: column;
+    width: min(88vw, 360px);
+    height: 100vh;
+    height: 100dvh;
+    margin: 0;
+    padding-left: env(safe-area-inset-left, 0px);
+    border: 0;
+    border-right: 1px solid var(--line);
+    border-radius: 0;
+    overscroll-behavior: contain;
+    visibility: hidden;
+    transform: translateX(-100%);
+    transition: transform var(--dur-base) var(--ease), visibility 0s linear var(--dur-base);
+  }
+  .filters.is-enhanced.is-open { visibility: visible; transform: none; transition-delay: 0s; }
+  .filters.is-enhanced .filters__head { min-height: 64px; padding-top: env(safe-area-inset-top, 0px); background: var(--secondary); }
+  .filters.is-enhanced .filters__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+  .filters.is-enhanced .filters__foot { border-top: 1px solid var(--line); padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px)); }
+  .filters__close { background: var(--surface); border-radius: 50%; }
+}
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  .filters.is-enhanced { transition: none; }
+}
+
+/* ---------- 900px and up: a sticky sidebar beside the results ---------- */
+@media (min-width: 900px) {
+  .shop-layout {
+    display: grid;
+    grid-template-columns: 272px minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-6);
+    margin-top: var(--space-5);
+  }
+  .filters {
+    position: sticky;
+    top: calc(var(--header-h, 61px) + var(--space-3));
+    max-height: calc(100vh - var(--header-h, 61px) - var(--space-5));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .filters__close { display: none; }
+  /* every change submits at once, so the button is only for browsers without scripts */
+  .filters.is-enhanced .filters__apply { display: none; }
+  .filters.is-enhanced .filters__foot:not(:has(.filters__clear)) { display: none; }
+  .shop-results .toolbar { margin-top: 0; padding-top: 0; }
+  .listing .shop-results .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
