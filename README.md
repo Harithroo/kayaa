@@ -28,7 +28,7 @@ php artisan serve
 
 Re-run `npm run build` whenever you edit `resources/css/app.css` or `resources/js/app.js` (it takes ~100ms). If you're iterating on styling and want changes to appear without rebuilding, run `npm run dev` in a second terminal instead — that's Vite's watcher with hot reload, not a second copy of the site. Production only ever uses the built files in `public/build/`.
 
-Storefront: http://localhost:8000 · Admin: http://localhost:8000/admin (login with ADMIN_EMAIL / ADMIN_PASSWORD from `.env`).
+Storefront: http://localhost:8000 · Admin: http://localhost:8000/kdash/login (login with ADMIN_EMAIL / ADMIN_PASSWORD from `.env`; the path is `ADMIN_PATH`, `kdash` unless set).
 
 The seeder creates the "Baby age" size scale, the Baby department with its categories, seven colours, and eight **placeholder products with no photos** so the storefront has something to show. Delete them in admin (or remove `DemoProductSeeder` from `DatabaseSeeder`) once real products are in.
 
@@ -45,7 +45,7 @@ The seeder creates the "Baby age" size scale, the Baby department with its categ
 
 ## Routes
 
-`/` home · `/shop` all products (`?size=0–3m`, `?sale=1`, `?sort=price_asc`) · `/baby/bodysuits` category · `/products/{slug}` · `/cart` · `/checkout` · `/orders/{ref}/thank-you` · `/track` · `/size-guide` · `/delivery` `/returns` `/about` `/privacy` `/terms` · `/admin`
+`/` home · `/shop` all products (`?size=0–3m`, `?sale=1`, `?sort=price_asc`) · `/baby/bodysuits` category · `/products/{slug}` · `/cart` · `/checkout` · `/orders/{ref}/thank-you` · `/track` · `/size-guide` · `/delivery` `/returns` `/about` `/privacy` `/terms` · `/kdash` (admin, `ADMIN_PATH`)
 
 ## Not done yet (by design)
 

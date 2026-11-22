@@ -82,7 +82,7 @@ class SiteModeTest extends TestCase
     {
         config(['kayaa.site_mode' => SiteMode::MAINTENANCE]);
 
-        $this->get('/admin/login')->assertOk()->assertDontSee('Under maintenance');
+        $this->get($this->adminPath('login'))->assertOk()->assertDontSee('Under maintenance');
     }
 
     public function test_a_signed_in_admin_sees_the_real_shop_with_a_band(): void

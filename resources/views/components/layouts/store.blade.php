@@ -48,6 +48,9 @@
     'sizes' => ($navSizes ?? collect())->map(fn ($s) => ['slug' => (string) $s->id, 'label' => $s->label])->values(),
     'colours' => ($navColors ?? collect())->mapWithKeys(fn ($c) => [(string) $c->id => $c->name]),
   ];
+  // "Shop by age" in the mega menu and the menu drawer: the age scale only (the full
+  // list, "One size" included, is what the quick-add sheet needs for its labels).
+  $navAges = ($navSizes ?? collect())->filter(fn ($s) => $s->scale?->type === 'age')->values();
   $jsSwatches = ($navColors ?? collect())->filter(fn ($c) => (bool) $c->hex)->mapWithKeys(fn ($c) => [(string) $c->id => $c->hex]);
 @endphp
 <!doctype html>
@@ -94,7 +97,7 @@
 
 @if($shell === 'full')
   <x-store.shell.announcement :topbar="$topbar" :free-over="$freeOver" :island-days="$islandDays" />
-  <x-store.shell.header :nav-categories="$navCategories" :size-options="$navSizes ?? collect()" :cart-count="$cartCount" :wish-count="$wishCount" />
+  <x-store.shell.header :nav-categories="$navCategories" :size-options="$navAges" :cart-count="$cartCount" :wish-count="$wishCount" />
 @elseif($shell === 'minimal')
   <x-store.shell.header-minimal :back="$back" :back-label="$backLabel" />
 @else
@@ -124,7 +127,7 @@
 
 @if($shell === 'full')
   <x-store.shell.footer :nav-categories="$navCategories" :size-options="$navSizes ?? collect()" :wa-href="$waHref" :wa="$wa" :tel="$tel" :tel-href="$telHref" />
-  <x-store.shell.menu-drawer :nav-categories="$navCategories" :size-options="$navSizes ?? collect()" :wa-href="$waHref" />
+  <x-store.shell.menu-drawer :nav-categories="$navCategories" :size-options="$navAges" :wa-href="$waHref" />
   <x-store.shell.cart-drawer :cart="$cart" :cart-count="$cartCount" />
   <x-store.shell.quick-add />
   <x-store.shell.tabbar :cart-count="$cartCount" />

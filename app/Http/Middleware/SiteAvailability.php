@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  * when the admin has turned one on (Admin > Storefront > Site availability).
  *
  * What still answers while a notice is up:
- *   - /admin and everything it needs (Livewire, Filament assets), so the owner
+ *   - the admin panel (config/kayaa.php admin_path) and everything it needs (Livewire, Filament assets), so the owner
  *     can turn the notice back off;
  *   - /up, the health check the host polls;
  *   - the Onepay callback and the deploy hook, which are server-to-server and
@@ -24,8 +24,6 @@ class SiteAvailability
 {
     /** Paths that answer normally whatever the mode is. */
     private const ALWAYS_OPEN = [
-        'admin',
-        'admin/*',
         'livewire/*',
         'filament/*',
         'up',
@@ -60,6 +58,7 @@ class SiteAvailability
     {
         return SiteMode::isLive()
             || $request->is(...self::ALWAYS_OPEN)
+            || $request->is(config('kayaa.admin_path'), config('kayaa.admin_path').'/*')
             || SiteMode::viewerBypasses();
     }
 

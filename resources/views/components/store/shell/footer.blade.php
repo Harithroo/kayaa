@@ -27,16 +27,14 @@
           <li><a href="mailto:{{ config('kayaa.email') }}">{{ config('kayaa.email') }}</a></li>
         </ul>
       </div>
-      @if($sizeOptions->isNotEmpty())
-        <nav aria-labelledby="footer-age">
-          <h2 class="footer__title" id="footer-age">Shop by size</h2>
-          <ul class="footer__list footer__list--cols" role="list">
-            @foreach($sizeOptions as $size)
-              <li><a href="{{ route('shop.index', ['size' => $size->label]) }}">{{ $size->label }}</a></li>
-            @endforeach
-          </ul>
-        </nav>
-      @endif
+      <nav aria-labelledby="footer-shop">
+        <h2 class="footer__title" id="footer-shop">Shop by category</h2>
+        <ul class="footer__list" role="list">
+          @foreach($navCategories as $cat)
+            <li><a href="{{ $cat->url() }}">{{ $cat->name }}</a></li>
+          @endforeach
+        </ul>
+      </nav>
       <nav aria-labelledby="footer-help">
         <h2 class="footer__title" id="footer-help">Help</h2>
         <ul class="footer__list" role="list">
@@ -59,8 +57,8 @@
       </nav>
     </div>
     <div class="footer__legal">
-      <p>&copy; {{ date('Y') }} Kayaa. Colombo, Sri Lanka</p>
-      <p>Secure card payments &middot; Island-wide delivery</p>
+      <p class="footer__credit">Designed &amp; developed by <a href="https://shanalanthony.com" target="_blank" rel="noopener">Shenal</a> and <a href="https://harithroowijayawardhana.com" target="_blank" rel="noopener">Harithroo</a></p>
+      <p>&copy; {{ date('Y') }} Kayaa. All rights reserved</p>
     </div>
   </div>
   <div class="footer__art" aria-hidden="true" data-footer-art>

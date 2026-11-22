@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Collection;
 use App\Models\Department;
 use App\Models\Product;
 use App\Models\SizeOption;
 use App\Services\Seo\JsonLd;
 use App\Services\Seo\SeoMeta;
+use App\Support\ShopFilters;
 use App\Support\Seo\Breadcrumbs;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -34,48 +34,47 @@ class ShopController extends Controller
 
     private function listing(Request $request, ?Department $department, ?Category $category): View
     {
-        $query = Product::active()->forCards();
+        // The listing's own scope: a category (with its subcategories), a department or everything.
+        $scope = function () use ($category, $department) {
+            $q = Product::active();
+            if ($category) {
+                $q->whereIn('category_id', [$category->id, ...$category->children->pluck('id')]);
+            } elseif ($department) {
+                $q->whereHas('category', fn ($c) => $c->where('department_id', $department->id));
+            }
 
-        if ($category) {
-            $ids = [$category->id, ...$category->children->pluck('id')];
-            $query->whereIn('category_id', $ids);
-        } elseif ($department) {
-            $query->whereHas('category', fn ($q) => $q->where('department_id', $department->id));
-        }
+            return $q;
+        };
 
-        $sizeLabel = $request->query('size');
-        $size = $sizeLabel ? SizeOption::where('label', $sizeLabel)->first() : null;
-        if ($size) {
-            $query->whereHas('variants', fn ($q) => $q
-                ->where('size_option_id', $size->id)
-                ->where('is_active', true)
-                ->where('stock', '>', 0));
-        }
+        // The category filter is for /shop: a category page has its subcategory chips instead.
+        $topCategories = $category
+            ? collect()
+            : Category::active()->whereNull('parent_id')->with(['department', 'children'])->orderBy('position')->get();
 
-        // ?tag=<collection slug>: the tag chips on the product page.
-        $tag = $request->query('tag');
-        $collection = $tag ? Collection::where('slug', $tag)->where('is_active', true)->first() : null;
-        if ($collection) {
-            $query->whereHas('collections', fn ($q) => $q->whereKey($collection->id));
-        }
+        $filters = new ShopFilters($request, $topCategories);
+        $query = $filters->apply($scope())->with(['images', 'variants.sizeOption', 'variants.color']);
 
-        if ($request->query('sale')) {
-            $query->whereHas('variants', fn ($q) => $q->whereNotNull('compare_at_price')->whereColumn('compare_at_price', '>', 'price'));
-        }
-
-        match ($request->query('sort')) {
-            'price_asc' => $query->orderBy(fn ($q) => $q->selectRaw('min(price)')->from('product_variants')->whereColumn('product_id', 'products.id')),
-            'price_desc' => $query->orderByDesc(fn ($q) => $q->selectRaw('min(price)')->from('product_variants')->whereColumn('product_id', 'products.id')),
+        $sort = $request->query('sort');
+        match ($sort) {
+            'price_asc' => $query->orderBy(fn ($q) => $q->selectRaw('min(price)')->from('product_variants')->whereColumn('product_id', 'products.id')->where('is_active', true)),
+            'price_desc' => $query->orderByDesc(fn ($q) => $q->selectRaw('min(price)')->from('product_variants')->whereColumn('product_id', 'products.id')->where('is_active', true)),
             'new' => $query->orderByDesc('created_at'),
             default => $query->orderByDesc('is_featured')->orderByDesc('is_new')->orderByDesc('created_at'),
         };
+        $query->orderBy('products.id');   // a stable order, so pages never repeat or skip a product
 
         $products = $query->paginate(24)->withQueryString();
 
         // Size chips come from the scale in use. With one department that is always "Baby age".
         $sizes = SizeOption::whereHas('scale', fn ($q) => $q->where('name', 'Baby age'))->orderBy('position')->get();
 
-        $sale = (bool) $request->query('sale');
+        $facets = $filters->facets($scope, $sizes, ! $category);
+        $base = $category ? $category->url() : route('shop.index');
+        $chips = $filters->chips($request, $base, $facets['colours']->pluck('label', 'value'));
+
+        $sale = $filters->sale;
+        $collection = $filters->tag;
+        $sizeLabel = count($filters->sizes) === 1 ? $filters->sizes[0] : null;
 
         // A real category gets its own metadata; /shop and the collection and
         // sale views fall back to the config page map. Either way the canonical
@@ -96,6 +95,10 @@ class ShopController extends Controller
             'products' => $products,
             'sizes' => $sizes,
             'activeSize' => $sizeLabel,
+            'filters' => $filters,
+            'facets' => $facets,
+            'chips' => $chips,
+            'base' => $base,
             'collection' => $collection,
             'title' => $category?->name ?? $collection?->name ?? ($sale ? 'Sale' : 'All products'),
             'meta' => $meta,

@@ -18,7 +18,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * The people who can sign in to /admin (users with is_admin = true). Customers
+ * The people who can sign in to the admin panel (users with is_admin = true). Customers
  * are managed on the Customers screen. Whether an admin may be deleted is
  * decided by User::canBeDeleted(), so the button and the model agree.
  */

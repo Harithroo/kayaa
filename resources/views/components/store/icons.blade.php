@@ -148,6 +148,18 @@
   <symbol id="i-wrench" viewBox="0 0 24 24">
     <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6.003 6.003 0 0 1 7.057-8.26c.438.12.54.662.219.984z" />
   </symbol>
+  <!-- Laravel addition: the shop filters button (Lucide sliders-horizontal). -->
+  <symbol id="i-sliders-horizontal" viewBox="0 0 24 24">
+    <line x1="21" x2="14" y1="4" y2="4" />
+    <line x1="10" x2="3" y1="4" y2="4" />
+    <line x1="21" x2="12" y1="12" y2="12" />
+    <line x1="8" x2="3" y1="12" y2="12" />
+    <line x1="21" x2="16" y1="20" y2="20" />
+    <line x1="12" x2="3" y1="20" y2="20" />
+    <line x1="14" x2="14" y1="2" y2="6" />
+    <line x1="8" x2="8" y1="10" y2="14" />
+    <line x1="16" x2="16" y1="18" y2="22" />
+  </symbol>
   <symbol id="i-search-x" viewBox="0 0 24 24">
     <path d="m13.5 8.5-5 5" />
     <path d="m8.5 8.5 5 5" />

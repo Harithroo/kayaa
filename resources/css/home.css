@@ -1,0 +1,21 @@
+/* Kayaa Home. The prototype's assets/css/pages/home.css (byte-identical), loaded on the
+   home page only, after app.css, as the prototype links it from index.html alone. It
+   cannot join app.css: its selectors are not namespaced (.reviews, .review, .stars,
+   .age-chips, .tabs, .help ...), and the product, shop and account pages use those
+   class names for their own components. */
+
+@import './pages/home.css';
+
+/* ---------- Laravel-only additions (the prototype had no markup for these) ---------- */
+
+/* The prototype's sample reviews are all five stars. A real review can have four,
+   so the stars it did not earn are outlined in the same colour. */
+.review .stars svg.is-off { fill: none; stroke: var(--primary-deep); stroke-width: 1.6; stroke-linejoin: round; }
+
+/* The rail stage's CSS height (home.css) assumes seven hangers; home-rail.js sizes a
+   hanger as 1.008 x the stage width / N, clamped to 118-172px. The view writes N as
+   --rail-n so the CSS default still equals the script's number when Admin has more or
+   fewer categories, and nothing shifts when the script runs. */
+@container (min-width: 860px) {
+  .rail-wrap .rail-stage { --stage-h: calc(198px + 1.7097 * clamp(118px, calc(100.8cqw / var(--rail-n, 7)), 172px)); }
+}

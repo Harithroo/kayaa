@@ -19,34 +19,25 @@
           <li><a href="{{ route('pages.show', 'about') }}" data-nav="about">Our story</a></li>
         </ul>
       </div>
-      @if($sizeOptions->isNotEmpty())
-        <div class="menu-group">
-          <p class="menu-group__title">Shop by size</p>
-          <ul class="chip-list menu-group__chips" role="list">
-            @foreach($sizeOptions as $size)
-              <li><a class="chip" href="{{ route('shop.index', ['size' => $size->label]) }}">{{ $size->label }}</a></li>
-            @endforeach
-          </ul>
-        </div>
-      @endif
-      <div class="menu-group">
-        <p class="menu-group__title">Shop by category</p>
+      {{-- Shop by category and Shop by age are collapsed so the first screen stays short (native details: works without JS). Help lives in the footer. --}}
+      <details class="menu-group menu-group--fold">
+        <summary class="menu-group__title"><span>Shop by category</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
         <ul role="list">
           @foreach($navCategories as $cat)
-            <li><a href="{{ $cat->url() }}">{{ $cat->name }}</a></li>
+            <li><a href="{{ $cat->url() }}">{{ $cat->name }} <svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg></a></li>
           @endforeach
         </ul>
-      </div>
-      <div class="menu-group">
-        <p class="menu-group__title">Help</p>
-        <ul role="list">
-          <li><a href="{{ route('orders.track') }}" data-nav="track">Track order</a></li>
-          <li><a href="{{ route('pages.size-guide') }}" data-nav="size-guide">Size guide</a></li>
-          <li><a href="{{ route('pages.show', 'delivery') }}" data-nav="delivery">Delivery</a></li>
-          <li><a href="{{ route('pages.show', 'returns') }}" data-nav="returns">Returns</a></li>
-          <li><a href="{{ route('pages.contact') }}" data-nav="contact">Contact</a></li>
-        </ul>
-      </div>
+      </details>
+      @if($sizeOptions->isNotEmpty())
+        <details class="menu-group menu-group--fold">
+          <summary class="menu-group__title"><span>Shop by age</span><svg class="icon icon--16" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+          <ul class="menu-group__cols" role="list">
+            @foreach($sizeOptions as $size)
+              <li><a href="{{ route('shop.index', ['size' => $size->label]) }}">{{ $size->label }}</a></li>
+            @endforeach
+          </ul>
+        </details>
+      @endif
       <div class="menu-group">
         <p class="menu-group__title">Account</p>
         <ul role="list">

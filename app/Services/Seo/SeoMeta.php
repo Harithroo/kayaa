@@ -27,7 +27,7 @@ final class SeoMeta
      * worth indexing. These are ShopController's real parameters — a new filter
      * must be added here too, or it will quietly start generating duplicates.
      */
-    public const FILTER_PARAMS = ['size', 'sort', 'tag', 'sale'];
+    public const FILTER_PARAMS = ['category', 'size', 'colour', 'min', 'max', 'stock', 'new', 'sort', 'tag', 'sale'];
 
     /**
      * Parameters stripped from the canonical but which do not trigger noindex:

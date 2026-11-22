@@ -1,7 +1,9 @@
 /* Kayaa storefront. The design system from the `frontend` prototype, ported verbatim:
    each file below is the prototype's assets/css/<name>.css unchanged. Shell first
    (fonts, tokens, base, components, layout, suggest, footer), then the per-page
-   sheets, which are all namespaced by a page-level class so one bundle is safe. */
+   sheets, which are all namespaced by a page-level class so one bundle is safe.
+   The home page's sheet is the exception: it is not namespaced, so it is its own
+   entry (resources/css/home.css), linked from the home page only. */
 
 @import './fonts.css';
 @import './tokens.css';
@@ -11,7 +13,6 @@
 @import './suggest.css';
 @import './footer.css';
 
-@import './pages/home.css';
 @import './pages/listing.css';
 @import './pages/categories.css';
 @import './pages/product.css';
@@ -28,6 +29,7 @@
 @import './pages/errors.css';
 @import './pages/stub.css';
 @import './pages/site-notice.css';
+@import './pages/shop-filters.css';   /* Laravel addition: the shop's filter panel */
 
 /* Laravel-only additions, last so they win. */
 @import './laravel.css';

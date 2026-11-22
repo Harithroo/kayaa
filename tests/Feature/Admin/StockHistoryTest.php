@@ -152,8 +152,8 @@ class StockHistoryTest extends TestCase
             ->assertCanSeeTableRecords([$initialBib])
             ->assertCanNotSeeTableRecords([$initialRomper, $placedRomper]);
 
-        $this->get('/admin/stock-movements')->assertOk()->assertSee('Stock history');
-        $this->get('/admin/stock-movements/create')->assertNotFound();
+        $this->get($this->adminPath('stock-movements'))->assertOk()->assertSee('Stock history');
+        $this->get($this->adminPath('stock-movements/create'))->assertNotFound();
     }
 
     /** Fills the cart (the signed-in cart if someone is signed in, else the session) and checks out. */

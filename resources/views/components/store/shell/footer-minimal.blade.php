@@ -10,6 +10,6 @@
         <li><a href="{{ route('pages.contact') }}">Contact</a></li>
       </ul>
     </nav>
-    <p class="footer-min__copy">&copy; {{ date('Y') }} Kayaa</p>
+    <p class="footer-min__copy">&copy; {{ date('Y') }} Kayaa. All rights reserved</p>
   </div>
 </footer>
