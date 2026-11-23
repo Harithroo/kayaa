@@ -56,11 +56,10 @@
   font-weight: 700;
 }
 
-/* The credit line in the footer's legal row. Footer text is Ink (Primary Deep fails
-   4.5:1 on the lower gradient stops), and links there are bold and underlined like
-   the contact links. */
+/* The credit line in the footer's legal row: the names in the line's own weight,
+   underlined so they still read as links. Footer text is Ink (Primary Deep fails
+   4.5:1 on the lower gradient stops). */
 .footer__credit a {
-  font-weight: 700;
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
