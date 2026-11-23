@@ -24,7 +24,7 @@ Route::get('/', HomeController::class)->name('home');
 
 // Staff-only printable slip, opened from the order page in the admin panel
 // (config/kayaa.php admin_path).
-Route::get('/'.config('kayaa.admin_path').'/orders/{order}/packing-slip', PackingSlipController::class)
+Route::get('/'.(config('kayaa.admin_path') ?: 'kdash').'/orders/{order}/packing-slip', PackingSlipController::class)
     ->middleware('auth')
     ->name('admin.orders.packing-slip');
 

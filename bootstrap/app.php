@@ -6,6 +6,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
+// An FTP deploy leaves the previous deploy's config and route caches on the server:
+// drop them when the files they were built from are newer (App\Support\StaleCache).
+App\Support\StaleCache::clear(dirname(__DIR__));
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',

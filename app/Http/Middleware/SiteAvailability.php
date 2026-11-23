@@ -58,7 +58,7 @@ class SiteAvailability
     {
         return SiteMode::isLive()
             || $request->is(...self::ALWAYS_OPEN)
-            || $request->is(config('kayaa.admin_path'), config('kayaa.admin_path').'/*')
+            || $request->is($admin = config('kayaa.admin_path') ?: 'kdash', $admin.'/*')
             || SiteMode::viewerBypasses();
     }
 
