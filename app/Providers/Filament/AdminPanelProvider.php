@@ -27,7 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             // config/kayaa.php admin_path (ADMIN_PATH), "kdash" unless set.
-            ->path(config('kayaa.admin_path'))
+            ->path(config('kayaa.admin_path') ?: 'kdash')
             ->login()
             // Adds /<admin_path>/profile: the signed-in admin can change their name,
             // email and password (the current password is required to do it).
