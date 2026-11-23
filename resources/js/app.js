@@ -23,3 +23,4 @@ import './store/content.js';
 import './store/size-guide.js';
 import './store/thank-you.js';
 import './store/shop-filters.js';   // Laravel addition: the shop's filter panel
+import './store/smooth-scroll.js';  // Laravel addition: smooth wheel scrolling (Lenis)

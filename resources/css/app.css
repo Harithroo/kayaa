@@ -30,6 +30,7 @@
 @import './pages/stub.css';
 @import './pages/site-notice.css';
 @import './pages/shop-filters.css';   /* Laravel addition: the shop's filter panel */
+@import 'lenis/dist/lenis.css';        /* Laravel addition: the smooth-scroll library's own rules */
 
 /* Laravel-only additions, last so they win. */
 @import './laravel.css';
