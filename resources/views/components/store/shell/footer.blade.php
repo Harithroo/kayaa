@@ -57,7 +57,7 @@
       </nav>
     </div>
     <div class="footer__legal">
-      <p class="footer__credit">Designed &amp; developed by <a href="https://shanalanthony.com/" target="_blank" rel="noopener">Shenal</a> and <a href="https://harithroowijayawardhana.com/" target="_blank" rel="noopener">Harithroo</a></p>
+      <p class="footer__credit">Designed &amp; developed by <a href="https://shenalanthony.com/" target="_blank" rel="noopener">Shenal</a> and <a href="https://harithroowijayawardhana.com/" target="_blank" rel="noopener">Harithroo</a></p>
       <p>&copy; {{ date('Y') }} Kayaa. All rights reserved</p>
     </div>
   </div>
